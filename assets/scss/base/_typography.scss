@@ -1,0 +1,67 @@
+@font-face {
+  font-family: "Inter";
+  src:
+    local("Inter"),
+    url("../../fonts/inter/Inter-Medium.ttf") format("truetype");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "Inter";
+  src:
+    local("Inter"),
+    url("../../fonts/inter/Inter-Regular.ttf") format("truetype");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Inter";
+  src:
+    local("Inter"),
+    url("../../fonts/inter/Inter-Italic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Inter";
+  src:
+    local("Inter"),
+    url("../../fonts/inter/Inter-ExtraBold.ttf") format("truetype");
+  font-weight: 600;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  font-size: $default-font-size;
+  font-weight: 400;
+  color: $sd-color-neutral-neutral-0;
+}
+
+.heading {
+  &-primary {
+    color: $sd-color-neutral-neutral-0;
+    text-transform: uppercase;
+    letter-spacing: 0.15rem;
+    font-size: $font-size-heading-primary;
+    font-weight: 600;
+  }
+
+  &-secondary {
+    font-size: $font-size-heading-secondary;
+    font-weight: 600;
+  }
+
+  &-tertiary {
+    font-size: $default-font-size;
+    font-weight: 600;
+  }
+}
+
+.paragraph {
+  font-size: $default-font-size;
+
+  &:not(:last-child) {
+    margin-bottom: 3rem;
+  }
+}

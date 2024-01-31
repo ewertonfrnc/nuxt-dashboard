@@ -1,0 +1,16 @@
+.listbox {
+  &__item {
+    padding: 0.75rem 2rem;
+    font-size: $small-font-size;
+    transition: all 0.2s;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $sd-color-brand-primary-1;
+    }
+
+    &--selected {
+      background-color: $sd-color-brand-primary-1;
+    }
+  }
+}

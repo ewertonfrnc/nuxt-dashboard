@@ -1,0 +1,62 @@
+.dialog {
+  background-color: $sd-color-neutral-neutral-7;
+  border-radius: $dialog-border-radius;
+  transition: all 0.2s;
+  padding: $dialog-padding;
+
+  &__button {
+    @extend .btn;
+    padding: 1rem;
+    background: transparent;
+  }
+
+  &__mask {
+    backdrop-filter: blur(0.8rem);
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+
+  &__header {
+    padding: $dialog-padding;
+    font-size: $default-font-size;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &--icon {
+      //@extend .btn;
+      //padding: 0;
+      //background: transparent;
+
+      display: grid;
+      place-content: center;
+
+      i {
+        font-size: $default-font-size;
+      }
+    }
+  }
+
+  &__header-icons {
+    & button {
+      @extend .btn;
+      padding: 0;
+      background: transparent;
+    }
+
+    width: 50%;
+    background: red;
+  }
+
+  &__content {
+    padding: $dialog-padding;
+    font-size: $default-font-size;
+  }
+
+  &__footer {
+    font-size: $default-font-size;
+    padding: $dialog-padding;
+    display: flex;
+    justify-content: flex-end;
+  }
+}

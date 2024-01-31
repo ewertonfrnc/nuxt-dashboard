@@ -1,0 +1,45 @@
+::selection {
+  background-color: $sd-color-brand-primary-0;
+  color: $sd-color-brand-primary-1;
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+hr {
+  margin: 4rem 0;
+}
+
+.table .p-hidden-accessible {
+  all: unset;
+}
+
+[data-pc-section='column.transition'] {
+  width: 24rem;
+  background-color: white;
+  border-radius: $button-border-radius;
+  box-shadow: $box-shadow;
+}

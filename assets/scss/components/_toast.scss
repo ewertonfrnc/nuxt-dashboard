@@ -1,0 +1,74 @@
+.toast {
+  position: relative;
+  overflow: hidden;
+
+  width: 40rem;
+  padding: 2rem;
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+
+  display: flex;
+  gap: 1rem;
+
+  &:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+
+  &__content {
+    position: relative;
+  }
+
+  &__success {
+    background: rgba($sd-color-feedback-success-2, 0.5);
+
+    ::after {
+      @include toastBeforeStyles($sd-color-feedback-success-0);
+    }
+  }
+
+  &__danger {
+    background: rgba($sd-color-feedback-danger-4, 0.5);
+
+    ::after {
+      @include toastBeforeStyles($sd-color-feedback-danger-0);
+    }
+  }
+
+  &__warn {
+    background: rgba($sd-color-feedback-warning-4, 0.5);
+
+    ::after {
+      @include toastBeforeStyles($sd-color-feedback-warning-0);
+    }
+  }
+
+  &__icon i {
+    font-size: 28px;
+  }
+
+  &__info {
+    font-size: $default-font-size;
+    word-break: break-word;
+    white-space: pre-line;
+  }
+
+  &__summary {
+    margin-bottom: 1rem;
+    font-weight: bold;
+  }
+
+  &__button {
+    position: absolute;
+    top: 10%;
+    right: 5%;
+
+    border: none;
+    cursor: pointer;
+    background: transparent;
+
+    svg {
+      width: 2rem;
+      height: 2rem;
+    }
+  }
+}

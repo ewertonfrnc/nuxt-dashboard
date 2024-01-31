@@ -1,0 +1,150 @@
+.table {
+  min-width: 100%;
+  text-align: left;
+  font-family: inherit;
+  color: $sd-color-neutral-neutral-0;
+  border: 1px solid $sd-color-neutral-neutral-5;
+  border-collapse: collapse;
+
+  &__header {
+    background-color: $sd-color-neutral-neutral-6;
+    position: relative;
+
+    &--options {
+      transition: all 0.5s ease-in-out;
+      display: grid;
+      grid-template-columns: 1fr;
+      justify-content: end;
+      padding: 2rem 0;
+    }
+
+    &--options-selection {
+      transition: all 0.5s ease-in-out;
+      display: grid;
+      grid-template-columns: 0fr;
+      justify-content: end;
+      padding: 2rem 0;
+    }
+
+    &--filter {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    &--see-selected {
+      width: max-content;
+      position: absolute;
+      animation: slideInFromTop 0.5s ease-in-out;
+    }
+
+    &--cell {
+      width: 2rem;
+      padding: 1.5rem 1rem;
+      border: 1px solid $sd-color-neutral-neutral-5;
+    }
+  }
+
+  &__body {
+    position: relative;
+
+    &--row {
+      transition: all 0.3s;
+      &[data-p-highlight='true'] {
+        background-color: $sd-color-brand-primary-1;
+      }
+    }
+
+    &--cell {
+      width: 2rem;
+      padding: 2rem 1rem;
+      border: 1px solid $sd-color-neutral-neutral-5;
+
+      button {
+        all: unset;
+      }
+    }
+  }
+
+  &__expansion {
+    padding: 2rem;
+    animation: slideInFromTop 0.3s ease-in-out;
+  }
+}
+
+.filter {
+  &__add-rule {
+    display: none;
+  }
+
+  &__input {
+    @extend .input__field;
+
+    margin: 1rem auto;
+    font-size: $small-font-size;
+    border: 1px solid $sd-color-neutral-neutral-0;
+  }
+
+  &__btn-group {
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    button {
+      @extend .btn;
+      padding: 1rem 3rem;
+      font-size: $small-font-size;
+    }
+  }
+}
+
+// inputs from tables
+input[type='checkbox'] {
+  appearance: none;
+  background-color: #fff;
+  margin: 0;
+
+  font: inherit;
+  color: white;
+  min-width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 0.2rem;
+  border: 1px solid $sd-color-neutral-neutral-4;
+  border-radius: 6px;
+  transform: translateY(0);
+
+  position: relative;
+  display: grid;
+  place-content: center;
+
+  &::before {
+    content: '';
+    min-width: 100%;
+    height: 100%;
+    transform: scale(0);
+    transition: 0.25s transform ease-in-out;
+    box-shadow: inset 1em 1em rebeccapurple;
+    border-radius: 6px;
+
+    position: absolute;
+  }
+
+  &[aria-label='Row Selected']::before,
+  &[aria-label='All items selected']::before {
+    transform: scale(1);
+  }
+}
+
+[data-pc-section='checkbox'],
+[data-pc-section='headercheckbox'] {
+  position: absolute;
+  top: 10%;
+  left: 5%;
+
+  svg {
+    color: white;
+    width: 80%;
+  }
+}
