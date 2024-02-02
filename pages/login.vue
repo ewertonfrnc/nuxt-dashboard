@@ -100,6 +100,7 @@ export default {
           <BaseButton
             label="Entrar"
             class="btn__primary"
+            :loading="isLoading"
             @click.prevent="login"
           />
         </form>
@@ -107,11 +108,7 @@ export default {
         <div class="register">
           <span>Não tem cadastro?</span>
           <span>
-            <BaseButton
-              label="Cadastre-se"
-              class="btn__primary--text"
-              :loading="isLoading"
-            />
+            <BaseButton label="Cadastre-se" class="btn__primary--text" />
           </span>
         </div>
       </div>

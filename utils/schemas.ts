@@ -18,7 +18,7 @@ export const registerSchema = yup.object({
 
 export const loginSchema = yup.object({
   username: yup.string().required().min(3).trim(),
-  password: yup.string().required().min(3).max(100),
+  password: yup.string().required().min(3),
 });
 
 export const contactInfoSchema = yup.object({
