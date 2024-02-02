@@ -72,7 +72,6 @@
 
     &--text {
       display: inline-block;
-      padding: 0;
       @include buttonStyles(
         $sd-color-background-button-primary-text-enabled,
         $sd-color-text-button-primary-text-enabled,

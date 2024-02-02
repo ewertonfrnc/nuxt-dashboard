@@ -3,10 +3,10 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
 
   modules: [
-    'nuxt-primevue',
-    '@vee-validate/nuxt',
-    '@pinia/nuxt',
-    '@pinia-plugin-persistedstate/nuxt',
+    "nuxt-primevue",
+    "@vee-validate/nuxt",
+    "@pinia/nuxt",
+    "@pinia-plugin-persistedstate/nuxt",
   ],
   primevue: {
     usePrimeVue: true,
@@ -15,16 +15,16 @@ export default defineNuxtConfig({
   veeValidate: {
     autoImports: true,
     componentNames: {
-      Form: 'VeeForm',
-      Field: 'VeeField',
-      ErrorMessage: 'ErrorMessage',
+      Form: "VeeForm",
+      Field: "VeeField",
+      ErrorMessage: "ErrorMessage",
     },
   },
 
   css: [
-    '/node_modules/primeflex/primeflex.css',
-    'primeicons/primeicons.css',
-    '~/assets/scss/base.scss',
+    "/node_modules/primeflex/primeflex.css",
+    "primeicons/primeicons.css",
+    "~/assets/scss/base.scss",
   ],
   vite: {
     css: {
@@ -37,7 +37,7 @@ export default defineNuxtConfig({
   },
 
   build: {
-    transpile: ['primevue'],
+    transpile: ["primevue"],
   },
   ssr: false,
 });

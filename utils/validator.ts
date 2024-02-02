@@ -3,7 +3,7 @@ import * as yup from "yup";
 yup.setLocale({
   mixed: {
     default: "é inválido",
-    required: "é um campo obrigatório",
+    required: "Preencha o campo para prosseguir",
     oneOf: "deve ser um dos seguintes valores: ${values}",
     notOneOf: "não pode ser um dos seguintes valores: ${values}",
   },
