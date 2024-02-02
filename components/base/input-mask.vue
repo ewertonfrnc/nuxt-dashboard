@@ -9,6 +9,7 @@
       :disabled="disabled"
       :readonly="readonly"
       class="input__field"
+      :placeholder="placeholder"
     />
   </div>
 

@@ -2,12 +2,15 @@
   &,
   &:link,
   &:visited {
-    display: inline-block;
     text-decoration: none;
     padding: $button-padding;
     transition: all 0.2s;
+    font-weight: 600;
+    font-family: inherit;
 
+    width: 100%;
     display: flex;
+    justify-content: center;
     gap: 1.5rem;
 
     font-size: $default-font-size;
@@ -20,6 +23,7 @@
   }
 
   &__primary {
+    font-size: $font-size-button-primary;
     @include buttonStyles(
       $sd-color-background-button-primary-basic-enabled,
       $sd-color-text-button-primary-basic-enabled,
@@ -67,6 +71,8 @@
     }
 
     &--text {
+      display: inline-block;
+      padding: 0;
       @include buttonStyles(
         $sd-color-background-button-primary-text-enabled,
         $sd-color-text-button-primary-text-enabled,
@@ -92,6 +98,7 @@
   }
 
   &__secondary {
+    font-size: $font-size-button-secondary;
     @include buttonStyles(
       $sd-color-background-button-secondary-basic-enabled,
       $sd-color-text-button-secondary-basic-enabled,
@@ -139,6 +146,7 @@
     }
 
     &--text {
+      display: inline-block;
       @include buttonStyles(
         $sd-color-background-button-secondary-text-enabled,
         $sd-color-text-button-secondary-text-enabled,
@@ -195,6 +203,7 @@
     }
 
     &--text {
+      display: inline-block;
       @include buttonStyles(
         $sd-color-background-button-success-text-enabled,
         $sd-color-text-button-success-text-enabled,
@@ -251,6 +260,7 @@
     }
 
     &--text {
+      display: inline-block;
       @include buttonStyles(
         $sd-color-background-button-danger-text-enabled,
         $sd-color-text-button-danger-text-enabled,
@@ -315,6 +325,7 @@
     }
 
     &--text {
+      display: inline-block;
       @include buttonStyles(
         $sd-color-background-button-warning-text-enabled,
         $sd-color-text-button-warning-text-enabled,
@@ -379,6 +390,7 @@
     }
 
     &--text {
+      display: inline-block;
       @include buttonStyles(
         $sd-color-background-button-info-text-enabled,
         $sd-color-text-button-info-text-enabled,
