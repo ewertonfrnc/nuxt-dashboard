@@ -44,15 +44,23 @@ export default {
 
 <template>
   <div class="container">
-    <img src="~/assets/img/login-feature.png" class="container__detail--1" />
-    <img src="~/assets/img/login-feature.png" class="container__detail--2" />
+    <img
+      src="~/assets/img/login-feature.png"
+      class="container__detail--1"
+      alt="container details"
+    />
+    <img
+      src="~/assets/img/login-feature.png"
+      class="container__detail--2"
+      alt="container details"
+    />
 
     <UiModal>
       <div class="login">
         <img src="~/assets/img/LOGO.png" alt="Itera logo" class="logo" />
 
         <div class="login__header">
-          <h3 class="heading__tertirary">Área do RH</h3>
+          <h3 class="heading__tertiary">Área do RH</h3>
           <p class="body__primary">Insira suas credenciais de acesso:</p>
         </div>
 
@@ -89,15 +97,21 @@ export default {
             </span>
           </div>
 
-          <div>
-            <BaseButton label="Entrar" class="btn__primary" type="submit" />
-          </div>
+          <BaseButton
+            label="Entrar"
+            class="btn__primary"
+            @click.prevent="login"
+          />
         </form>
 
         <div class="register">
           <span>Não tem cadastro?</span>
           <span>
-            <BaseButton label="Cadastre-se" class="btn__primary--text" />
+            <BaseButton
+              label="Cadastre-se"
+              class="btn__primary--text"
+              :loading="isLoading"
+            />
           </span>
         </div>
       </div>

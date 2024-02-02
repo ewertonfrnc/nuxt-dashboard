@@ -8,14 +8,26 @@
       :feedback="false"
       :disabled="disabled"
       :placeholder="placeholder"
-      :pt="{ input: { class: 'input__field', readonly } }"
+      :pt="{
+        input: { class: `input__field ${errorMessage && 'error'}`, readonly },
+        hideIcon: 'pi pi-eye',
+        showIcon: 'pi pi-eye-slash',
+      }"
     />
+
+    <div
+      class="input__icon--password"
+      @click.prevent="togglePasswordVisibility"
+    >
+      <i v-if="!isPasswordVisible" class="pi pi-eye-slash" />
+      <i v-else class="pi pi-eye" />
+    </div>
   </div>
 
   <small class="input__error">{{ errorMessage }}</small>
 </template>
 
-<script>
+<script lang="ts">
 import { useField } from "vee-validate";
 
 export default {
@@ -30,6 +42,24 @@ export default {
   setup(props) {
     const { value, errorMessage } = useField(props.name);
     return { value, errorMessage };
+  },
+  data() {
+    return {
+      isPasswordVisible: false,
+    };
+  },
+  methods: {
+    togglePasswordVisibility() {
+      this.isPasswordVisible = !this.isPasswordVisible;
+
+      const inputEl: HTMLInputElement | null = document.querySelector(
+        '[data-pc-name="password"] > .input__field',
+      );
+
+      if (inputEl) {
+        inputEl.type = this.isPasswordVisible ? "text" : "password";
+      }
+    },
   },
 };
 </script>
