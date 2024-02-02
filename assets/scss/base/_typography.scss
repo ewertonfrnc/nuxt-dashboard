@@ -1,67 +1,104 @@
 @font-face {
-  font-family: "Inter";
-  src:
-    local("Inter"),
-    url("../../fonts/inter/Inter-Medium.ttf") format("truetype");
+  font-family: "Rajdhani";
+  src: url("../../fonts/rajdhani/Rajdhani-light.ttf");
   font-weight: 300;
+  font-style: normal;
 }
 
 @font-face {
-  font-family: "Inter";
-  src:
-    local("Inter"),
-    url("../../fonts/inter/Inter-Regular.ttf") format("truetype");
+  font-family: "Rajdhani";
+  src: url("../../fonts/rajdhani/Rajdhani-Regular.ttf");
   font-weight: 400;
+  font-style: normal;
 }
 
 @font-face {
-  font-family: "Inter";
-  src:
-    local("Inter"),
-    url("../../fonts/inter/Inter-Italic.ttf") format("truetype");
-  font-weight: 400;
-  font-style: italic;
+  font-family: "Rajdhani";
+  src: url("../../fonts/rajdhani/Rajdhani-Medium.ttf");
+  font-weight: 500;
+  font-style: normal;
 }
 
 @font-face {
-  font-family: "Inter";
-  src:
-    local("Inter"),
-    url("../../fonts/inter/Inter-ExtraBold.ttf") format("truetype");
+  font-family: "Rajdhani";
+  src: url("../../fonts/rajdhani/Rajdhani-SemiBold.ttf");
   font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Rajdhani";
+  src: url("../../fonts/rajdhani/Rajdhani-Bold.ttf");
+  font-weight: 700;
+  font-style: normal;
 }
 
 body {
-  font-family: "Inter", sans-serif;
+  font-family: "Rajdhani", sans-serif;
   font-size: $default-font-size;
-  font-weight: 400;
   color: $sd-color-neutral-neutral-0;
 }
 
 .heading {
-  &-primary {
-    color: $sd-color-neutral-neutral-0;
-    text-transform: uppercase;
-    letter-spacing: 0.15rem;
-    font-size: $font-size-heading-primary;
+  &__primary {
+    font-size: $font-size-title-1;
     font-weight: 600;
   }
 
-  &-secondary {
-    font-size: $font-size-heading-secondary;
-    font-weight: 600;
+  &__secondary {
+    font-size: $font-size-title-2;
+    font-weight: 500;
   }
 
-  &-tertiary {
-    font-size: $default-font-size;
+  &__tertiary {
+    font-size: $font-size-title-3;
     font-weight: 600;
   }
 }
 
-.paragraph {
-  font-size: $default-font-size;
+.subtitle {
+  &__primary {
+    font-size: $font-size-subtitle;
+    font-weight: 600;
+  }
 
-  &:not(:last-child) {
-    margin-bottom: 3rem;
+  &__secondary {
+    font-size: $font-size-subtitle;
+    font-style: italic;
+  }
+}
+
+.body {
+  font-weight: 400;
+
+  &__primary {
+    font-size: $font-size-body-primary;
+  }
+
+  &__secondary {
+    font-size: $font-size-body-secondary;
+  }
+}
+
+.button {
+  font-weight: 600;
+
+  &__primary {
+    font-size: $font-size-button-primary;
+  }
+
+  &__secondary {
+    font-size: $font-size-body-secondary;
+  }
+}
+
+.caption {
+  &__primary {
+    font-size: $font-size-caption;
+    font-weight: 400;
+  }
+
+  &__secondary {
+    font-size: $font-size-caption;
+    font-weight: 600;
   }
 }
