@@ -31,15 +31,24 @@ export default {
         if (!this.formData) return;
 
         this.isLoading = true;
-        const user = await this.$axios.post("/api/login", this.formData);
+        const {
+          data: { user },
+        } = await this.$axios.post("/api/login", this.formData);
+
+        if (user && !this.remindUser) {
+          sessionStorage.setItem("token", user?.token);
+        }
+
+        if (user && this.remindUser) {
+          const token = useCookie("token");
+          token.value = user?.token;
+        }
 
         if (this.authenticated) {
           await this.router.push("/");
         }
       } catch (error) {
         this.wrongCredentialsMessage = error.response.data.message;
-      } finally {
-        this.isLoading = false;
 
         this.resetForm({
           values: {
@@ -47,6 +56,8 @@ export default {
             password: "",
           },
         });
+      } finally {
+        this.isLoading = false;
       }
     },
   },
@@ -100,13 +111,18 @@ export default {
           </div>
 
           <div class="form__reminder">
-            <label class="form__reminder--label">
-              <BaseCheckbox />
-              Lembre-me
-            </label>
+            <div>
+              <BaseCheckbox
+                input-id="remindUser"
+                @change="remindUser = !remindUser"
+              />
+              <label class="form__reminder--label" for="remindUser">
+                Lembre-me
+              </label>
+            </div>
 
             <span>
-              <BaseButton label="Cadastre-se" class="btn__primary--text" />
+              <BaseButton label="Esqueci a senha" class="btn__primary--text" />
             </span>
           </div>
 
@@ -155,6 +171,7 @@ export default {
 }
 
 .login {
+  width: 35rem;
   display: grid;
   gap: $spacing-md;
 }
@@ -172,6 +189,11 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    & > div {
+      display: flex;
+      gap: 0.8rem;
+    }
 
     &--label {
       color: $color-neutral-neutral-2;
