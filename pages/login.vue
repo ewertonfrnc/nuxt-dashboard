@@ -2,10 +2,8 @@
 import { useForm } from "vee-validate";
 import { storeToRefs } from "pinia";
 import { loginSchema } from "~/utils/schemas";
-import UiModal from "~/components/ui/ui-modal.vue";
 
 export default {
-  components: { UiModal },
   setup() {
     const router = useRouter();
     const { authenticated } = storeToRefs(useAuthStore());
@@ -23,17 +21,24 @@ export default {
   },
   methods: {
     async login() {
-      this.isLoading = true;
-
       try {
         this.formData = await this.onSubmit();
-        await this.$axios.post("/api/login", this.formData);
+        if (!this.formData) return;
+
+        this.isLoading = true;
+        const user = await this.$axios.post("/api/login", this.formData);
 
         if (this.authenticated) {
           await this.router.push("/");
         }
       } catch (error) {
-        console.error("err", error.message);
+        const { data } = error.response;
+        this.$toast.add({
+          severity: "info",
+          summary: "Example test",
+          detail: data.message,
+          life: 3000,
+        });
       } finally {
         this.isLoading = false;
       }
@@ -118,8 +123,9 @@ export default {
 
 <style scoped lang="scss">
 .container {
+  overflow: hidden;
   position: relative;
-  background-color: $sd-color-brand-primary-0;
+  background-color: $color-brand-primary-0;
   width: 100vw;
   height: 100vh;
 
@@ -160,7 +166,7 @@ export default {
     justify-content: space-between;
 
     &--label {
-      color: $sd-color-neutral-neutral-2;
+      color: $color-neutral-neutral-2;
       display: flex;
       gap: 0.8rem;
     }
