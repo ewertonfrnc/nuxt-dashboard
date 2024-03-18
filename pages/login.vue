@@ -8,16 +8,21 @@ export default {
     const router = useRouter();
     const { authenticated } = storeToRefs(useAuthStore());
 
-    const { handleSubmit } = useForm({
+    const { handleSubmit, resetForm } = useForm({
       initialValues: { username: "", password: "" },
       validationSchema: loginSchema,
     });
     const onSubmit = handleSubmit((formValues) => formValues);
 
-    return { router, authenticated, onSubmit };
+    return { router, authenticated, onSubmit, resetForm };
   },
   data() {
-    return { isLoading: false, formData: {} };
+    return {
+      isLoading: false,
+      formData: {},
+      remindUser: false,
+      wrongCredentialsMessage: "",
+    };
   },
   methods: {
     async login() {
@@ -32,15 +37,16 @@ export default {
           await this.router.push("/");
         }
       } catch (error) {
-        const { data } = error.response;
-        this.$toast.add({
-          severity: "info",
-          summary: "Example test",
-          detail: data.message,
-          life: 3000,
-        });
+        this.wrongCredentialsMessage = error.response.data.message;
       } finally {
         this.isLoading = false;
+
+        this.resetForm({
+          values: {
+            username: "",
+            password: "",
+          },
+        });
       }
     },
   },
@@ -77,6 +83,7 @@ export default {
                 name="username"
                 mask="999.999.999-99"
                 placeholder="Insira seu CPF"
+                :wrong-crendentials-message="wrongCredentialsMessage"
               />
             </label>
           </div>
@@ -87,6 +94,7 @@ export default {
               <BaseInputPassword
                 name="password"
                 placeholder="Insira sua senha"
+                :wrong-crendentials-message="wrongCredentialsMessage"
               />
             </label>
           </div>

@@ -9,7 +9,12 @@
       :disabled="disabled"
       :placeholder="placeholder"
       :pt="{
-        input: { class: `input__field ${errorMessage && 'error'}`, readonly },
+        input: {
+          class: `input__field ${
+            (errorMessage || wrongCrendentialsMessage) && 'error'
+          }`,
+          readonly,
+        },
         hideIcon: 'pi pi-eye',
         showIcon: 'pi pi-eye-slash',
       }"
