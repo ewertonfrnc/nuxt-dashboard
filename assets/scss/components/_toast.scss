@@ -19,26 +19,26 @@
   }
 
   &__success {
-    background: rgba($sd-color-feedback-success-2, 0.5);
+    background: rgba($color-feedback-success-2, 0.5);
 
     ::after {
-      @include toastBeforeStyles($sd-color-feedback-success-0);
+      @include toastBeforeStyles($color-feedback-success-0);
     }
   }
 
   &__danger {
-    background: rgba($sd-color-feedback-danger-4, 0.5);
+    background: rgba($color-feedback-danger-4, 0.5);
 
     ::after {
-      @include toastBeforeStyles($sd-color-feedback-danger-0);
+      @include toastBeforeStyles($color-feedback-danger-0);
     }
   }
 
   &__warn {
-    background: rgba($sd-color-feedback-warning-4, 0.5);
+    background: rgba($color-feedback-warning-4, 0.5);
 
     ::after {
-      @include toastBeforeStyles($sd-color-feedback-warning-0);
+      @include toastBeforeStyles($color-feedback-warning-0);
     }
   }
 
