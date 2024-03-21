@@ -16,7 +16,7 @@ export default {
   data() {
     return {
       loading: false,
-      isValidPassword: false,
+      isValidPassword: true,
       formData: {},
     };
   },
@@ -36,11 +36,15 @@ export default {
         if (!this.formData) return;
 
         this.loading = true;
+        await this.$axios.post("/api/change-password", this.formData);
 
-        const { data } = await this.$axios.post(
-          "/api/change-password",
-          this.formData,
-        );
+        this.$emit("changeStep", "login");
+        this.$toast.add({
+          severity: "success",
+          summary: "Senha alterada",
+          detail: "Faça login utilizando sua nova senha.",
+          life: 4000,
+        });
       } catch (error) {
         console.error(error.message);
         this.resetForm({
