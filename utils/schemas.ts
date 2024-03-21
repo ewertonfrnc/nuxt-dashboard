@@ -1,19 +1,7 @@
 import yup from "~/utils/validator";
 
-export const registerSchema = yup.object({
-  name: yup.string().required().min(3).max(100).trim(),
-  email: yup.string().required().email().trim(),
-  phone: yup.string().required().min(15),
-  password: yup.string().required().min(8).max(100),
-  confirmPassword: yup
-    .string()
-    .test(
-      "passwords-mismatch",
-      "As senhas não são iguais.",
-      function (currentValue) {
-        return this.parent.password === currentValue;
-      },
-    ),
+export const recoverPassword = yup.object({
+  username: yup.string().required().min(3).trim(),
 });
 
 export const loginSchema = yup.object({

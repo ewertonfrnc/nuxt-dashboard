@@ -32,7 +32,7 @@ export default defineNuxtRouteMiddleware((to) => {
   if (token) {
     authenticated.value = true;
 
-    if (to?.name === "login") return navigateTo("/");
+    if (to?.name === "auth") return navigateTo("/");
 
     if (user && to.meta.authorizedFor) {
       // @ts-ignore
@@ -44,9 +44,9 @@ export default defineNuxtRouteMiddleware((to) => {
   }
 
   if (!token) {
-    if (to?.name !== "login") {
+    if (to?.name !== "auth") {
       abortNavigation();
-      return navigateTo("/login");
+      return navigateTo("/auth");
     }
   }
 });

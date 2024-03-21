@@ -1,9 +1,9 @@
-<script>
+<script lang="ts">
 import { useForm } from "vee-validate";
 import { storeToRefs } from "pinia";
-import { loginSchema } from "~/utils/schemas";
 
 export default {
+  emits: ["changeStep"],
   setup() {
     const router = useRouter();
     const { authenticated } = storeToRefs(useAuthStore());
@@ -25,6 +25,9 @@ export default {
     };
   },
   methods: {
+    goToRecoverPassword() {
+      this.$emit("changeStep", "recover");
+    },
     async login() {
       try {
         this.formData = await this.onSubmit();
@@ -63,6 +66,7 @@ export default {
   },
 };
 </script>
+
 <template>
   <UiModal>
     <div class="login">
@@ -109,7 +113,11 @@ export default {
           </div>
 
           <span>
-            <BaseButton label="Esqueci a senha" class="btn__primary--text" />
+            <BaseButton
+              label="Esqueci a senha"
+              class="btn__primary--text"
+              @click.prevent="goToRecoverPassword"
+            />
           </span>
         </div>
 
@@ -131,4 +139,43 @@ export default {
   </UiModal>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.login {
+  width: 35rem;
+  display: grid;
+  gap: $spacing-md;
+}
+
+.logo {
+  max-width: 20rem;
+  justify-self: center;
+}
+
+.form {
+  display: grid;
+  gap: $spacing-md;
+
+  &__reminder {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    & > div {
+      display: flex;
+      gap: 0.8rem;
+    }
+
+    &--label {
+      color: $color-neutral-neutral-2;
+      display: flex;
+      gap: 0.8rem;
+    }
+  }
+}
+
+.register {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+</style>

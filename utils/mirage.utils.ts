@@ -9,20 +9,6 @@ export function makeServer() {
       this.urlPrefix = "http://localhost:3000/";
       this.namespace = "api";
 
-      this.get("/products", (schema) => {
-        return new Response(
-          200,
-          {},
-          { status: "success", data: schema.db.products },
-        );
-      });
-
-      this.post("/products", (schema, request) => {
-        schema.db.products.push(JSON.parse(request.requestBody));
-
-        return new Response(201, {}, { status: "success" });
-      });
-
       this.post("/login", async (schema, request) => {
         const userCredentials = JSON.parse(request.requestBody);
 
@@ -40,6 +26,25 @@ export function makeServer() {
         const user = await authenticateUser(JSON.parse(request.requestBody));
 
         return new Response(201, {}, { status: "success", user });
+      });
+
+      this.post("/recover-password", (schema, request) => {
+        const { username } = JSON.parse(request.requestBody);
+        if (!username) return;
+
+        if (username !== "111.111.111-11") {
+          return new Response(
+            404,
+            {},
+            { status: "fail", message: "Usuário não encontrado!" },
+          );
+        }
+
+        return new Response(
+          201,
+          {},
+          { status: "success", userEmail: "ewerton.silva@usemobile.xyz" },
+        );
       });
 
       this.passthrough("https://dummyjson.com/auth/login");

@@ -1,5 +1,25 @@
 <script lang="ts">
-export default {};
+export default {
+  setup() {
+    const authSteps = ["login", "recover", "change"];
+    return { authSteps };
+  },
+  data() {
+    return {
+      currentStep: "login",
+      recoverEmail: "",
+    };
+  },
+  methods: {
+    changeAuthStep(step: string) {
+      if (!this.authSteps.includes(step)) return;
+      this.currentStep = step;
+    },
+    setRecoverEmail(email: string) {
+      this.recoverEmail = email;
+    },
+  },
+};
 </script>
 
 <template>
@@ -15,7 +35,17 @@ export default {};
       alt="container details"
     />
 
-    <!--    <AuthLogin />-->
+    <AuthLogin v-if="currentStep === 'login'" @change-step="changeAuthStep" />
+    <AuthRecoverPassword
+      v-if="currentStep === 'recover'"
+      @change-step="changeAuthStep"
+      @recover-email="setRecoverEmail"
+    />
+    <AuthChangePassword
+      v-if="currentStep === 'change'"
+      :recover-email="recoverEmail"
+      @change-step="changeAuthStep"
+    />
   </div>
 </template>
 
@@ -42,44 +72,5 @@ export default {};
     bottom: 0;
     left: 0;
   }
-}
-
-.login {
-  width: 35rem;
-  display: grid;
-  gap: $spacing-md;
-}
-
-.logo {
-  max-width: 20rem;
-  justify-self: center;
-}
-
-.form {
-  display: grid;
-  gap: $spacing-md;
-
-  &__reminder {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    & > div {
-      display: flex;
-      gap: 0.8rem;
-    }
-
-    &--label {
-      color: $color-neutral-neutral-2;
-      display: flex;
-      gap: 0.8rem;
-    }
-  }
-}
-
-.register {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 }
 </style>
