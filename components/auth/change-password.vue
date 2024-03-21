@@ -82,9 +82,4 @@ export default {
     gap: 1rem;
   }
 }
-
-.highlight {
-  color: $color-feedback-warning-4;
-  font-weight: bold;
-}
 </style>

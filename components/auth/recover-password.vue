@@ -26,6 +26,19 @@ export default {
     goToChangePassword() {
       this.$emit("changeStep", "change");
     },
+    hashEmail(email) {
+      const regex = /^([a-zA-Z0-9._%+-]+)@([a-zA-Z0-9.-]+)\.([a-zA-Z]{2,})$/;
+
+      if (regex.test(email)) {
+        const [_, user, domain, dot] = email.match(regex);
+
+        return `${user.slice(0, 3)}*${"*".repeat(
+          user.length - 3,
+        )}@${domain}.${dot}`;
+      } else {
+        return "Email inválido";
+      }
+    },
     async recoverPassword() {
       try {
         this.formData = await this.onSubmit();
@@ -36,8 +49,7 @@ export default {
         const {
           data: { userEmail },
         } = await this.$axios.post("/api/recover-password", this.formData);
-        this.goToChangePassword();
-        this.$emit("recoverEmail", userEmail);
+        this.userEmail = userEmail;
 
         this.$toast.add({
           severity: "success",
@@ -60,7 +72,7 @@ export default {
 
 <template>
   <UiModal>
-    <div class="recover">
+    <div v-if="!userEmail" class="recover fadein animation-duration-500">
       <div class="recover__header">
         <h1 class="heading__tertiary">Recuperar senha</h1>
         <p class="body__primary">Insira suas credenciais de acesso:</p>
@@ -95,6 +107,39 @@ export default {
         />
       </div>
     </div>
+
+    <div v-else class="recover fadein animation-duration-500">
+      <div class="recover__header">
+        <h1 class="heading__tertiary">Código de recuperação</h1>
+        <p class="body__primary">
+          Insira o código que enviamos para seu e-mail
+          <span class="highlight"> {{ hashEmail(userEmail) }}. </span>
+        </p>
+      </div>
+
+      <div class="recover__body">
+        <form class="form">
+          <div class="form__control">
+            <label class="caption__primary">
+              Código de recuperação
+              <BaseInputText
+                name="username"
+                placeholder="Insira o código de recuperação"
+              />
+            </label>
+          </div>
+        </form>
+      </div>
+
+      <div class="recover__footer">
+        <BaseButton
+          label="Voltar"
+          class="btn__primary--outlined"
+          @click.prevent="userEmail = ''"
+        />
+        <BaseButton label="Próximo" class="btn__primary" />
+      </div>
+    </div>
   </UiModal>
 </template>
 
@@ -115,5 +160,10 @@ export default {
     align-items: center;
     gap: 1rem;
   }
+}
+
+.highlight {
+  color: $color-feedback-warning-4;
+  font-weight: bold;
 }
 </style>

@@ -41,11 +41,11 @@ export default {
       @change-step="changeAuthStep"
       @recover-email="setRecoverEmail"
     />
-    <AuthChangePassword
-      v-if="currentStep === 'change'"
-      :recover-email="recoverEmail"
-      @change-step="changeAuthStep"
-    />
+    <!--    <AuthChangePassword-->
+    <!--      v-if="currentStep === 'change'"-->
+    <!--      :recover-email="recoverEmail"-->
+    <!--      @change-step="changeAuthStep"-->
+    <!--    />-->
   </div>
 </template>
 

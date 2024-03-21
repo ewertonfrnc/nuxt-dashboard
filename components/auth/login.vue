@@ -69,7 +69,7 @@ export default {
 
 <template>
   <UiModal>
-    <div class="login">
+    <div class="login fadein animation-duration-500">
       <img src="~/assets/img/LOGO.png" alt="Itera logo" class="logo" />
 
       <div class="login__header">
