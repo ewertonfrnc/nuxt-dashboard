@@ -24,7 +24,7 @@
 
 
     ::after {
-      @include toastBeforeStyles($color-feedback-success-4);
+      @include beforeStyles($color-feedback-success-4);
     }
   }
 
@@ -32,7 +32,7 @@
     background: rgba($color-feedback-danger-4, 0.5);
 
     ::after {
-      @include toastBeforeStyles($color-feedback-danger-0);
+      @include beforeStyles($color-feedback-danger-0);
     }
   }
 
@@ -40,7 +40,7 @@
     background: rgba($color-feedback-warning-4, 0.5);
 
     ::after {
-      @include toastBeforeStyles($color-feedback-warning-0);
+      @include beforeStyles($color-feedback-warning-0);
     }
   }
 

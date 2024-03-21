@@ -1,0 +1,29 @@
+<script lang="ts">
+export type MessageType = "success" | "info" | "warn" | "error";
+
+export default {
+  props: {
+    severity: {
+      type: String as PropType<MessageType>,
+      default: "info",
+      required: true,
+    },
+    text: { type: String, default: "", required: true },
+  },
+};
+</script>
+
+<template>
+  <InlineMessage
+    :pt="{
+      root: `inline-message inline-message__${severity}`,
+      icon: 'inline-message__icon body__secondary',
+      text: 'inline-message__text body__secondary',
+    }"
+    :severity="severity"
+  >
+    {{ text }}
+  </InlineMessage>
+</template>
+
+<style scoped lang="scss"></style>
