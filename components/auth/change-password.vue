@@ -1,24 +1,46 @@
 <script lang="ts">
+import { useForm } from "vee-validate";
+import { changePassword } from "~/utils/schemas";
+
 export default {
-  props: {
-    recoverEmail: { type: String, default: "", required: true },
-  },
   emits: ["changeStep"],
+  setup() {
+    const { handleSubmit, resetForm } = useForm({
+      initialValues: { password: "", passwordConfirm: "" },
+      validationSchema: changePassword,
+    });
+    const onSubmit = handleSubmit((formValues) => formValues);
+
+    return { onSubmit, resetForm };
+  },
+  data() {
+    return {
+      loading: false,
+      formData: {},
+    };
+  },
   methods: {
     goToLogin() {
-      this.$emit("changeStep", "recover");
+      this.$emit("changeStep", "login");
     },
-    hashEmail(email) {
-      const regex = /^([a-zA-Z0-9._%+-]+)@([a-zA-Z0-9.-]+)\.([a-zA-Z]{2,})$/;
+    async changePassword() {
+      try {
+        this.formData = await this.onSubmit();
+        if (!this.formData) return;
 
-      if (regex.test(email)) {
-        const [_, user, domain, dot] = email.match(regex);
+        this.loading = true;
 
-        return `${user.slice(0, 3)}*${"*".repeat(
-          user.length - 3,
-        )}@${domain}.${dot}`;
-      } else {
-        return "Email inválido";
+        const { data } = await this.$axios.post(
+          "/api/change-password",
+          this.formData,
+        );
+      } catch (error) {
+        console.error(error.message);
+        this.resetForm({
+          values: { password: "", passwordConfirm: "" },
+        });
+      } finally {
+        this.loading = false;
       }
     },
   },
@@ -27,23 +49,32 @@ export default {
 
 <template>
   <UiModal>
-    <div class="change-password">
+    <div class="change-password fadein animation-duration-500">
       <div class="change-password__header">
-        <h1 class="heading__tertiary">Código de recuperação</h1>
-        <p class="body__primary">
-          Insira o código que enviamos para seu e-mail
-          <span class="highlight"> {{ hashEmail(recoverEmail) }}. </span>
-        </p>
+        <h1 class="heading__tertiary">Alterar senha</h1>
+        <p class="body__primary">Insira a nova senha</p>
       </div>
 
       <div class="change-password__body">
         <form class="form">
           <div class="form__control">
             <label class="caption__primary">
-              Código de recuperação
-              <BaseInputText
-                name="username"
-                placeholder="Insira o código de recuperação"
+              Nova senha
+              <BaseInputPassword
+                name="password"
+                placeholder="Insira a nova senha"
+              />
+            </label>
+          </div>
+
+          <BaseInlineMessage severity="success" text="4 dígitos numéricos" />
+
+          <div class="form__control">
+            <label class="caption__primary">
+              Repita a senha
+              <BaseInputPassword
+                name="passwordConfirm"
+                placeholder="Repita a nova senha"
               />
             </label>
           </div>
@@ -56,7 +87,11 @@ export default {
           class="btn__primary--outlined"
           @click.prevent="goToLogin"
         />
-        <BaseButton label="Próximo" class="btn__primary" />
+        <BaseButton
+          label="Salvar"
+          class="btn__primary"
+          @click.prevent="changePassword"
+        />
       </div>
     </div>
   </UiModal>
@@ -67,13 +102,11 @@ export default {
   width: 35rem;
 
   &__header {
-    margin-bottom: 1.6rem;
-    display: grid;
-    gap: 0.8rem;
+    margin-bottom: $spacing-md;
   }
 
   &__body {
-    margin-bottom: 1.6rem;
+    margin-bottom: $spacing-md;
   }
 
   &__footer {
@@ -81,5 +114,10 @@ export default {
     align-items: center;
     gap: 1rem;
   }
+}
+
+.form {
+  display: grid;
+  gap: $spacing-md;
 }
 </style>

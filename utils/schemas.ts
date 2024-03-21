@@ -4,6 +4,19 @@ export const recoverPassword = yup.object({
   username: yup.string().required().min(3).trim(),
 });
 
+export const recoverCode = yup.object({
+  code: yup.string().required().min(3).trim(),
+});
+
+export const changePassword = yup.object({
+  password: yup.string().required().min(3),
+  passwordConfirm: yup
+    .string()
+    .required()
+    .min(3)
+    .oneOf([yup.ref("password")], "As senhas não iguais"),
+});
+
 export const loginSchema = yup.object({
   username: yup.string().required().min(3).trim(),
   password: yup.string().required().min(3),

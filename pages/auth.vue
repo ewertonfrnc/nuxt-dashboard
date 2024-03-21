@@ -1,12 +1,12 @@
 <script lang="ts">
 export default {
   setup() {
-    const authSteps = ["login", "recover", "change"];
+    const authSteps = ["login", "recover", "code", "change"];
     return { authSteps };
   },
   data() {
     return {
-      currentStep: "login",
+      currentStep: "change",
       recoverEmail: "",
     };
   },
@@ -41,11 +41,15 @@ export default {
       @change-step="changeAuthStep"
       @recover-email="setRecoverEmail"
     />
-    <!--    <AuthChangePassword-->
-    <!--      v-if="currentStep === 'change'"-->
-    <!--      :recover-email="recoverEmail"-->
-    <!--      @change-step="changeAuthStep"-->
-    <!--    />-->
+    <AuthRecoverCode
+      v-if="currentStep === 'code'"
+      :recover-email="recoverEmail"
+      @change-step="changeAuthStep"
+    />
+    <AuthChangePassword
+      v-if="currentStep === 'change'"
+      @change-step="changeAuthStep"
+    />
   </div>
 </template>
 

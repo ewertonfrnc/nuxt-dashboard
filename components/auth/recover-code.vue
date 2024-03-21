@@ -1,12 +1,16 @@
 <script lang="ts">
 import { useForm } from "vee-validate";
+import { recoverCode } from "~/utils/schemas";
 
 export default {
-  emits: ["changeStep", "recoverEmail"],
+  props: {
+    recoverEmail: { type: String, default: "", required: true },
+  },
+  emits: ["changeStep"],
   setup() {
     const { handleSubmit, resetForm } = useForm({
-      initialValues: { username: "" },
-      validationSchema: recoverPassword,
+      initialValues: { code: "" },
+      validationSchema: recoverCode,
     });
     const onSubmit = handleSubmit((formValues) => formValues);
 
@@ -16,15 +20,11 @@ export default {
     return {
       loading: false,
       formData: {},
-      userEmail: "",
     };
   },
   methods: {
-    goToLogin() {
-      this.$emit("changeStep", "login");
-    },
-    goToChangePassword() {
-      this.$emit("changeStep", "code");
+    goBack() {
+      this.$emit("changeStep", "recover");
     },
     hashEmail(email: string) {
       const regex = /^([a-zA-Z0-9._%+-]+)@([a-zA-Z0-9.-]+)\.([a-zA-Z]{2,})$/;
@@ -39,7 +39,7 @@ export default {
         return "Email inválido";
       }
     },
-    async recoverPassword() {
+    async sendRecoverCode() {
       try {
         this.formData = await this.onSubmit();
         if (!this.formData) return;
@@ -47,21 +47,14 @@ export default {
         this.loading = true;
 
         const {
-          data: { userEmail },
-        } = await this.$axios.post("/api/recover-password", this.formData);
-        this.goToChangePassword();
-        this.userEmail = userEmail;
+          data: { status },
+        } = await this.$axios.post("/api/recover-code", this.formData);
 
-        this.$toast.add({
-          severity: "success",
-          detail: "Verifique seu e-mail para copiar o código de recuperação.",
-          summary: "E-mail enviado",
-          life: 4000,
-        });
+        if (status && status === "success") this.$emit("changeStep", "change");
       } catch (error) {
         console.error(error.message);
         this.resetForm({
-          values: { username: "" },
+          values: { code: "" },
         });
       } finally {
         this.loading = false;
@@ -73,38 +66,39 @@ export default {
 
 <template>
   <UiModal>
-    <div class="recover fadein animation-duration-500">
-      <div class="recover__header">
-        <h1 class="heading__tertiary">Recuperar senha</h1>
-        <p class="body__primary">Insira suas credenciais de acesso:</p>
+    <div class="recover-code">
+      <div class="recover-code__header">
+        <h1 class="heading__tertiary">Código de recuperação</h1>
+        <p class="body__primary">
+          Insira o código que enviamos para seu e-mail
+          <span class="highlight"> {{ hashEmail(recoverEmail) }}. </span>
+        </p>
       </div>
 
-      <div class="recover__body">
+      <div class="recover-code__body">
         <form class="form">
           <div class="form__control">
             <label class="caption__primary">
-              Usuário
-              <BaseInputMask
-                name="username"
-                mask="999.999.999-99"
-                placeholder="Insira seu CPF"
+              Código de recuperação
+              <BaseInputText
+                name="code"
+                placeholder="Insira o código de recuperação"
               />
             </label>
           </div>
         </form>
       </div>
 
-      <div class="recover__footer">
+      <div class="recover-code__footer">
         <BaseButton
-          label="Cancelar"
+          label="Voltar"
           class="btn__primary--outlined"
-          @click.prevent="goToLogin"
+          @click.prevent="goBack"
         />
         <BaseButton
-          label="Próximo"
-          :loading="loading"
+          label="Confirmar"
           class="btn__primary"
-          @click.prevent="recoverPassword"
+          @click.prevent="sendRecoverCode"
         />
       </div>
     </div>
@@ -112,15 +106,17 @@ export default {
 </template>
 
 <style scoped lang="scss">
-.recover {
+.recover-code {
   width: 35rem;
 
   &__header {
-    margin-bottom: 1.6rem;
+    margin-bottom: $spacing-md;
+    display: grid;
+    gap: 0.8rem;
   }
 
   &__body {
-    margin-bottom: 1.6rem;
+    margin-bottom: $spacing-md;
   }
 
   &__footer {
@@ -128,10 +124,5 @@ export default {
     align-items: center;
     gap: 1rem;
   }
-}
-
-.highlight {
-  color: $color-feedback-warning-4;
-  font-weight: bold;
 }
 </style>

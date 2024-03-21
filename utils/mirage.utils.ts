@@ -47,6 +47,21 @@ export function makeServer() {
         );
       });
 
+      this.post("/recover-code", (schema, request) => {
+        const { code } = JSON.parse(request.requestBody);
+        if (!code) return;
+
+        if (code !== "1234") {
+          return new Response(
+            404,
+            {},
+            { status: "fail", message: "Usuário não encontrado!" },
+          );
+        }
+
+        return new Response(201, {}, { status: "success" });
+      });
+
       this.passthrough("https://dummyjson.com/auth/login");
       this.passthrough("https://dummyjson.com/users");
     },
