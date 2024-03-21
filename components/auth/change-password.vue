@@ -16,12 +16,19 @@ export default {
   data() {
     return {
       loading: false,
+      isValidPassword: false,
       formData: {},
     };
   },
   methods: {
     goToLogin() {
       this.$emit("changeStep", "login");
+    },
+    validatePassword(password: string) {
+      if (!password) return;
+
+      if (password.length >= 4) this.isValidPassword = true;
+      else this.isValidPassword = false;
     },
     async changePassword() {
       try {
@@ -63,11 +70,15 @@ export default {
               <BaseInputPassword
                 name="password"
                 placeholder="Insira a nova senha"
+                @updated-value="validatePassword"
               />
             </label>
           </div>
 
-          <BaseInlineMessage severity="success" text="4 dígitos numéricos" />
+          <BaseInlineMessage
+            :severity="isValidPassword ? 'success' : 'error'"
+            text="4 dígitos numéricos"
+          />
 
           <div class="form__control">
             <label class="caption__primary">

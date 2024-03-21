@@ -11,37 +11,21 @@
   &__info {
     background-color: $color-brand-primary-1;
     color: $color-brand-primary-4;
-
-    ::after {
-      @include beforeStyles($color-brand-primary-4);
-    }
   }
 
   &__success {
     background-color: $color-feedback-success-1;
     color: $color-feedback-success-4;
-
-    ::after {
-      @include beforeStyles($color-feedback-success-4);
-    }
   }
 
   &__warn {
     background-color: $color-feedback-warning-1;
     color: $color-feedback-warning-4;
-
-    ::after {
-      @include beforeStyles($color-feedback-warning-4);
-    }
   }
 
   &__error {
     background-color: $color-feedback-danger-1;
     color: $color-feedback-danger-4;
-
-    ::after {
-      @include beforeStyles($color-feedback-danger-4);
-    }
   }
 
   &__icon {}

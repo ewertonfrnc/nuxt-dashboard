@@ -18,6 +18,7 @@
         hideIcon: 'pi pi-eye',
         showIcon: 'pi pi-eye-slash',
       }"
+      @update:model-value="(value: string) => $emit('updatedValue', value)"
     />
 
     <div
@@ -38,6 +39,7 @@
 import { useField } from "vee-validate";
 
 export default {
+  emit: ["updatedValue"],
   props: {
     name: { type: String, default: "", required: true },
     label: { type: String, default: "", required: false },
@@ -47,6 +49,7 @@ export default {
     disabled: { type: Boolean, default: false, required: false },
     wrongCrendentialsMessage: { type: String, default: "", required: false },
   },
+  emits: ["updatedValue"],
   setup(props) {
     const { value, errorMessage } = useField(props.name);
     return { value, errorMessage };

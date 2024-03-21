@@ -9,7 +9,7 @@ export const recoverCode = yup.object({
 });
 
 export const changePassword = yup.object({
-  password: yup.string().required().min(3),
+  password: yup.string().required().min(4),
   passwordConfirm: yup
     .string()
     .required()
