@@ -6,7 +6,7 @@ export default {
   },
   data() {
     return {
-      currentStep: "change",
+      currentStep: "login",
       recoverEmail: "",
     };
   },
