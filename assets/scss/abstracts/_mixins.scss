@@ -56,7 +56,7 @@ $breakpoint argument choices:
 
   @if $breakpoint == big-desktop {
     // 1800px
-    @media (max-width: 112.5em) {
+    @media (min-width: 112.5em) {
       @content;
     }
   }
