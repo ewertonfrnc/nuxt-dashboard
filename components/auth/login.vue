@@ -121,12 +121,14 @@ export default {
           </span>
         </div>
 
-        <BaseButton
-          label="Entrar"
-          class="btn__primary"
-          :loading="isLoading"
-          @click.prevent="login"
-        />
+        <div class="form__submit">
+          <BaseButton
+            label="Entrar"
+            class="btn__primary"
+            :loading="isLoading"
+            @click.prevent="login"
+          />
+        </div>
       </form>
 
       <div class="register">
@@ -169,6 +171,15 @@ export default {
       color: $color-neutral-neutral-2;
       display: flex;
       gap: 0.8rem;
+    }
+  }
+
+  &__submit {
+    display: flex;
+    justify-content: center;
+
+    & > button {
+      max-width: 20rem;
     }
   }
 }
