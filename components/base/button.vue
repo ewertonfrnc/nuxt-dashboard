@@ -7,7 +7,11 @@
     :pt="{
       root: 'btn',
     }"
-  />
+  >
+    <template #loadingicon>
+      <i class="pi pi-spinner btn__icon--loading" />
+    </template>
+  </Button>
 </template>
 
 <script lang="ts">

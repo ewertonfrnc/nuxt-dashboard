@@ -22,6 +22,12 @@
     cursor: pointer;
   }
 
+  &__icon {
+    &--loading {
+      animation: rotation 1s linear infinite;
+    }
+  }
+
   &__primary {
     font-size: $font-size-button-primary;
     @include buttonStyles(
