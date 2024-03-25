@@ -63,13 +63,25 @@ export default {
     togglePasswordVisibility() {
       this.isPasswordVisible = !this.isPasswordVisible;
 
-      const inputEl: HTMLInputElement | null = document.querySelector(
+      const closedEyeIcons = document.querySelectorAll(".pi-eye-slash");
+      const openEyeIcons = document.querySelectorAll(".pi-eye");
+      const inputEls = document.querySelectorAll(
         '[data-pc-name="password"] > .input__field',
       );
 
-      if (inputEl) {
-        inputEl.type = this.isPasswordVisible ? "text" : "password";
+      if (this.isPasswordVisible) {
+        closedEyeIcons.forEach((el) => {
+          el.classList.replace("pi-eye-slash", "pi-eye");
+        });
+      } else {
+        openEyeIcons.forEach((el) => {
+          el.classList.replace("pi-eye", "pi-eye-slash");
+        });
       }
+
+      inputEls.forEach((el) => {
+        el.type = this.isPasswordVisible ? "text" : "password";
+      });
     },
   },
 };

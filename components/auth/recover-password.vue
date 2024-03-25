@@ -16,7 +16,6 @@ export default {
     return {
       loading: false,
       formData: {},
-      userEmail: "",
     };
   },
   methods: {
@@ -25,19 +24,6 @@ export default {
     },
     goToChangePassword() {
       this.$emit("changeStep", "code");
-    },
-    hashEmail(email: string) {
-      const regex = /^([a-zA-Z0-9._%+-]+)@([a-zA-Z0-9.-]+)\.([a-zA-Z]{2,})$/;
-
-      if (regex.test(email)) {
-        const [_, user, domain, dot] = email.match(regex);
-
-        return `${user.slice(0, 3)}*${"*".repeat(
-          user.length - 3,
-        )}@${domain}.${dot}`;
-      } else {
-        return "Email inválido";
-      }
     },
     async recoverPassword() {
       try {
@@ -50,7 +36,7 @@ export default {
           data: { userEmail },
         } = await this.$axios.post("/api/recover-password", this.formData);
         this.goToChangePassword();
-        this.userEmail = userEmail;
+        this.$emit("recoverEmail", userEmail);
 
         this.$toast.add({
           severity: "success",
@@ -128,10 +114,5 @@ export default {
     align-items: center;
     gap: 1rem;
   }
-}
-
-.highlight {
-  color: $color-feedback-warning-4;
-  font-weight: bold;
 }
 </style>

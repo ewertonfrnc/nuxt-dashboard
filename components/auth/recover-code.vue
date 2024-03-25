@@ -26,19 +26,6 @@ export default {
     goBack() {
       this.$emit("changeStep", "recover");
     },
-    hashEmail(email: string) {
-      const regex = /^([a-zA-Z0-9._%+-]+)@([a-zA-Z0-9.-]+)\.([a-zA-Z]{2,})$/;
-
-      if (regex.test(email)) {
-        const [_, user, domain, dot] = email.match(regex);
-
-        return `${user.slice(0, 3)}*${"*".repeat(
-          user.length - 3,
-        )}@${domain}.${dot}`;
-      } else {
-        return "Email inválido";
-      }
-    },
     async sendRecoverCode() {
       try {
         this.formData = await this.onSubmit();
@@ -71,7 +58,7 @@ export default {
         <h1 class="heading__tertiary">Código de recuperação</h1>
         <p class="body__primary">
           Insira o código que enviamos para seu e-mail
-          <span class="highlight"> {{ hashEmail(recoverEmail) }}. </span>
+          <span class="highlight"> {{ recoverEmail }}. </span>
         </p>
       </div>
 
@@ -97,6 +84,7 @@ export default {
         />
         <BaseButton
           label="Confirmar"
+          :loading="loading"
           class="btn__primary"
           @click.prevent="sendRecoverCode"
         />
@@ -124,5 +112,10 @@ export default {
     align-items: center;
     gap: 1rem;
   }
+}
+
+.highlight {
+  color: $color-feedback-warning-4;
+  font-weight: bold;
 }
 </style>

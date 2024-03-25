@@ -65,6 +65,7 @@ export default {
   place-content: center;
 
   &__detail--1 {
+    z-index: 0;
     transform: rotate(180deg);
     position: absolute;
     top: 0;
@@ -72,6 +73,7 @@ export default {
   }
 
   &__detail--2 {
+    z-index: 0;
     position: absolute;
     bottom: 0;
     left: 0;

@@ -10,7 +10,7 @@ export default {};
 
 <style scoped lang="scss">
 .modal {
-  z-index: 9999;
+  z-index: 1;
   background-color: $color-neutral-neutral-7;
   padding: 4.8rem;
   border-radius: 1.6rem;

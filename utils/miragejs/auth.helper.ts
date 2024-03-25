@@ -34,7 +34,7 @@ export function recoverPasswordMock(schema, request) {
   return new Response(
     201,
     {},
-    { status: "success", userEmail: "ewerton.silva@usemobile.xyz" },
+    { status: "success", userEmail: "ana******@usemobile.xyz" },
   );
 }
 
