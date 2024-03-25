@@ -1,6 +1,7 @@
 <script lang="ts">
 export default {
   setup() {
+    definePageMeta({ layout: false });
     const authSteps = ["login", "recover", "code", "change"];
     return { authSteps };
   },
@@ -23,34 +24,36 @@ export default {
 </script>
 
 <template>
-  <div class="container">
-    <img
-      src="~/assets/img/login-feature.png"
-      class="container__detail--1"
-      alt="container details"
-    />
-    <img
-      src="~/assets/img/login-feature.png"
-      class="container__detail--2"
-      alt="container details"
-    />
+  <NuxtLayout>
+    <div class="container">
+      <img
+        src="~/assets/img/login-feature.png"
+        class="container__detail--1"
+        alt="container details"
+      />
+      <img
+        src="~/assets/img/login-feature.png"
+        class="container__detail--2"
+        alt="container details"
+      />
 
-    <AuthLogin v-if="currentStep === 'login'" @change-step="changeAuthStep" />
-    <AuthRecoverPassword
-      v-if="currentStep === 'recover'"
-      @change-step="changeAuthStep"
-      @recover-email="setRecoverEmail"
-    />
-    <AuthRecoverCode
-      v-if="currentStep === 'code'"
-      :recover-email="recoverEmail"
-      @change-step="changeAuthStep"
-    />
-    <AuthChangePassword
-      v-if="currentStep === 'change'"
-      @change-step="changeAuthStep"
-    />
-  </div>
+      <AuthLogin v-if="currentStep === 'login'" @change-step="changeAuthStep" />
+      <AuthRecoverPassword
+        v-if="currentStep === 'recover'"
+        @change-step="changeAuthStep"
+        @recover-email="setRecoverEmail"
+      />
+      <AuthRecoverCode
+        v-if="currentStep === 'code'"
+        :recover-email="recoverEmail"
+        @change-step="changeAuthStep"
+      />
+      <AuthChangePassword
+        v-if="currentStep === 'change'"
+        @change-step="changeAuthStep"
+      />
+    </div>
+  </NuxtLayout>
 </template>
 
 <style scoped lang="scss">
