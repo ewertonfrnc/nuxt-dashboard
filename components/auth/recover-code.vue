@@ -53,7 +53,7 @@ export default {
 
 <template>
   <UiModal>
-    <div class="recover-code">
+    <div class="recover-code login fadein animation-duration-500">
       <div class="recover-code__header">
         <h1 class="heading__tertiary">Código de recuperação</h1>
         <p class="body__primary">
