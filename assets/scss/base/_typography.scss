@@ -53,6 +53,11 @@ body {
     font-size: $font-size-title-3;
     font-weight: 600;
   }
+
+  &__senary {
+    font-size: $font-size-title-5;
+    font-weight: 700;
+  }
 }
 
 .subtitle {
@@ -76,6 +81,7 @@ body {
 
   &__secondary {
     font-size: $font-size-body-secondary;
+    font-weight: 500;
   }
 }
 
