@@ -1,7 +1,7 @@
 <template>
-  <div class="container">
+  <div class="container fadein animation-duration-500">
     <transition name="slide">
-      <nav v-show="isSidebarVisible" class="nav">sidebar</nav>
+      <LayoutSidebar v-if="isSidebarVisible" />
     </transition>
 
     <div class="content">
@@ -66,7 +66,7 @@ export default {
   transition: all 0.3s ease-in-out;
 
   display: flex;
-  gap: 2rem;
+  gap: 1rem;
 }
 
 .content {
@@ -110,15 +110,6 @@ export default {
       border-radius: 10rem;
     }
   }
-}
-
-.nav {
-  box-shadow: $box-shadow;
-
-  background-color: $color-neutral-neutral-7;
-  padding: 2.4rem 0;
-  width: 23rem;
-  border: 1px solid $color-surface-surface-4;
 }
 
 .main {
