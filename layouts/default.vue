@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <transition name="slide">
-      <nav class="nav">sidebar</nav>
+      <nav v-show="isSidebarVisible" class="nav">sidebar</nav>
     </transition>
 
     <div class="content">
