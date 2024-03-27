@@ -7,6 +7,7 @@ export default defineNuxtConfig({
     "@vee-validate/nuxt",
     "@pinia/nuxt",
     "@pinia-plugin-persistedstate/nuxt",
+    "@nuxtjs/color-mode",
   ],
   primevue: {
     usePrimeVue: true,

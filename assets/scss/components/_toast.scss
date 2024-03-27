@@ -22,7 +22,6 @@
     background: $color-feedback-success-1;
     color: $color-feedback-success-4;
 
-
     ::after {
       @include beforeStyles($color-feedback-success-4);
     }

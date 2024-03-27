@@ -1,7 +1,7 @@
 <script lang="ts">
 export default {
   setup() {
-    definePageMeta({ layout: false });
+    definePageMeta({ layout: "auth" });
     const authSteps = ["login", "recover", "code", "change"];
     return { authSteps };
   },
@@ -73,6 +73,14 @@ export default {
     position: absolute;
     top: 0;
     right: 0;
+
+    @include respond(tab-land) {
+      max-width: 40rem;
+    }
+
+    @include respond(tab-port) {
+      max-width: 35rem;
+    }
   }
 
   &__detail--2 {
@@ -80,6 +88,14 @@ export default {
     position: absolute;
     bottom: 0;
     left: 0;
+
+    @include respond(tab-land) {
+      max-width: 40rem;
+    }
+
+    @include respond(tab-port) {
+      max-width: 35rem;
+    }
   }
 }
 </style>
