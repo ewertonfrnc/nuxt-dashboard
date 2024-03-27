@@ -6,7 +6,7 @@
 
     <div class="content">
       <main class="main">
-        <LayoutHeader :toggle-sidebar="toggleSidebar" />
+        <LayoutHeader :toggle-sidebar="toggleSidebar" :route-path="path" />
 
         <BaseToast />
         <slot />
@@ -27,7 +27,11 @@ export default {
   data() {
     return {
       isSidebarVisible: true,
+      path: "",
     };
+  },
+  updated() {
+    this.path = this.$route.path;
   },
   methods: {
     toggleSidebar() {

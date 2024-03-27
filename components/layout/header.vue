@@ -4,7 +4,25 @@
       <i class="pi pi-bars"></i>
     </button>
 
-    <div class="header__breadcrumbs">header__breadcrumbs</div>
+    <div class="header__breadcrumbs">
+      <Breadcrumb
+        :home="home"
+        :model="items"
+        :pt="{
+          root: 'breadcumb',
+          menu: 'breadcumb__menu',
+        }"
+      >
+        <template #item="{ item }">
+          <NuxtLink :to="item.route">
+            <i v-if="item.icon" :class="['pi', item.icon]" />
+            <span v-if="item.label && item.label !== 'Indicadores'">{{
+              item.label
+            }}</span>
+          </NuxtLink>
+        </template>
+      </Breadcrumb>
+    </div>
 
     <div class="header__avatar">
       <img
@@ -20,6 +38,7 @@
 import { mapState } from "pinia";
 import { PropType } from "vue";
 import { useAuthStore } from "~/stores/auth.store";
+import { findRouteAndLabel, routes } from "~/utils/routes.utils";
 
 export default {
   props: {
@@ -27,15 +46,19 @@ export default {
       type: Function as PropType<(payload: MouseEvent) => void>,
       required: true,
     },
+    routePath: { type: String, required: true },
   },
   data() {
     return {
-      home: { icon: "pi pi-home", to: "/" },
-      items: [{ label: "Fechamento de ponto" }],
+      home: { icon: "pi pi-home", route: "/" },
     };
   },
   computed: {
     ...mapState(useAuthStore, ["user"]),
+    items() {
+      const routeAndLabel = findRouteAndLabel(routes, this.routePath);
+      return [routeAndLabel];
+    },
   },
 };
 </script>
@@ -76,26 +99,4 @@ export default {
     }
   }
 }
-
-//header {
-//  gap: 2rem;
-//  margin-bottom: 2rem;
-//}
-//
-//.icon-wrapper {
-//  background-color: white;
-//  border: none;
-//}
-//
-//.breadcumbs {
-//  width: 100%;
-//}
-//
-//:deep(.p-menuitem-icon) {
-//  font-size: 1.4rem;
-//}
-//
-//:deep(.p-breadcrumb) {
-//  padding: 0.8rem 1.6rem;
-//}
 </style>
