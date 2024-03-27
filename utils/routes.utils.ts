@@ -44,7 +44,7 @@ export const routes: RouteItem[] = [
           {
             label: "Colaboradores",
             icon: "pi pi-users",
-            route: "/employees",
+            route: "/register-employees",
           },
           {
             label: "Cargos",
@@ -80,7 +80,7 @@ export function findRouteAndLabel(
       const foundItem = menuItem.items.find(
         (subItem) => subItem.route === path,
       );
-      if (foundItem) {
+      if (foundItem && foundItem.label !== "Cadastros") {
         result = { route: foundItem.route, label: foundItem.label };
       }
 
