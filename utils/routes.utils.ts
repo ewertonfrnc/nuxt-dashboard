@@ -1,9 +1,12 @@
-export const routes = [
+import { RouteItem } from "~/interfaces/routes.interface";
+
+export const routes: RouteItem[] = [
   {
     label: "Visão Geral",
+    route: "",
     items: [
       {
-        label: "Resumo",
+        label: "Indicadores",
         icon: "pi pi-home",
         route: "/",
       },
@@ -26,10 +29,12 @@ export const routes = [
   },
   {
     label: "Configurações",
+    route: "",
     items: [
       {
         label: "Cadastros",
         icon: "pi pi-plus-circle",
+        route: "",
         items: [
           {
             label: "Empresa",
@@ -56,8 +61,40 @@ export const routes = [
       {
         label: "Parâmetros de ponto",
         icon: "pi pi-clock",
-        route: "/",
+        route: "/clock-config",
       },
     ],
   },
 ];
+
+export function findRouteAndLabel(
+  menuItems: RouteItem[],
+  path: string,
+): RouteItem {
+  let result: RouteItem = { route: "", label: "" };
+
+  menuItems.forEach((menuItem) => {
+    if (!menuItem) return;
+
+    if (menuItem.items) {
+      const foundItem = menuItem.items.find(
+        (subItem) => subItem.route === path,
+      );
+      if (foundItem) {
+        result = { route: foundItem.route, label: foundItem.label };
+      }
+
+      const [subMenuItems] = menuItem.items;
+      if (subMenuItems.items) {
+        const foundItem = subMenuItems.items.find(
+          (subItem) => subItem.route === path,
+        );
+
+        if (foundItem)
+          result = { route: foundItem.route, label: foundItem.label };
+      }
+    }
+  });
+
+  return result;
+}
