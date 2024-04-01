@@ -2,6 +2,10 @@
 import { routes } from "~/utils/routes.utils";
 
 export default {
+  setup() {
+    const colorMode = useColorMode();
+    return { colorMode };
+  },
   data() {
     return {
       items: routes,
@@ -15,7 +19,18 @@ export default {
     <Menu :model="items">
       <template #start>
         <div class="nav__header">
-          <img src="~/assets/img/LOGO.png" alt="Itera logo" class="nav__logo" />
+          <img
+            v-if="colorMode.preference === 'light'"
+            src="~/assets/img/logo-black.png"
+            alt="Itera logo"
+            class="nav__logo"
+          />
+          <img
+            v-else
+            src="~/assets/img/logo-white.png"
+            alt="Itera logo"
+            class="nav__logo"
+          />
 
           <span class="caption__secondary"
             >Usemobile Soluções em Tecnologia</span
@@ -34,11 +49,11 @@ export default {
         <NuxtLink
           v-if="item.route && !item.items"
           :to="item.route"
-          class="nav__item"
+          class="nav__item body__secondary"
           active-class="nav__item--active"
         >
           <i :class="['pi', item.icon]"></i>
-          <span class="body__secondary"> {{ item.label }} </span>
+          <span> {{ item.label }} </span>
         </NuxtLink>
 
         <Accordion v-if="!item.route && item.items" :active-index="0">
@@ -84,17 +99,18 @@ export default {
 .nav {
   box-shadow: $box-shadow;
 
-  background-color: $color-neutral-neutral-7;
+  background-color: map-get($color-scheme-light, "$color-neutral-neutral-7");
   padding: 2.4rem 0;
-  width: 26rem;
-  border: 1px solid $color-surface-surface-4;
+  width: 30rem;
+  border: 1px solid map-get($color-scheme-light, "$color-surface-surface-4");
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  overflow-y: auto;
 
   &__header {
     padding: 0 1.6rem;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
 
     span {
       display: inline-block;
@@ -106,17 +122,17 @@ export default {
     display: flex;
     align-items: center;
     gap: 1rem;
-    color: $color-neutral-neutral-0;
+    color: map-get($color-scheme-light, "$color-neutral-neutral-0");
     transition: all 0.2s ease;
 
     h6 {
-      color: $color-brand-primary-4;
+      color: map-get($color-scheme-light, "$color-brand-primary-4");
     }
 
     &--active,
     &:not(.nav__menuheader):hover {
-      background-color: $color-brand-primary-1;
-      color: $color-brand-primary-0;
+      background-color: map-get($color-scheme-light, "$color-brand-primary-1");
+      color: map-get($color-scheme-light, "$color-brand-primary-0");
       cursor: pointer;
     }
 
@@ -133,12 +149,29 @@ export default {
     }
   }
 
+  .dark-mode &__item {
+    color: map-get($color-scheme-dark, "$color-neutral-neutral-0");
+
+    &--active,
+    &:not(.nav__menuheader):hover {
+      background-color: map-get($color-scheme-dark, "$color-brand-primary-1");
+      color: map-get($color-scheme-dark, "$color-brand-primary-0");
+    }
+  }
+
   &__footer {
     padding: 0.8rem 1.6rem;
   }
 
   &__logo {
     max-width: 100%;
+    margin-bottom: 1rem;
   }
+}
+
+.dark-mode .nav {
+  background-color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
+  border: 1px solid map-get($color-scheme-dark, "$color-surface-surface-4");
+  box-shadow: 0 0.2rem 1rem #191729;
 }
 </style>
