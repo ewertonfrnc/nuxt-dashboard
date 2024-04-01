@@ -3,20 +3,24 @@ export default {};
 </script>
 
 <template>
-  <div class="card p-5 border-round-2xl">
+  <div class="card">
     <slot />
   </div>
 </template>
 
 <style scoped lang="scss">
 .card {
-  background: $color-neutral-neutral-7;
-  border: $border;
-  box-shadow: $box-shadow;
-  overflow-x: auto;
+  background: map-get($color-scheme-light, "$color-neutral-neutral-7");
+  border: map-get($color-scheme-light, $border-light);
+  box-shadow: map-get($color-scheme-light, $box-shadow-light);
+  padding: 2.4rem;
+  border-radius: 0.8rem;
+  margin-bottom: 2rem;
+}
 
-  &:not(:last-child) {
-    margin-bottom: 2rem;
-  }
+.dark-mode .card {
+  background: map-get($color-scheme-dark, "$color-neutral-neutral-7");
+  border: map-get($color-scheme-dark, $border-dark);
+  box-shadow: map-get($color-scheme-dark, $box-shadow-dark);
 }
 </style>
