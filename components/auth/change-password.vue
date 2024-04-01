@@ -5,13 +5,13 @@ import { changePassword } from "~/utils/schemas";
 export default {
   emits: ["changeStep"],
   setup() {
-    const { handleSubmit, resetForm } = useForm({
+    const { handleSubmit, resetForm, values } = useForm({
       initialValues: { password: "", passwordConfirm: "" },
       validationSchema: changePassword,
     });
     const onSubmit = handleSubmit((formValues) => formValues);
 
-    return { onSubmit, resetForm };
+    return { onSubmit, resetForm, values };
   },
   data() {
     return {
@@ -80,6 +80,12 @@ export default {
           </div>
 
           <BaseInlineMessage
+            v-if="!values.password"
+            severity="info"
+            text="4 dígitos numéricos"
+          />
+          <BaseInlineMessage
+            v-else
             :severity="isValidPassword ? 'success' : 'error'"
             text="4 dígitos numéricos"
           />
