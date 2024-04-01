@@ -5,10 +5,11 @@ export default {
   props: {
     tabsData: { type: Array<Tabs>, required: true },
   },
+
   computed: {
     tabs() {
       return this.tabsData.map((tab) => ({
-        title: tab.title,
+        label: tab.label,
         icon: tab.icon,
         component: tab.component,
       }));
@@ -18,20 +19,33 @@ export default {
 </script>
 
 <template>
-  <TabView :pt="{ navContent: 'nav-content', nav: 'tab-list' }">
-    <TabPanel
-      v-for="(tab, index) in tabs"
-      :key="index"
-      :pt="{ header: 'tab-panel' }"
+  <BaseCard>
+    <TabView
+      select-on-focus
+      :pt="{
+        navContent: 'nav-content',
+        nav: 'tab-list',
+        inkbar: 'tab-list__inkbar',
+      }"
     >
-      <template #header>
-        <div class="flex align-items-center gap-2">
-          <i :class="tab.icon"></i>
-          <span>{{ tab.title }}</span>
-        </div>
-      </template>
+      <TabPanel
+        v-for="(tab, index) in tabs"
+        :key="index"
+        :pt="{ header: 'tab-panel' }"
+      >
+        <template #header>
+          <div class="tab-list__item">
+            <i :class="['pi', tab.icon]" />
+            <span class="subtitle__primary">{{ tab.label }}</span>
+          </div>
+        </template>
 
-      <component :is="{ ...tab.component }" />
-    </TabPanel>
-  </TabView>
+        <template #default>
+          <div class="tab-list__content">
+            <component :is="{ ...tab.component }" />
+          </div>
+        </template>
+      </TabPanel>
+    </TabView>
+  </BaseCard>
 </template>
