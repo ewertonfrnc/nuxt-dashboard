@@ -130,7 +130,7 @@ export default {
   <DataTable
     removable-sort
     :value="seeOnlySelectedFields ? selectedEmployees : nodes"
-    :paginator="paginator"
+    :paginator="!loading && paginator"
     :rows="rows"
     :filters="filters"
     filter-display="menu"
@@ -155,7 +155,7 @@ export default {
     @row-collapse="onRowCollapse"
     @update:filters="updateFilterHandler"
   >
-    <template v-if="headerShown" #header>
+    <template v-if="!loading && headerShown" #header>
       <div
         :class="[
           selectedEmployees?.length
@@ -172,9 +172,9 @@ export default {
 
         <div class="table__header--filter">
           <BaseButton
-            class="btn__secondary--outlined"
+            class="btn__primary--outlined"
             icon="pi pi-filter-slash"
-            label="Limpar"
+            label="Limpar filtro"
             @click="clearFilters"
           />
 
@@ -188,29 +188,30 @@ export default {
     </template>
 
     <template #empty> Nenhum produto encontrado. </template>
-    <template #loading> Carregando produtos. Por favor, aguarde! </template>
+    <template #loading>Carregando produtos. Por favor, aguarde! </template>
 
     <Column
-      v-if="isSelectable"
+      v-if="!loading && isSelectable"
       selection-mode="multiple"
       :pt="{
         checkboxwrapper: 'checkbox__wrapper',
         headercheckboxwrapper: 'checkbox__wrapper',
         headercell: 'table__header--cell',
-        bodycell: 'table__body--cell',
+        bodycell: 'table__body--cell table__body--cell-icon',
       }"
     />
 
     <Column
-      v-if="isExpandable"
+      v-if="!loading && isExpandable"
       expander
       :pt="{
-        bodycell: 'table__body--cell',
+        bodycell: 'table__body--cell table__body--cell-icon',
       }"
     />
 
     <Column
       v-for="col of columns"
+      v-if="!loading"
       :key="col.field"
       :field="col.field"
       :header="col.header"
