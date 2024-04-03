@@ -2,6 +2,11 @@
 import { routes } from "~/utils/routes.utils";
 
 export default {
+  props: {
+    isNavVisible: { type: Boolean, default: true, required: true },
+    isNarrowScreen: { type: Boolean, default: false, required: true },
+  },
+  emits: ["close-nav"],
   setup() {
     const colorMode = useColorMode();
     return { colorMode };
@@ -11,11 +16,16 @@ export default {
       items: routes,
     };
   },
+  methods: {
+    handleNavigation() {
+      this.$emit("close-nav", !this.isNavVisible);
+    },
+  },
 };
 </script>
 
 <template>
-  <nav class="nav">
+  <nav :class="['nav', isNarrowScreen && 'nav__collapsed']">
     <Menu :model="items">
       <template #start>
         <div class="nav__header">
@@ -51,6 +61,7 @@ export default {
           :to="item.route"
           class="nav__item body__secondary"
           active-class="nav__item--active"
+          @click="handleNavigation"
         >
           <i :class="['pi', item.icon]"></i>
           <span> {{ item.label }} </span>
@@ -79,6 +90,7 @@ export default {
                 class="nav__item nav__item--subitem"
                 active-class="nav__item--active"
                 :tabindex="0"
+                @click="handleNavigation"
               >
                 <i :class="['pi', subItem.icon]"></i>
                 <span class="body__secondary"> {{ subItem.label }} </span>
@@ -94,84 +106,3 @@ export default {
     </div>
   </nav>
 </template>
-
-<style scoped lang="scss">
-.nav {
-  box-shadow: $box-shadow;
-
-  background-color: map-get($color-scheme-light, "$color-neutral-neutral-7");
-  padding: 2.4rem 0;
-  width: 30rem;
-  border: 1px solid map-get($color-scheme-light, "$color-surface-surface-4");
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  overflow-y: auto;
-
-  &__header {
-    padding: 0 1.6rem;
-    margin-bottom: 2rem;
-
-    span {
-      display: inline-block;
-    }
-  }
-
-  &__item {
-    padding: 0.8rem 1.6rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    color: map-get($color-scheme-light, "$color-neutral-neutral-0");
-    transition: all 0.2s ease;
-
-    h6 {
-      color: map-get($color-scheme-light, "$color-brand-primary-4");
-    }
-
-    &--active,
-    &:not(.nav__menuheader):hover {
-      background-color: map-get($color-scheme-light, "$color-brand-primary-1");
-      color: map-get($color-scheme-light, "$color-brand-primary-0");
-      cursor: pointer;
-    }
-
-    &--icon {
-      margin-left: auto;
-    }
-
-    &--subitem {
-      padding: 0.8rem 1.6rem 0.8rem 3rem;
-    }
-
-    span {
-      font-weight: 500;
-    }
-  }
-
-  .dark-mode &__item {
-    color: map-get($color-scheme-dark, "$color-neutral-neutral-0");
-
-    &--active,
-    &:not(.nav__menuheader):hover {
-      background-color: map-get($color-scheme-dark, "$color-brand-primary-1");
-      color: map-get($color-scheme-dark, "$color-brand-primary-0");
-    }
-  }
-
-  &__footer {
-    padding: 0.8rem 1.6rem;
-  }
-
-  &__logo {
-    max-width: 100%;
-    margin-bottom: 1rem;
-  }
-}
-
-.dark-mode .nav {
-  background-color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
-  border: 1px solid map-get($color-scheme-dark, "$color-surface-surface-4");
-  box-shadow: 0 0.2rem 1rem #191729;
-}
-</style>
