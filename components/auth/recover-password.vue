@@ -40,12 +40,18 @@ export default {
 
         this.$toast.add({
           severity: "success",
-          detail: "Verifique seu e-mail para copiar o código de recuperação.",
           summary: "E-mail enviado",
+          detail: "Verifique seu e-mail para copiar o código de recuperação.",
           life: 4000,
         });
       } catch (error) {
-        console.error(error.message);
+        this.$toast.add({
+          severity: "error",
+          summary: "Algo deu errado",
+          detail: "Tente novamente mais tarde.",
+          life: 4000,
+        });
+
         this.resetForm({
           values: { username: "" },
         });

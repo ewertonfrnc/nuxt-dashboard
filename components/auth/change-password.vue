@@ -46,7 +46,13 @@ export default {
           life: 4000,
         });
       } catch (error) {
-        console.error(error.message);
+        this.$toast.add({
+          severity: "error",
+          summary: "Algo deu errado",
+          detail: "Tente novamente mais tarde.",
+          life: 4000,
+        });
+
         this.resetForm({
           values: { password: "", passwordConfirm: "" },
         });

@@ -39,7 +39,13 @@ export default {
 
         if (status && status === "success") this.$emit("changeStep", "change");
       } catch (error) {
-        console.error(error.message);
+        this.$toast.add({
+          severity: "error",
+          summary: "Algo deu errado",
+          detail: "Tente novamente mais tarde.",
+          life: 4000,
+        });
+
         this.resetForm({
           values: { code: "" },
         });
