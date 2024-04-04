@@ -42,7 +42,7 @@ export default {
 .large {
   width: 13rem;
   height: 13rem;
-  border-width: 7px;
+  border-width: 5px;
 }
 
 .dark-mode .loader {
