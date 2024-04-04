@@ -2,6 +2,7 @@ import { createServer, Model } from "miragejs";
 
 import authHandlers from "~/utils/miragejs/auth.handlers";
 import homeHandlers from "~/utils/miragejs/home.handlers";
+import timeSheetHandlers from "~/utils/miragejs/time-sheet.handlers";
 
 export function makeServer() {
   return createServer({
@@ -16,6 +17,9 @@ export function makeServer() {
 
       // home
       homeHandlers(this);
+
+      // time-sheet
+      timeSheetHandlers(this);
     },
   });
 }
