@@ -1,147 +1,19 @@
-<script lang="ts">
-import { FilterMatchMode } from "primevue/api";
-import {
-  DataTableFilterMeta,
-  DataTableRowExpandEvent,
-  DataTableRowSelectEvent,
-} from "primevue/datatable";
-
-export default {
-  props: {
-    columns: { type: Array, required: true },
-    nodes: { type: Array, required: true },
-    loading: { type: Boolean, required: false, default: false },
-    sortable: { type: Boolean, required: false, default: true },
-    paginator: { type: Boolean, required: false, default: true },
-    rows: { type: Number, required: false, default: 10 },
-    headerShown: { type: Boolean, required: false, default: false },
-    isSelectable: { type: Boolean, required: false, default: false },
-    isExpandable: { type: Boolean, required: false, default: false },
-    hasAction: { type: Boolean, required: false, default: false },
-  },
-  setup() {
-    const colorMode = useColorMode();
-    return { colorMode };
-  },
-  data() {
-    return {
-      filters: null,
-      selectedOption: { label: "", code: "" },
-      selectedFilterField: "",
-      filterOption: [
-        { label: "Começa com", code: FilterMatchMode.STARTS_WITH },
-        { label: "Contém", code: FilterMatchMode.CONTAINS },
-        { label: "Não contém", code: FilterMatchMode.NOT_CONTAINS },
-        { label: "Termina com", code: FilterMatchMode.ENDS_WITH },
-        { label: "Igual", code: FilterMatchMode.EQUALS },
-        { label: "Exceto", code: FilterMatchMode.NOT_EQUALS },
-      ],
-
-      // Row selection
-      selectAllCheckbox: null,
-      selectedEmployees: [],
-      seeOnlySelectedFields: false,
-
-      // Row Expansion
-      expandedRows: [],
-    };
-  },
-  created() {
-    this.initFilters();
-  },
-  mounted() {
-    if (this.isSelectable) {
-      this.selectAllCheckbox = document.querySelector(
-        '[data-pc-section="headercheckboxwrapper"] .p-hidden-accessible',
-      )?.children[0];
-
-      if (this.selectAllCheckbox)
-        this.selectAllCheckbox.ariaLabel = "All items unselected";
-    }
-  },
-  updated() {
-    if (this.isSelectable && this.selectAllCheckbox) {
-      this.selectAllCheckbox.ariaLabel =
-        this.selectedEmployees?.length !== this.nodes.length
-          ? "All items unselected"
-          : "All items selected";
-    }
-  },
-  methods: {
-    clearFilters() {
-      this.initFilters();
-    },
-    initFilters() {
-      this.filters = {
-        global: {
-          field: "global",
-          value: null,
-          matchMode: FilterMatchMode.CONTAINS,
-        },
-        firstName: {
-          field: "name",
-          value: null,
-          matchMode: FilterMatchMode.STARTS_WITH,
-        },
-      };
-    },
-    selectAllHandler() {
-      this.selectedEmployees =
-        this.selectedEmployees?.length !== this.nodes.length ? this.nodes : [];
-    },
-    onRowSelect(event: DataTableRowSelectEvent) {
-      this.selectedEmployees = [...this.selectedEmployees, event.data];
-    },
-    onRowUnselect(event: DataTableRowSelectEvent) {
-      this.selectedEmployees = this.selectedEmployees?.filter(
-        (employee) => employee.id !== event.data.id,
-      );
-    },
-    toggleValueItems() {
-      this.seeOnlySelectedFields = !this.seeOnlySelectedFields;
-    },
-    onRowExpand(event: DataTableRowExpandEvent) {
-      this.expandedRows = [...this.expandedRows, event.data];
-    },
-    onRowCollapse(event: DataTableRowExpandEvent) {
-      this.expandedRows = this.expandedRows?.filter(
-        (row) => row.id !== event.data.id,
-      );
-    },
-    changeFilter(field: string) {
-      this.selectedFilterField = field;
-    },
-    filterOptionsHandler(value: FilterOption) {
-      this.selectedOption = value;
-    },
-    updateFilterHandler(updatedFilters: DataTableFilterMeta) {
-      if (!this.selectedOption) return;
-
-      updatedFilters[this.selectedFilterField].matchMode =
-        this.selectedOption.code;
-
-      this.filters = updatedFilters;
-    },
-  },
-};
-</script>
-
 <template>
   <DataTable
     removable-sort
-    :value="seeOnlySelectedFields ? selectedEmployees : nodes"
-    :paginator="!loading && paginator"
-    :rows="rows"
-    :filters="filters"
-    filter-display="menu"
-    :global-filter-fields="['firstName']"
-    :loading="loading"
-    :selection="selectedEmployees"
-    data-key="id"
     select-all
+    :rows="rows"
+    data-key="id"
     select-all-change
-    :expanded-rows="expandedRows"
+    :filters="filters"
+    :loading="loading"
+    filter-display="menu"
     :has-action="hasAction"
+    :expanded-rows="expandedRows"
+    :selection="selectedEmployees"
+    :global-filter-fields="['name']"
+    :paginator="!loading && paginator"
+    :value="seeOnlySelectedFields ? selectedEmployees : nodes"
     :pt="{
       table: 'table',
       thead: 'table__header',
@@ -255,23 +127,23 @@ export default {
       </template>
 
       <template v-if="col.hasFilter" #filter="{ filterModel }">
-        <input
-          v-model="filterModel.value"
-          type="text"
-          class="filter__input"
-          placeholder="Filtrar por"
-        />
-
-        <BaseListbox
-          :options="filterOption"
-          :on-update-handler="filterOptionsHandler"
-        />
+        <div class="table__filter">
+          <input
+            v-model="filterModel.value"
+            type="text"
+            class="filter__input"
+            placeholder="Filtrar por"
+          />
+          <BaseListbox
+            :options="filterOption"
+            :on-update-handler="filterOptionsHandler"
+          />
+        </div>
       </template>
 
       <template #filterclear="{ filterCallback }">
         <BaseButton
-          class="btn__secondary--outlined"
-          type="button"
+          class="btn__primary--outlined"
           label="Limpar"
           @click="filterCallback"
         />
@@ -279,8 +151,7 @@ export default {
 
       <template #filterapply="{ filterCallback, field }">
         <BaseButton
-          class="btn__secondary"
-          type="button"
+          class="btn__primary"
           label="Filtrar"
           @click="
             () => {
@@ -315,3 +186,141 @@ export default {
     </template>
   </DataTable>
 </template>
+
+<script lang="ts">
+import { FilterMatchMode } from "primevue/api";
+import {
+  DataTableFilterMeta,
+  DataTableRowExpandEvent,
+  DataTableRowSelectEvent,
+} from "primevue/datatable";
+
+export default {
+  props: {
+    columns: { type: Array, required: true },
+    nodes: { type: Array, required: true },
+    loading: { type: Boolean, required: false, default: false },
+    sortable: { type: Boolean, required: false, default: true },
+    paginator: { type: Boolean, required: false, default: true },
+    rows: { type: Number, required: false, default: 10 },
+    headerShown: { type: Boolean, required: false, default: false },
+    isSelectable: { type: Boolean, required: false, default: false },
+    isExpandable: { type: Boolean, required: false, default: false },
+    hasAction: { type: Boolean, required: false, default: false },
+  },
+  setup() {
+    const colorMode = useColorMode();
+    return { colorMode };
+  },
+  data() {
+    return {
+      filters: null,
+      selectedOption: { label: "", code: "" },
+      selectedFilterField: "",
+      filterOption: [
+        { label: "Contém", code: FilterMatchMode.CONTAINS },
+        { label: "Não contém", code: FilterMatchMode.NOT_CONTAINS },
+        { label: "Igual", code: FilterMatchMode.EQUALS },
+        { label: "Começa com", code: FilterMatchMode.STARTS_WITH },
+        { label: "Termina com", code: FilterMatchMode.ENDS_WITH },
+        { label: "Exceto", code: FilterMatchMode.NOT_EQUALS },
+      ],
+
+      // Row selection
+      selectAllCheckbox: null,
+      selectedEmployees: [],
+      seeOnlySelectedFields: false,
+
+      // Row Expansion
+      expandedRows: [],
+    };
+  },
+  created() {
+    this.initFilters();
+  },
+  mounted() {
+    if (this.isSelectable) {
+      this.selectAllCheckbox = document.querySelector(
+        '[data-pc-section="headercheckboxwrapper"] .p-hidden-accessible',
+      )?.children[0];
+
+      if (this.selectAllCheckbox)
+        this.selectAllCheckbox.ariaLabel = "All items unselected";
+    }
+  },
+  updated() {
+    if (this.isSelectable && this.selectAllCheckbox) {
+      this.selectAllCheckbox.ariaLabel =
+        this.selectedEmployees?.length !== this.nodes.length
+          ? "All items unselected"
+          : "All items selected";
+    }
+  },
+  methods: {
+    clearFilters() {
+      this.initFilters();
+    },
+    initFilters() {
+      this.filters = {
+        global: {
+          field: "global",
+          value: null,
+          matchMode: FilterMatchMode.CONTAINS,
+        },
+        name: {
+          field: "name",
+          value: null,
+          matchMode: FilterMatchMode.CONTAINS,
+        },
+        currentBalance: {
+          field: "currentBalance",
+          value: null,
+          matchMode: FilterMatchMode.CONTAINS,
+        },
+        totalRequests: {
+          field: "totalRequests",
+          value: null,
+          matchMode: FilterMatchMode.CONTAINS,
+        },
+      };
+    },
+    selectAllHandler() {
+      this.selectedEmployees =
+        this.selectedEmployees?.length !== this.nodes.length ? this.nodes : [];
+    },
+    onRowSelect(event: DataTableRowSelectEvent) {
+      this.selectedEmployees = [...this.selectedEmployees, event.data];
+    },
+    onRowUnselect(event: DataTableRowSelectEvent) {
+      this.selectedEmployees = this.selectedEmployees?.filter(
+        (employee) => employee.id !== event.data.id,
+      );
+    },
+    toggleValueItems() {
+      this.seeOnlySelectedFields = !this.seeOnlySelectedFields;
+    },
+    onRowExpand(event: DataTableRowExpandEvent) {
+      this.expandedRows = [...this.expandedRows, event.data];
+    },
+    onRowCollapse(event: DataTableRowExpandEvent) {
+      this.expandedRows = this.expandedRows?.filter(
+        (row) => row.id !== event.data.id,
+      );
+    },
+    changeFilter(field: string) {
+      this.selectedFilterField = field;
+    },
+    filterOptionsHandler(value: FilterOption) {
+      this.selectedOption = value;
+    },
+    updateFilterHandler(updatedFilters: DataTableFilterMeta) {
+      if (!this.selectedOption) return;
+
+      updatedFilters[this.selectedFilterField].matchMode =
+        this.selectedOption.code;
+
+      this.filters = updatedFilters;
+    },
+  },
+};
+</script>
