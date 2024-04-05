@@ -8,12 +8,17 @@
       :auto-clear="false"
       :disabled="disabled"
       :readonly="readonly"
-      :class="['input__field', errorMessage && 'error']"
+      :class="[
+        'input__field',
+        (errorMessage || wrongCrendentialsMessage) && 'error',
+      ]"
       :placeholder="placeholder"
     />
   </div>
 
-  <small class="input__error">{{ errorMessage }}</small>
+  <small v-if="!wrongCrendentialsMessage" class="input__error">{{
+    errorMessage
+  }}</small>
 </template>
 
 <script>
@@ -28,6 +33,7 @@ export default {
     icon: { type: String, default: "", required: false },
     readonly: { type: Boolean, default: false, required: false },
     disabled: { type: Boolean, default: false, required: false },
+    wrongCrendentialsMessage: { type: String, default: "", required: false },
   },
   setup(props) {
     const { value, errorMessage } = useField(props.name);

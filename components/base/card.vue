@@ -10,7 +10,7 @@ export default {};
 
 <style scoped lang="scss">
 .card {
-  background: $sd-color-neutral-neutral-7;
+  background: $color-neutral-neutral-7;
   border: $border;
   box-shadow: $box-shadow;
   overflow-x: auto;

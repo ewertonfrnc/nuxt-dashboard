@@ -9,10 +9,16 @@
       :disabled="disabled"
       :placeholder="placeholder"
       :pt="{
-        input: { class: `input__field ${errorMessage && 'error'}`, readonly },
+        input: {
+          class: `input__field ${
+            (errorMessage || wrongCrendentialsMessage) && 'error'
+          }`,
+          readonly,
+        },
         hideIcon: 'pi pi-eye',
         showIcon: 'pi pi-eye-slash',
       }"
+      @update:model-value="(value: string) => $emit('updatedValue', value)"
     />
 
     <div
@@ -24,13 +30,16 @@
     </div>
   </div>
 
-  <small class="input__error">{{ errorMessage }}</small>
+  <small class="input__error">{{
+    wrongCrendentialsMessage || errorMessage
+  }}</small>
 </template>
 
 <script lang="ts">
 import { useField } from "vee-validate";
 
 export default {
+  emit: ["updatedValue"],
   props: {
     name: { type: String, default: "", required: true },
     label: { type: String, default: "", required: false },
@@ -38,7 +47,9 @@ export default {
     icon: { type: String, default: "", required: false },
     readonly: { type: Boolean, default: false, required: false },
     disabled: { type: Boolean, default: false, required: false },
+    wrongCrendentialsMessage: { type: String, default: "", required: false },
   },
+  emits: ["updatedValue"],
   setup(props) {
     const { value, errorMessage } = useField(props.name);
     return { value, errorMessage };
@@ -52,13 +63,25 @@ export default {
     togglePasswordVisibility() {
       this.isPasswordVisible = !this.isPasswordVisible;
 
-      const inputEl: HTMLInputElement | null = document.querySelector(
+      const closedEyeIcons = document.querySelectorAll(".pi-eye-slash");
+      const openEyeIcons = document.querySelectorAll(".pi-eye");
+      const inputEls = document.querySelectorAll(
         '[data-pc-name="password"] > .input__field',
       );
 
-      if (inputEl) {
-        inputEl.type = this.isPasswordVisible ? "text" : "password";
+      if (this.isPasswordVisible) {
+        closedEyeIcons.forEach((el) => {
+          el.classList.replace("pi-eye-slash", "pi-eye");
+        });
+      } else {
+        openEyeIcons.forEach((el) => {
+          el.classList.replace("pi-eye", "pi-eye-slash");
+        });
       }
+
+      inputEls.forEach((el) => {
+        el.type = this.isPasswordVisible ? "text" : "password";
+      });
     },
   },
 };

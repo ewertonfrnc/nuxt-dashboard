@@ -2,12 +2,12 @@
   min-width: 100%;
   text-align: left;
   font-family: inherit;
-  color: $sd-color-neutral-neutral-0;
-  border: 1px solid $sd-color-neutral-neutral-5;
+  color: $color-neutral-neutral-0;
+  border: 1px solid $color-neutral-neutral-5;
   border-collapse: collapse;
 
   &__header {
-    background-color: $sd-color-neutral-neutral-6;
+    background-color: $color-neutral-neutral-6;
     position: relative;
 
     &--options {
@@ -42,7 +42,7 @@
     &--cell {
       width: 2rem;
       padding: 1.5rem 1rem;
-      border: 1px solid $sd-color-neutral-neutral-5;
+      border: 1px solid $color-neutral-neutral-5;
     }
   }
 
@@ -51,15 +51,15 @@
 
     &--row {
       transition: all 0.3s;
-      &[data-p-highlight='true'] {
-        background-color: $sd-color-brand-primary-1;
+      &[data-p-highlight="true"] {
+        background-color: $color-brand-primary-1;
       }
     }
 
     &--cell {
       width: 2rem;
       padding: 2rem 1rem;
-      border: 1px solid $sd-color-neutral-neutral-5;
+      border: 1px solid $color-neutral-neutral-5;
 
       button {
         all: unset;
@@ -83,7 +83,7 @@
 
     margin: 1rem auto;
     font-size: $small-font-size;
-    border: 1px solid $sd-color-neutral-neutral-0;
+    border: 1px solid $color-neutral-neutral-0;
   }
 
   &__btn-group {
@@ -101,7 +101,7 @@
 }
 
 // inputs from tables
-input[type='checkbox'] {
+input[type="checkbox"] {
   appearance: none;
   background-color: #fff;
   margin: 0;
@@ -111,7 +111,7 @@ input[type='checkbox'] {
   min-width: 1.7rem;
   height: 1.7rem;
   border-radius: 0.2rem;
-  border: 1px solid $sd-color-neutral-neutral-4;
+  border: 1px solid $color-neutral-neutral-4;
   border-radius: 6px;
   transform: translateY(0);
 
@@ -120,7 +120,7 @@ input[type='checkbox'] {
   place-content: center;
 
   &::before {
-    content: '';
+    content: "";
     min-width: 100%;
     height: 100%;
     transform: scale(0);
@@ -131,14 +131,14 @@ input[type='checkbox'] {
     position: absolute;
   }
 
-  &[aria-label='Row Selected']::before,
-  &[aria-label='All items selected']::before {
+  &[aria-label="Row Selected"]::before,
+  &[aria-label="All items selected"]::before {
     transform: scale(1);
   }
 }
 
-[data-pc-section='checkbox'],
-[data-pc-section='headercheckbox'] {
+[data-pc-section="checkbox"],
+[data-pc-section="headercheckbox"] {
   position: absolute;
   top: 10%;
   left: 5%;

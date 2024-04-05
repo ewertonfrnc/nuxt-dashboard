@@ -1,6 +1,6 @@
 ::selection {
-  background-color: $sd-color-brand-primary-0;
-  color: $sd-color-brand-primary-1;
+  background-color: $color-brand-primary-0;
+  color: $color-brand-primary-1;
 }
 
 *,
@@ -12,7 +12,20 @@
 }
 
 html {
-  font-size: 62.5%;
+  // This defines 1rem
+  font-size: 62.5%; // 1rem = 10px; 10px/16px = 62.5%
+
+  @include respond(tab-land) {
+    font-size: 56.25%; // 1rem = 9px; 9px/16px = 56.25%
+  }
+
+  @include respond(tab-port) {
+    font-size: 50%; // 1rem = 8px; 8px/16px = 50%
+  }
+
+  @include respond(big-desktop) {
+    font-size: 75%; // 1rem = 12px; 12px/16px = 75%
+  }
 }
 
 body {
@@ -37,7 +50,7 @@ hr {
   all: unset;
 }
 
-[data-pc-section='column.transition'] {
+[data-pc-section="column.transition"] {
   width: 24rem;
   background-color: white;
   border-radius: $button-border-radius;

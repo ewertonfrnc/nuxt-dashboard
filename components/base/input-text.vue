@@ -7,7 +7,7 @@
       :icon="icon"
       :disabled="disabled"
       :readonly="readonly"
-      class="input__field"
+      :class="['input__field', errorMessage && 'error']"
       :placeholder="placeholder"
     />
   </div>

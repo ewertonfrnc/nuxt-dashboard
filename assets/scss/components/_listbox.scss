@@ -6,11 +6,11 @@
     cursor: pointer;
 
     &:hover {
-      background-color: $sd-color-brand-primary-1;
+      background-color: $color-brand-primary-1;
     }
 
     &--selected {
-      background-color: $sd-color-brand-primary-1;
+      background-color: $color-brand-primary-1;
     }
   }
 }

@@ -23,14 +23,16 @@ const checkPermissions = (user: User, authorizedFor: string[]) => {
 export default defineNuxtRouteMiddleware((to) => {
   const toast = useToast();
 
-  const token = useCookie("token");
+  const cookiesToken = useCookie("token");
+  const sessionToken = sessionStorage.getItem("token");
+  const token = cookiesToken.value || sessionToken;
   const { user } = useAuthStore();
   const { authenticated } = storeToRefs(useAuthStore());
 
-  if (token.value) {
+  if (token) {
     authenticated.value = true;
 
-    if (to?.name === "login") return navigateTo("/");
+    if (to?.name === "auth") return navigateTo("/");
 
     if (user && to.meta.authorizedFor) {
       // @ts-ignore
@@ -41,10 +43,10 @@ export default defineNuxtRouteMiddleware((to) => {
     }
   }
 
-  if (!token.value) {
-    if (to?.name !== "login") {
+  if (!token) {
+    if (to?.name !== "auth") {
       abortNavigation();
-      return navigateTo("/login");
+      return navigateTo("/auth");
     }
   }
 });

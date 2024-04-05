@@ -18,7 +18,7 @@
 
       cursor: pointer;
       font-size: $font-size-title-3;
-      color: $sd-color-neutral-neutral-1;
+      color: $color-neutral-neutral-1;
     }
   }
 
@@ -26,36 +26,36 @@
     width: 100%;
     display: block;
 
-    color: $sd-color-neutral-neutral-2;
+    color: $color-neutral-neutral-2;
     font-size: $font-size-body-primary;
     font-family: inherit;
 
     padding: $input-padding;
     border-radius: $input-border-radius;
-    border: 1px solid $sd-color-neutral-neutral-4;
+    border: 1px solid $color-neutral-neutral-4;
 
     transition: all 0.3s;
-    background-color: $sd-color-neutral-neutral-7;
+    background-color: $color-neutral-neutral-7;
 
     &:read-only {
       border: 1px solid transparent;
     }
 
     &:disabled {
-      background-color: $sd-color-background-button-success-outline-disabled;
-      color: $sd-color-text-button-success-outline-disabled;
-      border: 1px solid $sd-color-border-button-success-outline-disabled;
+      background-color: $color-neutral-neutral-3;
+      color: $color-neutral-neutral-3;
+      border: 1px solid $color-neutral-neutral-3;
       cursor: not-allowed;
     }
   }
 
   .error {
-    border: 1px solid $sd-color-feedback-danger-0;
+    border: 1px solid $color-feedback-danger-0;
   }
 
   &__error {
     display: block;
-    color: $sd-color-feedback-danger-0;
+    color: $color-feedback-danger-0;
     padding: 0.5rem 1rem 0;
   }
 }

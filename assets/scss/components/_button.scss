@@ -22,385 +22,209 @@
     cursor: pointer;
   }
 
+  &__icon {
+    &--loading {
+      animation: rotation 1s linear infinite;
+    }
+  }
+
   &__primary {
     font-size: $font-size-button-primary;
     @include buttonStyles(
-      $sd-color-background-button-primary-basic-enabled,
-      $sd-color-text-button-primary-basic-enabled,
-      $sd-color-border-button-primary-basic-enabled
+      $color-brand-primary-0,
+      $color-neutral-neutral-7,
+      $color-brand-primary-0
     );
 
     &:hover {
       @include buttonStyles(
-        $sd-color-background-button-primary-basic-hover,
-        $sd-color-text-button-primary-text-hover,
-        $sd-color-border-button-primary-basic-hover
+        $color-brand-primary-3,
+        $color-neutral-neutral-7,
+        $color-brand-primary-3
+      );
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 1rem $color-brand-primary-0;
+      @include buttonStyles(
+        $color-brand-primary-3,
+        $color-neutral-neutral-7,
+        $color-brand-primary-3
       );
     }
 
     &:disabled {
       @include buttonStyles(
-        $sd-color-background-button-primary-basic-disabled,
-        $sd-color-text-button-primary-text-disabled,
-        $sd-color-border-button-primary-basic-disabled
+        $color-neutral-neutral-3,
+        $color-neutral-neutral-7,
+        $color-neutral-neutral-3
       );
     }
 
     &--outlined {
       @include buttonStyles(
-        $sd-color-background-button-primary-outline-enabled,
-        $sd-color-text-button-primary-outline-enabled,
-        $sd-color-border-button-primary-outline-enabled
+        transparent,
+        $color-brand-primary-0,
+        $color-brand-primary-0
       );
 
       &:hover {
         @include buttonStyles(
-          $sd-color-background-button-primary-outline-hover,
-          $sd-color-text-button-primary-outline-hover,
-          $sd-color-border-button-primary-outline-hover
+          $color-brand-primary-1,
+          $color-brand-primary-0,
+          $color-brand-primary-0
+        );
+      }
+
+      &:focus {
+        outline: none;
+        box-shadow: 0 0 1rem $color-brand-primary-0;
+        @include buttonStyles(
+          transparent,
+          $color-brand-primary-0,
+          $color-neutral-neutral-3
         );
       }
 
       &:disabled {
         @include buttonStyles(
-          $sd-color-background-button-primary-outline-disabled,
-          $sd-color-text-button-primary-outline-disabled,
-          $sd-color-border-button-primary-outline-disabled
+          transparent,
+          $color-neutral-neutral-3,
+          $color-neutral-neutral-3
         );
       }
     }
 
     &--text {
-      display: inline-block;
-      @include buttonStyles(
-        $sd-color-background-button-primary-text-enabled,
-        $sd-color-text-button-primary-text-enabled,
-        $sd-color-border-button-primary-text-enabled
-      );
+      @include buttonStyles(transparent, $color-brand-primary-0, transparent);
 
       &:hover {
         @include buttonStyles(
-          $sd-color-background-button-primary-text-hover,
-          $sd-color-text-button-primary-text-hover,
-          $sd-color-border-button-primary-text-hover
+          $color-brand-primary-1,
+          $color-brand-primary-0,
+          transparent
+        );
+      }
+
+      &:focus {
+        outline: none;
+        box-shadow: 0 0 5px $color-brand-primary-0;
+        @include buttonStyles(
+          transparent,
+          $color-brand-primary-0,
+          $color-neutral-neutral-3
         );
       }
 
       &:disabled {
         @include buttonStyles(
-          $sd-color-background-button-primary-text-disabled,
-          $sd-color-text-button-primary-text-disabled,
-          $sd-color-border-button-primary-text-disabled
+          transparent,
+          $color-neutral-neutral-3,
+          transparent
         );
       }
     }
   }
 
   &__secondary {
-    font-size: $font-size-button-secondary;
+    font-size: $font-size-button-primary;
     @include buttonStyles(
-      $sd-color-background-button-secondary-basic-enabled,
-      $sd-color-text-button-secondary-basic-enabled,
-      $sd-color-border-button-secondary-basic-enabled
+      $color-feedback-success-0,
+      $color-neutral-neutral-7,
+      $color-feedback-success-0
     );
 
     &:hover {
       @include buttonStyles(
-        $sd-color-background-button-secondary-basic-hover,
-        $sd-color-text-button-secondary-text-hover,
-        $sd-color-border-button-secondary-basic-hover
+        $color-feedback-success-3,
+        $color-neutral-neutral-7,
+        $color-feedback-success-3
+      );
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 1rem $color-feedback-success-0;
+      @include buttonStyles(
+        $color-feedback-success-3,
+        $color-neutral-neutral-7,
+        $color-feedback-success-3
       );
     }
 
     &:disabled {
       @include buttonStyles(
-        $sd-color-background-button-secondary-basic-disabled,
-        $sd-color-text-button-secondary-text-disabled,
-        $sd-color-border-button-secondary-basic-disabled
+        $color-neutral-neutral-3,
+        $color-neutral-neutral-7,
+        $color-neutral-neutral-3
       );
     }
 
     &--outlined {
       @include buttonStyles(
-        $sd-color-background-button-success-outline-enabled,
-        $sd-color-text-button-secondary-outline-enabled,
-        $sd-color-border-button-secondary-outline-enabled
+        transparent,
+        $color-feedback-success-0,
+        $color-feedback-success-0
       );
 
       &:hover {
         @include buttonStyles(
-          $sd-color-background-button-secondary-outline-hover,
-          $sd-color-text-button-secondary-outline-hover,
-          $sd-color-border-button-secondary-outline-hover
+          $color-feedback-success-1,
+          $color-feedback-success-0,
+          $color-feedback-success-0
+        );
+      }
+
+      &:focus {
+        outline: none;
+        box-shadow: 0 0 1rem $color-feedback-success-0;
+        @include buttonStyles(
+          transparent,
+          $color-feedback-success-0,
+          $color-neutral-neutral-3
         );
       }
 
       &:disabled {
         @include buttonStyles(
-          $sd-color-background-button-success-outline-disabled,
-          $sd-color-text-button-secondary-outline-disabled,
-          $sd-color-border-button-secondary-outline-disabled
+          transparent,
+          $color-neutral-neutral-3,
+          $color-neutral-neutral-3
         );
       }
     }
 
     &--text {
-      display: inline-block;
       @include buttonStyles(
-        $sd-color-background-button-secondary-text-enabled,
-        $sd-color-text-button-secondary-text-enabled,
-        $sd-color-border-button-secondary-text-enabled
-      );
-    }
-  }
-
-  &__success {
-    @include buttonStyles(
-      $sd-color-background-button-success-basic-enabled,
-      $sd-color-text-button-success-basic-enabled,
-      $sd-color-border-button-success-basic-enabled
-    );
-
-    &:hover {
-      @include buttonStyles(
-        $sd-color-background-button-success-basic-hover,
-        $sd-color-text-button-success-text-hover,
-        $sd-color-border-button-success-basic-hover
-      );
-    }
-
-    &:disabled {
-      @include buttonStyles(
-        $sd-color-background-button-success-basic-disabled,
-        $sd-color-text-button-success-text-disabled,
-        $sd-color-border-button-success-basic-disabled
-      );
-    }
-
-    &--outlined {
-      @include buttonStyles(
-        $sd-color-background-button-success-outline-enabled,
-        $sd-color-text-button-success-outline-enabled,
-        $sd-color-border-button-success-outline-enabled
+        transparent,
+        $color-feedback-success-0,
+        transparent
       );
 
       &:hover {
         @include buttonStyles(
-          $sd-color-background-button-success-outline-hover,
-          $sd-color-text-button-success-outline-hover,
-          $sd-color-border-button-success-outline-hover
+          $color-feedback-success-1,
+          $color-feedback-success-0,
+          transparent
+        );
+      }
+
+      &:focus {
+        outline: none;
+        box-shadow: 0 0 5px $color-feedback-success-0;
+        @include buttonStyles(
+          transparent,
+          $color-feedback-success-0,
+          $color-neutral-neutral-3
         );
       }
 
       &:disabled {
         @include buttonStyles(
-          $sd-color-background-button-success-outline-disabled,
-          $sd-color-text-button-success-outline-disabled,
-          $sd-color-border-button-success-outline-disabled
-        );
-      }
-    }
-
-    &--text {
-      display: inline-block;
-      @include buttonStyles(
-        $sd-color-background-button-success-text-enabled,
-        $sd-color-text-button-success-text-enabled,
-        $sd-color-border-button-success-text-enabled
-      );
-    }
-  }
-
-  &__danger {
-    @include buttonStyles(
-      $sd-color-background-button-danger-basic-enabled,
-      $sd-color-text-button-danger-basic-enabled,
-      $sd-color-border-button-danger-basic-enabled
-    );
-
-    &:hover {
-      @include buttonStyles(
-        $sd-color-background-button-danger-basic-hover,
-        $sd-color-text-button-danger-basic-hover,
-        $sd-color-border-button-danger-basic-hover
-      );
-    }
-
-    &:disabled {
-      @include buttonStyles(
-        $sd-color-background-button-danger-basic-disabled,
-        $sd-color-text-button-danger-basic-disabled,
-        $sd-color-border-button-danger-basic-disabled
-      );
-    }
-
-    &--outlined {
-      @include buttonStyles(
-        $sd-color-background-button-danger-outline-enabled,
-        $sd-color-text-button-danger-outline-enabled,
-        $sd-color-border-button-danger-outline-enabled
-      );
-
-      &:hover {
-        @include buttonStyles(
-          $sd-color-background-button-danger-outline-hover,
-          $sd-color-text-button-danger-outline-hover,
-          $sd-color-border-button-danger-outline-hover
-        );
-      }
-
-      &:disabled {
-        @include buttonStyles(
-          $sd-color-background-button-danger-outline-disabled,
-          $sd-color-text-button-danger-outline-disabled,
-          $sd-color-border-button-danger-outline-disabled
-        );
-      }
-    }
-
-    &--text {
-      display: inline-block;
-      @include buttonStyles(
-        $sd-color-background-button-danger-text-enabled,
-        $sd-color-text-button-danger-text-enabled,
-        $sd-color-border-button-danger-text-enabled
-      );
-
-      &:hover {
-        @include buttonStyles(
-          $sd-color-background-button-danger-text-hover,
-          $sd-color-text-button-danger-text-hover,
-          $sd-color-border-button-danger-text-hover
-        );
-      }
-    }
-  }
-
-  &__warning {
-    @include buttonStyles(
-      $sd-color-background-button-warning-basic-enabled,
-      $sd-color-text-button-warning-basic-enabled,
-      $sd-color-border-button-warning-basic-enabled
-    );
-
-    &:hover {
-      @include buttonStyles(
-        $sd-color-background-button-warning-basic-hover,
-        $sd-color-text-button-warning-basic-hover,
-        $sd-color-border-button-warning-basic-hover
-      );
-    }
-
-    &:disabled {
-      @include buttonStyles(
-        $sd-color-background-button-warning-basic-disabled,
-        $sd-color-text-button-warning-basic-disabled,
-        $sd-color-border-button-warning-basic-disabled
-      );
-    }
-
-    &--outlined {
-      @include buttonStyles(
-        $sd-color-background-button-warning-outline-enabled,
-        $sd-color-text-button-warning-outline-enabled,
-        $sd-color-border-button-warning-outline-enabled
-      );
-
-      &:hover {
-        @include buttonStyles(
-          $sd-color-background-button-warning-outline-hover,
-          $sd-color-text-button-warning-outline-hover,
-          $sd-color-border-button-warning-outline-hover
-        );
-      }
-
-      &:disabled {
-        @include buttonStyles(
-          $sd-color-background-button-warning-outline-disabled,
-          $sd-color-text-button-warning-outline-disabled,
-          $sd-color-border-button-warning-outline-disabled
-        );
-      }
-    }
-
-    &--text {
-      display: inline-block;
-      @include buttonStyles(
-        $sd-color-background-button-warning-text-enabled,
-        $sd-color-text-button-warning-text-enabled,
-        $sd-color-border-button-warning-text-enabled
-      );
-
-      &:hover {
-        @include buttonStyles(
-          $sd-color-background-button-warning-text-hover,
-          $sd-color-text-button-warning-text-hover,
-          $sd-color-border-button-warning-text-hover
-        );
-      }
-    }
-  }
-
-  &__info {
-    @include buttonStyles(
-      $sd-color-background-button-info-basic-enabled,
-      $sd-color-text-button-info-basic-enabled,
-      $sd-color-border-button-info-basic-enabled
-    );
-
-    &:hover {
-      @include buttonStyles(
-        $sd-color-background-button-info-basic-hover,
-        $sd-color-text-button-info-basic-hover,
-        $sd-color-border-button-info-basic-hover
-      );
-    }
-
-    &:disabled {
-      @include buttonStyles(
-        $sd-color-background-button-info-basic-disabled,
-        $sd-color-text-button-info-basic-disabled,
-        $sd-color-border-button-info-basic-disabled
-      );
-    }
-
-    &--outlined {
-      @include buttonStyles(
-        $sd-color-background-button-info-outline-enabled,
-        $sd-color-text-button-info-outline-enabled,
-        $sd-color-border-button-info-outline-enabled
-      );
-
-      &:hover {
-        @include buttonStyles(
-          $sd-color-background-button-info-outline-hover,
-          $sd-color-text-button-info-outline-hover,
-          $sd-color-border-button-info-outline-hover
-        );
-      }
-
-      &:disabled {
-        @include buttonStyles(
-          $sd-color-background-button-info-outline-disabled,
-          $sd-color-text-button-info-outline-disabled,
-          $sd-color-border-button-info-outline-disabled
-        );
-      }
-    }
-
-    &--text {
-      display: inline-block;
-      @include buttonStyles(
-        $sd-color-background-button-info-text-enabled,
-        $sd-color-text-button-info-text-enabled,
-        $sd-color-border-button-info-text-enabled
-      );
-
-      &:hover {
-        @include buttonStyles(
-          $sd-color-background-button-info-text-hover,
-          $sd-color-text-button-info-text-hover,
-          $sd-color-border-button-info-text-hover
+          transparent,
+          $color-neutral-neutral-3,
+          transparent
         );
       }
     }

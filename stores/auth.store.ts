@@ -32,14 +32,11 @@ export const useAuthStore = defineStore("auth", {
         {
           method: "post",
           headers: { "Content-Type": "application/json" },
-          body: authValues,
+          body: { username: "kminchelle", password: "0lelplR" },
         },
       );
 
       if (userInfo.value) {
-        const token = useCookie("token");
-        token.value = userInfo?.value?.token;
-
         this.user = { ...userInfo.value, role: ["manager"] };
         this.authenticated = true;
 
