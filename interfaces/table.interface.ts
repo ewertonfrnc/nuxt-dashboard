@@ -3,9 +3,15 @@ export type FilterOption = {
   code: string;
 };
 
+export type Filter = {
+  field: string;
+  value: null;
+  matchMode: string;
+};
+
 export type Filters = {
-  global: { field: string; value: null; matchMode: string };
-  name: { field: string; value: null; matchMode: string };
-  currentBalance: { field: string; value: null; matchMode: string };
-  totalRequests: { field: string; value: null; matchMode: string };
+  global: Filter;
+  name: Filter;
+  currentBalance: Filter;
+  totalRequests: Filter;
 };
