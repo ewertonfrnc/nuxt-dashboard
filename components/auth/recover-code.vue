@@ -1,3 +1,45 @@
+<template>
+  <UiModal>
+    <div class="recover-code login fadein animation-duration-500">
+      <div class="recover-code__header">
+        <h1 class="heading__tertiary">Código de recuperação</h1>
+        <p class="body__primary">
+          Insira o código que enviamos para seu e-mail
+          <span class="highlight"> {{ recoverEmail }}. </span>
+        </p>
+      </div>
+
+      <div class="recover-code__body">
+        <form class="form">
+          <div class="form__control">
+            <label class="caption__primary">
+              Código de recuperação
+              <BaseInputText
+                name="code"
+                placeholder="Insira o código de recuperação"
+              />
+            </label>
+          </div>
+        </form>
+      </div>
+
+      <div class="recover-code__footer">
+        <BaseButton
+          label="Voltar"
+          class="btn__primary--outlined"
+          @click.prevent="goBack"
+        />
+        <BaseButton
+          label="Confirmar"
+          :loading="loading"
+          class="btn__primary"
+          @click.prevent="sendRecoverCode"
+        />
+      </div>
+    </div>
+  </UiModal>
+</template>
+
 <script lang="ts">
 import { useForm } from "vee-validate";
 import { recoverCode } from "~/utils/schemas";
@@ -56,48 +98,6 @@ export default {
   },
 };
 </script>
-
-<template>
-  <UiModal>
-    <div class="recover-code login fadein animation-duration-500">
-      <div class="recover-code__header">
-        <h1 class="heading__tertiary">Código de recuperação</h1>
-        <p class="body__primary">
-          Insira o código que enviamos para seu e-mail
-          <span class="highlight"> {{ recoverEmail }}. </span>
-        </p>
-      </div>
-
-      <div class="recover-code__body">
-        <form class="form">
-          <div class="form__control">
-            <label class="caption__primary">
-              Código de recuperação
-              <BaseInputText
-                name="code"
-                placeholder="Insira o código de recuperação"
-              />
-            </label>
-          </div>
-        </form>
-      </div>
-
-      <div class="recover-code__footer">
-        <BaseButton
-          label="Voltar"
-          class="btn__primary--outlined"
-          @click.prevent="goBack"
-        />
-        <BaseButton
-          label="Confirmar"
-          :loading="loading"
-          class="btn__primary"
-          @click.prevent="sendRecoverCode"
-        />
-      </div>
-    </div>
-  </UiModal>
-</template>
 
 <style scoped lang="scss">
 .recover-code {

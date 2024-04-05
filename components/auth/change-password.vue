@@ -1,3 +1,57 @@
+<template>
+  <UiModal>
+    <div class="change-password fadein animation-duration-500">
+      <div class="change-password__header">
+        <h1 class="heading__tertiary">Alterar senha</h1>
+        <p class="body__primary">Insira a nova senha</p>
+      </div>
+
+      <div class="change-password__body">
+        <form class="form">
+          <div class="form__control">
+            <label class="caption__primary">
+              Nova senha
+              <BaseInputPassword
+                name="password"
+                placeholder="Insira a nova senha"
+                @updated-value="validatePassword"
+              />
+            </label>
+          </div>
+
+          <BaseInlineMessage
+            :severity="isValidPassword ? 'success' : 'error'"
+            text="4 dígitos numéricos"
+          />
+
+          <div class="form__control">
+            <label class="caption__primary">
+              Repita a senha
+              <BaseInputPassword
+                name="passwordConfirm"
+                placeholder="Repita a nova senha"
+              />
+            </label>
+          </div>
+        </form>
+      </div>
+
+      <div class="change-password__footer">
+        <BaseButton
+          label="Voltar"
+          class="btn__primary--outlined"
+          @click.prevent="goToLogin"
+        />
+        <BaseButton
+          label="Salvar"
+          class="btn__primary"
+          @click.prevent="changePassword"
+        />
+      </div>
+    </div>
+  </UiModal>
+</template>
+
 <script lang="ts">
 import { useForm } from "vee-validate";
 import { changePassword } from "~/utils/schemas";
@@ -63,60 +117,6 @@ export default {
   },
 };
 </script>
-
-<template>
-  <UiModal>
-    <div class="change-password fadein animation-duration-500">
-      <div class="change-password__header">
-        <h1 class="heading__tertiary">Alterar senha</h1>
-        <p class="body__primary">Insira a nova senha</p>
-      </div>
-
-      <div class="change-password__body">
-        <form class="form">
-          <div class="form__control">
-            <label class="caption__primary">
-              Nova senha
-              <BaseInputPassword
-                name="password"
-                placeholder="Insira a nova senha"
-                @updated-value="validatePassword"
-              />
-            </label>
-          </div>
-
-          <BaseInlineMessage
-            :severity="isValidPassword ? 'success' : 'error'"
-            text="4 dígitos numéricos"
-          />
-
-          <div class="form__control">
-            <label class="caption__primary">
-              Repita a senha
-              <BaseInputPassword
-                name="passwordConfirm"
-                placeholder="Repita a nova senha"
-              />
-            </label>
-          </div>
-        </form>
-      </div>
-
-      <div class="change-password__footer">
-        <BaseButton
-          label="Voltar"
-          class="btn__primary--outlined"
-          @click.prevent="goToLogin"
-        />
-        <BaseButton
-          label="Salvar"
-          class="btn__primary"
-          @click.prevent="changePassword"
-        />
-      </div>
-    </div>
-  </UiModal>
-</template>
 
 <style scoped lang="scss">
 .change-password {

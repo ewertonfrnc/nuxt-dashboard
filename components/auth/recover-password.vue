@@ -1,3 +1,43 @@
+<template>
+  <UiModal>
+    <div class="recover fadein animation-duration-500">
+      <div class="recover__header">
+        <h1 class="heading__tertiary">Recuperar senha</h1>
+        <p class="body__primary">Insira suas credenciais de acesso:</p>
+      </div>
+
+      <div class="recover__body">
+        <form class="form">
+          <div class="form__control">
+            <label class="caption__primary">
+              Usuário
+              <BaseInputMask
+                name="username"
+                mask="999.999.999-99"
+                placeholder="Insira seu CPF"
+              />
+            </label>
+          </div>
+        </form>
+      </div>
+
+      <div class="recover__footer">
+        <BaseButton
+          label="Cancelar"
+          class="btn__primary--outlined"
+          @click.prevent="goToLogin"
+        />
+        <BaseButton
+          label="Próximo"
+          :loading="loading"
+          class="btn__primary"
+          @click.prevent="recoverPassword"
+        />
+      </div>
+    </div>
+  </UiModal>
+</template>
+
 <script lang="ts">
 import { useForm } from "vee-validate";
 
@@ -62,46 +102,6 @@ export default {
   },
 };
 </script>
-
-<template>
-  <UiModal>
-    <div class="recover fadein animation-duration-500">
-      <div class="recover__header">
-        <h1 class="heading__tertiary">Recuperar senha</h1>
-        <p class="body__primary">Insira suas credenciais de acesso:</p>
-      </div>
-
-      <div class="recover__body">
-        <form class="form">
-          <div class="form__control">
-            <label class="caption__primary">
-              Usuário
-              <BaseInputMask
-                name="username"
-                mask="999.999.999-99"
-                placeholder="Insira seu CPF"
-              />
-            </label>
-          </div>
-        </form>
-      </div>
-
-      <div class="recover__footer">
-        <BaseButton
-          label="Cancelar"
-          class="btn__primary--outlined"
-          @click.prevent="goToLogin"
-        />
-        <BaseButton
-          label="Próximo"
-          :loading="loading"
-          class="btn__primary"
-          @click.prevent="recoverPassword"
-        />
-      </div>
-    </div>
-  </UiModal>
-</template>
 
 <style scoped lang="scss">
 .recover {

@@ -1,27 +1,3 @@
-<script lang="ts">
-export default {
-  setup() {
-    const authSteps = ["login", "recover", "code", "change"];
-    return { authSteps };
-  },
-  data() {
-    return {
-      currentStep: "login",
-      recoverEmail: "",
-    };
-  },
-  methods: {
-    changeAuthStep(step: string) {
-      if (!this.authSteps.includes(step)) return;
-      this.currentStep = step;
-    },
-    setRecoverEmail(email: string) {
-      this.recoverEmail = email;
-    },
-  },
-};
-</script>
-
 <template>
   <div class="container">
     <img
@@ -52,6 +28,30 @@ export default {
     />
   </div>
 </template>
+
+<script lang="ts">
+export default {
+  setup() {
+    const authSteps = ["login", "recover", "code", "change"];
+    return { authSteps };
+  },
+  data() {
+    return {
+      currentStep: "login",
+      recoverEmail: "",
+    };
+  },
+  methods: {
+    changeAuthStep(step: string) {
+      if (!this.authSteps.includes(step)) return;
+      this.currentStep = step;
+    },
+    setRecoverEmail(email: string) {
+      this.recoverEmail = email;
+    },
+  },
+};
+</script>
 
 <style scoped lang="scss">
 .container {
