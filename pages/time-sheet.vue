@@ -16,11 +16,6 @@ export default {
           icon: "pi-users",
           component: ClockOverview,
         },
-        {
-          label: "Busca avançada",
-          icon: "pi-search",
-          component: PendingAdjustments,
-        },
       ],
     };
   },
