@@ -119,7 +119,8 @@
         headercontent: 'flex justify-content-between',
         bodycell: 'table__body--cell',
         filteraddrule: 'filter__add-rule',
-        filterbuttonbar: 'filter__btn-group',
+        filterConstraints: 'table__filter',
+        filterbuttonbar: 'table__filter--footer',
       }"
     >
       <template #body="{ data, field }">
@@ -127,18 +128,18 @@
       </template>
 
       <template v-if="col.hasFilter" #filter="{ filterModel }">
-        <div class="table__filter">
-          <input
-            v-model="filterModel.value"
-            type="text"
-            class="filter__input"
-            placeholder="Filtrar por"
-          />
-          <BaseListbox
-            :options="filterOption"
-            :on-update-handler="filterOptionsHandler"
-          />
-        </div>
+        {{ filterModel }}
+
+        <input
+          v-model="filterModel.value"
+          type="text"
+          class="filter__input"
+          placeholder="Filtrar por"
+        />
+        <BaseListbox
+          :options="filterOption"
+          :on-update-handler="filterOptionsHandler"
+        />
       </template>
 
       <template #filterclear="{ filterCallback }">
@@ -155,8 +156,8 @@
           label="Filtrar"
           @click="
             () => {
-              filterCallback();
               changeFilter(field);
+              filterCallback();
             }
           "
         />
@@ -194,6 +195,7 @@ import {
   DataTableRowExpandEvent,
   DataTableRowSelectEvent,
 } from "primevue/datatable";
+import { FilterOption, Filters } from "~/interfaces/table.interface";
 
 export default {
   props: {
@@ -214,7 +216,7 @@ export default {
   },
   data() {
     return {
-      filters: null,
+      filters: {},
       selectedOption: { label: "", code: "" },
       selectedFilterField: "",
       filterOption: [
@@ -313,10 +315,10 @@ export default {
     filterOptionsHandler(value: FilterOption) {
       this.selectedOption = value;
     },
-    updateFilterHandler(updatedFilters: DataTableFilterMeta) {
-      if (!this.selectedOption) return;
+    updateFilterHandler(updatedFilters: Filters) {
+      if (!this.selectedOption || !this.selectedFilterField) return;
 
-      updatedFilters[this.selectedFilterField].matchMode =
+      updatedFilters[this.selectedFilterField as keyof Filters].matchMode =
         this.selectedOption.code;
 
       this.filters = updatedFilters;
