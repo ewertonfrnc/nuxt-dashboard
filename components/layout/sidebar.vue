@@ -38,7 +38,7 @@ export default {
           active-class="nav__item--active"
         >
           <i :class="['pi', item.icon]"></i>
-          <span class="body__primary"> {{ item.label }} </span>
+          <span class="body__secondary"> {{ item.label }} </span>
         </NuxtLink>
 
         <Accordion v-if="!item.route && item.items" :active-index="0">
@@ -46,7 +46,7 @@ export default {
             <template #header>
               <div class="nav__item nav__item--expander">
                 <i :class="['pi', item.icon]"></i>
-                <span class="body__primary"> {{ item.label }} </span>
+                <span class="body__secondary"> {{ item.label }} </span>
 
                 <span class="nav__item--icon">
                   <i class="pi pi-angle-down" />
@@ -63,9 +63,10 @@ export default {
                 :to="subItem.route"
                 class="nav__item nav__item--subitem"
                 active-class="nav__item--active"
+                :tabindex="0"
               >
                 <i :class="['pi', subItem.icon]"></i>
-                <span class="body__primary"> {{ subItem.label }} </span>
+                <span class="body__secondary"> {{ subItem.label }} </span>
               </NuxtLink>
             </template>
           </AccordionTab>
