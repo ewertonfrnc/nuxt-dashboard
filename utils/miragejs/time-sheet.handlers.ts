@@ -564,7 +564,7 @@ const nodes = [
 ];
 
 export default function (server: Server) {
-  server.get("/time-sheet/pending", () => {
+  server.get("/time-sheet/pending", (schema, request) => {
     return new Response(
       200,
       {},
