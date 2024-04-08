@@ -1,4 +1,6 @@
 import { timeSheetService } from "~/services";
+import { QueryParams } from "~/interfaces/time-sheet/time-sheet.interface";
+
 type TimeSheetstate = {};
 
 export const useTimeSheetStore = defineStore("time-sheet", {
@@ -7,14 +9,14 @@ export const useTimeSheetStore = defineStore("time-sheet", {
     return {};
   },
   actions: {
-    async getPendingAdjustments() {
+    async getPendingAdjustments(params: QueryParams) {
       try {
         const {
           data: { pending },
-        } = await timeSheetService.fetchPendingAdjustments();
+        } = await timeSheetService.fetchPendingAdjustments(params);
         return pending;
       } catch (err) {
-        console.log("err", err);
+        return err;
       }
     },
   },
