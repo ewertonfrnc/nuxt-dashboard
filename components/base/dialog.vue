@@ -3,31 +3,48 @@
     :visible="isVisible"
     modal
     :draggable="false"
-    :style="{ width: '40vw' }"
     close-on-escape
     :pt="{
       root: 'dialog',
       mask: 'dialog__mask fadein',
+      closeButton: 'dialog__close-btn',
+      header: 'dialog__header',
+      footer: 'dialog__footer',
     }"
   >
-    <template #container>
+    <template #header>
+      <h5 class="heading__quinary">{{ title }}</h5>
+    </template>
+
+    <template #closeicon>
+      <i class="pi pi-times" @click="toggleDialog"></i>
+    </template>
+
+    <template #default>
       <slot />
     </template>
+
+    <template #footer>Footer</template>
   </Dialog>
 </template>
 
 <script lang="ts">
+import { PropType } from "vue";
+
 export default {
   props: {
-    isVisible: {
-      type: Boolean,
-      default: false,
-      required: true,
-    },
+    isVisible: { type: Boolean, default: false, required: true },
     toggleDialog: {
-      type: Function,
+      type: Function as PropType<(payload: MouseEvent) => void>,
       required: true,
     },
+    title: { type: String, default: "", required: true },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+h5 {
+  margin-bottom: 2rem;
+}
+</style>

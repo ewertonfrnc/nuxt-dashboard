@@ -1,62 +1,31 @@
 .dialog {
-  background-color: $color-neutral-neutral-7;
-  border-radius: $dialog-border-radius;
-  transition: all 0.2s;
-  padding: $dialog-padding;
+  background-color: map-get($color-scheme-light, "$color-neutral-neutral-7");
+  transition: all 0.2s ease-in-out;
+  padding: 1.6rem 3.2rem 4rem 3.2rem;
+  border-radius: 1.6rem;
+  width: max-content;
 
-  &__button {
-    @extend .btn;
-    padding: 1rem;
-    background: transparent;
+  &__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+
+  &__footer {
+  }
+
+  &__close-btn {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
   }
 
   &__mask {
     backdrop-filter: blur(0.8rem);
     background-color: rgba(0, 0, 0, 0.2);
   }
+}
 
-  &__header {
-    padding: $dialog-padding;
-    font-size: $default-font-size;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    &--icon {
-      //@extend .btn;
-      //padding: 0;
-      //background: transparent;
-
-      display: grid;
-      place-content: center;
-
-      i {
-        font-size: $default-font-size;
-      }
-    }
-  }
-
-  &__header-icons {
-    & button {
-      @extend .btn;
-      padding: 0;
-      background: transparent;
-    }
-
-    width: 50%;
-    background: red;
-  }
-
-  &__content {
-    padding: $dialog-padding;
-    font-size: $default-font-size;
-  }
-
-  &__footer {
-    font-size: $default-font-size;
-    padding: $dialog-padding;
-    display: flex;
-    justify-content: flex-end;
-  }
+.dark-mode .dialog {
+  background-color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
 }
