@@ -65,13 +65,13 @@ import { changePassword } from "~/utils/schemas";
 export default {
   emits: ["changeStep"],
   setup() {
-    const { handleSubmit, resetForm } = useForm({
+    const { handleSubmit, resetForm, values } = useForm({
       initialValues: { password: "", passwordConfirm: "" },
       validationSchema: changePassword,
     });
     const onSubmit = handleSubmit((formValues) => formValues);
 
-    return { onSubmit, resetForm };
+    return { onSubmit, resetForm, values };
   },
   data() {
     return {

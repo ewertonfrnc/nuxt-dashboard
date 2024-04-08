@@ -108,7 +108,7 @@ export default {
 <style scoped lang="scss">
 .summary {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(27rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
   gap: 1rem;
   margin: 2rem 0;
 }
@@ -118,11 +118,11 @@ export default {
 }
 
 .indicator {
-  padding: 1.6rem;
+  padding: 1.6rem 1.6rem 1.6rem 0;
   border-radius: 0.8rem;
   transition: transform 0.2s linear;
-  border: map-get($color-scheme-light, $border-light);
-  box-shadow: map-get($color-scheme-light, $box-shadow-light);
+  border: $border-light;
+  box-shadow: $box-shadow-light;
   color: map-get($color-scheme-light, "$color-neutral-neutral-0");
   background-color: map-get($color-scheme-light, "$color-neutral-neutral-7");
 
@@ -138,7 +138,9 @@ export default {
   }
 
   i {
-    font-size: 6.4rem;
+    font-size: 4.4rem;
+    justify-self: center;
+    color: map-get($color-scheme-light, "$color-neutral-neutral-1");
   }
 
   &:hover {
@@ -147,9 +149,13 @@ export default {
 }
 
 .dark-mode .indicator {
-  border: map-get($color-scheme-dark, $border-dark);
-  box-shadow: map-get($color-scheme-dark, $box-shadow-dark);
+  border: $border-dark;
+  box-shadow: $box-shadow-dark;
   color: map-get($color-scheme-dark, "$color-neutral-neutral-0");
   background-color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
+
+  i {
+    color: map-get($color-scheme-dark, "$color-neutral-neutral-1");
+  }
 }
 </style>

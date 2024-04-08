@@ -437,8 +437,9 @@ $color-scheme-dark: (
   "$color-surface-surface-5": #16151e,
 );
 
-$border-light: 1px solid #282534;
+$border-light: 1px solid
+  map-get($color-scheme-light, "$color-surface-surface-4");
 $box-shadow-light: 0 0.2rem 1rem #e9e5ff;
 
-$border-dark: 1px solid #282534;
+$border-dark: 1px solid map-get($color-scheme-dark, "$color-surface-surface-4");
 $box-shadow-dark: 0 0.2rem 1rem #191729;
