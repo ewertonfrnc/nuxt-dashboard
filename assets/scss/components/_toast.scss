@@ -19,27 +19,76 @@
   }
 
   &__success {
-    background: $color-feedback-success-1;
-    color: $color-feedback-success-4;
+    background: map-get($color-scheme-light, "$color-feedback-success-1");
+    color: map-get($color-scheme-light, "$color-feedback-success-4");
 
     ::after {
-      @include beforeStyles($color-feedback-success-4);
+      @include beforeStyles(
+        map-get($color-scheme-light, "$color-feedback-success-4")
+      );
+    }
+  }
+
+  .dark-mode &__success {
+    background: map-get($color-scheme-dark, "$color-feedback-success-1");
+    color: map-get($color-scheme-dark, "$color-feedback-success-4");
+
+    ::after {
+      @include beforeStyles(
+        map-get($color-scheme-dark, "$color-feedback-success-4")
+      );
     }
   }
 
   &__danger {
-    background: rgba($color-feedback-danger-4, 0.5);
+    background: rgba(
+      map-get($color-scheme-light, "$color-feedback-danger-4"),
+      0.5
+    );
 
     ::after {
-      @include beforeStyles($color-feedback-danger-0);
+      @include beforeStyles(
+        map-get($color-scheme-light, "$color-feedback-danger-0")
+      );
+    }
+  }
+
+  .dark-mode &__danger {
+    background: rgba(
+      map-get($color-scheme-dark, "$color-feedback-danger-4"),
+      0.5
+    );
+
+    ::after {
+      @include beforeStyles(
+        map-get($color-scheme-dark, "$color-feedback-danger-0")
+      );
     }
   }
 
   &__warn {
-    background: rgba($color-feedback-warning-4, 0.5);
+    background: rgba(
+      map-get($color-scheme-light, "$color-feedback-warning-4"),
+      0.5
+    );
 
     ::after {
-      @include beforeStyles($color-feedback-warning-0);
+      @include beforeStyles(
+        map-get($color-scheme-light, "$color-feedback-warning-0")
+      );
+    }
+  }
+
+  .dark-mode &__warn {
+    background: rgba(
+      map-get($color-scheme-dark, "$color-feedback-warning-4"),
+      0.5
+    );
+
+    ::after {
+      @include beforeStyles(
+        map-get($color-scheme-dark, "$color-feedback-warning-0")
+      );
     }
   }
 
@@ -48,7 +97,7 @@
   }
 
   &__info {
-    font-size: $default-font-size;
+    font-size: 1.6rem;
     word-break: break-word;
     white-space: pre-line;
   }

@@ -35,7 +35,14 @@
 body {
   font-family: "Rajdhani", sans-serif;
   font-size: $default-font-size;
-  color: $color-neutral-neutral-0;
+}
+
+.light-mode body {
+  color: map-get($color-scheme-light, "$color-neutral-neutral-0");
+}
+
+.dark-mode body {
+  color: map-get($color-scheme-dark, "$color-neutral-neutral-0");
 }
 
 .heading {

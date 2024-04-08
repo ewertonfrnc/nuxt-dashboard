@@ -34,6 +34,7 @@
 <script lang="ts">
 export default {
   setup() {
+    definePageMeta({ layout: "auth", colorMode: "light" });
     const authSteps = ["login", "recover", "code", "change"];
     return { authSteps };
   },
@@ -56,10 +57,13 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.light-mode .container {
+  background-color: map-get($color-scheme-light, "$color-brand-primary-3");
+}
+
 .container {
   overflow: hidden;
   position: relative;
-  background-color: $color-brand-primary-0;
   width: 100vw;
   height: 100vh;
 

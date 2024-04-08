@@ -12,13 +12,19 @@
     transform: translateY(-50%);
 
     &--password {
+      font-size: 2.4rem;
+      cursor: pointer;
       position: absolute;
       top: 25%;
       right: 5%;
+    }
 
-      cursor: pointer;
-      font-size: $font-size-title-3;
-      color: $color-neutral-neutral-1;
+    .light-mode &--password {
+      color: map-get($color-scheme-light, "$color-neutral-neutral-1");
+    }
+
+    .dark-mode &--password {
+      color: map-get($color-scheme-dark, "$color-neutral-neutral-1");
     }
   }
 
@@ -26,36 +32,45 @@
     width: 100%;
     display: block;
 
-    color: $color-neutral-neutral-2;
     font-size: $font-size-body-primary;
     font-family: inherit;
 
     padding: $input-padding;
     border-radius: $input-border-radius;
-    border: 1px solid $color-neutral-neutral-4;
-
     transition: all 0.3s;
-    background-color: $color-neutral-neutral-7;
+
+    color: map-get($color-scheme-light, "$color-neutral-neutral-2");
+    border: 1px solid map-get($color-scheme-light, "$color-neutral-neutral-4");
+    background-color: map-get($color-scheme-light, "$color-neutral-neutral-7");
 
     &:read-only {
       border: 1px solid transparent;
     }
 
     &:disabled {
-      background-color: $color-neutral-neutral-3;
-      color: $color-neutral-neutral-3;
-      border: 1px solid $color-neutral-neutral-3;
+      background-color: map-get(
+        $color-scheme-light,
+        "$color-neutral-neutral-3"
+      );
+      color: map-get($color-scheme-light, "$color-neutral-neutral-3");
+      border: 1px solid map-get($color-scheme-light, "$color-neutral-neutral-3");
       cursor: not-allowed;
     }
   }
 
+  .dark-mode &__field {
+    color: map-get($color-scheme-dark, "$color-neutral-neutral-2");
+    border: 1px solid map-get($color-scheme-dark, "$color-neutral-neutral-4");
+    background-color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
+  }
+
   .error {
-    border: 1px solid $color-feedback-danger-0;
+    border: 1px solid map-get($color-scheme-light, "$color-feedback-danger-0");
   }
 
   &__error {
     display: block;
-    color: $color-feedback-danger-0;
+    color: map-get($color-scheme-light, "$color-feedback-danger-0");
     padding: 0.5rem 1rem 0;
   }
 }

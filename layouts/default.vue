@@ -4,13 +4,10 @@
       <LayoutSidebar v-if="isSidebarVisible" />
     </transition>
 
-    <div class="content">
-      <main class="main">
-        <LayoutHeader :toggle-sidebar="toggleSidebar" :route-path="path" />
-
-        <BaseToast />
-        <slot />
-      </main>
+    <main class="main">
+      <LayoutHeader :toggle-sidebar="toggleSidebar" :route-path="path" />
+      <BaseToast />
+      <slot />
 
       <footer class="footer">
         <p class="caption__primary">
@@ -18,17 +15,30 @@
           <strong>Usemobile</strong>
         </p>
       </footer>
-    </div>
+    </main>
   </div>
 </template>
 
 <script lang="ts">
+import { mapState } from "pinia";
+
 export default {
+  setup() {
+    const colorMode = useColorMode();
+    return { colorMode };
+  },
   data() {
     return {
       isSidebarVisible: true,
       path: "",
     };
+  },
+  computed: {
+    ...mapState(useHomeStore, ["colorPreference"]),
+  },
+  created() {
+    const colorMode = localStorage.getItem("colorPreference");
+    this.colorMode.preference = colorMode || this.colorPreference;
   },
   updated() {
     this.path = this.$route.path;
@@ -42,38 +52,46 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.dark-mode .container {
+  background: map-get($color-scheme-dark, "$color-surface-surface-5");
+}
+
 .container {
   position: relative;
   height: 100vh;
-  width: 100vw;
-  background-color: $color-surface-surface-5;
   transition: all 0.3s ease-in-out;
+  background: map-get($color-scheme-light, "$color-surface-surface-5");
 
   display: flex;
   gap: 1rem;
 }
 
 .content {
-  position: relative;
-  width: 100%;
-  margin: 1rem 2rem;
   transition: all 0.3s ease-in-out;
 }
 
 .main {
   width: 100%;
+  max-height: 100vh;
+  overflow: auto;
+  padding: 1rem 2rem;
+
+  display: flex;
+  flex-direction: column;
 }
 
 .footer {
-  background: $color-neutral-neutral-7;
-  border: 1px solid $color-surface-surface-4;
+  background: map-get($color-scheme-light, "$color-neutral-neutral-7");
+  border: 1px solid map-get($color-scheme-light, "$color-surface-surface-4");
   padding: 0.8rem;
   text-align: right;
-
-  width: 100%;
-  position: absolute;
-  bottom: 0;
   border-radius: 1rem;
+  margin-top: auto;
+}
+
+.dark-mode .footer {
+  background: map-get($color-scheme-dark, "$color-neutral-neutral-7");
+  border: 1px solid map-get($color-scheme-dark, "$color-surface-surface-4");
 }
 
 .slide-enter-active {

@@ -1,16 +1,26 @@
 <script lang="ts">
 export default {
+  props: {
+    checked: { type: Boolean, default: true, required: true },
+  },
+  emits: ["toggleCheckbox"],
   data() {
     return {
-      checked: false,
+      isChecked: false,
     };
+  },
+  methods: {
+    handleCheckbox() {
+      this.isChecked = !this.checked;
+      this.$emit("toggleCheckbox", this.isChecked);
+    },
   },
 };
 </script>
 
 <template>
   <label class="switch">
-    <input type="checkbox" />
+    <input type="checkbox" :checked="checked" @click="handleCheckbox" />
     <span class="slider round" />
   </label>
 </template>
@@ -36,7 +46,7 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: $color-neutral-neutral-4;
+  background-color: map-get($color-scheme-light, "$color-neutral-neutral-4");
   -webkit-transition: 0.4s;
   transition: 0.4s;
 
@@ -53,12 +63,18 @@ export default {
   }
 }
 
-input:checked + .slider {
-  background-color: $color-brand-primary-0;
+.dark-mode .slider {
+  &:before {
+    background-color: map-get($color-scheme-light, "$color-neutral-neutral-0");
+  }
 }
 
-input:focus + .slider {
-  box-shadow: 0 0 1rem $color-brand-primary-0;
+input:checked + .slider {
+  background-color: map-get($color-scheme-light, "$color-brand-primary-0");
+}
+
+.dark-mode input:checked + .slider {
+  background-color: map-get($color-scheme-light, "$color-brand-primary-0");
 }
 
 input:checked + .slider:before {

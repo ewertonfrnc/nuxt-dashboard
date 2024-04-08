@@ -1,7 +1,7 @@
-import type { Component } from 'vue';
+import type { Component } from "vue";
 
 export type Tabs = {
-  title: string;
+  label: string;
   icon: string;
   component: Component;
 };

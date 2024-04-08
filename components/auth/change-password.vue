@@ -20,6 +20,12 @@
           </div>
 
           <BaseInlineMessage
+            v-if="!values.password"
+            severity="info"
+            text="4 dígitos numéricos"
+          />
+          <BaseInlineMessage
+            v-else
             :severity="isValidPassword ? 'success' : 'error'"
             text="4 dígitos numéricos"
           />
@@ -80,9 +86,7 @@ export default {
     },
     validatePassword(password: string) {
       if (!password) return;
-
-      if (password.length >= 4) this.isValidPassword = true;
-      else this.isValidPassword = false;
+      this.isValidPassword = password.length >= 4;
     },
     async changePassword() {
       try {

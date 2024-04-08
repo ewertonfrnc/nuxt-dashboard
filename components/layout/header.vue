@@ -11,6 +11,7 @@
         :pt="{
           root: 'breadcumb',
           menu: 'breadcumb__menu',
+          menuitem: 'breadcumb__item',
         }"
       >
         <template #item="{ item }">
@@ -27,55 +28,13 @@
     <button class="header__avatar" @click="toggle">
       <img
         class="header__avatar--img"
-        src="https://randomuser.me/api/portraits/women/39.jpg"
-        :alt="`Imagem de ${user?.firstName}`"
+        :src="user?.image"
+        alt="Imagem do usuário"
       />
     </button>
 
-    <OverlayPanel ref="op">
-      <div class="menu">
-        <div class="menu__info">
-          <div class="menu__logo">LOGO</div>
-
-          <div>
-            <div class="menu__user">
-              <img
-                class="menu__user--img"
-                src="https://randomuser.me/api/portraits/women/39.jpg"
-                :alt="`Imagem de ${user?.firstName}`"
-              />
-
-              <div class="menu__user--info">
-                <span class="caption__primary">Felipe Xavier</span>
-                <span class="caption__primary"
-                  >felipe.xavier@usemobile.com.br</span
-                >
-              </div>
-            </div>
-
-            <div class="menu__company">
-              <h5 class="heading__quinary">Usemobile Soluções em Tecnologia</h5>
-              <span class="caption__primary">01.270.742/0001-08</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="menu__options">
-          <div class="menu__options--action">
-            <i class="pi pi-moon" />
-            <span class="button__secondary">Tema escuro</span>
-
-            <div class="menu__options--switch">
-              <BaseInputSwitch />
-            </div>
-          </div>
-
-          <div class="menu__options--action">
-            <i class="pi pi-sign-out" />
-            <span class="button__secondary">Sair</span>
-          </div>
-        </div>
-      </div>
+    <OverlayPanel ref="op" class="fadein animation-duration-150">
+      <LayoutAvatarMenu />
     </OverlayPanel>
   </header>
 </template>
@@ -83,7 +42,6 @@
 <script lang="ts">
 import { mapState } from "pinia";
 import { PropType } from "vue";
-import { useAuthStore } from "~/stores/auth.store";
 import { findRouteAndLabel, routes } from "~/utils/routes.utils";
 
 export default {
@@ -96,7 +54,6 @@ export default {
   },
   data() {
     return {
-      checked: true,
       home: { icon: "pi pi-home", route: "/" },
     };
   },
@@ -116,60 +73,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.menu {
-  background-color: $color-neutral-neutral-7;
-  border-radius: 1.6rem;
-  box-shadow: $box-shadow;
-  margin-left: 2.6rem;
-
-  &__logo {
-    display: grid;
-    place-content: center;
-  }
-
-  &__info {
-    padding: 2.6rem;
-    display: flex;
-    gap: 2rem;
-  }
-
-  &__user {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-
-    &--img {
-      max-width: 5.6rem;
-      border-radius: 10rem;
-    }
-
-    &--info {
-      display: flex;
-      flex-direction: column;
-
-      span:nth-child(2) {
-        color: $color-neutral-neutral-1;
-      }
-    }
-  }
-
-  &__options {
-    border-top: 1px solid $color-neutral-neutral-5;
-
-    &--action {
-      position: relative;
-      padding: 2.4rem;
-      display: flex;
-      align-items: center;
-      gap: 2rem;
-    }
-
-    &--switch {
-      margin-left: auto;
-    }
-  }
-}
-
 .header {
   margin-bottom: $spacing-lg;
   display: flex;
@@ -179,20 +82,34 @@ export default {
 
   &__toggle {
     cursor: pointer;
-    border: 1px solid #e1dfef;
     border-radius: 1rem;
-    background-color: $color-neutral-neutral-7;
     padding: 0.8rem;
     box-shadow: $box-shadow;
+    border: 1px solid map-get($color-scheme-light, "$color-surface-surface-4");
+    background-color: map-get($color-scheme-light, "$color-neutral-neutral-7");
+    color: map-get($color-scheme-light, "$color-neutral-neutral-1");
+  }
+
+  .dark-mode &__toggle {
+    box-shadow: 0 0.2rem 1rem #191729;
+    background-color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
+    border: 1px solid map-get($color-scheme-dark, "$color-surface-surface-4");
+    color: map-get($color-scheme-dark, "$color-neutral-neutral-1");
   }
 
   &__breadcrumbs {
     flex: 1;
     padding: 0.8rem 1.6rem;
-    background-color: $color-neutral-neutral-7;
+    background-color: map-get($color-scheme-light, "$color-neutral-neutral-7");
     box-shadow: $box-shadow;
     border-radius: 1rem;
     border: 1px solid #e1dfef;
+  }
+
+  .dark-mode &__breadcrumbs {
+    background-color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
+    box-shadow: 0 0.2rem 1rem #191729;
+    border: 1px solid #282534;
   }
 
   &__avatar {
