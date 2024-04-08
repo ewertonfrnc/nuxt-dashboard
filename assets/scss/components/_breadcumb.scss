@@ -1,0 +1,12 @@
+.breadcumb {
+  &__menu {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    a {
+      color: $color-neutral-neutral-1;
+      font-size: $font-size-body-primary;
+    }
+  }
+}

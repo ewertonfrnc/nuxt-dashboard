@@ -1,32 +1,34 @@
 <template>
-  <div class="container">
-    <img
-      src="~/assets/img/login-feature.png"
-      class="container__detail--1"
-      alt="container details"
-    />
-    <img
-      src="~/assets/img/login-feature.png"
-      class="container__detail--2"
-      alt="container details"
-    />
+  <NuxtLayout>
+    <div class="container">
+      <img
+        src="~/assets/img/login-feature.png"
+        class="container__detail--1"
+        alt="container details"
+      />
+      <img
+        src="~/assets/img/login-feature.png"
+        class="container__detail--2"
+        alt="container details"
+      />
 
-    <AuthLogin v-if="currentStep === 'login'" @change-step="changeAuthStep" />
-    <AuthRecoverPassword
-      v-if="currentStep === 'recover'"
-      @change-step="changeAuthStep"
-      @recover-email="setRecoverEmail"
-    />
-    <AuthRecoverCode
-      v-if="currentStep === 'code'"
-      :recover-email="recoverEmail"
-      @change-step="changeAuthStep"
-    />
-    <AuthChangePassword
-      v-if="currentStep === 'change'"
-      @change-step="changeAuthStep"
-    />
-  </div>
+      <AuthLogin v-if="currentStep === 'login'" @change-step="changeAuthStep" />
+      <AuthRecoverPassword
+        v-if="currentStep === 'recover'"
+        @change-step="changeAuthStep"
+        @recover-email="setRecoverEmail"
+      />
+      <AuthRecoverCode
+        v-if="currentStep === 'code'"
+        :recover-email="recoverEmail"
+        @change-step="changeAuthStep"
+      />
+      <AuthChangePassword
+        v-if="currentStep === 'change'"
+        @change-step="changeAuthStep"
+      />
+    </div>
+  </NuxtLayout>
 </template>
 
 <script lang="ts">
@@ -70,6 +72,14 @@ export default {
     position: absolute;
     top: 0;
     right: 0;
+
+    @include respond(tab-land) {
+      max-width: 40rem;
+    }
+
+    @include respond(tab-port) {
+      max-width: 35rem;
+    }
   }
 
   &__detail--2 {
@@ -77,6 +87,14 @@ export default {
     position: absolute;
     bottom: 0;
     left: 0;
+
+    @include respond(tab-land) {
+      max-width: 40rem;
+    }
+
+    @include respond(tab-port) {
+      max-width: 35rem;
+    }
   }
 }
 </style>

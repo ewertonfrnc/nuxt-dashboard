@@ -1,48 +1,102 @@
 <template>
-  <header class="flex">
-    <BaseButton outlined icon="pi pi-bars" class="icon-wrapper" />
+  <header class="header">
+    <button class="header__toggle" @click="toggleSidebar">
+      <i class="pi pi-bars"></i>
+    </button>
 
-    <div class="breadcumbs">
-      <Breadcrumb class="text-lg" :home="home" :model="items" />
+    <div class="header__breadcrumbs">
+      <Breadcrumb
+        :home="home"
+        :model="items"
+        :pt="{
+          root: 'breadcumb',
+          menu: 'breadcumb__menu',
+        }"
+      >
+        <template #item="{ item }">
+          <NuxtLink :to="item.route">
+            <i v-if="item.icon" :class="['pi', item.icon]" />
+            <span v-if="item.label && item.label !== 'Indicadores'">{{
+              item.label
+            }}</span>
+          </NuxtLink>
+        </template>
+      </Breadcrumb>
     </div>
 
-    <div>
-      <Avatar icon="pi pi-user" class="mr-2" size="large" shape="circle" />
+    <div class="header__avatar">
+      <img
+        class="header__avatar--img"
+        src="https://randomuser.me/api/portraits/women/39.jpg"
+        :alt="`Imagem de ${user?.firstName}`"
+      />
     </div>
   </header>
 </template>
 
 <script lang="ts">
+import { mapState } from "pinia";
+import { PropType } from "vue";
+import { useAuthStore } from "~/stores/auth.store";
+import { findRouteAndLabel, routes } from "~/utils/routes.utils";
+
 export default {
+  props: {
+    toggleSidebar: {
+      type: Function as PropType<(payload: MouseEvent) => void>,
+      required: true,
+    },
+    routePath: { type: String, required: true },
+  },
   data() {
     return {
-      home: { icon: "pi pi-home", to: "/" },
-      items: [{ label: "Fechamento de ponto" }],
+      home: { icon: "pi pi-home", route: "/" },
     };
+  },
+  computed: {
+    ...mapState(useAuthStore, ["user"]),
+    items() {
+      const routeAndLabel = findRouteAndLabel(routes, this.routePath);
+      return [routeAndLabel];
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-header {
-  gap: 2rem;
-  margin-bottom: 2rem;
-}
+.header {
+  margin-bottom: $spacing-lg;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
 
-.icon-wrapper {
-  background-color: white;
-  border: none;
-}
+  &__toggle {
+    cursor: pointer;
+    border: 1px solid #e1dfef;
+    border-radius: 1rem;
+    background-color: $color-neutral-neutral-7;
+    padding: 0.8rem;
+    box-shadow: $box-shadow;
+  }
 
-.breadcumbs {
-  width: 100%;
-}
+  &__breadcrumbs {
+    flex: 1;
+    padding: 0.8rem 1.6rem;
+    background-color: $color-neutral-neutral-7;
+    box-shadow: $box-shadow;
+    border-radius: 1rem;
+    border: 1px solid #e1dfef;
+  }
 
-:deep(.p-menuitem-icon) {
-  font-size: 1.4rem;
-}
+  &__avatar {
+    width: 4rem;
+    height: 4rem;
 
-:deep(.p-breadcrumb) {
-  padding: 0.8rem 1.6rem;
+    &--img {
+      max-width: 100%;
+      border-radius: 10rem;
+    }
+  }
 }
 </style>

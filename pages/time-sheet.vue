@@ -4,7 +4,7 @@ export default {};
 
 <template>
   <UiModal class="login fadein animation-duration-500">
-    <h1 class="heading__primary">Indicadores</h1>
+    <h1 class="heading__primary">Pontos</h1>
   </UiModal>
 </template>
 
