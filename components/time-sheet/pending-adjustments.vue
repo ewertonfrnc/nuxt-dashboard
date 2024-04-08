@@ -1,5 +1,7 @@
 <script lang="ts">
 import { mapActions } from "pinia";
+import { QueryParams } from "~/interfaces/time-sheet/time-sheet.interface";
+import { Filter } from "~/interfaces/table.interface";
 
 export default {
   data() {
@@ -26,19 +28,39 @@ export default {
         },
       ],
       nodes: [],
+      queries: {
+        global: { value: "", matchMode: "" },
+        name: { value: "2", matchMode: "" },
+        currentBalance: { value: "", matchMode: "" },
+        totalRequests: { value: "3", matchMode: "" },
+      },
     };
   },
   async mounted() {
-    await this.getInitialValues();
+    await this.getTableValues(this.queries);
   },
   methods: {
     ...mapActions(useTimeSheetStore, ["getPendingAdjustments"]),
-    async getInitialValues() {
+    arrayToObject(array: Filter[]) {
+      return array.reduce((accumulator, currentValue) => {
+        const { field, value, matchMode } = currentValue;
+        return Object.assign(accumulator, { [field]: { value, matchMode } });
+      }, {});
+    },
+    async getTableValues(queryParams: QueryParams) {
+      const queryParamsArray = Object.values(queryParams);
+      this.queries = this.arrayToObject(queryParamsArray);
+
       this.loading = true;
       try {
-        this.nodes = await this.getPendingAdjustments();
+        this.nodes = await this.getPendingAdjustments(this.queries);
       } catch (err) {
-        console.log("err", err);
+        this.$toast.add({
+          severity: "error",
+          summary: "Algo deu errado!",
+          detail: "Tente novamente mais tarde.",
+          life: 4000,
+        });
       } finally {
         this.loading = false;
       }
@@ -57,6 +79,7 @@ export default {
       :nodes="nodes"
       header-shown
       is-expandable
+      @update-filter-handler="getTableValues"
     >
       <template #expansion-content="slotProps">
         <TimeSheetTableExpandedRow :slot-props="slotProps.data" />
