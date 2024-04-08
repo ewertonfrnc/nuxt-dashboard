@@ -1,5 +1,8 @@
 <template>
   <DataTable
+    scrollable
+    scroll-height="flex"
+    scroll-direction="horizontal"
     removable-sort
     select-all
     :rows="rows"
@@ -51,11 +54,13 @@
             @click="clearFilters"
           />
 
-          <input
-            v-model="filters['global'].value"
-            class="input__field"
-            placeholder="Procurar por nome"
-          />
+          <label>
+            <i class="pi pi-search"></i>
+            <input
+              v-model="filters['global'].value"
+              placeholder="Procurar por nome"
+            />
+          </label>
         </div>
       </div>
     </template>
@@ -98,9 +103,15 @@
       v-if="!loading && isExpandable"
       expander
       :pt="{
+        headercell: 'table__header--cell',
+        headercontent: 'table__header--content',
         bodycell: 'table__body--cell table__body--cell-icon',
       }"
-    />
+    >
+      <template #header>
+        <span class="heading__quinary">Ações</span>
+      </template>
+    </Column>
 
     <Column
       v-for="col of columns"
@@ -110,16 +121,19 @@
       :header="col.header"
       :sortable="col.sortable"
       :filter-field="col.field"
+      frozen
       :show-filter-menu="true"
       :show-filter-match-modes="false"
       :show-filter-operator="false"
       :show-add-button="false"
       :pt="{
         headercell: 'table__header--cell',
-        headercontent: 'flex justify-content-between',
+        headertitle: 'heading__quinary',
+        headercontent: 'table__header--content',
         bodycell: 'table__body--cell',
         filteraddrule: 'filter__add-rule',
         filterConstraints: 'table__filter',
+        filtermenubutton: 'table__filter--icon',
         filterbuttonbar: 'table__filter--footer',
       }"
     >
@@ -128,8 +142,6 @@
       </template>
 
       <template v-if="col.hasFilter" #filter="{ filterModel }">
-        {{ filterModel }}
-
         <input
           v-model="filterModel.value"
           type="text"
@@ -191,7 +203,6 @@
 <script lang="ts">
 import { FilterMatchMode } from "primevue/api";
 import {
-  DataTableFilterMeta,
   DataTableRowExpandEvent,
   DataTableRowSelectEvent,
 } from "primevue/datatable";
@@ -210,6 +221,7 @@ export default {
     isExpandable: { type: Boolean, required: false, default: false },
     hasAction: { type: Boolean, required: false, default: false },
   },
+  emits: ["update-filter-handler"],
   setup() {
     const colorMode = useColorMode();
     return { colorMode };
@@ -322,6 +334,7 @@ export default {
         this.selectedOption.code;
 
       this.filters = updatedFilters;
+      this.$emit("update-filter-handler", this.filters);
     },
   },
 };
