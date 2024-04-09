@@ -35,70 +35,110 @@
 body {
   font-family: "Rajdhani", sans-serif;
   font-size: $default-font-size;
-  color: $color-neutral-neutral-0;
+}
+
+.light-mode body {
+  color: map-get($color-scheme-light, "$color-neutral-neutral-0");
+}
+
+.dark-mode body {
+  color: map-get($color-scheme-dark, "$color-neutral-neutral-0");
 }
 
 .heading {
   &__primary {
-    font-size: $font-size-title-1;
-    font-weight: 600;
+    font-size: 4rem;
+    line-height: 5.3rem;
+    font-weight: 700;
   }
 
   &__secondary {
-    font-size: $font-size-title-2;
-    font-weight: 500;
+    font-size: 3.5rem;
+    line-height: 4.2rem;
+    font-weight: 700;
   }
 
   &__tertiary {
-    font-size: $font-size-title-3;
+    font-size: 2.8rem;
+    line-height: 3.6rem;
     font-weight: 600;
+  }
+
+  &__quaternary {
+    font-size: 2.3rem;
+    line-height: 3.2rem;
+    font-weight: 600;
+  }
+
+  &__quinary {
+    font-size: 1.8rem;
+    line-height: 2.7rem;
+    font-weight: 600;
+  }
+
+  &__senary {
+    font-size: 1.8rem;
+    line-height: 2.1rem;
+    font-weight: 700;
   }
 }
 
 .subtitle {
   &__primary {
-    font-size: $font-size-subtitle;
-    font-weight: 600;
+    font-size: 2.1rem;
+    line-height: 2.7rem;
+    font-weight: 700;
   }
 
   &__secondary {
-    font-size: $font-size-subtitle;
-    font-style: italic;
+    font-size: 2.1rem;
+    line-height: 2.7rem;
+    font-weight: 400;
   }
 }
 
 .body {
-  font-weight: 400;
+  font-weight: 500;
 
   &__primary {
-    font-size: $font-size-body-primary;
+    font-size: 1.9rem;
+    line-height: 2.1rem;
+    font-weight: 500;
   }
 
   &__secondary {
-    font-size: $font-size-body-secondary;
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+    font-weight: 500;
   }
 }
 
 .button {
-  font-weight: 600;
+  font-weight: 700;
 
   &__primary {
-    font-size: $font-size-button-primary;
+    font-size: 1.9rem;
+    line-height: 2.4rem;
+    font-weight: 700;
   }
 
   &__secondary {
-    font-size: $font-size-body-secondary;
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+    font-weight: 700;
   }
 }
 
 .caption {
   &__primary {
-    font-size: $font-size-caption;
-    font-weight: 400;
+    font-size: 1.4rem;
+    line-height: 1.8rem;
+    font-weight: 500;
   }
 
   &__secondary {
-    font-size: $font-size-caption;
+    font-size: 1.4rem;
+    line-height: 1.8rem;
     font-weight: 600;
   }
 }

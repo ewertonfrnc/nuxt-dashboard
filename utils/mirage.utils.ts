@@ -1,6 +1,7 @@
 import { createServer, Model } from "miragejs";
 
 import authHandlers from "~/utils/miragejs/auth.handlers";
+import homeHandlers from "~/utils/miragejs/home.handlers";
 
 export function makeServer() {
   return createServer({
@@ -12,6 +13,9 @@ export function makeServer() {
 
       // auth
       authHandlers(this);
+
+      // home
+      homeHandlers(this);
     },
   });
 }

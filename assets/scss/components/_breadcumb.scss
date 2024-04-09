@@ -1,0 +1,22 @@
+.breadcumb {
+  &__menu {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1.6rem;
+  }
+
+  .light-mode &__item {
+    a,
+    i,
+    span {
+      color: map-get($color-scheme-light, "$color-neutral-neutral-1");
+    }
+  }
+
+  .dark-mode &__item a,
+  i,
+  span {
+    color: map-get($color-scheme-dark, "$color-neutral-neutral-0");
+  }
+}

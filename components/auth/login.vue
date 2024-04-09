@@ -168,7 +168,7 @@ export default {
     }
 
     &--label {
-      color: $color-neutral-neutral-2;
+      color: map-get($color-scheme-light, "$color-neutral-neutral-2");
       display: flex;
       gap: 0.8rem;
     }

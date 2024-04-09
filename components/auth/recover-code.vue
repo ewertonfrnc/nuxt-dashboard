@@ -121,7 +121,7 @@ export default {
 }
 
 .highlight {
-  color: $color-feedback-warning-4;
+  color: map-get($color-scheme-light, "$color-feedback-warning-4");
   font-weight: bold;
 }
 </style>

@@ -1,48 +1,129 @@
 <template>
-  <header class="flex">
-    <BaseButton outlined icon="pi pi-bars" class="icon-wrapper" />
+  <header class="header">
+    <button class="header__toggle" @click="toggleSidebar">
+      <i class="pi pi-bars"></i>
+    </button>
 
-    <div class="breadcumbs">
-      <Breadcrumb class="text-lg" :home="home" :model="items" />
+    <div class="header__breadcrumbs">
+      <Breadcrumb
+        :home="home"
+        :model="items"
+        :pt="{
+          root: 'breadcumb',
+          menu: 'breadcumb__menu',
+          menuitem: 'breadcumb__item',
+        }"
+      >
+        <template #item="{ item }">
+          <NuxtLink :to="item.route" class="fadein animation-duration-500">
+            <i v-if="item.icon" :class="['pi', item.icon]" />
+            <span v-if="item.label && item.label !== 'Indicadores'">{{
+              item.label
+            }}</span>
+          </NuxtLink>
+        </template>
+      </Breadcrumb>
     </div>
 
-    <div>
-      <Avatar icon="pi pi-user" class="mr-2" size="large" shape="circle" />
-    </div>
+    <button class="header__avatar" @click="toggle">
+      <img
+        class="header__avatar--img"
+        :src="user?.image"
+        alt="Imagem do usuário"
+      />
+    </button>
+
+    <OverlayPanel ref="op" class="fadein animation-duration-150">
+      <LayoutAvatarMenu />
+    </OverlayPanel>
   </header>
 </template>
 
 <script lang="ts">
+import { mapState } from "pinia";
+import { PropType } from "vue";
+import { findRouteAndLabel, routes } from "~/utils/routes.utils";
+
 export default {
+  props: {
+    toggleSidebar: {
+      type: Function as PropType<(payload: MouseEvent) => void>,
+      required: true,
+    },
+    routePath: { type: String, required: true },
+  },
   data() {
     return {
-      home: { icon: "pi pi-home", to: "/" },
-      items: [{ label: "Fechamento de ponto" }],
+      home: { icon: "pi pi-home", route: "/" },
     };
+  },
+  computed: {
+    ...mapState(useAuthStore, ["user"]),
+    items() {
+      const routeAndLabel = findRouteAndLabel(routes, this.routePath);
+      return [routeAndLabel];
+    },
+  },
+  methods: {
+    toggle(event) {
+      this.$refs.op.toggle(event);
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-header {
-  gap: 2rem;
-  margin-bottom: 2rem;
-}
+.header {
+  margin-bottom: $spacing-lg;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
 
-.icon-wrapper {
-  background-color: white;
-  border: none;
-}
+  &__toggle {
+    cursor: pointer;
+    border-radius: 1rem;
+    padding: 0.8rem;
+    box-shadow: $box-shadow;
+    border: 1px solid map-get($color-scheme-light, "$color-surface-surface-4");
+    background-color: map-get($color-scheme-light, "$color-neutral-neutral-7");
+    color: map-get($color-scheme-light, "$color-neutral-neutral-1");
+  }
 
-.breadcumbs {
-  width: 100%;
-}
+  .dark-mode &__toggle {
+    box-shadow: 0 0.2rem 1rem #191729;
+    background-color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
+    border: 1px solid map-get($color-scheme-dark, "$color-surface-surface-4");
+    color: map-get($color-scheme-dark, "$color-neutral-neutral-1");
+  }
 
-:deep(.p-menuitem-icon) {
-  font-size: 1.4rem;
-}
+  &__breadcrumbs {
+    flex: 1;
+    padding: 0.8rem 1.6rem;
+    background-color: map-get($color-scheme-light, "$color-neutral-neutral-7");
+    box-shadow: $box-shadow;
+    border-radius: 1rem;
+    border: 1px solid #e1dfef;
+  }
 
-:deep(.p-breadcrumb) {
-  padding: 0.8rem 1.6rem;
+  .dark-mode &__breadcrumbs {
+    background-color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
+    box-shadow: 0 0.2rem 1rem #191729;
+    border: 1px solid #282534;
+  }
+
+  &__avatar {
+    width: 4rem;
+    height: 4rem;
+    border: none;
+    background: transparent;
+    border-radius: 10rem;
+    cursor: pointer;
+
+    &--img {
+      max-width: 100%;
+      border-radius: 10rem;
+    }
+  }
 }
 </style>
