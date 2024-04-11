@@ -15,5 +15,9 @@ class TimeSheetService {
       },
     });
   }
+
+  fetchUserPendingAdjustments(userId: number) {
+    return api().get(`/api/time-sheet/pending/${userId}`);
+  }
 }
 export default new TimeSheetService();
