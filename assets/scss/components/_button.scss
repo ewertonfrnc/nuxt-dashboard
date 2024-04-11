@@ -2,22 +2,24 @@
   &,
   &:link,
   &:visited {
+    width: 100%;
+
+    cursor: pointer;
     text-decoration: none;
-    padding: $button-padding;
+    position: relative;
     transition: all 0.2s;
-    font-weight: 600;
     font-family: inherit;
 
-    width: 100%;
+    padding: $button-padding;
+    border-radius: $button-border-radius;
+
     display: flex;
     justify-content: center;
     gap: 1.5rem;
 
-    font-size: 1.6rem;
-    position: relative;
-
-    border-radius: $button-border-radius;
-    cursor: pointer;
+    font-size: $font-size-button-primary;
+    line-height: $line-height-button-primary;
+    font-weight: $font-weight-button-primary;
   }
 
   &__icon {
@@ -43,7 +45,7 @@
 
     &:focus {
       outline: none;
-      box-shadow: 0 0 1rem
+      box-shadow: 0 0 0.5rem
         map-get($color-scheme-light, "$color-brand-primary-0");
       @include buttonStyles(
         map-get($color-scheme-light, "$color-brand-primary-3"),
@@ -77,7 +79,7 @@
 
       &:focus {
         outline: none;
-        box-shadow: 0 0 1rem
+        box-shadow: 0 0 0.5rem
           map-get($color-scheme-light, "$color-brand-primary-0");
         @include buttonStyles(
           transparent,
@@ -148,7 +150,8 @@
 
     &:focus {
       outline: none;
-      box-shadow: 0 0 1rem map-get($color-scheme-dark, "$color-brand-primary-0");
+      box-shadow: 0 0 0.5rem
+        map-get($color-scheme-dark, "$color-brand-primary-0");
       @include buttonStyles(
         map-get($color-scheme-dark, "$color-brand-primary-3"),
         map-get($color-scheme-dark, "$color-neutral-neutral-7"),
@@ -181,7 +184,7 @@
 
       &:focus {
         outline: none;
-        box-shadow: 0 0 1rem
+        box-shadow: 0 0 0.5rem
           map-get($color-scheme-dark, "$color-brand-primary-0");
         @include buttonStyles(
           transparent,
@@ -252,7 +255,7 @@
 
     &:focus {
       outline: none;
-      box-shadow: 0 0 1rem
+      box-shadow: 0 0 0.5rem
         map-get($color-scheme-light, "$color-feedback-success-0");
       @include buttonStyles(
         map-get($color-scheme-light, "$color-feedback-success-3"),
@@ -286,7 +289,7 @@
 
       &:focus {
         outline: none;
-        box-shadow: 0 0 1rem
+        box-shadow: 0 0 0.5rem
           map-get($color-scheme-light, "$color-feedback-success-0");
         @include buttonStyles(
           transparent,
@@ -357,7 +360,7 @@
 
     &:focus {
       outline: none;
-      box-shadow: 0 0 1rem
+      box-shadow: 0 0 0.5rem
         map-get($color-scheme-dark, "$color-feedback-success-0");
       @include buttonStyles(
         map-get($color-scheme-dark, "$color-feedback-success-3"),
@@ -391,7 +394,7 @@
 
       &:focus {
         outline: none;
-        box-shadow: 0 0 1rem
+        box-shadow: 0 0 0.5rem
           map-get($color-scheme-dark, "$color-feedback-success-0");
         @include buttonStyles(
           transparent,

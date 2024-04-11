@@ -83,7 +83,7 @@ export default {
 
 .menu {
   border-radius: 1.6rem;
-  box-shadow: $box-shadow;
+  box-shadow: $box-shadow-light;
   margin-left: 2.6rem;
   color: map-get($color-scheme-light, "$color-neutral-neutral-0");
   background-color: map-get($color-scheme-light, "$color-neutral-neutral-7");

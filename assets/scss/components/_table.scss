@@ -7,6 +7,9 @@
   border: $border-light;
   border-collapse: collapse;
 
+  &__loading {
+  }
+
   &__filter {
     padding: 1.2rem 0;
     border-top-left-radius: 0.8rem;
@@ -268,4 +271,8 @@
     color: white;
     width: 80%;
   }
+}
+
+.p-datatable-loading-overlay .p-component-overlay {
+  all: unset;
 }

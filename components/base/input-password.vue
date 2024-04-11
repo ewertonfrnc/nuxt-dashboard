@@ -8,6 +8,7 @@
       :feedback="false"
       :disabled="disabled"
       :placeholder="placeholder"
+      toggle-mask
       :pt="{
         input: {
           class: `input__field ${
@@ -21,13 +22,13 @@
       @update:model-value="(value: string) => $emit('updatedValue', value)"
     />
 
-    <div
-      class="input__icon--password"
-      @click.prevent="togglePasswordVisibility"
-    >
-      <i v-if="!isPasswordVisible" class="pi pi-eye-slash" />
-      <i v-else class="pi pi-eye" />
-    </div>
+    <!--    <div-->
+    <!--      class="input__icon&#45;&#45;password"-->
+    <!--      @click.prevent="togglePasswordVisibility"-->
+    <!--    >-->
+    <!--      <i v-if="!isPasswordVisible" class="pi pi-eye-slash" />-->
+    <!--      <i v-else class="pi pi-eye" />-->
+    <!--    </div>-->
   </div>
 
   <small class="input__error">{{
