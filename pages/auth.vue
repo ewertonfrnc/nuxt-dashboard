@@ -1,28 +1,3 @@
-<script lang="ts">
-export default {
-  setup() {
-    definePageMeta({ layout: "auth", colorMode: "light" });
-    const authSteps = ["login", "recover", "code", "change"];
-    return { authSteps };
-  },
-  data() {
-    return {
-      currentStep: "login",
-      recoverEmail: "",
-    };
-  },
-  methods: {
-    changeAuthStep(step: string) {
-      if (!this.authSteps.includes(step)) return;
-      this.currentStep = step;
-    },
-    setRecoverEmail(email: string) {
-      this.recoverEmail = email;
-    },
-  },
-};
-</script>
-
 <template>
   <NuxtLayout>
     <div class="container">
@@ -55,6 +30,31 @@ export default {
     </div>
   </NuxtLayout>
 </template>
+
+<script lang="ts">
+export default {
+  setup() {
+    definePageMeta({ layout: "auth", colorMode: "light" });
+    const authSteps = ["login", "recover", "code", "change"];
+    return { authSteps };
+  },
+  data() {
+    return {
+      currentStep: "login",
+      recoverEmail: "",
+    };
+  },
+  methods: {
+    changeAuthStep(step: string) {
+      if (!this.authSteps.includes(step)) return;
+      this.currentStep = step;
+    },
+    setRecoverEmail(email: string) {
+      this.recoverEmail = email;
+    },
+  },
+};
+</script>
 
 <style scoped lang="scss">
 .light-mode .container {

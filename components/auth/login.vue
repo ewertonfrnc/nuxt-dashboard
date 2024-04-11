@@ -1,72 +1,3 @@
-<script lang="ts">
-import { useForm } from "vee-validate";
-import { storeToRefs } from "pinia";
-
-export default {
-  emits: ["changeStep"],
-  setup() {
-    const router = useRouter();
-    const { authenticated } = storeToRefs(useAuthStore());
-
-    const { handleSubmit, resetForm } = useForm({
-      initialValues: { username: "", password: "" },
-      validationSchema: loginSchema,
-    });
-    const onSubmit = handleSubmit((formValues) => formValues);
-
-    return { router, authenticated, onSubmit, resetForm };
-  },
-  data() {
-    return {
-      isLoading: false,
-      formData: {},
-      remindUser: false,
-      wrongCredentialsMessage: "",
-    };
-  },
-  methods: {
-    goToRecoverPassword() {
-      this.$emit("changeStep", "recover");
-    },
-    async login() {
-      try {
-        this.formData = await this.onSubmit();
-        if (!this.formData) return;
-
-        this.isLoading = true;
-        const {
-          data: { user },
-        } = await this.$axios.post("/api/login", this.formData);
-
-        if (user && !this.remindUser) {
-          sessionStorage.setItem("token", user?.token);
-        }
-
-        if (user && this.remindUser) {
-          const token = useCookie("token");
-          token.value = user?.token;
-        }
-
-        if (this.authenticated) {
-          await this.router.push("/");
-        }
-      } catch (error) {
-        this.wrongCredentialsMessage = error.response.data.message;
-
-        this.resetForm({
-          values: {
-            username: "",
-            password: "",
-          },
-        });
-      } finally {
-        this.isLoading = false;
-      }
-    },
-  },
-};
-</script>
-
 <template>
   <UiModal>
     <div class="login fadein animation-duration-500">
@@ -140,6 +71,75 @@ export default {
     </div>
   </UiModal>
 </template>
+
+<script lang="ts">
+import { useForm } from "vee-validate";
+import { storeToRefs } from "pinia";
+
+export default {
+  emits: ["changeStep"],
+  setup() {
+    const router = useRouter();
+    const { authenticated } = storeToRefs(useAuthStore());
+
+    const { handleSubmit, resetForm } = useForm({
+      initialValues: { username: "", password: "" },
+      validationSchema: loginSchema,
+    });
+    const onSubmit = handleSubmit((formValues) => formValues);
+
+    return { router, authenticated, onSubmit, resetForm };
+  },
+  data() {
+    return {
+      isLoading: false,
+      formData: {},
+      remindUser: false,
+      wrongCredentialsMessage: "",
+    };
+  },
+  methods: {
+    goToRecoverPassword() {
+      this.$emit("changeStep", "recover");
+    },
+    async login() {
+      try {
+        this.formData = await this.onSubmit();
+        if (!this.formData) return;
+
+        this.isLoading = true;
+        const {
+          data: { user },
+        } = await this.$axios.post("/api/login", this.formData);
+
+        if (user && !this.remindUser) {
+          sessionStorage.setItem("token", user?.token);
+        }
+
+        if (user && this.remindUser) {
+          const token = useCookie("token");
+          token.value = user?.token;
+        }
+
+        if (this.authenticated) {
+          await this.router.push("/");
+        }
+      } catch (error) {
+        this.wrongCredentialsMessage = error.response.data.message;
+
+        this.resetForm({
+          values: {
+            username: "",
+            password: "",
+          },
+        });
+      } finally {
+        this.isLoading = false;
+      }
+    },
+  },
+};
+</script>
 
 <style lang="scss" scoped>
 .login {

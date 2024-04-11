@@ -1,56 +1,3 @@
-<script lang="ts">
-import { useForm } from "vee-validate";
-import { recoverCode } from "~/utils/schemas";
-
-export default {
-  props: {
-    recoverEmail: { type: String, default: "", required: true },
-  },
-  emits: ["changeStep"],
-  setup() {
-    const { handleSubmit, resetForm } = useForm({
-      initialValues: { code: "" },
-      validationSchema: recoverCode,
-    });
-    const onSubmit = handleSubmit((formValues) => formValues);
-
-    return { onSubmit, resetForm };
-  },
-  data() {
-    return {
-      loading: false,
-      formData: {},
-    };
-  },
-  methods: {
-    goBack() {
-      this.$emit("changeStep", "recover");
-    },
-    async sendRecoverCode() {
-      try {
-        this.formData = await this.onSubmit();
-        if (!this.formData) return;
-
-        this.loading = true;
-
-        const {
-          data: { status },
-        } = await this.$axios.post("/api/recover-code", this.formData);
-
-        if (status && status === "success") this.$emit("changeStep", "change");
-      } catch (error) {
-        console.error(error.message);
-        this.resetForm({
-          values: { code: "" },
-        });
-      } finally {
-        this.loading = false;
-      }
-    },
-  },
-};
-</script>
-
 <template>
   <UiModal>
     <div class="recover-code login fadein animation-duration-500">
@@ -92,6 +39,65 @@ export default {
     </div>
   </UiModal>
 </template>
+
+<script lang="ts">
+import { useForm } from "vee-validate";
+import { recoverCode } from "~/utils/schemas";
+
+export default {
+  props: {
+    recoverEmail: { type: String, default: "", required: true },
+  },
+  emits: ["changeStep"],
+  setup() {
+    const { handleSubmit, resetForm } = useForm({
+      initialValues: { code: "" },
+      validationSchema: recoverCode,
+    });
+    const onSubmit = handleSubmit((formValues) => formValues);
+
+    return { onSubmit, resetForm };
+  },
+  data() {
+    return {
+      loading: false,
+      formData: {},
+    };
+  },
+  methods: {
+    goBack() {
+      this.$emit("changeStep", "recover");
+    },
+    async sendRecoverCode() {
+      try {
+        this.formData = await this.onSubmit();
+        if (!this.formData) return;
+
+        this.loading = true;
+
+        const {
+          data: { status },
+        } = await this.$axios.post("/api/recover-code", this.formData);
+
+        if (status && status === "success") this.$emit("changeStep", "change");
+      } catch (error) {
+        this.$toast.add({
+          severity: "error",
+          summary: "Algo deu errado",
+          detail: "Tente novamente mais tarde.",
+          life: 4000,
+        });
+
+        this.resetForm({
+          values: { code: "" },
+        });
+      } finally {
+        this.loading = false;
+      }
+    },
+  },
+};
+</script>
 
 <style scoped lang="scss">
 .recover-code {

@@ -1,63 +1,3 @@
-<script lang="ts">
-import { useForm } from "vee-validate";
-import { changePassword } from "~/utils/schemas";
-
-export default {
-  emits: ["changeStep"],
-  setup() {
-    const { handleSubmit, resetForm, values } = useForm({
-      initialValues: { password: "", passwordConfirm: "" },
-      validationSchema: changePassword,
-    });
-    const onSubmit = handleSubmit((formValues) => formValues);
-
-    return { onSubmit, resetForm, values };
-  },
-  data() {
-    return {
-      loading: false,
-      isValidPassword: true,
-      formData: {},
-    };
-  },
-  methods: {
-    goToLogin() {
-      this.$emit("changeStep", "login");
-    },
-    validatePassword(password: string) {
-      if (!password) return;
-
-      if (password.length >= 4) this.isValidPassword = true;
-      else this.isValidPassword = false;
-    },
-    async changePassword() {
-      try {
-        this.formData = await this.onSubmit();
-        if (!this.formData) return;
-
-        this.loading = true;
-        await this.$axios.post("/api/change-password", this.formData);
-
-        this.$emit("changeStep", "login");
-        this.$toast.add({
-          severity: "success",
-          summary: "Senha alterada",
-          detail: "Faça login utilizando sua nova senha.",
-          life: 4000,
-        });
-      } catch (error) {
-        console.error(error.message);
-        this.resetForm({
-          values: { password: "", passwordConfirm: "" },
-        });
-      } finally {
-        this.loading = false;
-      }
-    },
-  },
-};
-</script>
-
 <template>
   <UiModal>
     <div class="change-password fadein animation-duration-500">
@@ -117,6 +57,70 @@ export default {
     </div>
   </UiModal>
 </template>
+
+<script lang="ts">
+import { useForm } from "vee-validate";
+import { changePassword } from "~/utils/schemas";
+
+export default {
+  emits: ["changeStep"],
+  setup() {
+    const { handleSubmit, resetForm, values } = useForm({
+      initialValues: { password: "", passwordConfirm: "" },
+      validationSchema: changePassword,
+    });
+    const onSubmit = handleSubmit((formValues) => formValues);
+
+    return { onSubmit, resetForm, values };
+  },
+  data() {
+    return {
+      loading: false,
+      isValidPassword: true,
+      formData: {},
+    };
+  },
+  methods: {
+    goToLogin() {
+      this.$emit("changeStep", "login");
+    },
+    validatePassword(password: string) {
+      if (!password) return;
+      this.isValidPassword = password.length >= 4;
+    },
+    async changePassword() {
+      try {
+        this.formData = await this.onSubmit();
+        if (!this.formData) return;
+
+        this.loading = true;
+        await this.$axios.post("/api/change-password", this.formData);
+
+        this.$emit("changeStep", "login");
+        this.$toast.add({
+          severity: "success",
+          summary: "Senha alterada",
+          detail: "Faça login utilizando sua nova senha.",
+          life: 4000,
+        });
+      } catch (error) {
+        this.$toast.add({
+          severity: "error",
+          summary: "Algo deu errado",
+          detail: "Tente novamente mais tarde.",
+          life: 4000,
+        });
+
+        this.resetForm({
+          values: { password: "", passwordConfirm: "" },
+        });
+      } finally {
+        this.loading = false;
+      }
+    },
+  },
+};
+</script>
 
 <style scoped lang="scss">
 .change-password {
