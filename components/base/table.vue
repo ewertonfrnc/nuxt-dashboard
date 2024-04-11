@@ -23,6 +23,7 @@
       tbody: 'table__body',
       bodyrow: 'table__body--row',
       rowExpansionCell: 'table__expansion',
+      loadingOverlay: 'hidden',
     }"
     @row-select="onRowSelect"
     @row-unselect="onRowUnselect"
@@ -82,11 +83,9 @@
       </div>
     </template>
 
-    <template v-if="loading" #loading>
-      <div class="table__loading">
-        <UiActivityIndicator size="large" />
-      </div>
-    </template>
+    <div v-if="loading" class="table__loading">
+      <UiActivityIndicator size="large" />
+    </div>
 
     <Column
       v-if="!loading && isSelectable"
@@ -121,7 +120,6 @@
       :header="col.header"
       :sortable="col.sortable"
       :filter-field="col.field"
-      frozen
       :show-filter-menu="true"
       :show-filter-match-modes="false"
       :show-filter-operator="false"
@@ -177,7 +175,7 @@
     </Column>
 
     <Column
-      v-if="hasAction"
+      v-if="!loading && hasAction"
       :pt="{
         headercell: 'table__header--cell',
         bodycell: 'table__body--cell',
