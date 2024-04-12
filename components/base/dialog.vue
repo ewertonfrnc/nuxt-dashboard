@@ -24,7 +24,9 @@
       <slot />
     </template>
 
-    <template #footer>Footer</template>
+    <template #footer>
+      <slot name="footer" />
+    </template>
   </Dialog>
 </template>
 
