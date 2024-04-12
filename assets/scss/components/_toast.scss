@@ -5,16 +5,17 @@
   width: 40rem;
   padding: 2rem;
   border-radius: 8px;
-  backdrop-filter: blur(10px);
 
   display: flex;
   gap: 1rem;
+  top: 5% !important;
 
   &:not(:last-child) {
     margin-bottom: 1rem;
   }
 
   &__content {
+    width: 100%;
     position: relative;
   }
 

@@ -34,6 +34,10 @@
       color: map-get($color-scheme-light, "$color-brand-primary-4");
     }
 
+    &--expander {
+      width: 100%;
+    }
+
     &--active,
     &:not(.nav__menuheader):hover {
       background-color: map-get($color-scheme-light, "$color-brand-primary-1");

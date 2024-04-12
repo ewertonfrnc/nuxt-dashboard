@@ -1,4 +1,5 @@
 .input {
+  width: 100%;
   position: relative;
 
   &:has(.input__icon) .input__field {
@@ -12,10 +13,10 @@
     transform: translateY(-50%);
 
     &--password {
-      font-size: 2.4rem;
+      font-size: 1.7rem;
       cursor: pointer;
       position: absolute;
-      top: 25%;
+      top: 30%;
       right: 5%;
     }
 

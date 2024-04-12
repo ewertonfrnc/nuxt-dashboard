@@ -1,31 +1,7 @@
-<script lang="ts">
-export default {
-  methods: {
-    getIconClass(severity: string): string {
-      const severityToIconMap: Record<string, string> = {
-        success: "pi pi-check",
-        error: "pi pi-times-circle",
-        warn: "pi pi-exclamation-triangle",
-      };
-
-      return severityToIconMap[severity];
-    },
-    getSeverityClass(severity: string): string {
-      const severityToIconMap: Record<string, string> = {
-        success: "toast__success",
-        error: "toast__danger",
-        warn: "toast__warn",
-      };
-
-      return severityToIconMap[severity];
-    },
-  },
-};
-</script>
-
 <template>
   <Toast
     :pt="{
+      root: 'toast',
       content: 'toast__content',
       closeButton: 'toast__button fadeindown animation-duration-500',
     }"
@@ -51,3 +27,28 @@ export default {
     </template>
   </Toast>
 </template>
+
+<script lang="ts">
+export default {
+  methods: {
+    getIconClass(severity: string): string {
+      const severityToIconMap: Record<string, string> = {
+        success: "pi pi-check",
+        error: "pi pi-times-circle",
+        warn: "pi pi-exclamation-triangle",
+      };
+
+      return severityToIconMap[severity];
+    },
+    getSeverityClass(severity: string): string {
+      const severityToIconMap: Record<string, string> = {
+        success: "toast__success",
+        error: "toast__danger",
+        warn: "toast__warn",
+      };
+
+      return severityToIconMap[severity];
+    },
+  },
+};
+</script>

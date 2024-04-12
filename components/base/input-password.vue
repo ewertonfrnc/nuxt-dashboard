@@ -10,17 +10,27 @@
       :placeholder="placeholder"
       toggle-mask
       :pt="{
+        root: 'input',
         input: {
           class: `input__field ${
             (errorMessage || wrongCrendentialsMessage) && 'error'
           }`,
           readonly,
         },
-        hideIcon: 'pi pi-eye',
-        showIcon: 'pi pi-eye-slash',
       }"
       @update:model-value="(value: string) => $emit('updatedValue', value)"
-    />
+    >
+      <template #hideicon="{ toggleCallback, onClick }">
+        <div class="input__icon--password" @click="onClick">
+          <i class="pi pi-eye" />
+        </div>
+      </template>
+      <template #showicon="{ toggleCallback, onClick }">
+        <div class="input__icon--password" @click="onClick">
+          <i class="pi pi-eye-slash" />
+        </div>
+      </template>
+    </Password>
 
     <!--    <div-->
     <!--      class="input__icon&#45;&#45;password"-->
