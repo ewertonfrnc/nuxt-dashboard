@@ -29,7 +29,11 @@
             </span>
           </div>
 
-          <BaseSplitButton @button-handler="buttonHandler" />
+          <BaseSplitButton
+            :request="request"
+            :approve-all="approveAll"
+            @button-handler="buttonHandler"
+          />
         </div>
       </template>
 
@@ -128,13 +132,36 @@
 </template>
 
 <script lang="ts">
+import { PropType } from "vue";
+import { mapActions } from "pinia";
+import { Request, User } from "~/interfaces/time-sheet/time-sheet.interface";
+
 export default {
   props: {
-    user: { type: Object, required: true },
+    user: { type: Object as PropType<User>, required: true },
+    approveAll: { type: Boolean, default: false, required: true },
+  },
+  emits: ["button-handler"],
+  data() {
+    return {
+      updatedRequests: [] as Request[],
+    };
+  },
+  unmounted() {
+    this.updatedRequests = [];
   },
   methods: {
-    buttonHandler(selectedBtn: string) {
-      console.log({ selectedBtn });
+    ...mapActions(useTimeSheetStore, ["updateRequestsApproval"]),
+    buttonHandler(request: Request) {
+      const index = this.updatedRequests.indexOf(request);
+
+      if (index !== -1) {
+        this.updatedRequests.splice(index, 1, request);
+      } else {
+        this.updatedRequests.push(request);
+      }
+
+      this.$emit("button-handler", this.updatedRequests);
     },
   },
 };
