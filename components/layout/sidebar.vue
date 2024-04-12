@@ -1,46 +1,39 @@
-<script lang="ts">
-import { routes } from "~/utils/routes.utils";
-
-export default {
-  props: {
-    isNavVisible: { type: Boolean, default: true, required: true },
-    isNarrowScreen: { type: Boolean, default: false, required: true },
-  },
-  emits: ["close-nav"],
-  setup() {
-    const colorMode = useColorMode();
-    return { colorMode };
-  },
-  data() {
-    return {
-      items: routes,
-    };
-  },
-  methods: {
-    handleNavigation() {
-      this.$emit("close-nav", !this.isNavVisible);
-    },
-  },
-};
-</script>
-
 <template>
-  <nav :class="['nav', isNarrowScreen && 'nav__collapsed']">
+  <nav
+    :class="[
+      'nav',
+      isNarrowScreen && 'nav__collapsed',
+      mouseover && 'nav__open',
+      isNavVisible && 'nav__expanded',
+    ]"
+    @mouseover="handleMouseOver"
+    @mouseleave="handleMouseLeave"
+  >
     <Menu :model="items">
       <template #start>
         <div class="nav__header">
-          <img
-            v-if="colorMode.preference === 'light'"
-            src="~/assets/img/logo-black.png"
-            alt="Itera logo"
-            class="nav__logo"
-          />
-          <img
-            v-else
-            src="~/assets/img/logo-white.png"
-            alt="Itera logo"
-            class="nav__logo"
-          />
+          <div :class="['logo', (mouseover || isNavVisible) && 'logo-move']">
+            <img
+              src="~/assets/img/logo-narrow.png"
+              alt="Itera logo"
+              class="nav__logo--narrow fadein animation-duration-500"
+            />
+          </div>
+
+          <div :class="['logo', (mouseover || isNavVisible) && 'logo-move']">
+            <img
+              v-if="colorMode.preference === 'light'"
+              src="~/assets/img/logo-black.png"
+              alt="Itera logo"
+              class="nav__logo fadein animation-duration-500"
+            />
+            <img
+              v-else
+              src="~/assets/img/logo-white.png"
+              alt="Itera logo"
+              class="nav__logo fadein animation-duration-500"
+            />
+          </div>
 
           <span class="caption__secondary"
             >Usemobile Soluções em Tecnologia</span
@@ -106,3 +99,38 @@ export default {
     </div>
   </nav>
 </template>
+
+<script lang="ts">
+import { routes } from "~/utils/routes.utils";
+
+export default {
+  props: {
+    isNavVisible: { type: Boolean, default: true, required: true },
+    isNarrowScreen: { type: Boolean, default: false, required: true },
+  },
+  emits: ["close-nav", "mouse-over"],
+  setup() {
+    const colorMode = useColorMode();
+    return { colorMode };
+  },
+  data() {
+    return {
+      items: routes,
+      mouseover: false,
+    };
+  },
+  methods: {
+    handleNavigation() {
+      this.$emit("close-nav", !this.isNavVisible);
+    },
+    handleMouseOver() {
+      this.mouseover = true;
+      this.$emit("mouse-over", this.mouseover);
+    },
+    handleMouseLeave() {
+      this.mouseover = false;
+      this.$emit("mouse-over", this.mouseover);
+    },
+  },
+};
+</script>

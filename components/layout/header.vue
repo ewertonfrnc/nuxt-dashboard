@@ -1,9 +1,5 @@
 <template>
   <header class="header">
-    <button class="header__toggle" @click="toggleSidebar">
-      <i class="pi pi-bars"></i>
-    </button>
-
     <div class="header__breadcrumbs">
       <Breadcrumb
         :home="home"

@@ -1,20 +1,32 @@
 <template>
   <div ref="container" class="container fadein animation-duration-500">
     <div
-      v-if="isSidebarVisible && isNarrowScreen"
+      v-if="sidebarExpanded && isNarrowScreen"
       class="mask fadein animation-duration-500"
-      @click="isSidebarVisible = false"
+      @click="sidebarExpanded = false"
     />
     <transition name="slide">
-      <LayoutSidebar
-        v-if="isSidebarVisible"
-        :is-nav-visible="isSidebarVisible"
-        :is-narrow-screen="isNarrowScreen"
-        @close-nav="handleNarrowNavigation"
-      />
+      <div class="sidebar">
+        <div
+          :class="[
+            'close-btn',
+            (sidebarExpanded || mouseover) && 'close-btn-expanded',
+          ]"
+          @click="sidebarExpanded = !sidebarExpanded"
+        >
+          <i class="pi pi-chevron-right" />
+        </div>
+
+        <LayoutSidebar
+          :is-nav-visible="sidebarExpanded"
+          :is-narrow-screen="isNarrowScreen"
+          @close-nav="handleNarrowNavigation"
+          @mouse-over="handleMouseover"
+        />
+      </div>
     </transition>
 
-    <main class="main">
+    <section :class="['section', sidebarExpanded && 'section__adapted']">
       <LayoutHeader :toggle-sidebar="toggleSidebar" :route-path="path" />
       <BaseToast />
       <slot />
@@ -25,7 +37,7 @@
           <strong>Usemobile</strong>
         </p>
       </footer>
-    </main>
+    </section>
   </div>
 </template>
 
@@ -39,8 +51,9 @@ export default {
   },
   data() {
     return {
+      mouseover: false,
       isNarrowScreen: false,
-      isSidebarVisible: true,
+      sidebarExpanded: true,
       path: "",
     };
   },
@@ -61,21 +74,24 @@ export default {
     window.removeEventListener("resize", this.handleResize);
   },
   methods: {
+    handleMouseover(isMouseover: boolean) {
+      this.mouseover = isMouseover;
+    },
     toggleSidebar() {
-      this.isSidebarVisible = !this.isSidebarVisible;
+      this.sidebarExpanded = !this.sidebarExpanded;
     },
     handleResize() {
       if (window.matchMedia("(max-width: 56.25em)").matches) {
         this.isNarrowScreen = true;
-        this.isSidebarVisible = false;
+        this.sidebarExpanded = false;
       } else {
         this.isNarrowScreen = false;
-        this.isSidebarVisible = true;
+        this.sidebarExpanded = true;
       }
     },
     handleNarrowNavigation() {
       if (this.isNarrowScreen) {
-        this.isSidebarVisible = false;
+        this.sidebarExpanded = false;
       }
     },
   },
@@ -90,25 +106,55 @@ export default {
 .container {
   position: relative;
   height: 100vh;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.3s cubic-bezier(0, 0, 0.2, 1);
   background: map-get($color-scheme-light, "$color-surface-surface-5");
-
-  display: flex;
-  gap: 1rem;
 }
-
 .content {
-  transition: all 0.3s ease-in-out;
+  transition: all 0.3s cubic-bezier(0, 0, 0.2, 1);
 }
 
-.main {
-  width: 100%;
-  max-height: 100vh;
-  overflow: auto;
-  padding: 1rem 2rem;
+.section {
+  height: 100vh;
+  margin-left: 5.25rem;
+  transition: margin-left 0.3s cubic-bezier(0, 0, 0.2, 1);
+  overflow-x: hidden;
+  padding: 2rem;
 
   display: flex;
   flex-direction: column;
+
+  &__adapted {
+    margin-left: 25rem;
+  }
+}
+
+.sidebar {
+  position: relative;
+}
+.close-btn {
+  display: grid;
+  place-content: center;
+  width: 1.4rem;
+  height: 1.4rem;
+  padding: 1.6rem;
+  border-radius: 1.6rem;
+  cursor: pointer;
+  background-color: map-get($color-scheme-light, "$color-brand-primary-0");
+  color: map-get($color-scheme-light, "$color-neutral-neutral-7");
+  transition: all 0.3s cubic-bezier(0, 0, 0.2, 1);
+  z-index: 9999;
+  position: fixed;
+  top: 10%;
+  left: 3%;
+
+  &-expanded {
+    left: 18.6%;
+  }
+}
+
+.dark-mode .close-btn {
+  background-color: map-get($color-scheme-dark, "$color-brand-primary-0");
+  color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
 }
 
 .footer {
