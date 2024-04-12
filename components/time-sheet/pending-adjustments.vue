@@ -258,6 +258,7 @@ export default {
 <style scoped lang="scss">
 .adjust {
   width: 60rem;
+  height: 60rem;
 
   @include respond(phone) {
     width: 100%;
