@@ -202,6 +202,19 @@
     justify-items: center;
     padding: 6.4rem 0;
   }
+
+  &__footer {
+    padding-top: 1rem;
+    border: $border-light;
+    border-top-style: none;
+  }
+
+  .highlight {
+    color: map-get($color-scheme-light, "$color-feedback-warning-4");
+    font-size: $font-size-subtitle-primary;
+    line-height: $line-height-subtitle-primary;
+    font-weight: $font-weight-subtitle-primary;
+  }
 }
 
 .dark-mode .table {

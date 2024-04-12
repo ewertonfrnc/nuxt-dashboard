@@ -1,0 +1,26 @@
+.paginator {
+  padding: 1.2rem;
+
+  &__pages {
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+  }
+
+  &__button {
+    width: 3.7rem;
+    height: 3.7rem;
+    border-radius: 50%;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      background-color: map-get($color-scheme-light, "$color-brand-primary-1");
+      color: map-get($color-scheme-light, "$color-brand-primary-0");
+    }
+  }
+
+  [data-p-highlight="true"] {
+    background-color: map-get($color-scheme-light, "$color-brand-primary-1");
+    color: map-get($color-scheme-light, "$color-brand-primary-0");
+  }
+}

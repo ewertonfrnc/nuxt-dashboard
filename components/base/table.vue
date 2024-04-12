@@ -5,7 +5,6 @@
     scroll-direction="horizontal"
     removable-sort
     select-all
-    :rows="rows"
     data-key="id"
     select-all-change
     :filters="filters"
@@ -15,7 +14,6 @@
     :expanded-rows="expandedRows"
     :selection="selectedEmployees"
     :global-filter-fields="['name']"
-    :paginator="!loading && paginator"
     :value="seeOnlySelectedFields ? selectedEmployees : nodes"
     :pt="{
       table: 'table',
@@ -136,7 +134,11 @@
       }"
     >
       <template #body="{ data, field }">
-        <span class="body__primary"> {{ data[field] }} </span>
+        <span
+          :class="['body__primary', field === 'totalRequests' && 'highlight']"
+        >
+          {{ data[field] }}
+        </span>
       </template>
 
       <template v-if="col.hasFilter" #filter="{ filterModel }">
@@ -192,8 +194,19 @@
       </template>
     </Column>
 
-    <template #expansion="slotProps">
-      <slot name="expansion-content" :data="slotProps.data" />
+    <template #footer>
+      <div v-if="nodes.length" class="table__footer">
+        <Paginator
+          :rows="rows"
+          :total-records="totalPages"
+          :pt="{
+            root: 'paginator',
+            pages: 'paginator__pages',
+            pageButton: 'paginator__button caption__primary',
+          }"
+          @page="(pageState) => changePage(pageState)"
+        />
+      </div>
     </template>
   </DataTable>
 </template>
@@ -204,6 +217,7 @@ import {
   DataTableRowExpandEvent,
   DataTableRowSelectEvent,
 } from "primevue/datatable";
+import { PageState } from "primevue/paginator";
 import { FilterOption, Filters } from "~/interfaces/table.interface";
 
 export default {
@@ -218,8 +232,9 @@ export default {
     isSelectable: { type: Boolean, required: false, default: false },
     isExpandable: { type: Boolean, required: false, default: false },
     hasAction: { type: Boolean, required: false, default: false },
+    totalPages: { type: Number, required: true },
   },
-  emits: ["update-filter-handler"],
+  emits: ["update-filter-handler", "change-page"],
   setup() {
     const colorMode = useColorMode();
     return { colorMode };
@@ -333,6 +348,9 @@ export default {
 
       this.filters = updatedFilters;
       this.$emit("update-filter-handler", this.filters);
+    },
+    changePage(pageState: PageState) {
+      this.$emit("change-page", pageState);
     },
   },
 };
