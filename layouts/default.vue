@@ -7,16 +7,6 @@
     />
     <transition name="slide">
       <div class="sidebar">
-        <div
-          :class="[
-            'close-btn',
-            (sidebarExpanded || mouseover) && 'close-btn-expanded',
-          ]"
-          @click="sidebarExpanded = !sidebarExpanded"
-        >
-          <i class="pi pi-chevron-right" />
-        </div>
-
         <LayoutSidebar
           :is-nav-visible="sidebarExpanded"
           :is-narrow-screen="isNarrowScreen"
@@ -53,7 +43,7 @@ export default {
     return {
       mouseover: false,
       isNarrowScreen: false,
-      sidebarExpanded: true,
+      sidebarExpanded: false,
       path: "",
     };
   },

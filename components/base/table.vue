@@ -212,17 +212,22 @@
 </template>
 
 <script lang="ts">
+import { PropType } from "nuxt/dist/app/compat/capi";
 import { FilterMatchMode } from "primevue/api";
 import {
   DataTableRowExpandEvent,
   DataTableRowSelectEvent,
 } from "primevue/datatable";
 import { PageState } from "primevue/paginator";
-import { FilterOption, Filters } from "~/interfaces/table.interface";
+import {
+  FilterOption,
+  Filters,
+  TableColumn,
+} from "~/interfaces/table.interface";
 
 export default {
   props: {
-    columns: { type: Array, required: true },
+    columns: { type: Array as PropType<TableColumn[]>, required: true },
     nodes: { type: Array, required: true },
     loading: { type: Boolean, required: false, default: false },
     sortable: { type: Boolean, required: false, default: true },

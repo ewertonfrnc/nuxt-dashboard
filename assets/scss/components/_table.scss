@@ -215,6 +215,14 @@
     line-height: $line-height-subtitle-primary;
     font-weight: $font-weight-subtitle-primary;
   }
+
+  .positive {
+    color: map-get($color-scheme-light, "$color-feedback-success-0");
+  }
+
+  .negative {
+    color: map-get($color-scheme-light, "$color-feedback-danger-0");
+  }
 }
 
 .dark-mode .table {
