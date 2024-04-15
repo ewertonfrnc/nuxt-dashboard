@@ -1,7 +1,7 @@
 <template>
   <Toast
     :pt="{
-      root: 'toast',
+      root: 'toast-root',
       content: 'toast__content',
       closeButton: 'toast__button fadeindown animation-duration-500',
     }"
