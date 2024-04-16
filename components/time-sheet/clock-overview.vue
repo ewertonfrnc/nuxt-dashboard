@@ -5,15 +5,17 @@
     <section>
       <label class="caption__primary filter__label">
         <span>Data de exibição</span>
-        <BaseDatePicker />
+        <BaseDatePicker @date-handler="datePickerHandler" />
       </label>
 
       <BaseTable
         :loading="loading"
         :columns="columns"
         :nodes="nodes"
+        :total-pages="totalPages"
         header-shown
         has-action
+        @change-page="changePageHandler"
       >
         <template #body-cell="{ data, field }">
           <BaseTag
@@ -48,8 +50,10 @@
 </template>
 
 <script lang="ts">
+import { PageState } from "primevue/paginator";
 import { mapActions } from "pinia";
 import { AllClocksParams } from "~/interfaces/time-sheet/time-sheet.interface";
+import { dateFormatters } from "@/utils/formatters";
 
 export default {
   data() {
@@ -83,9 +87,12 @@ export default {
         },
       ],
       nodes: [],
+      totalPages: 0,
+      currentPage: 1,
       queries: {
         page: 1,
         limit: 10,
+        date: "",
         global: { value: "", matchMode: "" },
         tag: { value: "", matchMode: "" },
         name: { value: "", matchMode: "" },
@@ -102,13 +109,29 @@ export default {
     goToEmployeeDetails({ data }) {
       this.$router.push(`/employees/${data.id}`);
     },
+    async datePickerHandler(date: Date) {
+      const formattedDate = dateFormatters.formatDate(date);
+      this.queries = { ...this.queries, date: formattedDate };
+      await this.getClocks(this.queries);
+    },
+    async changePageHandler(currentPage: PageState) {
+      this.queries.page = currentPage.page + 1;
+      await this.getClocks(this.queries);
+    },
     async getClocks(queryParams: AllClocksParams) {
       this.loading = true;
 
       try {
-        this.nodes = await this.fetchAllClocks(queryParams);
+        const { results, total } = await this.fetchAllClocks(queryParams);
+        this.nodes = results;
+        this.totalPages = total;
       } catch (error) {
-        console.log("error", error);
+        this.$toast.add({
+          severity: "error",
+          summary: "Algo deu errado!",
+          detail: "Tente novamente mais tarde.",
+          life: 4000,
+        });
       } finally {
         this.loading = false;
       }

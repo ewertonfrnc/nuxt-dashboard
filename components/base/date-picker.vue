@@ -14,6 +14,7 @@
       tableHeaderRow: 'heading__senary',
       tableBodyRow: 'body__primary',
     }"
+    @update:model-value="handleDateChange"
   >
     <template #date="{ date }">
       <span
@@ -34,6 +35,7 @@ import { dateFormatters } from "~/utils/formatters";
 import locale from "~/utils/primevue/locale.utils";
 
 export default {
+  emits: ["date-handler"],
   setup() {
     const changeToBR = () => {
       const primevue = usePrimeVue();
@@ -52,12 +54,17 @@ export default {
       date: null,
     };
   },
-  mounted() {
-    this.changeToBR();
-  },
   computed: {
     selectedDay() {
       return this.date && dateFormatters.getDateNumber(this.date);
+    },
+  },
+  mounted() {
+    this.changeToBR();
+  },
+  methods: {
+    handleDateChange() {
+      this.$emit("date-handler", this.date);
     },
   },
 };
