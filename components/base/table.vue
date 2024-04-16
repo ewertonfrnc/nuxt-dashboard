@@ -237,7 +237,7 @@ export default {
     isSelectable: { type: Boolean, required: false, default: false },
     isExpandable: { type: Boolean, required: false, default: false },
     hasAction: { type: Boolean, required: false, default: false },
-    totalPages: { type: Number, required: true },
+    totalPages: { type: Number, required: false },
   },
   emits: ["update-filter-handler", "change-page"],
   setup() {
