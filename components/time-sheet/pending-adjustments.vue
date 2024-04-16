@@ -16,16 +16,12 @@
       </template>
 
       <template #column-action="slotData">
-        <span class="body__primary">
-          <i
-            v-tooltip.top="{
-              value: 'Verificar ajuste',
-              pt: { root: 'tooltip' },
-            }"
-            class="pi pi-search"
-            @click="logSelectedItem(slotData)"
-          />
-        </span>
+        <BaseTableAction
+          tooltip-text="Verificar ajuste"
+          :icon="'pi-search'"
+          :data="slotData"
+          @action-handler="logSelectedItem"
+        />
       </template>
     </BaseTable>
 
