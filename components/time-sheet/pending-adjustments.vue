@@ -11,8 +11,16 @@
       @update-filter-handler="getTableValues"
       @change-page="changePageHandler"
     >
+      <template #body-cell="{ data, field }">
+        <span
+          :class="['body__primary', field === 'totalRequests' && 'highlight']"
+        >
+          {{ data[field] }}
+        </span>
+      </template>
+
       <template #column-header>
-        <span>Ações</span>
+        <span class="heading__quinary">Ações</span>
       </template>
 
       <template #column-action="slotData">

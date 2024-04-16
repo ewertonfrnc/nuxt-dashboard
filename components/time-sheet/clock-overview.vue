@@ -15,8 +15,23 @@
         header-shown
         has-action
       >
+        <template #body-cell="{ data, field }">
+          <BaseTag
+            v-if="field === 'tag'"
+            :severity="data[field] === 'check-in' ? 'Success' : 'Danger'"
+            :value="data[field]"
+          />
+
+          <span
+            v-else
+            :class="['body__primary', field === 'totalRequests' && 'highlight']"
+          >
+            {{ data[field] }}
+          </span>
+        </template>
+
         <template #column-header>
-          <span>Ações</span>
+          <span style="width: 1rem" class="heading__quinary">Ações</span>
         </template>
 
         <template #column-action="slotData">
@@ -38,10 +53,8 @@ import { mapActions } from "pinia";
 export default {
   data() {
     return {
-      date: null,
-
-      // table
       loading: false,
+      date: null,
       columns: [
         {
           field: "hour",
@@ -69,21 +82,30 @@ export default {
         },
       ],
       nodes: [],
+      queries: {
+        page: 1,
+        limit: 10,
+        global: { value: "", matchMode: "" },
+        tag: { value: "", matchMode: "" },
+        name: { value: "", matchMode: "" },
+        hour: { value: "", matchMode: "" },
+        department: { value: "", matchMode: "" },
+      },
     };
   },
   async mounted() {
-    await this.getClocks();
+    await this.getClocks(this.queries);
   },
   methods: {
     ...mapActions(useTimeSheetStore, ["fetchAllClocks"]),
     goToEmployeeDetails({ data }) {
       this.$router.push(`/employees/${data.id}`);
     },
-    async getClocks() {
+    async getClocks(queryParams) {
       this.loading = true;
 
       try {
-        this.nodes = await this.fetchAllClocks();
+        this.nodes = await this.fetchAllClocks(queryParams);
       } catch (error) {
         console.log("error", error);
       } finally {

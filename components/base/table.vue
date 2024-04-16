@@ -134,18 +134,7 @@
       }"
     >
       <template #body="{ data, field }">
-        <BaseTag
-          v-if="field === 'tag'"
-          :severity="data[field] === 'check-in' ? 'Success' : 'Danger'"
-          :value="data[field]"
-        />
-
-        <span
-          v-else
-          :class="['body__primary', field === 'totalRequests' && 'highlight']"
-        >
-          {{ data[field] }}
-        </span>
+        <slot name="body-cell" :data="data" :field="field" />
       </template>
 
       <template v-if="col.hasFilter" #filter="{ filterModel }">
@@ -185,6 +174,7 @@
 
     <Column
       v-if="!loading && hasAction"
+      style="width: 1rem"
       :pt="{
         headercell: 'table__header--cell',
         bodycell: 'table__body--cell',
