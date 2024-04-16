@@ -1,3 +1,4 @@
+import authService from "./auth.service";
 import homeService from "./home.service";
 
-export { homeService };
+export { authService, homeService };
