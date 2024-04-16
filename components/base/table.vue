@@ -234,7 +234,8 @@ export default {
     isSelectable: { type: Boolean, required: false, default: false },
     isExpandable: { type: Boolean, required: false, default: false },
     hasAction: { type: Boolean, required: false, default: false },
-    totalPages: { type: Number, required: false },
+    totalPages: { type: Number, default: 0, required: false },
+    customFilters: { type: Object, default: () => {}, required: true },
   },
   emits: ["update-filter-handler", "change-page"],
   setup() {
@@ -296,22 +297,8 @@ export default {
           value: null,
           matchMode: FilterMatchMode.CONTAINS,
         },
-        name: {
-          field: "name",
-          value: null,
-          matchMode: FilterMatchMode.CONTAINS,
-        },
-        currentBalance: {
-          field: "currentBalance",
-          value: null,
-          matchMode: FilterMatchMode.CONTAINS,
-        },
-        totalRequests: {
-          field: "totalRequests",
-          value: null,
-          matchMode: FilterMatchMode.CONTAINS,
-        },
       };
+      this.filters = { ...this.filters, ...this.customFilters };
     },
     selectAllHandler() {
       this.selectedEmployees =

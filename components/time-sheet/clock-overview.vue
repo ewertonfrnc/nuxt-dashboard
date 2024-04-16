@@ -13,8 +13,10 @@
         :columns="columns"
         :nodes="nodes"
         :total-pages="totalPages"
+        :custom-filters="filters"
         header-shown
         has-action
+        @update-filter-handler="getClocks"
         @change-page="changePageHandler"
       >
         <template #body-cell="{ data, field }">
@@ -50,6 +52,7 @@
 </template>
 
 <script lang="ts">
+import { FilterMatchMode } from "primevue/api";
 import { PageState } from "primevue/paginator";
 import { mapActions } from "pinia";
 import { AllClocksParams } from "~/interfaces/time-sheet/time-sheet.interface";
@@ -89,6 +92,28 @@ export default {
       nodes: [],
       totalPages: 0,
       currentPage: 1,
+      filters: {
+        name: {
+          field: "name",
+          value: null,
+          matchMode: FilterMatchMode.CONTAINS,
+        },
+        tag: {
+          field: "tag",
+          value: null,
+          matchMode: FilterMatchMode.CONTAINS,
+        },
+        department: {
+          field: "department",
+          value: null,
+          matchMode: FilterMatchMode.CONTAINS,
+        },
+        hour: {
+          field: "hour",
+          value: null,
+          matchMode: FilterMatchMode.CONTAINS,
+        },
+      },
       queries: {
         page: 1,
         limit: 10,
@@ -122,7 +147,10 @@ export default {
       this.loading = true;
 
       try {
-        const { results, total } = await this.fetchAllClocks(queryParams);
+        const { results, total } = await this.fetchAllClocks({
+          ...this.queries,
+          ...queryParams,
+        });
         this.nodes = results;
         this.totalPages = total;
       } catch (error) {

@@ -6,6 +6,7 @@
       :columns="columns"
       :nodes="nodes"
       :total-pages="totalPages"
+      :custom-filters="filters"
       header-shown
       has-action
       @update-filter-handler="getTableValues"
@@ -94,6 +95,7 @@
 </template>
 
 <script lang="ts">
+import { FilterMatchMode } from "primevue/api";
 import { mapActions, mapState } from "pinia";
 import { PageState } from "primevue/paginator";
 import {
@@ -136,6 +138,23 @@ export default {
         name: { value: "2", matchMode: "" },
         currentBalance: { value: "", matchMode: "" },
         totalRequests: { value: "3", matchMode: "" },
+      },
+      filters: {
+        name: {
+          field: "name",
+          value: null,
+          matchMode: FilterMatchMode.CONTAINS,
+        },
+        currentBalance: {
+          field: "currentBalance",
+          value: null,
+          matchMode: FilterMatchMode.CONTAINS,
+        },
+        totalRequests: {
+          field: "totalRequests",
+          value: null,
+          matchMode: FilterMatchMode.CONTAINS,
+        },
       },
 
       // pending requests
