@@ -1,5 +1,10 @@
 import { authService } from "@/services";
-import { UserCredentials } from "@/interfaces/auth/auth.interface";
+import {
+  ChangePassword,
+  RecoverCode,
+  RecoverPassword,
+  UserCredentials,
+} from "@/interfaces/auth/auth.interface";
 
 export type User = {
   id: number;
@@ -33,6 +38,36 @@ export const useAuthStore = defineStore("auth", {
         const { data: user } = await authService.login(userCredentials);
         this.user = { ...user, role: ["manager"] };
         this.authenticated = true;
+      } catch (error) {
+        return error as Error;
+      }
+    },
+    async recoverPassword(userId: RecoverPassword) {
+      try {
+        const {
+          data: { userEmail },
+        } = await authService.recoverPassword(userId);
+        return userEmail;
+      } catch (error) {
+        return error as Error;
+      }
+    },
+    async recoverCode(code: RecoverCode) {
+      try {
+        const {
+          data: { status },
+        } = await authService.recoverCode(code);
+        return status;
+      } catch (error) {
+        return error as Error;
+      }
+    },
+    async changePassword(newPassword: ChangePassword) {
+      try {
+        const {
+          data: { status },
+        } = await authService.changePassword(newPassword);
+        return status;
       } catch (error) {
         return error as Error;
       }
