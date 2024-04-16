@@ -26,5 +26,9 @@ class TimeSheetService {
   updatePendingAdjustments(userId: number, payload: Request[]) {
     return api().put(`/api/time-sheet/pending/${userId}`, payload);
   }
+
+  fetchAllClocks() {
+    return api().get("/api/time-sheet/clocks");
+  }
 }
 export default new TimeSheetService();
