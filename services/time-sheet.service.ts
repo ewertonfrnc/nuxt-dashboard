@@ -29,12 +29,13 @@ class TimeSheetService {
   }
 
   fetchAllClocks(params: AllClocksParams) {
-    const { page, limit, name, hour, department, tag } = params;
+    const { page, limit, name, hour, department, tag, date } = params;
 
     return api().get("/api/time-sheet/clocks", {
       params: {
         page,
         limit,
+        date: date || "",
         tag: tag?.value || "",
         name: name?.value || "",
         hour: hour?.value || "",

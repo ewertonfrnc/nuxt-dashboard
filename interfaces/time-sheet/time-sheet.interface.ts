@@ -11,6 +11,7 @@ export type QueryParams = {
 export type AllClocksParams = {
   page: number;
   limit: number;
+  date: string;
   global: Filter;
   tag: Filter;
   name: Filter;

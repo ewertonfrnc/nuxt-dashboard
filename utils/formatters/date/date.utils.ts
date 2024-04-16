@@ -1,5 +1,5 @@
 class DateFormatters {
-  locale = navigator.language;
+  locale = navigator.language || "pt-BR";
   options: Intl.DateTimeFormatOptions = {};
 
   getDateNumber(date: Date) {

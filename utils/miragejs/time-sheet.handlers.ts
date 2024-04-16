@@ -15,6 +15,90 @@ const employeeClocks = [
     tag: "check-in",
     department: "Marketing",
   },
+  {
+    id: 1000,
+    hour: "12:23:30",
+    name: "Ana Maria Carla",
+    tag: "check-out",
+    department: "Design",
+  },
+  {
+    id: 1001,
+    hour: "12:22:30",
+    name: "Jorge Felipe Araújo",
+    tag: "check-in",
+    department: "Marketing",
+  },
+  {
+    id: 1000,
+    hour: "12:23:30",
+    name: "Ana Maria Carla",
+    tag: "check-out",
+    department: "Design",
+  },
+  {
+    id: 1001,
+    hour: "12:22:30",
+    name: "Jorge Felipe Araújo",
+    tag: "check-in",
+    department: "Marketing",
+  },
+  {
+    id: 1000,
+    hour: "12:23:30",
+    name: "Ana Maria Carla",
+    tag: "check-out",
+    department: "Design",
+  },
+  {
+    id: 1001,
+    hour: "12:22:30",
+    name: "Jorge Felipe Araújo",
+    tag: "check-in",
+    department: "Marketing",
+  },
+  {
+    id: 1000,
+    hour: "12:23:30",
+    name: "Ana Maria Carla",
+    tag: "check-out",
+    department: "Design",
+  },
+  {
+    id: 1001,
+    hour: "12:22:30",
+    name: "Jorge Felipe Araújo",
+    tag: "check-in",
+    department: "Marketing",
+  },
+  {
+    id: 1000,
+    hour: "12:23:30",
+    name: "Ana Maria Carla",
+    tag: "check-out",
+    department: "Design",
+  },
+  {
+    id: 1001,
+    hour: "12:22:30",
+    name: "Jorge Felipe Araújo",
+    tag: "check-in",
+    department: "Marketing",
+  },
+  {
+    id: 1000,
+    hour: "12:23:30",
+    name: "Ana Maria Carla",
+    tag: "check-out",
+    department: "Design",
+  },
+  {
+    id: 1001,
+    hour: "12:22:30",
+    name: "Jorge Felipe Araújo",
+    tag: "check-in",
+    department: "Marketing",
+  },
 ];
 
 const nodes = [
@@ -1960,13 +2044,16 @@ const nodes = [
   },
 ];
 
+function paginate(array, page: string, limit: string) {
+  const initialIdx = (+page - 1) * +limit;
+  const finalIdx = initialIdx + +limit;
+  return array.slice(initialIdx, finalIdx);
+}
+
 export default function (server: Server) {
   server.get("/time-sheet/pending", (schema, request) => {
     const { page, limit } = request.queryParams;
-
-    const initialIdx = (+page - 1) * +limit;
-    const finalIdx = initialIdx + +limit;
-    const results = nodes.slice(initialIdx, finalIdx);
+    const results = paginate(nodes, page, limit);
 
     return new Response(
       200,
@@ -1994,7 +2081,18 @@ export default function (server: Server) {
     return new Response(200, {}, { message: "deu bom" });
   });
 
-  server.get("/time-sheet/clocks", () => {
-    return new Response(200, {}, employeeClocks);
+  server.get("/time-sheet/clocks", (schema, request) => {
+    const { page, limit } = request.queryParams;
+    const results = paginate(employeeClocks, page, limit);
+
+    return new Response(
+      200,
+      {},
+      {
+        status: "success",
+        results,
+        total: employeeClocks.length,
+      },
+    );
   });
 }
