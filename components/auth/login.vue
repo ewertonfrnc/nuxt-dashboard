@@ -143,7 +143,7 @@ export default {
 
 <style lang="scss" scoped>
 .login {
-  width: 35rem;
+  width: 30rem;
   display: grid;
   gap: $spacing-md;
 }

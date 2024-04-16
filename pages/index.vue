@@ -1,34 +1,3 @@
-<script lang="ts">
-import { mapState, mapActions } from "pinia";
-
-export default {
-  data() {
-    return {
-      loading: false,
-    };
-  },
-  computed: {
-    ...mapState(useHomeStore, ["indicators"]),
-  },
-  async created() {
-    await this.getHomeInfo();
-  },
-  methods: {
-    ...mapActions(useHomeStore, ["getIndicators"]),
-    async getHomeInfo() {
-      this.loading = true;
-      try {
-        await this.getIndicators();
-      } catch (e) {
-        console.log(e);
-      } finally {
-        this.loading = false;
-      }
-    },
-  },
-};
-</script>
-
 <template>
   <div class="login fadein animation-duration-500">
     <h1 class="heading__primary">Indicadores</h1>
@@ -104,6 +73,42 @@ export default {
     </div>
   </div>
 </template>
+
+<script lang="ts">
+import { mapState, mapActions } from "pinia";
+
+export default {
+  data() {
+    return {
+      loading: false,
+    };
+  },
+  computed: {
+    ...mapState(useHomeStore, ["indicators"]),
+  },
+  async created() {
+    await this.getHomeInfo();
+  },
+  methods: {
+    ...mapActions(useHomeStore, ["getIndicators"]),
+    async getHomeInfo() {
+      this.loading = true;
+      try {
+        await this.getIndicators();
+      } catch (e) {
+        this.$toast.add({
+          severity: "error",
+          summary: "Algo deu errado",
+          detail: "Tente novamente mais tarde.",
+          life: 4000,
+        });
+      } finally {
+        this.loading = false;
+      }
+    },
+  },
+};
+</script>
 
 <style scoped lang="scss">
 .summary {
