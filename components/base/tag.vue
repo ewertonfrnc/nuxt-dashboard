@@ -1,0 +1,58 @@
+<template>
+  <Tag severity="secondary" :value="value">
+    <template #default>
+      <span :class="['tag', 'body__primary', getSeverityClass(severity)]">{{
+        value
+      }}</span>
+    </template>
+  </Tag>
+</template>
+
+<script lang="ts">
+import { PropType } from "vue";
+
+export type TagType =
+  | "Primary"
+  | "Secondary"
+  | "Success"
+  | "Info"
+  | "Warning"
+  | "Danger"
+  | "Contrast";
+
+export default {
+  props: {
+    value: { type: String, default: "", required: true },
+    severity: {
+      type: String as PropType<TagType>,
+      default: "",
+      required: true,
+    },
+  },
+  methods: {
+    getSeverityClass(severity: string): string {
+      const severityToClassMap: Record<string, string> = {
+        Success: "tag__success",
+        Danger: "tag__danger",
+      };
+
+      return severityToClassMap[severity];
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.tag {
+  padding: 0.4rem 0.8rem;
+  border-radius: $border-radius;
+
+  &__success {
+    background-color: map-get($color-scheme-light, "$color-feedback-success-2");
+  }
+
+  &__danger {
+    background-color: map-get($color-scheme-light, "$color-feedback-danger-2");
+  }
+}
+</style>
