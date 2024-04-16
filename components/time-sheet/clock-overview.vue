@@ -49,6 +49,7 @@
 
 <script lang="ts">
 import { mapActions } from "pinia";
+import { AllClocksParams } from "~/interfaces/time-sheet/time-sheet.interface";
 
 export default {
   data() {
@@ -101,7 +102,7 @@ export default {
     goToEmployeeDetails({ data }) {
       this.$router.push(`/employees/${data.id}`);
     },
-    async getClocks(queryParams) {
+    async getClocks(queryParams: AllClocksParams) {
       this.loading = true;
 
       try {

@@ -3,6 +3,7 @@ import {
   QueryParams,
   User,
   Request,
+  AllClocksParams,
 } from "~/interfaces/time-sheet/time-sheet.interface";
 
 type TimeSheetstate = {
@@ -49,9 +50,9 @@ export const useTimeSheetStore = defineStore("time-sheet", {
         return err as Error;
       }
     },
-    async fetchAllClocks() {
+    async fetchAllClocks(params: AllClocksParams) {
       try {
-        const { data } = await timeSheetService.fetchAllClocks();
+        const { data } = await timeSheetService.fetchAllClocks(params);
         return data;
       } catch (error) {
         return error as Error;

@@ -1,9 +1,21 @@
+type Filter = { value: string; matchMode: string };
+
 export type QueryParams = {
   page: number;
-  global: { value: string; matchMode: string };
-  name: { value: string; matchMode: string };
-  currentBalance: { value: string; matchMode: string };
-  totalRequests: { value: string; matchMode: string };
+  global: Filter;
+  name: Filter;
+  currentBalance: Filter;
+  totalRequests: Filter;
+};
+
+export type AllClocksParams = {
+  page: number;
+  limit: number;
+  global: Filter;
+  tag: Filter;
+  name: Filter;
+  hour: Filter;
+  department: Filter;
 };
 
 export type PendingAdjust = {

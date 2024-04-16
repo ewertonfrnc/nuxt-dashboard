@@ -1,6 +1,7 @@
 import api from "~/services/api.service";
 import {
   QueryParams,
+  AllClocksParams,
   Request,
 } from "~/interfaces/time-sheet/time-sheet.interface";
 
@@ -27,8 +28,19 @@ class TimeSheetService {
     return api().put(`/api/time-sheet/pending/${userId}`, payload);
   }
 
-  fetchAllClocks() {
-    return api().get("/api/time-sheet/clocks");
+  fetchAllClocks(params: AllClocksParams) {
+    const { page, limit, name, hour, department, tag } = params;
+
+    return api().get("/api/time-sheet/clocks", {
+      params: {
+        page,
+        limit,
+        tag: tag?.value || "",
+        name: name?.value || "",
+        hour: hour?.value || "",
+        department: department?.value || "",
+      },
+    });
   }
 }
 export default new TimeSheetService();
