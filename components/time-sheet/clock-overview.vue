@@ -13,7 +13,21 @@
         :columns="columns"
         :nodes="nodes"
         header-shown
-      />
+        has-action
+      >
+        <template #column-header>
+          <span>Ações</span>
+        </template>
+
+        <template #column-action="slotData">
+          <BaseTableAction
+            tooltip-text="Ver detalhes no perfil"
+            :icon="'pi-user'"
+            :data="slotData"
+            @action-handler="goToEmployeeDetails"
+          />
+        </template>
+      </BaseTable>
     </section>
   </div>
 </template>
@@ -62,6 +76,9 @@ export default {
   },
   methods: {
     ...mapActions(useTimeSheetStore, ["fetchAllClocks"]),
+    goToEmployeeDetails({ data }) {
+      this.$router.push(`/employees/${data.id}`);
+    },
     async getClocks() {
       this.loading = true;
 
