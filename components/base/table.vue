@@ -134,7 +134,14 @@
       }"
     >
       <template #body="{ data, field }">
+        <BaseTag
+          v-if="field === 'tag'"
+          :severity="data[field] === 'check-in' ? 'Success' : 'Danger'"
+          :value="data[field]"
+        />
+
         <span
+          v-else
           :class="['body__primary', field === 'totalRequests' && 'highlight']"
         >
           {{ data[field] }}
