@@ -49,5 +49,13 @@ export const useTimeSheetStore = defineStore("time-sheet", {
         return err as Error;
       }
     },
+    async fetchAllClocks() {
+      try {
+        const { data } = await timeSheetService.fetchAllClocks();
+        return data;
+      } catch (error) {
+        return error as Error;
+      }
+    },
   },
 });
