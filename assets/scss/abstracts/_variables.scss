@@ -437,12 +437,15 @@ $color-scheme-dark: (
   "$color-surface-surface-5": #16151e,
 );
 
+// Border / Box Shadows
 $border-light: 1px solid
   map-get($color-scheme-light, "$color-surface-surface-4");
 $box-shadow-light: 0 0.2rem 1rem #e9e5ff;
 
 $border-dark: 1px solid map-get($color-scheme-dark, "$color-surface-surface-4");
 $box-shadow-dark: 0 0.2rem 1rem #191729;
+
+$box-shadow-calendar-panel-light: 0px 0px 7px 0px #47474733;
 
 // Fonts
 $font-size-title-1: 4rem;
