@@ -42,15 +42,6 @@ export default {
       disableRightBtn: false,
     };
   },
-  watch: {
-    approveAll(newValue) {
-      if (newValue) {
-        for (const request of this.requests) {
-          this.rightButtonHandler(request);
-        }
-      }
-    },
-  },
   methods: {
     leftButtonHandler(request: Request) {
       this.selectedBtn = "left";
@@ -106,19 +97,26 @@ export default {
   .active {
     background-color: map-get($color-scheme-light, "$color-brand-primary-0");
     color: map-get($color-scheme-light, "$color-neutral-neutral-7");
+
+    &:disabled {
+      @extend .btn__primary--outlined;
+    }
   }
 }
 
 .dark-mode .split {
   .inactive {
     background-color: transparent;
-    color: map-get($color-scheme-light, "$color-neutral-neutral-3");
     border-color: map-get($color-scheme-light, "$color-neutral-neutral-3");
   }
 
   .active {
     background-color: map-get($color-scheme-light, "$color-brand-primary-0");
     color: map-get($color-scheme-light, "$color-neutral-neutral-7");
+
+    &:disabled {
+      @extend .btn__primary--outlined;
+    }
   }
 }
 </style>

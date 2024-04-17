@@ -199,9 +199,11 @@ export default {
       this.isVisible = !this.isVisible;
       this.showErrorMessage = false;
       this.updatedPendingRequests = [];
+      this.approveAll = false;
     },
     handleApproveAll(value: boolean) {
       this.approveAll = value;
+      if (!value) this.updatedPendingRequests = [];
     },
     buttonHandler(requests: Request[]) {
       this.updatedPendingRequests = requests;
@@ -317,6 +319,10 @@ section {
     align-items: center;
     justify-content: flex-end;
     gap: 1rem;
+
+    label {
+      cursor: pointer;
+    }
   }
 
   &__footer {

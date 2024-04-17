@@ -30,7 +30,7 @@
           </div>
 
           <BaseSplitButton
-            :requests="updatedRequests"
+            :requests="user.requests"
             :request="request"
             :approve-all="approveAll"
             @button-handler="buttonHandler"
@@ -150,6 +150,11 @@ export default {
       approvedRequests: new Set<Request>(),
     };
   },
+  watch: {
+    approveAll(newValue) {
+      newValue && this.handleApproveAll();
+    },
+  },
   unmounted() {
     this.updatedRequests = [];
   },
@@ -173,6 +178,13 @@ export default {
 
       console.log("updatedRequests", ...this.updatedRequests);
 
+      this.$emit("button-handler", this.updatedRequests);
+    },
+    handleApproveAll() {
+      for (const request of this.user.requests) {
+        this.approvedRequests.add({ ...request, approved: true });
+      }
+      this.updatedRequests = [...this.approvedRequests];
       this.$emit("button-handler", this.updatedRequests);
     },
   },
