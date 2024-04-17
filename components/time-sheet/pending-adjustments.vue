@@ -59,7 +59,10 @@
           </div>
 
           <div class="adjust__approval">
-            <BaseCheckbox input-id="approval" @change="handleApproveAll" />
+            <BaseCheckbox
+              input-id="approval"
+              @checkbox-value="handleApproveAll"
+            />
             <label for="approval" class="body__primary">Aprovar tudo</label>
           </div>
 
@@ -68,6 +71,7 @@
               v-if="userPendingRequests"
               :user="userPendingRequests"
               :approve-all="approveAll"
+              @approved-all="handleApproveAll"
               @button-handler="buttonHandler"
             />
           </div>
@@ -196,15 +200,8 @@ export default {
       this.showErrorMessage = false;
       this.updatedPendingRequests = [];
     },
-    handleApproveAll() {
-      this.approveAll = !this.approveAll;
-
-      if (this.approveAll) {
-        return this.userPendingRequests?.requests.map((request) => ({
-          requestId: request.id,
-          approved: true,
-        }));
-      }
+    handleApproveAll(value: boolean) {
+      this.approveAll = value;
     },
     buttonHandler(requests: Request[]) {
       this.updatedPendingRequests = requests;

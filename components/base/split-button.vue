@@ -2,11 +2,12 @@
   <div class="split">
     <BaseButton
       label="Reprovar"
+      :disabled="approveAll"
       :class="[
         'btn__primary--outlined',
         'split__button-left',
         selectedBtn === 'left' && 'active',
-        (approveAll || disableLeftBtn) && 'inactive',
+        disableLeftBtn && 'inactive',
       ]"
       @click.stop="leftButtonHandler(request)"
     />
@@ -29,6 +30,7 @@ import { Request } from "~/interfaces/time-sheet/time-sheet.interface";
 
 export default {
   props: {
+    requests: { type: Array as PropType<Request[]>, required: true },
     request: { type: Object as PropType<Request>, required: true },
     approveAll: { type: Boolean, default: false, required: true },
   },
@@ -39,6 +41,15 @@ export default {
       disableLeftBtn: false,
       disableRightBtn: false,
     };
+  },
+  watch: {
+    approveAll(newValue) {
+      if (newValue) {
+        for (const request of this.requests) {
+          this.rightButtonHandler(request);
+        }
+      }
+    },
   },
   methods: {
     leftButtonHandler(request: Request) {

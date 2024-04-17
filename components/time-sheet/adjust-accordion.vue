@@ -30,6 +30,7 @@
           </div>
 
           <BaseSplitButton
+            :requests="updatedRequests"
             :request="request"
             :approve-all="approveAll"
             @button-handler="buttonHandler"
@@ -141,10 +142,12 @@ export default {
     user: { type: Object as PropType<User>, required: true },
     approveAll: { type: Boolean, default: false, required: true },
   },
-  emits: ["button-handler"],
+  emits: ["button-handler", "approved-all"],
   data() {
     return {
       updatedRequests: [] as Request[],
+      rejectedRequests: new Set<Request>(),
+      approvedRequests: new Set<Request>(),
     };
   },
   unmounted() {
@@ -153,13 +156,22 @@ export default {
   methods: {
     ...mapActions(useTimeSheetStore, ["updateRequestsApproval"]),
     buttonHandler(request: Request) {
-      const index = this.updatedRequests.indexOf(request);
-
-      if (index !== -1) {
-        this.updatedRequests.splice(index, 1, request);
+      if (request.approved) {
+        this.approvedRequests.add(request);
       } else {
-        this.updatedRequests.push(request);
+        this.rejectedRequests.add(request);
       }
+
+      if (this.approvedRequests.size === this.user.requests.length) {
+        this.$emit("approved-all");
+      }
+
+      this.updatedRequests = [
+        ...this.approvedRequests,
+        ...this.rejectedRequests,
+      ];
+
+      console.log("updatedRequests", ...this.updatedRequests);
 
       this.$emit("button-handler", this.updatedRequests);
     },
