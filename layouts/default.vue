@@ -1,7 +1,17 @@
 <template>
-  <div class="container fadein animation-duration-500">
+  <div ref="container" class="container fadein animation-duration-500">
+    <div
+      v-if="isSidebarVisible && isNarrowScreen"
+      class="mask fadein animation-duration-500"
+      @click="isSidebarVisible = false"
+    />
     <transition name="slide">
-      <LayoutSidebar v-if="isSidebarVisible" />
+      <LayoutSidebar
+        v-if="isSidebarVisible"
+        :is-nav-visible="isSidebarVisible"
+        :is-narrow-screen="isNarrowScreen"
+        @close-nav="handleNarrowNavigation"
+      />
     </transition>
 
     <main class="main">
@@ -29,6 +39,7 @@ export default {
   },
   data() {
     return {
+      isNarrowScreen: false,
       isSidebarVisible: true,
       path: "",
     };
@@ -43,9 +54,29 @@ export default {
   updated() {
     this.path = this.$route.path;
   },
+  mounted() {
+    window.addEventListener("resize", this.handleResize);
+  },
+  unmounted() {
+    window.removeEventListener("resize", this.handleResize);
+  },
   methods: {
     toggleSidebar() {
       this.isSidebarVisible = !this.isSidebarVisible;
+    },
+    handleResize() {
+      if (window.matchMedia("(max-width: 56.25em)").matches) {
+        this.isNarrowScreen = true;
+        this.isSidebarVisible = false;
+      } else {
+        this.isNarrowScreen = false;
+        this.isSidebarVisible = true;
+      }
+    },
+    handleNarrowNavigation() {
+      if (this.isNarrowScreen) {
+        this.isSidebarVisible = false;
+      }
     },
   },
 };

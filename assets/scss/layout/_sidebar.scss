@@ -1,0 +1,102 @@
+.nav {
+  width: 30rem;
+  padding: 2.4rem 0;
+  background-color: map-get($color-scheme-light, "$color-neutral-neutral-7");
+  box-shadow: $box-shadow-light;
+  border: 1px solid map-get($color-scheme-light, "$color-surface-surface-4");
+
+  overflow-y: auto;
+  transform: translateX(0);
+  transition: all 0.5s ease-out;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  &__header {
+    padding: 0 1.6rem;
+    margin-bottom: 2rem;
+
+    span {
+      display: inline-block;
+    }
+  }
+
+  &__item {
+    padding: 0.8rem 1.6rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: map-get($color-scheme-light, "$color-neutral-neutral-0");
+    transition: all 0.2s ease;
+
+    h6 {
+      color: map-get($color-scheme-light, "$color-brand-primary-4");
+    }
+
+    &--active,
+    &:not(.nav__menuheader):hover {
+      background-color: map-get($color-scheme-light, "$color-brand-primary-1");
+      color: map-get($color-scheme-light, "$color-brand-primary-0");
+      cursor: pointer;
+    }
+
+    &--icon {
+      margin-left: auto;
+    }
+
+    &--subitem {
+      padding: 0.8rem 1.6rem 0.8rem 3rem;
+    }
+
+    span {
+      font-weight: 500;
+    }
+  }
+
+  .dark-mode &__item {
+    color: map-get($color-scheme-dark, "$color-neutral-neutral-0");
+
+    &--active,
+    &:not(.nav__menuheader):hover {
+      background-color: map-get($color-scheme-dark, "$color-brand-primary-1");
+      color: map-get($color-scheme-dark, "$color-brand-primary-0");
+    }
+  }
+
+  &__footer {
+    padding: 0.8rem 1.6rem;
+  }
+
+  &__logo {
+    max-width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  &__collapsed {
+    @include respond(tab-port) {
+      height: 100vh;
+      z-index: 9999;
+      position: fixed;
+      top: 0;
+      left: 0;
+    }
+  }
+}
+
+.dark-mode .nav {
+  background-color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
+  border: 1px solid map-get($color-scheme-dark, "$color-surface-surface-4");
+  box-shadow: $box-shadow-dark;
+  border: $border-dark;
+}
+
+.mask {
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(0.8rem);
+  background-color: rgba(0, 0, 0, 0.2);
+
+  z-index: 9998;
+  position: absolute;
+}

@@ -17,6 +17,11 @@ export default {
     headerShown: { type: Boolean, required: false, default: false },
     isSelectable: { type: Boolean, required: false, default: false },
     isExpandable: { type: Boolean, required: false, default: false },
+    hasAction: { type: Boolean, required: false, default: false },
+  },
+  setup() {
+    const colorMode = useColorMode();
+    return { colorMode };
   },
   data() {
     return {
@@ -34,7 +39,7 @@ export default {
 
       // Row selection
       selectAllCheckbox: null,
-      selectedEmployees: null,
+      selectedEmployees: [],
       seeOnlySelectedFields: false,
 
       // Row Expansion
@@ -74,14 +79,9 @@ export default {
           matchMode: FilterMatchMode.CONTAINS,
         },
         firstName: {
-          field: "firstName",
+          field: "name",
           value: null,
           matchMode: FilterMatchMode.STARTS_WITH,
-        },
-        age: {
-          field: "age",
-          value: null,
-          matchMode: FilterMatchMode.EQUALS,
         },
       };
     },
@@ -130,7 +130,7 @@ export default {
   <DataTable
     removable-sort
     :value="seeOnlySelectedFields ? selectedEmployees : nodes"
-    :paginator="paginator"
+    :paginator="!loading && paginator"
     :rows="rows"
     :filters="filters"
     filter-display="menu"
@@ -141,6 +141,7 @@ export default {
     select-all
     select-all-change
     :expanded-rows="expandedRows"
+    :has-action="hasAction"
     :pt="{
       table: 'table',
       thead: 'table__header',
@@ -155,7 +156,7 @@ export default {
     @row-collapse="onRowCollapse"
     @update:filters="updateFilterHandler"
   >
-    <template v-if="headerShown" #header>
+    <template v-if="!loading && headerShown" #header>
       <div
         :class="[
           selectedEmployees?.length
@@ -172,9 +173,9 @@ export default {
 
         <div class="table__header--filter">
           <BaseButton
-            class="btn__secondary--outlined"
+            class="btn__primary--outlined"
             icon="pi pi-filter-slash"
-            label="Limpar"
+            label="Limpar filtro"
             @click="clearFilters"
           />
 
@@ -187,30 +188,51 @@ export default {
       </div>
     </template>
 
-    <template #empty> Nenhum produto encontrado. </template>
-    <template #loading> Carregando produtos. Por favor, aguarde! </template>
+    <template v-if="!loading && !nodes.length" #empty>
+      <div class="table__empty">
+        <img
+          v-if="colorMode.preference === 'light'"
+          src="~/assets/img/empty-light.png"
+          alt="no entries illustration"
+        />
+        <img
+          v-else
+          src="~/assets/img/empty-dark.png"
+          alt="no entries illustration"
+        />
+
+        <h5 class="heading__quinary">Não há nada aqui por enquanto...</h5>
+      </div>
+    </template>
+
+    <template v-if="loading" #loading>
+      <div class="table__loading">
+        <UiActivityIndicator size="large" />
+      </div>
+    </template>
 
     <Column
-      v-if="isSelectable"
+      v-if="!loading && isSelectable"
       selection-mode="multiple"
       :pt="{
         checkboxwrapper: 'checkbox__wrapper',
         headercheckboxwrapper: 'checkbox__wrapper',
         headercell: 'table__header--cell',
-        bodycell: 'table__body--cell',
+        bodycell: 'table__body--cell table__body--cell-icon',
       }"
     />
 
     <Column
-      v-if="isExpandable"
+      v-if="!loading && isExpandable"
       expander
       :pt="{
-        bodycell: 'table__body--cell',
+        bodycell: 'table__body--cell table__body--cell-icon',
       }"
     />
 
     <Column
       v-for="col of columns"
+      v-if="!loading && nodes.length"
       :key="col.field"
       :field="col.field"
       :header="col.header"
@@ -228,7 +250,9 @@ export default {
         filterbuttonbar: 'filter__btn-group',
       }"
     >
-      <template #body="{ data, field }"> {{ data[field] }} </template>
+      <template #body="{ data, field }">
+        <span class="body__primary"> {{ data[field] }} </span>
+      </template>
 
       <template v-if="col.hasFilter" #filter="{ filterModel }">
         <input
@@ -268,8 +292,26 @@ export default {
       </template>
     </Column>
 
-    <template v-if="isExpandable" #expansion="slotProps">
-      <BaseTableExpandedRow :slot-props="slotProps.data" />
+    <Column
+      v-if="hasAction"
+      :pt="{
+        headercell: 'table__header--cell',
+        bodycell: 'table__body--cell',
+      }"
+    >
+      <template #header>
+        <slot name="column-header" />
+      </template>
+
+      <template #body="{ data }">
+        <div class="table__action">
+          <slot name="column-action" :data="data" />
+        </div>
+      </template>
+    </Column>
+
+    <template #expansion="slotProps">
+      <slot name="expansion-content" :data="slotProps.data" />
     </template>
   </DataTable>
 </template>

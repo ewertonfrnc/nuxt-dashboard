@@ -2,12 +2,12 @@
   min-width: 100%;
   text-align: left;
   font-family: inherit;
-  color: $color-neutral-neutral-0;
-  border: 1px solid $color-neutral-neutral-5;
+  color: map-get($color-scheme-light, "$color-neutral-neutral-0");
+  border: $border-light;
   border-collapse: collapse;
 
   &__header {
-    background-color: $color-neutral-neutral-6;
+    background-color: map-get($color-scheme-light, "$color-neutral-neutral-6");
     position: relative;
 
     &--options {
@@ -15,7 +15,13 @@
       display: grid;
       grid-template-columns: 1fr;
       justify-content: end;
-      padding: 2rem 0;
+      padding: 2rem 0.8rem;
+      background-color: map-get(
+        $color-scheme-light,
+        "$color-neutral-neutral-6"
+      );
+      border: $border-light;
+      border-bottom-style: none;
     }
 
     &--options-selection {
@@ -30,7 +36,7 @@
       width: 100%;
       display: flex;
       justify-content: space-between;
-      gap: 2rem;
+      gap: 20rem;
     }
 
     &--see-selected {
@@ -42,7 +48,7 @@
     &--cell {
       width: 2rem;
       padding: 1.5rem 1rem;
-      border: 1px solid $color-neutral-neutral-5;
+      border: 1px solid map-get($color-scheme-light, "$color-neutral-neutral-4");
     }
   }
 
@@ -52,24 +58,117 @@
     &--row {
       transition: all 0.3s;
       &[data-p-highlight="true"] {
-        background-color: $color-brand-primary-1;
+        background-color: map-get(
+          $color-scheme-light,
+          "$color-brand-primary-1"
+        );
       }
     }
 
     &--cell {
       width: 2rem;
       padding: 2rem 1rem;
-      border: 1px solid $color-neutral-neutral-5;
+      border: $border-light;
+      background-color: map-get(
+        $color-scheme-light,
+        "$color-neutral-neutral-7"
+      );
 
       button {
-        all: unset;
+        cursor: pointer;
+        background: transparent;
+        border-color: transparent;
+        padding: 0.5rem 1rem;
+        transition: background 0.2s ease;
+        border-radius: 10rem;
+        color: map-get($color-scheme-light, "$color-brand-primary-0");
+
+        &:hover {
+          outline: 1px solid
+            map-get($color-scheme-light, "$color-neutral-neutral-5");
+        }
       }
+    }
+
+    &--cell-icon {
+      width: 5.9rem;
+      text-align: center;
     }
   }
 
   &__expansion {
     padding: 2rem;
     animation: slideInFromTop 0.3s ease-in-out;
+    background-color: map-get($color-scheme-light, "$color-neutral-neutral-6");
+  }
+
+  &__action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+
+    .pi {
+      cursor: pointer;
+      color: map-get($color-scheme-light, "$color-brand-primary-0");
+    }
+  }
+
+  &__loading,
+  &__empty {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    padding: 6.4rem 0;
+  }
+}
+
+.dark-mode .table {
+  color: map-get($color-scheme-dark, "$color-neutral-neutral-0");
+  border: $border-dark;
+
+  &__header {
+    background-color: map-get($color-scheme-dark, "$color-neutral-neutral-6");
+
+    &--options {
+      border: $border-dark;
+      border-bottom-style: none;
+      background: map-get($color-scheme-dark, "$color-neutral-neutral-6");
+    }
+
+    &--cell {
+      border: $border-dark;
+    }
+  }
+
+  &__body {
+    &--row {
+      &[data-p-highlight="true"] {
+        background-color: map-get($color-scheme-dark, "$color-brand-primary-1");
+      }
+    }
+
+    &--cell {
+      background-color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
+      border: $border-dark;
+
+      button {
+        color: map-get($color-scheme-light, "$color-brand-primary-0");
+
+        &:hover {
+          outline: 1px solid
+            map-get($color-scheme-dark, "$color-neutral-neutral-5");
+        }
+      }
+    }
+
+    &__action .pi {
+      color: map-get($color-scheme-dark, "$color-brand-primary-0");
+    }
+  }
+
+  &__expansion {
+    background-color: map-get($color-scheme-dark, "$color-neutral-neutral-6");
   }
 }
 
@@ -83,7 +182,7 @@
 
     margin: 1rem auto;
     font-size: $small-font-size;
-    border: 1px solid $color-neutral-neutral-0;
+    border: 1px solid map-get($color-scheme-light, "$color-neutral-neutral-0");
   }
 
   &__btn-group {
@@ -110,8 +209,7 @@ input[type="checkbox"] {
   color: white;
   min-width: 1.7rem;
   height: 1.7rem;
-  border-radius: 0.2rem;
-  border: 1px solid $color-neutral-neutral-4;
+  border: 1px solid map-get($color-scheme-light, "$color-neutral-neutral-4");
   border-radius: 6px;
   transform: translateY(0);
 
@@ -147,4 +245,11 @@ input[type="checkbox"] {
     color: white;
     width: 80%;
   }
+}
+
+.tooltip {
+  z-index: 9999;
+  position: absolute;
+
+  background: white;
 }
