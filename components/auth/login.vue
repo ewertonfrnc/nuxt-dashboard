@@ -164,7 +164,12 @@ export default {
 
     & > div {
       display: flex;
+      align-items: center;
       gap: 0.8rem;
+
+      label {
+        cursor: pointer;
+      }
     }
 
     &--label {
