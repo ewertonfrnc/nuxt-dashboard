@@ -121,7 +121,7 @@ export default {
   padding: 1.6rem 1.6rem 1.6rem 0;
   border-radius: 0.8rem;
   transition: transform 0.2s linear;
-  border: $border-light;
+  border: 1px solid map-get($color-scheme-light, "$color-surface-surface-4");
   box-shadow: $box-shadow-light;
   color: map-get($color-scheme-light, "$color-neutral-neutral-0");
   background-color: map-get($color-scheme-light, "$color-neutral-neutral-7");
@@ -149,7 +149,7 @@ export default {
 }
 
 .dark-mode .indicator {
-  border: $border-dark;
+  border: 1px solid map-get($color-scheme-dark, "$color-surface-surface-4");
   box-shadow: $box-shadow-dark;
   color: map-get($color-scheme-dark, "$color-neutral-neutral-0");
   background-color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
