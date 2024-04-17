@@ -176,8 +176,6 @@ export default {
         ...this.rejectedRequests,
       ];
 
-      console.log("updatedRequests", ...this.updatedRequests);
-
       this.$emit("button-handler", this.updatedRequests);
     },
     handleApproveAll() {
