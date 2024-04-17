@@ -74,13 +74,13 @@
 
 <script lang="ts">
 import { useForm } from "vee-validate";
-import { storeToRefs } from "pinia";
+import { mapActions, mapState } from "pinia";
+import { UserCredentials } from "@/interfaces/auth/auth.interface";
 
 export default {
   emits: ["changeStep"],
   setup() {
     const router = useRouter();
-    const { authenticated } = storeToRefs(useAuthStore());
 
     const { handleSubmit, resetForm } = useForm({
       initialValues: { username: "", password: "" },
@@ -88,17 +88,21 @@ export default {
     });
     const onSubmit = handleSubmit((formValues) => formValues);
 
-    return { router, authenticated, onSubmit, resetForm };
+    return { router, onSubmit, resetForm };
   },
   data() {
     return {
       isLoading: false,
-      formData: {},
+      formData: {} as UserCredentials | undefined,
       remindUser: false,
       wrongCredentialsMessage: "",
     };
   },
+  computed: {
+    ...mapState(useAuthStore, ["user", "authenticated"]),
+  },
   methods: {
+    ...mapActions(useAuthStore, ["authenticateUser"]),
     goToRecoverPassword() {
       this.$emit("changeStep", "recover");
     },
@@ -108,22 +112,18 @@ export default {
         if (!this.formData) return;
 
         this.isLoading = true;
-        const {
-          data: { user },
-        } = await this.$axios.post("/api/login", this.formData);
+        await this.authenticateUser(this.formData);
 
-        if (user && !this.remindUser) {
-          sessionStorage.setItem("token", user?.token);
+        if (this.user && !this.remindUser) {
+          sessionStorage.setItem("token", this.user?.token);
         }
 
-        if (user && this.remindUser) {
+        if (this.user && this.remindUser) {
           const token = useCookie("token");
-          token.value = user?.token;
+          token.value = this.user?.token;
         }
 
-        if (this.authenticated) {
-          await this.router.push("/");
-        }
+        if (this.authenticated) await this.router.push("/");
       } catch (error) {
         this.wrongCredentialsMessage = error.response.data.message;
 
@@ -143,7 +143,7 @@ export default {
 
 <style lang="scss" scoped>
 .login {
-  width: 35rem;
+  width: 30rem;
   display: grid;
   gap: $spacing-md;
 }
