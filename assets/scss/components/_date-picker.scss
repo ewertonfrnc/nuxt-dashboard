@@ -7,8 +7,6 @@
     border-bottom-right-radius: 0;
   }
 
-
-
   button {
     width: 5.6rem;
     height: 4.4rem;
@@ -99,5 +97,58 @@
   &__selected-day {
     background-color: map-get($color-scheme-light, "$color-brand-primary-1");
     color: map-get($color-scheme-light, "$color-brand-primary-0");
+  }
+}
+
+.dark-mode .date-picker {
+  button {
+    background-color: map-get($color-scheme-dark, "$color-brand-primary-0");
+    color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
+    border: none;
+  }
+
+  &__panel {
+    background-color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
+    box-shadow: $box-shadow-calendar-panel-light;
+  }
+
+  &__header {
+    border-bottom: 1px solid
+      map-get($color-scheme-dark, "$color-neutral-neutral-4");
+    color: map-get($color-scheme-dark, "$color-neutral-neutral-1");
+
+    button {
+      color: inherit;
+      &:hover {
+        background-color: map-get($color-scheme-dark, "$color-brand-primary-0");
+        color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
+      }
+    }
+
+    &--title {
+      button {
+        color: inherit;
+        transition: color 0.2s ease;
+
+        &:hover {
+          background-color: transparent;
+          color: map-get($color-scheme-dark, "$color-brand-primary-0");
+        }
+      }
+    }
+  }
+
+  &__table {
+    &--day {
+      &:hover {
+        background-color: map-get($color-scheme-dark, "$color-brand-primary-1");
+        color: map-get($color-scheme-dark, "$color-brand-primary-0");
+      }
+    }
+  }
+
+  &__selected-day {
+    background-color: map-get($color-scheme-dark, "$color-brand-primary-1");
+    color: map-get($color-scheme-dark, "$color-brand-primary-0");
   }
 }

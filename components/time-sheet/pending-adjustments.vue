@@ -1,96 +1,104 @@
 <template>
   <div class="fadein animation-duration-500">
     <h2 class="heading__secondary">Ajustes pendentes</h2>
-    <BaseTable
-      :loading="tableLoading"
-      :columns="columns"
-      :nodes="nodes"
-      :total-pages="totalPages"
-      :custom-filters="filters"
-      header-shown
-      has-action
-      @update-filter-handler="getTableValues"
-      @change-page="changePageHandler"
-    >
-      <template #body-cell="{ data, field }">
-        <span
-          :class="['body__primary', field === 'totalRequests' && 'highlight']"
-        >
-          {{ data[field] }}
-        </span>
-      </template>
 
-      <template #column-header>
-        <span class="heading__quinary">Ações</span>
-      </template>
+    <section>
+      <BaseTable
+        :loading="tableLoading"
+        :columns="columns"
+        :nodes="nodes"
+        :total-pages="totalPages"
+        :custom-filters="filters"
+        header-shown
+        has-action
+        @update-filter-handler="getTableValues"
+        @change-page="changePageHandler"
+      >
+        <template #body-cell="{ data, field }">
+          <span
+            :class="[
+              'body__primary',
+              field === 'totalRequests' && 'highlight',
+              field === 'currentBalance' && data.negative && 'negative',
+              field === 'currentBalance' && !data.negative && 'positive',
+            ]"
+          >
+            {{ data[field] }}
+          </span>
+        </template>
 
-      <template #column-action="slotData">
-        <BaseTableAction
-          tooltip-text="Verificar ajuste"
-          :icon="'pi-search'"
-          :data="slotData"
-          @action-handler="logSelectedItem"
-        />
-      </template>
-    </BaseTable>
+        <template #column-header>
+          <span class="heading__quinary">Ações</span>
+        </template>
 
-    <BaseDialog
-      title="Ajustar ponto"
-      :is-visible="isVisible"
-      :toggle-dialog="toggleDialog"
-    >
-      <div class="adjust">
-        <div class="adjust__info">
-          <span class="caption__primary">Solicitante:</span>
+        <template #column-action="slotData">
+          <BaseTableAction
+            tooltip-text="Verificar ajuste"
+            :icon="'pi-search'"
+            :data="slotData"
+            @action-handler="logSelectedItem"
+          />
+        </template>
+      </BaseTable>
 
-          <div class="adjust__info--employee">
-            <p class="body__primary">{{ userPendingRequests?.name }}</p>
-            <span class="caption__primary">{{
-              userPendingRequests?.role
-            }}</span>
+      <BaseDialog
+        title="Ajustar ponto"
+        :is-visible="isVisible"
+        :toggle-dialog="toggleDialog"
+      >
+        <div class="adjust">
+          <div class="adjust__info">
+            <span class="caption__primary">Solicitante:</span>
+
+            <div class="adjust__info--employee">
+              <p class="body__primary">{{ userPendingRequests?.name }}</p>
+              <span class="caption__primary">{{
+                userPendingRequests?.role
+              }}</span>
+            </div>
+          </div>
+
+          <div class="adjust__approval">
+            <BaseCheckbox input-id="approval" @change="handleApproveAll" />
+            <label for="approval" class="body__primary">Aprovar tudo</label>
+          </div>
+
+          <div class="adjust__accordion">
+            <TimeSheetAdjustAccordion
+              v-if="userPendingRequests"
+              :user="userPendingRequests"
+              :approve-all="approveAll"
+              @button-handler="buttonHandler"
+            />
           </div>
         </div>
 
-        <div class="adjust__approval">
-          <BaseCheckbox input-id="approval" @change="handleApproveAll" />
-          <label for="approval" class="body__primary">Aprovar tudo</label>
-        </div>
-
-        <div class="adjust__accordion">
-          <TimeSheetAdjustAccordion
-            v-if="userPendingRequests"
-            :user="userPendingRequests"
-            :approve-all="approveAll"
-            @button-handler="buttonHandler"
+        <template #footer>
+          <BaseInlineMessage
+            v-if="showErrorMessage"
+            severity="error"
+            text="Selecione uma ação para prosseguir"
           />
-        </div>
-      </div>
 
-      <template #footer>
-        <BaseInlineMessage
-          v-if="showErrorMessage"
-          severity="error"
-          text="Selecione uma ação para prosseguir"
-        />
-
-        <div class="adjust__footer">
-          <BaseButton
-            icon="pi pi-times"
-            label="Cancelar"
-            class="btn__danger--outlined"
-            :disabled="dialogLoading"
-            @click="toggleDialog"
-          />
-          <BaseButton
-            icon="pi pi-save"
-            label="Salvar"
-            class="btn__secondary"
-            :loading="dialogLoading"
-            @click="submitPendingRequests"
-          />
-        </div>
-      </template>
-    </BaseDialog>
+          <div class="adjust__footer">
+            <BaseButton
+              icon="pi pi-times"
+              label="Cancelar"
+              class="btn__danger--outlined"
+              :disabled="dialogLoading"
+              @click="toggleDialog"
+            />
+            <BaseButton
+              icon="pi pi-save"
+              label="Salvar"
+              class="btn__secondary"
+              :loading="dialogLoading"
+              @click="submitPendingRequests"
+            />
+          </div>
+        </template>
+      </BaseDialog>
+    </section>
   </div>
 </template>
 
@@ -279,6 +287,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+section {
+  margin-top: 2rem;
+}
+
 .adjust {
   width: 60rem;
   height: 60rem;

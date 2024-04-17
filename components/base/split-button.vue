@@ -97,4 +97,17 @@ export default {
     color: map-get($color-scheme-light, "$color-neutral-neutral-7");
   }
 }
+
+.dark-mode .split {
+  .inactive {
+    background-color: transparent;
+    color: map-get($color-scheme-light, "$color-neutral-neutral-3");
+    border-color: map-get($color-scheme-light, "$color-neutral-neutral-3");
+  }
+
+  .active {
+    background-color: map-get($color-scheme-light, "$color-brand-primary-0");
+    color: map-get($color-scheme-light, "$color-neutral-neutral-7");
+  }
+}
 </style>

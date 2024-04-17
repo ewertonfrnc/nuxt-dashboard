@@ -55,4 +55,14 @@ export default {
     background-color: map-get($color-scheme-light, "$color-feedback-danger-2");
   }
 }
+
+.dark-mode .tag {
+  &__success {
+    background-color: map-get($color-scheme-dark, "$color-feedback-success-2");
+  }
+
+  &__danger {
+    background-color: map-get($color-scheme-dark, "$color-feedback-danger-2");
+  }
+}
 </style>

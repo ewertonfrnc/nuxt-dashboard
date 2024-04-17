@@ -200,6 +200,26 @@
             root: 'paginator',
             pages: 'paginator__pages',
             pageButton: 'paginator__button caption__primary',
+            previousPageButton: ({ context }) => {
+              return `paginator__button ${
+                context.disabled && 'paginator__button--disabled'
+              }`;
+            },
+            nextPageButton: ({ context }) => {
+              return `paginator__button ${
+                context.disabled && 'paginator__button--disabled'
+              }`;
+            },
+            lastPageButton: ({ context }) => {
+              return `paginator__button ${
+                context.disabled && 'paginator__button--disabled'
+              }`;
+            },
+            firstPageButton: ({ context }) => {
+              return `paginator__button ${
+                context.disabled && 'paginator__button--disabled'
+              }`;
+            },
           }"
           @page="(pageState) => changePage(pageState)"
         />

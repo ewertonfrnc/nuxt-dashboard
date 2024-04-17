@@ -7,9 +7,6 @@
   border: $border-light;
   border-collapse: collapse;
 
-  &__loading {
-  }
-
   &__filter {
     padding: 1.2rem 0;
     border-top-left-radius: 0.8rem;
@@ -230,7 +227,20 @@
   border: $border-dark;
 
   &__filter {
+    border-top-right-radius: 0.8rem;
     background-color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
+
+    &--icon {
+      &:hover {
+        background-color: map-get($color-scheme-dark, "$color-brand-primary-1");
+      }
+
+      svg {
+        width: 1.7rem;
+        height: 1.7rem;
+        color: map-get($color-scheme-dark, "$color-neutral-neutral-1");
+      }
+    }
 
     &--footer {
       background-color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
@@ -263,7 +273,7 @@
       border: $border-dark;
 
       button {
-        color: map-get($color-scheme-light, "$color-brand-primary-0");
+        color: map-get($color-scheme-dark, "$color-brand-primary-0");
 
         &:hover {
           outline: 1px solid
@@ -279,6 +289,18 @@
 
   &__expansion {
     background-color: map-get($color-scheme-dark, "$color-neutral-neutral-6");
+  }
+
+  .highlight {
+    color: map-get($color-scheme-dark, "$color-feedback-warning-4");
+  }
+
+  .positive {
+    color: map-get($color-scheme-dark, "$color-feedback-success-0");
+  }
+
+  .negative {
+    color: map-get($color-scheme-dark, "$color-feedback-danger-0");
   }
 }
 
