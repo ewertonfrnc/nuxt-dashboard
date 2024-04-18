@@ -8,8 +8,8 @@
     <transition name="slide">
       <div class="sidebar">
         <LayoutSidebar
-          :is-nav-visible="sidebarExpanded"
           :is-narrow-screen="isNarrowScreen"
+          :is-nav-visible="sidebarExpanded"
           @close-nav="handleNarrowNavigation"
           @mouse-over="handleMouseover"
         />
@@ -17,7 +17,7 @@
     </transition>
 
     <section :class="['section', sidebarExpanded && 'section__adapted']">
-      <LayoutHeader :toggle-sidebar="toggleSidebar" :route-path="path" />
+      <LayoutHeader :route-path="path" :toggle-sidebar="toggleSidebar" />
       <BaseToast />
       <slot />
 

@@ -1,7 +1,7 @@
 <template>
   <UiModal>
     <div class="login fadein animation-duration-500">
-      <img src="~/assets/img/LOGO.png" alt="Itera logo" class="login__logo" />
+      <img alt="Itera logo" class="login__logo" src="~/assets/img/LOGO.png" />
 
       <div class="login__header">
         <h3 class="heading__tertiary">Área do RH</h3>
@@ -13,10 +13,10 @@
           <label class="caption__primary">
             Usuário
             <BaseInputMask
-              name="username"
+              :wrong-crendentials-message="wrongCpfMessage"
               mask="999.999.999-99"
+              name="username"
               placeholder="Insira seu CPF"
-              :wrong-crendentials-message="wrongCredentialsMessage"
             />
           </label>
         </div>
@@ -25,9 +25,9 @@
           <label class="caption__primary">
             Senha
             <BaseInputPassword
+              :wrong-crendentials-message="wrongCredentialsMessage"
               name="password"
               placeholder="Insira sua senha"
-              :wrong-crendentials-message="wrongCredentialsMessage"
             />
           </label>
         </div>
@@ -45,8 +45,8 @@
 
           <span>
             <BaseButton
-              label="Esqueci a senha"
               class="btn__primary--text"
+              label="Esqueci a senha"
               @click.prevent="goToRecoverPassword"
             />
           </span>
@@ -54,9 +54,9 @@
 
         <div class="form__submit">
           <BaseButton
-            label="Entrar"
-            class="btn__primary"
             :loading="isLoading"
+            class="btn__primary"
+            label="Entrar"
             @click.prevent="login"
           />
         </div>
@@ -65,7 +65,7 @@
       <div class="register">
         <span>Não tem cadastro?</span>
         <span>
-          <BaseButton label="Cadastre-se" class="btn__primary--text" />
+          <BaseButton class="btn__primary--text" label="Cadastre-se" />
         </span>
       </div>
     </div>
@@ -74,13 +74,14 @@
 
 <script lang="ts">
 import { useForm } from "vee-validate";
-import { storeToRefs } from "pinia";
+import { mapActions, mapState } from "pinia";
+import { UserCredentials } from "@/interfaces/auth/auth.interface";
+import { validateCPF } from "@/utils/validators";
 
 export default {
   emits: ["changeStep"],
   setup() {
     const router = useRouter();
-    const { authenticated } = storeToRefs(useAuthStore());
 
     const { handleSubmit, resetForm } = useForm({
       initialValues: { username: "", password: "" },
@@ -88,17 +89,22 @@ export default {
     });
     const onSubmit = handleSubmit((formValues) => formValues);
 
-    return { router, authenticated, onSubmit, resetForm };
+    return { router, onSubmit, resetForm };
   },
   data() {
     return {
       isLoading: false,
-      formData: {},
+      formData: {} as UserCredentials,
       remindUser: false,
       wrongCredentialsMessage: "",
+      wrongCpfMessage: "",
     };
   },
+  computed: {
+    ...mapState(useAuthStore, ["user", "authenticated"]),
+  },
   methods: {
+    ...mapActions(useAuthStore, ["authenticateUser"]),
     goToRecoverPassword() {
       this.$emit("changeStep", "recover");
     },
@@ -106,24 +112,24 @@ export default {
       try {
         this.formData = await this.onSubmit();
         if (!this.formData) return;
+        if (!validateCPF(this.formData.username)) {
+          this.wrongCpfMessage = "CPF inválido!";
+          return;
+        }
 
         this.isLoading = true;
-        const {
-          data: { user },
-        } = await this.$axios.post("/api/login", this.formData);
+        await this.authenticateUser(this.formData);
 
-        if (user && !this.remindUser) {
-          sessionStorage.setItem("token", user?.token);
+        if (this.user && !this.remindUser) {
+          sessionStorage.setItem("token", this.user?.token);
         }
 
-        if (user && this.remindUser) {
+        if (this.user && this.remindUser) {
           const token = useCookie("token");
-          token.value = user?.token;
+          token.value = this.user?.token;
         }
 
-        if (this.authenticated) {
-          await this.router.push("/");
-        }
+        if (this.authenticated) await this.router.push("/");
       } catch (error) {
         this.wrongCredentialsMessage = error.response.data.message;
 
@@ -143,7 +149,7 @@ export default {
 
 <style lang="scss" scoped>
 .login {
-  width: 35rem;
+  width: 30rem;
   display: grid;
   gap: $spacing-md;
 
@@ -166,10 +172,6 @@ export default {
       display: flex;
       align-items: center;
       gap: 0.8rem;
-
-      label {
-        cursor: pointer;
-      }
     }
 
     &--label {

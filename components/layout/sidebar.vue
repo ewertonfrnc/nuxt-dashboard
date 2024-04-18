@@ -6,32 +6,32 @@
       mouseover && 'nav__open',
       isNavVisible && 'nav__expanded',
     ]"
-    @mouseover="handleMouseOver"
     @mouseleave="handleMouseLeave"
+    @mouseover="handleMouseOver"
   >
     <Menu :model="items">
       <template #start>
         <div class="nav__header">
           <div :class="['logo', (mouseover || isNavVisible) && 'logo-move']">
             <img
-              src="~/assets/img/logo-narrow.png"
               alt="Itera logo"
               class="nav__logo--narrow fadein animation-duration-500"
+              src="~/assets/img/logo-narrow.png"
             />
           </div>
 
           <div :class="['logo', (mouseover || isNavVisible) && 'logo-move']">
             <img
               v-if="colorMode.preference === 'light'"
-              src="~/assets/img/logo-black.png"
               alt="Itera logo"
               class="nav__logo fadein animation-duration-500"
+              src="~/assets/img/logo-black.png"
             />
             <img
               v-else
-              src="~/assets/img/logo-white.png"
               alt="Itera logo"
               class="nav__logo fadein animation-duration-500"
+              src="~/assets/img/logo-white.png"
             />
           </div>
 
@@ -52,8 +52,8 @@
         <NuxtLink
           v-if="item.route && !item.items"
           :to="item.route"
-          class="nav__item body__secondary"
           active-class="nav__item--active"
+          class="nav__item body__secondary"
           @click="handleNavigation"
         >
           <i :class="['pi', item.icon]"></i>
@@ -79,10 +79,10 @@
               <NuxtLink
                 v-for="(subItem, index) in item.items"
                 :key="index"
-                :to="subItem.route"
-                class="nav__item nav__item--subitem"
-                active-class="nav__item--active"
                 :tabindex="0"
+                :to="subItem.route"
+                active-class="nav__item--active"
+                class="nav__item nav__item--subitem"
                 @click="handleNavigation"
               >
                 <i :class="['pi', subItem.icon]"></i>

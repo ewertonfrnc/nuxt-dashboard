@@ -51,7 +51,7 @@
         <BaseButton
           label="Salvar"
           class="btn__primary"
-          @click.prevent="changePassword"
+          @click.prevent="changePasswordHandler"
         />
       </div>
     </div>
@@ -59,7 +59,9 @@
 </template>
 
 <script lang="ts">
+import { mapActions } from "pinia";
 import { useForm } from "vee-validate";
+import { ChangePassword } from "~/interfaces/auth/auth.interface";
 import { changePassword } from "~/utils/schemas";
 
 export default {
@@ -77,10 +79,11 @@ export default {
     return {
       loading: false,
       isValidPassword: true,
-      formData: {},
+      formData: {} as ChangePassword | undefined,
     };
   },
   methods: {
+    ...mapActions(useAuthStore, ["changePassword"]),
     goToLogin() {
       this.$emit("changeStep", "login");
     },
@@ -88,13 +91,13 @@ export default {
       if (!password) return;
       this.isValidPassword = password.length >= 4;
     },
-    async changePassword() {
+    async changePasswordHandler() {
       try {
         this.formData = await this.onSubmit();
         if (!this.formData) return;
 
         this.loading = true;
-        await this.$axios.post("/api/change-password", this.formData);
+        await this.changePassword(this.formData);
 
         this.$emit("changeStep", "login");
         this.$toast.add({

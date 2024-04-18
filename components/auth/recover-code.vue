@@ -41,7 +41,9 @@
 </template>
 
 <script lang="ts">
+import { mapActions } from "pinia";
 import { useForm } from "vee-validate";
+import { RecoverCode } from "~/interfaces/auth/auth.interface";
 import { recoverCode } from "~/utils/schemas";
 
 export default {
@@ -61,10 +63,11 @@ export default {
   data() {
     return {
       loading: false,
-      formData: {},
+      formData: {} as RecoverCode | undefined,
     };
   },
   methods: {
+    ...mapActions(useAuthStore, ["recoverCode"]),
     goBack() {
       this.$emit("changeStep", "recover");
     },
@@ -75,9 +78,7 @@ export default {
 
         this.loading = true;
 
-        const {
-          data: { status },
-        } = await this.$axios.post("/api/recover-code", this.formData);
+        const status = await this.recoverCode(this.formData);
 
         if (status && status === "success") this.$emit("changeStep", "change");
       } catch (error) {

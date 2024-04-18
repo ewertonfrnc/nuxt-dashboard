@@ -10,7 +10,6 @@
   z-index: 999;
   position: fixed;
   box-shadow: $box-shadow-light;
-  border: 1px solid map-get($color-scheme-light, "$color-surface-surface-4");
   background-color: map-get($color-scheme-light, "$color-neutral-neutral-7");
 
   h6,
@@ -146,9 +145,7 @@
 
 .dark-mode .nav {
   background-color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
-  border: 1px solid map-get($color-scheme-dark, "$color-surface-surface-4");
   box-shadow: $box-shadow-dark;
-  border: $border-dark;
 }
 
 .mask {

@@ -12,8 +12,9 @@
             <label class="caption__primary">
               Usuário
               <BaseInputMask
-                name="username"
+                :wrong-crendentials-message="wrongCpfMessage"
                 mask="999.999.999-99"
+                name="username"
                 placeholder="Insira seu CPF"
               />
             </label>
@@ -23,15 +24,15 @@
 
       <div class="recover__footer">
         <BaseButton
-          label="Cancelar"
           class="btn__primary--outlined"
+          label="Cancelar"
           @click.prevent="goToLogin"
         />
         <BaseButton
-          label="Próximo"
           :loading="loading"
           class="btn__primary"
-          @click.prevent="recoverPassword"
+          label="Próximo"
+          @click.prevent="recoverHandler"
         />
       </div>
     </div>
@@ -40,6 +41,9 @@
 
 <script lang="ts">
 import { useForm } from "vee-validate";
+import { mapActions } from "pinia";
+import { RecoverPassword } from "~/interfaces/auth/auth.interface";
+import { validateCPF } from "~/utils/validators";
 
 export default {
   emits: ["changeStep", "recoverEmail"],
@@ -55,26 +59,30 @@ export default {
   data() {
     return {
       loading: false,
-      formData: {},
+      formData: {} as RecoverPassword | undefined,
+      wrongCpfMessage: "",
     };
   },
   methods: {
+    ...mapActions(useAuthStore, ["recoverPassword"]),
     goToLogin() {
       this.$emit("changeStep", "login");
     },
     goToChangePassword() {
       this.$emit("changeStep", "code");
     },
-    async recoverPassword() {
+    async recoverHandler() {
       try {
         this.formData = await this.onSubmit();
         if (!this.formData) return;
+        if (!validateCPF(this.formData.username)) {
+          this.wrongCpfMessage = "CPF inválido!";
+          return;
+        }
 
         this.loading = true;
 
-        const {
-          data: { userEmail },
-        } = await this.$axios.post("/api/recover-password", this.formData);
+        const userEmail = await this.recoverPassword(this.formData);
         this.goToChangePassword();
         this.$emit("recoverEmail", userEmail);
 
@@ -103,7 +111,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .recover {
   width: 35rem;
 

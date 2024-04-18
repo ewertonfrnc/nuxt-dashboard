@@ -20,8 +20,12 @@
         </div>
 
         <div class="toast__info">
-          <div class="toast__summary">{{ slotProps.message.summary }}</div>
-          <div class="toast__detail">{{ slotProps.message.detail }}</div>
+          <div class="toast__summary subtitle__primary">
+            {{ slotProps.message.summary }}
+          </div>
+          <div class="toast__detail caption__primary">
+            {{ slotProps.message.detail }}
+          </div>
         </div>
       </div>
     </template>

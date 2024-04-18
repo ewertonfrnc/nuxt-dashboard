@@ -4,11 +4,10 @@
 
     <Password
       v-model="value"
-      :icon="icon"
-      :feedback="false"
       :disabled="disabled"
+      :feedback="false"
+      :icon="icon"
       :placeholder="placeholder"
-      toggle-mask
       :pt="{
         root: 'input',
         input: {
@@ -18,6 +17,7 @@
           readonly,
         },
       }"
+      toggle-mask
       @update:model-value="(value: string) => $emit('updatedValue', value)"
     >
       <template #hideicon="{ toggleCallback, onClick }">
@@ -31,14 +31,6 @@
         </div>
       </template>
     </Password>
-
-    <!--    <div-->
-    <!--      class="input__icon&#45;&#45;password"-->
-    <!--      @click.prevent="togglePasswordVisibility"-->
-    <!--    >-->
-    <!--      <i v-if="!isPasswordVisible" class="pi pi-eye-slash" />-->
-    <!--      <i v-else class="pi pi-eye" />-->
-    <!--    </div>-->
   </div>
 
   <small class="input__error">{{

@@ -2,7 +2,7 @@ import api from "~/services/api.service";
 
 class HomeService {
   home() {
-    return api().get("/api/home");
+    return api().get("/home");
   }
 }
 

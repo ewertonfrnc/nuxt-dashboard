@@ -1,20 +1,10 @@
 <template>
   <DataTable
-    scrollable
-    scroll-height="flex"
-    scroll-direction="horizontal"
-    removable-sort
-    select-all
-    data-key="id"
-    select-all-change
-    :filters="filters"
-    :loading="loading"
-    filter-display="menu"
-    :has-action="hasAction"
     :expanded-rows="expandedRows"
-    :selection="selectedEmployees"
+    :filters="filters"
     :global-filter-fields="['name']"
-    :value="seeOnlySelectedFields ? selectedEmployees : nodes"
+    :has-action="hasAction"
+    :loading="loading"
     :pt="{
       table: 'table',
       thead: 'table__header',
@@ -23,6 +13,16 @@
       rowExpansionCell: 'table__expansion',
       loadingOverlay: 'hidden',
     }"
+    :selection="selectedEmployees"
+    :value="seeOnlySelectedFields ? selectedEmployees : nodes"
+    data-key="id"
+    filter-display="menu"
+    removable-sort
+    scroll-direction="horizontal"
+    scroll-height="flex"
+    scrollable
+    select-all
+    select-all-change
     @row-select="onRowSelect"
     @row-unselect="onRowUnselect"
     @select-all-change="selectAllHandler"
@@ -68,13 +68,13 @@
       <div class="table__empty">
         <img
           v-if="colorMode.preference === 'light'"
-          src="~/assets/img/empty-light.png"
           alt="no entries illustration"
+          src="~/assets/img/empty-light.png"
         />
         <img
           v-else
-          src="~/assets/img/empty-dark.png"
           alt="no entries illustration"
+          src="~/assets/img/empty-dark.png"
         />
 
         <h5 class="heading__quinary">Não há nada aqui por enquanto...</h5>
@@ -87,23 +87,23 @@
 
     <Column
       v-if="!loading && isSelectable"
-      selection-mode="multiple"
       :pt="{
         checkboxwrapper: 'checkbox__wrapper',
         headercheckboxwrapper: 'checkbox__wrapper',
         headercell: 'table__header--cell',
         bodycell: 'table__body--cell table__body--cell-icon',
       }"
+      selection-mode="multiple"
     />
 
     <Column
       v-if="!loading && isExpandable"
-      expander
       :pt="{
         headercell: 'table__header--cell',
         headercontent: 'table__header--content',
         bodycell: 'table__body--cell table__body--cell-icon',
       }"
+      expander
     >
       <template #header>
         <span class="heading__quinary">Ações</span>
@@ -115,13 +115,8 @@
       v-if="!loading && nodes.length"
       :key="col.field"
       :field="col.field"
-      :header="col.header"
-      :sortable="col.sortable"
       :filter-field="col.field"
-      :show-filter-menu="true"
-      :show-filter-match-modes="false"
-      :show-filter-operator="false"
-      :show-add-button="false"
+      :header="col.header"
       :pt="{
         headercell: 'table__header--cell',
         headertitle: 'heading__quinary',
@@ -132,21 +127,26 @@
         filtermenubutton: 'table__filter--icon',
         filterbuttonbar: 'table__filter--footer',
       }"
+      :show-add-button="false"
+      :show-filter-match-modes="false"
+      :show-filter-menu="true"
+      :show-filter-operator="false"
+      :sortable="col.sortable"
     >
       <template #body="{ data, field }">
-        <slot name="body-cell" :data="data" :field="field" />
+        <slot :data="data" :field="field" name="body-cell" />
       </template>
 
       <template v-if="col.hasFilter" #filter="{ filterModel }">
         <input
           v-model="filterModel.value"
-          type="text"
           class="filter__input"
           placeholder="Filtrar por"
+          type="text"
         />
         <BaseListbox
-          :options="filterOption"
           :on-update-handler="filterOptionsHandler"
+          :options="filterOption"
         />
       </template>
 
@@ -174,11 +174,11 @@
 
     <Column
       v-if="!loading && hasAction"
-      style="width: 1rem"
       :pt="{
         headercell: 'table__header--cell',
         bodycell: 'table__body--cell',
       }"
+      style="width: 1rem"
     >
       <template #header>
         <slot name="column-header" />
@@ -186,7 +186,7 @@
 
       <template #body="{ data }">
         <div class="table__action">
-          <slot name="column-action" :data="data" />
+          <slot :data="data" name="column-action" />
         </div>
       </template>
     </Column>
@@ -194,8 +194,6 @@
     <template #footer>
       <div v-if="nodes.length" class="table__footer">
         <Paginator
-          :rows="rows"
-          :total-records="totalPages"
           :pt="{
             root: 'paginator',
             pages: 'paginator__pages',
@@ -221,6 +219,8 @@
               }`;
             },
           }"
+          :rows="rows"
+          :total-records="totalPages"
           @page="(pageState) => changePage(pageState)"
         />
       </div>

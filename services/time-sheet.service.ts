@@ -9,7 +9,7 @@ class TimeSheetService {
   fetchPendingAdjustments(params: QueryParams) {
     const { page, name, currentBalance, totalRequests } = params;
 
-    return api().get(`/api/time-sheet/pending`, {
+    return api().get(`/time-sheet/pending`, {
       params: {
         page,
         limit: 10,
@@ -21,7 +21,28 @@ class TimeSheetService {
   }
 
   fetchUserPendingAdjustments(userId: number) {
-    return api().get(`/api/time-sheet/pending/${userId}`);
+    return api().get(`/time-sheet/pending/${userId}`);
+  }
+
+  updatePendingAdjustments(userId: number, payload: Request[]) {
+    userId = 1000;
+    return api().put(`/time-sheet/pending/${userId}`, payload);
+  }
+
+  fetchAllClocks(params: AllClocksParams) {
+    const { page, limit, name, hour, department, tag, date } = params;
+
+    return api().get("/time-sheet/clocks", {
+      params: {
+        page,
+        limit,
+        date: date || "",
+        tag: tag?.value || "",
+        name: name?.value || "",
+        hour: hour?.value || "",
+        department: department?.value || "",
+      },
+    });
   }
 
   updatePendingAdjustments(userId: number, payload: Request[]) {

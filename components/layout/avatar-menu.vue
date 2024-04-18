@@ -1,29 +1,3 @@
-<script lang="ts">
-import { mapState, mapActions } from "pinia";
-import { useAuthStore } from "~/stores/auth.store";
-
-export default {
-  setup() {
-    const colorMode = useColorMode();
-    return { colorMode };
-  },
-  computed: {
-    ...mapState(useAuthStore, ["user"]),
-  },
-  methods: {
-    ...mapActions(useAuthStore, ["logUserOut"]),
-    logOut() {
-      this.logUserOut();
-      this.$router.push("/auth");
-    },
-    handleDarkMode(colorMode: boolean) {
-      this.colorMode.preference = colorMode ? "dark" : "light";
-      localStorage.setItem("colorPreference", this.colorMode.preference);
-    },
-  },
-};
-</script>
-
 <template>
   <div class="menu">
     <div class="menu__info">
@@ -32,9 +6,9 @@ export default {
       <div>
         <div class="menu__user">
           <img
-            class="menu__user--img"
-            :src="user?.image"
             :alt="`Imagem de ${user?.firstName}`"
+            :src="user?.image"
+            class="menu__user--img"
           />
 
           <div class="menu__user--info">
@@ -74,7 +48,33 @@ export default {
   </div>
 </template>
 
-<style scoped lang="scss">
+<script lang="ts">
+import { mapState, mapActions } from "pinia";
+import { useAuthStore } from "~/stores/auth.store";
+
+export default {
+  setup() {
+    const colorMode = useColorMode();
+    return { colorMode };
+  },
+  computed: {
+    ...mapState(useAuthStore, ["user"]),
+  },
+  methods: {
+    ...mapActions(useAuthStore, ["logUserOut"]),
+    logOut() {
+      this.logUserOut();
+      this.$router.push("/auth");
+    },
+    handleDarkMode(colorMode: boolean) {
+      this.colorMode.preference = colorMode ? "dark" : "light";
+      localStorage.setItem("colorPreference", this.colorMode.preference);
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
 .dark-mode .menu {
   background-color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
   color: map-get($color-scheme-dark, "$color-neutral-neutral-0");

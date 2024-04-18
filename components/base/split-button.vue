@@ -1,24 +1,24 @@
 <template>
   <div class="split">
     <BaseButton
-      label="Reprovar"
-      :disabled="approveAll"
       :class="[
         'btn__primary--outlined',
         'split__button-left',
         selectedBtn === 'left' && 'active',
         disableLeftBtn && 'inactive',
       ]"
+      :disabled="approveAll"
+      label="Reprovar"
       @click.stop="leftButtonHandler(request)"
     />
     <BaseButton
-      label="Aprovar"
       :class="[
         'btn__primary--outlined',
         'split__button-right',
         (approveAll || selectedBtn === 'right') && 'active',
         disableRightBtn && 'inactive',
       ]"
+      label="Aprovar"
       @click.stop="rightButtonHandler(request)"
     />
   </div>
@@ -61,7 +61,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .split {
   display: flex;
   align-items: center;

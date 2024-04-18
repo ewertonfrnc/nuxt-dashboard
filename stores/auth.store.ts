@@ -1,4 +1,10 @@
-import api from "~/services/api.service";
+import { authService } from "@/services";
+import {
+  ChangePassword,
+  RecoverCode,
+  RecoverPassword,
+  UserCredentials,
+} from "@/interfaces/auth/auth.interface";
 
 export type User = {
   id: number;
@@ -27,25 +33,45 @@ export const useAuthStore = defineStore("auth", {
   },
   persist: true,
   actions: {
-    authenticateUser() {
-      const userInfo = {
-        id: 15,
-        gender: "female",
-        lastName: "Xavier",
-        firstName: "Felipe",
-        cnpj: "01.270.742/0001-08",
-        email: "felipe.xavier@usemobile.com.br",
-        companyName: "Usemobile Soluções em Tecnologia",
-        image: "https://randomuser.me/api/portraits/women/39.jpg",
-        token:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTUsInVzZXJuYW1lIjoia21pbmNoZWxsZSIsImVtYWlsIjoia21pbmNoZWxsZUBxcS5jb20iLCJmaXJzdE5hbWUiOiJKZWFubmUiLCJsYXN0TmFtZSI6IkhhbHZvcnNvbiIsImdlbmRlciI6ImZlbWFsZSIsImltYWdlIjoiaHR0cHM6Ly9yb2JvaGFzaC5vcmcvSmVhbm5lLnBuZz9zZXQ9c2V0NCIsImlhdCI6MTcxMTc3Mzg4NiwiZXhwIjoxNzExNzc3NDg2fQ.GNIAwEDvoFZ5AtotEr9fPvGP3NVrjPiJha5R03bbuGI",
-      };
-
-      if (userInfo) {
-        this.user = { ...userInfo, role: ["manager"] };
+    async authenticateUser(userCredentials: UserCredentials) {
+      try {
+        const {
+          data: { user },
+        } = await authService.login(userCredentials);
+        this.user = { ...user, role: ["manager"] };
         this.authenticated = true;
-
-        return this.user;
+      } catch (error) {
+        return error as Error;
+      }
+    },
+    async recoverPassword(userId: RecoverPassword) {
+      try {
+        const {
+          data: { userEmail },
+        } = await authService.recoverPassword(userId);
+        return userEmail;
+      } catch (error) {
+        return error as Error;
+      }
+    },
+    async recoverCode(code: RecoverCode) {
+      try {
+        const {
+          data: { status },
+        } = await authService.recoverCode(code);
+        return status;
+      } catch (error) {
+        return error as Error;
+      }
+    },
+    async changePassword(newPassword: ChangePassword) {
+      try {
+        const {
+          data: { status },
+        } = await authService.changePassword(newPassword);
+        return status;
+      } catch (error) {
+        return error as Error;
       }
     },
     logUserOut() {

@@ -4,13 +4,13 @@
 
     <section>
       <BaseTable
-        :loading="tableLoading"
         :columns="columns"
+        :custom-filters="filters"
+        :loading="tableLoading"
         :nodes="nodes"
         :total-pages="totalPages"
-        :custom-filters="filters"
-        header-shown
         has-action
+        header-shown
         @update-filter-handler="getTableValues"
         @change-page="changePageHandler"
       >
@@ -33,18 +33,18 @@
 
         <template #column-action="slotData">
           <BaseTableAction
-            tooltip-text="Verificar ajuste"
-            :icon="'pi-search'"
             :data="slotData"
+            :icon="'pi-search'"
+            tooltip-text="Verificar ajuste"
             @action-handler="logSelectedItem"
           />
         </template>
       </BaseTable>
 
       <BaseDialog
-        title="Ajustar ponto"
         :is-visible="isVisible"
         :toggle-dialog="toggleDialog"
+        title="Ajustar ponto"
       >
         <div class="adjust">
           <div class="adjust__info">
@@ -63,14 +63,14 @@
               input-id="approval"
               @checkbox-value="handleApproveAll"
             />
-            <label for="approval" class="body__primary">Aprovar tudo</label>
+            <label class="body__primary" for="approval">Aprovar tudo</label>
           </div>
 
           <div class="adjust__accordion">
             <TimeSheetAdjustAccordion
               v-if="userPendingRequests"
-              :user="userPendingRequests"
               :approve-all="approveAll"
+              :user="nodes[0]"
               @approved-all="handleApproveAll"
               @button-handler="buttonHandler"
             />
@@ -86,17 +86,17 @@
 
           <div class="adjust__footer">
             <BaseButton
+              :disabled="dialogLoading"
+              class="btn__danger--outlined"
               icon="pi pi-times"
               label="Cancelar"
-              class="btn__danger--outlined"
-              :disabled="dialogLoading"
               @click="toggleDialog"
             />
             <BaseButton
+              :loading="dialogLoading"
+              class="btn__secondary"
               icon="pi pi-save"
               label="Salvar"
-              class="btn__secondary"
-              :loading="dialogLoading"
               @click="submitPendingRequests"
             />
           </div>
@@ -239,7 +239,7 @@ export default {
       this.toggleDialog();
 
       try {
-        await this.getUserPendingAdjustments(data.userId);
+        // await this.getUserPendingAdjustments(data.userId);
       } catch (err) {
         this.$toast.add({
           severity: "error",
@@ -285,7 +285,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 section {
   margin-top: 2rem;
 }
@@ -293,6 +293,7 @@ section {
 .adjust {
   width: 60rem;
   height: 60rem;
+  overflow-x: hidden;
 
   @include respond(phone) {
     width: 100%;

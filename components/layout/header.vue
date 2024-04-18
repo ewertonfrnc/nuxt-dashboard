@@ -23,9 +23,9 @@
 
     <button class="header__avatar" @click="toggle">
       <img
-        class="header__avatar--img"
         :src="user?.image"
         alt="Imagem do usuário"
+        class="header__avatar--img"
       />
     </button>
 

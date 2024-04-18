@@ -30,9 +30,9 @@
           </div>
 
           <BaseSplitButton
-            :requests="user.requests"
-            :request="request"
             :approve-all="approveAll"
+            :request="request"
+            :requests="user.requests"
             @button-handler="buttonHandler"
           />
         </div>
@@ -189,4 +189,4 @@ export default {
 };
 </script>
 
-<style scoped lang="scss"></style>
+<style lang="scss" scoped></style>

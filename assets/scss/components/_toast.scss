@@ -1,4 +1,4 @@
-.toast-root{
+.toast-root {
   width: 40rem;
   top: 7rem !important;
 }
@@ -46,14 +46,12 @@
   }
 
   &__danger {
-    background: rgba(
-      map-get($color-scheme-light, "$color-feedback-danger-4"),
-      0.5
-    );
+    background: (map-get($color-scheme-light, "$color-feedback-danger-1"));
+    color: (map-get($color-scheme-light, "$color-feedback-danger-4"));
 
     ::after {
       @include beforeStyles(
-        map-get($color-scheme-light, "$color-feedback-danger-0")
+        map-get($color-scheme-light, "$color-feedback-danger-4")
       );
     }
   }
