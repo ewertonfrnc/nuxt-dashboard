@@ -1,22 +1,10 @@
 <template>
   <DataTable
-    scrollable
-    scroll-height="flex"
-    scroll-direction="horizontal"
-    removable-sort
-    select-all
-    :rows="rows"
-    data-key="id"
-    select-all-change
-    :filters="filters"
-    :loading="loading"
-    filter-display="menu"
-    :has-action="hasAction"
     :expanded-rows="expandedRows"
-    :selection="selectedEmployees"
+    :filters="filters"
     :global-filter-fields="['name']"
-    :paginator="!loading && paginator"
-    :value="seeOnlySelectedFields ? selectedEmployees : nodes"
+    :has-action="hasAction"
+    :loading="loading"
     :pt="{
       table: 'table',
       thead: 'table__header',
@@ -25,6 +13,16 @@
       rowExpansionCell: 'table__expansion',
       loadingOverlay: 'hidden',
     }"
+    :selection="selectedEmployees"
+    :value="seeOnlySelectedFields ? selectedEmployees : nodes"
+    data-key="id"
+    filter-display="menu"
+    removable-sort
+    scroll-direction="horizontal"
+    scroll-height="flex"
+    scrollable
+    select-all
+    select-all-change
     @row-select="onRowSelect"
     @row-unselect="onRowUnselect"
     @select-all-change="selectAllHandler"
@@ -70,13 +68,13 @@
       <div class="table__empty">
         <img
           v-if="colorMode.preference === 'light'"
-          src="~/assets/img/empty-light.png"
           alt="no entries illustration"
+          src="~/assets/img/empty-light.png"
         />
         <img
           v-else
-          src="~/assets/img/empty-dark.png"
           alt="no entries illustration"
+          src="~/assets/img/empty-dark.png"
         />
 
         <h5 class="heading__quinary">Não há nada aqui por enquanto...</h5>
@@ -89,23 +87,23 @@
 
     <Column
       v-if="!loading && isSelectable"
-      selection-mode="multiple"
       :pt="{
         checkboxwrapper: 'checkbox__wrapper',
         headercheckboxwrapper: 'checkbox__wrapper',
         headercell: 'table__header--cell',
         bodycell: 'table__body--cell table__body--cell-icon',
       }"
+      selection-mode="multiple"
     />
 
     <Column
       v-if="!loading && isExpandable"
-      expander
       :pt="{
         headercell: 'table__header--cell',
         headercontent: 'table__header--content',
         bodycell: 'table__body--cell table__body--cell-icon',
       }"
+      expander
     >
       <template #header>
         <span class="heading__quinary">Ações</span>
@@ -117,13 +115,8 @@
       v-if="!loading && nodes.length"
       :key="col.field"
       :field="col.field"
-      :header="col.header"
-      :sortable="col.sortable"
       :filter-field="col.field"
-      :show-filter-menu="true"
-      :show-filter-match-modes="false"
-      :show-filter-operator="false"
-      :show-add-button="false"
+      :header="col.header"
       :pt="{
         headercell: 'table__header--cell',
         headertitle: 'heading__quinary',
@@ -134,21 +127,26 @@
         filtermenubutton: 'table__filter--icon',
         filterbuttonbar: 'table__filter--footer',
       }"
+      :show-add-button="false"
+      :show-filter-match-modes="false"
+      :show-filter-menu="true"
+      :show-filter-operator="false"
+      :sortable="col.sortable"
     >
       <template #body="{ data, field }">
-        <span class="body__primary"> {{ data[field] }} </span>
+        <slot :data="data" :field="field" name="body-cell" />
       </template>
 
       <template v-if="col.hasFilter" #filter="{ filterModel }">
         <input
           v-model="filterModel.value"
-          type="text"
           class="filter__input"
           placeholder="Filtrar por"
+          type="text"
         />
         <BaseListbox
-          :options="filterOption"
           :on-update-handler="filterOptionsHandler"
+          :options="filterOption"
         />
       </template>
 
@@ -180,6 +178,7 @@
         headercell: 'table__header--cell',
         bodycell: 'table__body--cell',
       }"
+      style="width: 1rem"
     >
       <template #header>
         <slot name="column-header" />
@@ -187,28 +186,65 @@
 
       <template #body="{ data }">
         <div class="table__action">
-          <slot name="column-action" :data="data" />
+          <slot :data="data" name="column-action" />
         </div>
       </template>
     </Column>
 
-    <template #expansion="slotProps">
-      <slot name="expansion-content" :data="slotProps.data" />
+    <template #footer>
+      <div v-if="nodes.length" class="table__footer">
+        <Paginator
+          :pt="{
+            root: 'paginator',
+            pages: 'paginator__pages',
+            pageButton: 'paginator__button caption__primary',
+            previousPageButton: ({ context }) => {
+              return `paginator__button ${
+                context.disabled && 'paginator__button--disabled'
+              }`;
+            },
+            nextPageButton: ({ context }) => {
+              return `paginator__button ${
+                context.disabled && 'paginator__button--disabled'
+              }`;
+            },
+            lastPageButton: ({ context }) => {
+              return `paginator__button ${
+                context.disabled && 'paginator__button--disabled'
+              }`;
+            },
+            firstPageButton: ({ context }) => {
+              return `paginator__button ${
+                context.disabled && 'paginator__button--disabled'
+              }`;
+            },
+          }"
+          :rows="rows"
+          :total-records="totalPages"
+          @page="(pageState) => changePage(pageState)"
+        />
+      </div>
     </template>
   </DataTable>
 </template>
 
 <script lang="ts">
+import { PropType } from "nuxt/dist/app/compat/capi";
 import { FilterMatchMode } from "primevue/api";
 import {
   DataTableRowExpandEvent,
   DataTableRowSelectEvent,
 } from "primevue/datatable";
-import { FilterOption, Filters } from "~/interfaces/table.interface";
+import { PageState } from "primevue/paginator";
+import {
+  FilterOption,
+  Filters,
+  TableColumn,
+} from "~/interfaces/table.interface";
 
 export default {
   props: {
-    columns: { type: Array, required: true },
+    columns: { type: Array as PropType<TableColumn[]>, required: true },
     nodes: { type: Array, required: true },
     loading: { type: Boolean, required: false, default: false },
     sortable: { type: Boolean, required: false, default: true },
@@ -218,8 +254,10 @@ export default {
     isSelectable: { type: Boolean, required: false, default: false },
     isExpandable: { type: Boolean, required: false, default: false },
     hasAction: { type: Boolean, required: false, default: false },
+    totalPages: { type: Number, default: 0, required: false },
+    customFilters: { type: Object, default: () => {}, required: true },
   },
-  emits: ["update-filter-handler"],
+  emits: ["update-filter-handler", "change-page"],
   setup() {
     const colorMode = useColorMode();
     return { colorMode };
@@ -279,22 +317,8 @@ export default {
           value: null,
           matchMode: FilterMatchMode.CONTAINS,
         },
-        name: {
-          field: "name",
-          value: null,
-          matchMode: FilterMatchMode.CONTAINS,
-        },
-        currentBalance: {
-          field: "currentBalance",
-          value: null,
-          matchMode: FilterMatchMode.CONTAINS,
-        },
-        totalRequests: {
-          field: "totalRequests",
-          value: null,
-          matchMode: FilterMatchMode.CONTAINS,
-        },
       };
+      this.filters = { ...this.filters, ...this.customFilters };
     },
     selectAllHandler() {
       this.selectedEmployees =
@@ -333,6 +357,9 @@ export default {
 
       this.filters = updatedFilters;
       this.$emit("update-filter-handler", this.filters);
+    },
+    changePage(pageState: PageState) {
+      this.$emit("change-page", pageState);
     },
   },
 };
