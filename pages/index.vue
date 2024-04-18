@@ -78,6 +78,9 @@
 import { mapState, mapActions } from "pinia";
 
 export default {
+  setup() {
+    useSeoMeta({ title: "Indicadores" });
+  },
   data() {
     return {
       loading: false,
