@@ -29,7 +29,12 @@
             </span>
           </div>
 
-          <BaseSplitButton @button-handler="buttonHandler" />
+          <BaseSplitButton
+            :approve-all="approveAll"
+            :request="request"
+            :requests="user.requests"
+            @button-handler="buttonHandler"
+          />
         </div>
       </template>
 
@@ -128,16 +133,60 @@
 </template>
 
 <script lang="ts">
+import { PropType } from "vue";
+import { mapActions } from "pinia";
+import { Request, User } from "~/interfaces/time-sheet/time-sheet.interface";
+
 export default {
   props: {
-    user: { type: Object, required: true },
+    user: { type: Object as PropType<User>, required: true },
+    approveAll: { type: Boolean, default: false, required: true },
+  },
+  emits: ["button-handler", "approved-all"],
+  data() {
+    return {
+      updatedRequests: [] as Request[],
+      rejectedRequests: new Set<Request>(),
+      approvedRequests: new Set<Request>(),
+    };
+  },
+  watch: {
+    approveAll(newValue) {
+      newValue && this.handleApproveAll();
+    },
+  },
+  unmounted() {
+    this.updatedRequests = [];
   },
   methods: {
-    buttonHandler(selectedBtn: string) {
-      console.log({ selectedBtn });
+    ...mapActions(useTimeSheetStore, ["updateRequestsApproval"]),
+    buttonHandler(request: Request) {
+      if (request.approved) {
+        this.approvedRequests.add(request);
+      } else {
+        this.rejectedRequests.add(request);
+      }
+
+      if (this.approvedRequests.size === this.user.requests.length) {
+        this.$emit("approved-all");
+      }
+
+      this.updatedRequests = [
+        ...this.approvedRequests,
+        ...this.rejectedRequests,
+      ];
+
+      this.$emit("button-handler", this.updatedRequests);
+    },
+    handleApproveAll() {
+      for (const request of this.user.requests) {
+        this.approvedRequests.add({ ...request, approved: true });
+      }
+      this.updatedRequests = [...this.approvedRequests];
+      this.$emit("button-handler", this.updatedRequests);
     },
   },
 };
 </script>
 
-<style scoped lang="scss"></style>
+<style lang="scss" scoped></style>

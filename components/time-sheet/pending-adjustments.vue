@@ -70,7 +70,7 @@
             <TimeSheetAdjustAccordion
               v-if="userPendingRequests"
               :approve-all="approveAll"
-              :user="userPendingRequests"
+              :user="nodes[0]"
               @approved-all="handleApproveAll"
               @button-handler="buttonHandler"
             />
@@ -239,7 +239,7 @@ export default {
       this.toggleDialog();
 
       try {
-        await this.getUserPendingAdjustments(data.userId);
+        // await this.getUserPendingAdjustments(data.userId);
       } catch (err) {
         this.$toast.add({
           severity: "error",
@@ -293,6 +293,7 @@ section {
 .adjust {
   width: 60rem;
   height: 60rem;
+  overflow-x: hidden;
 
   @include respond(phone) {
     width: 100%;
