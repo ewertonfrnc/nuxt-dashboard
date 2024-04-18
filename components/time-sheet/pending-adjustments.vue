@@ -2,71 +2,114 @@
   <div class="fadein animation-duration-500">
     <h2 class="heading__secondary">Ajustes pendentes</h2>
 
-    <BaseTable
-      :loading="loading"
-      :columns="columns"
-      :nodes="nodes"
-      header-shown
-      has-action
-      @update-filter-handler="getTableValues"
-    >
-      <template #column-header>
-        <span>Ações</span>
-      </template>
+    <section>
+      <BaseTable
+        :columns="columns"
+        :custom-filters="filters"
+        :loading="tableLoading"
+        :nodes="nodes"
+        :total-pages="totalPages"
+        has-action
+        header-shown
+        @update-filter-handler="getTableValues"
+        @change-page="changePageHandler"
+      >
+        <template #body-cell="{ data, field }">
+          <span
+            :class="[
+              'body__primary',
+              field === 'totalRequests' && 'highlight',
+              field === 'currentBalance' && data.negative && 'negative',
+              field === 'currentBalance' && !data.negative && 'positive',
+            ]"
+          >
+            {{ data[field] }}
+          </span>
+        </template>
 
-      <template #column-action="slotData">
-        <span class="body__primary">
-          <i
-            v-tooltip.top="{
-              value: 'Verificar ajuste',
-              pt: { root: 'tooltip' },
-            }"
-            class="pi pi-search"
-            @click="logSelectedItem(slotData)"
+        <template #column-header>
+          <span class="heading__quinary">Ações</span>
+        </template>
+
+        <template #column-action="slotData">
+          <BaseTableAction
+            :data="slotData"
+            :icon="'pi-search'"
+            tooltip-text="Verificar ajuste"
+            @action-handler="logSelectedItem"
           />
-        </span>
-      </template>
-    </BaseTable>
+        </template>
+      </BaseTable>
 
-    <BaseDialog
-      title="Ajustar ponto"
-      :is-visible="isVisible"
-      :toggle-dialog="toggleDialog"
-    >
-      <div class="adjust">
-        <div class="adjust__info">
-          <span class="caption__primary">Solicitante:</span>
+      <BaseDialog
+        :is-visible="isVisible"
+        :toggle-dialog="toggleDialog"
+        title="Ajustar ponto"
+      >
+        <div class="adjust">
+          <div class="adjust__info">
+            <span class="caption__primary">Solicitante:</span>
 
-          <div class="adjust__info--employee">
-            <template v-if="loading">
-              <UiActivityIndicator size="small" />
-            </template>
-            <template v-else>
-              <p class="body__primary">{{ user.name }}</p>
-              <span class="caption__primary">{{ user.role }}</span>
-            </template>
+            <div class="adjust__info--employee">
+              <p class="body__primary">{{ userPendingRequests?.name }}</p>
+              <span class="caption__primary">{{
+                userPendingRequests?.role
+              }}</span>
+            </div>
+          </div>
+
+          <div class="adjust__approval">
+            <BaseCheckbox
+              input-id="approval"
+              @checkbox-value="handleApproveAll"
+            />
+            <label class="body__primary" for="approval">Aprovar tudo</label>
+          </div>
+
+          <div class="adjust__accordion">
+            <TimeSheetAdjustAccordion
+              v-if="userPendingRequests"
+              :approve-all="approveAll"
+              :user="userPendingRequests"
+              @approved-all="handleApproveAll"
+              @button-handler="buttonHandler"
+            />
           </div>
         </div>
 
-        <div v-if="!loading" class="adjust__approval">
-          <BaseCheckbox input-id="approval" />
-          <label for="approval" class="body__primary">Aprovar tudo</label>
-        </div>
+        <template #footer>
+          <BaseInlineMessage
+            v-if="showErrorMessage"
+            severity="error"
+            text="Selecione uma ação para prosseguir"
+          />
 
-        <div class="adjust__accordion">
-          <div v-if="loading" class="adjust__loading">
-            <UiActivityIndicator size="large" />
+          <div class="adjust__footer">
+            <BaseButton
+              :disabled="dialogLoading"
+              class="btn__danger--outlined"
+              icon="pi pi-times"
+              label="Cancelar"
+              @click="toggleDialog"
+            />
+            <BaseButton
+              :loading="dialogLoading"
+              class="btn__secondary"
+              icon="pi pi-save"
+              label="Salvar"
+              @click="submitPendingRequests"
+            />
           </div>
-
-          <TimeSheetAdjustAccordion v-if="!loading && user" :user="user" />
-        </div>
-      </div>
-    </BaseDialog>
+        </template>
+      </BaseDialog>
+    </section>
   </div>
 </template>
 
 <script lang="ts">
-import { mapActions } from "pinia";
+import { FilterMatchMode } from "primevue/api";
+import { mapActions, mapState } from "pinia";
+import { PageState } from "primevue/paginator";
 import {
   PendingAdjust,
   QueryParams,
@@ -76,9 +119,8 @@ import { Filter } from "~/interfaces/table.interface";
 export default {
   data() {
     return {
-      loading: true,
-      isVisible: false,
-      user: {},
+      // table
+      tableLoading: true,
       columns: [
         {
           field: "name",
@@ -100,13 +142,43 @@ export default {
         },
       ],
       nodes: [],
+      totalPages: 0,
+      currentPage: 1,
       queries: {
+        page: 1,
         global: { value: "", matchMode: "" },
         name: { value: "2", matchMode: "" },
         currentBalance: { value: "", matchMode: "" },
         totalRequests: { value: "3", matchMode: "" },
       },
+      filters: {
+        name: {
+          field: "name",
+          value: null,
+          matchMode: FilterMatchMode.CONTAINS,
+        },
+        currentBalance: {
+          field: "currentBalance",
+          value: null,
+          matchMode: FilterMatchMode.CONTAINS,
+        },
+        totalRequests: {
+          field: "totalRequests",
+          value: null,
+          matchMode: FilterMatchMode.CONTAINS,
+        },
+      },
+
+      // pending requests
+      dialogLoading: false,
+      isVisible: false,
+      approveAll: false,
+      updatedPendingRequests: [] as Request[],
+      showErrorMessage: false,
     };
+  },
+  computed: {
+    ...mapState(useTimeSheetStore, ["userPendingRequests"]),
   },
   async mounted() {
     await this.getTableValues(this.queries);
@@ -115,6 +187,7 @@ export default {
     ...mapActions(useTimeSheetStore, [
       "getPendingAdjustments",
       "getUserPendingAdjustments",
+      "updateRequestsApproval",
     ]),
     arrayToObject(array: Filter[]) {
       return array.reduce((accumulator, currentValue) => {
@@ -124,14 +197,33 @@ export default {
     },
     toggleDialog() {
       this.isVisible = !this.isVisible;
+      this.showErrorMessage = false;
+      this.updatedPendingRequests = [];
+      this.approveAll = false;
+    },
+    handleApproveAll(value: boolean) {
+      this.approveAll = value;
+      if (!value) this.updatedPendingRequests = [];
+    },
+    buttonHandler(requests: Request[]) {
+      this.updatedPendingRequests = requests;
+    },
+    async changePageHandler(currentPage: PageState) {
+      this.currentPage = currentPage.page + 1;
+      await this.getTableValues(this.queries);
     },
     async getTableValues(queryParams: QueryParams) {
       const queryParamsArray = Object.values(queryParams);
       this.queries = this.arrayToObject(queryParamsArray);
 
-      this.loading = true;
+      this.tableLoading = true;
       try {
-        this.nodes = await this.getPendingAdjustments(this.queries);
+        const { pending, total } = await this.getPendingAdjustments({
+          ...this.queries,
+          page: this.currentPage,
+        });
+        this.nodes = pending;
+        this.totalPages = total;
       } catch (err) {
         this.$toast.add({
           severity: "error",
@@ -140,34 +232,67 @@ export default {
           life: 4000,
         });
       } finally {
-        this.loading = false;
+        this.tableLoading = false;
       }
     },
     async logSelectedItem({ data }: PendingAdjust) {
       this.toggleDialog();
 
       try {
-        this.user = await this.getUserPendingAdjustments(data.userId);
+        await this.getUserPendingAdjustments(data.userId);
       } catch (err) {
-        console.log(err);
+        this.$toast.add({
+          severity: "error",
+          summary: "Algo deu errado",
+          detail: "Tente novamente mais tarde.",
+          life: 4000,
+        });
       }
     },
-    handleBtnGroup(clickedBtn: string) {
-      console.log({ clickedBtn });
-    },
-    rejectAdjustment(adjustmentId: number) {
-      console.log({ adjustmentId });
-    },
-    approveAdjustment(adjustmentId: number) {
-      console.log({ adjustmentId });
+    async submitPendingRequests() {
+      if (!this.userPendingRequests || !this.updatedPendingRequests.length) {
+        this.showErrorMessage = true;
+        return;
+      }
+
+      this.dialogLoading = true;
+      try {
+        await this.updateRequestsApproval(
+          this.userPendingRequests.userId,
+          this.updatedPendingRequests,
+        );
+
+        this.$toast.add({
+          severity: "success",
+          summary: "Sucesso!",
+          detail: "Ação realizada com sucesso.",
+          life: 4000,
+        });
+      } catch (err) {
+        this.$toast.add({
+          severity: "error",
+          summary: "Ocorreu um erro!",
+          detail: "Ocorreu um erro de processamento, tente novamente.",
+          life: 4000,
+        });
+      } finally {
+        this.dialogLoading = false;
+        this.toggleDialog();
+        await this.getTableValues(this.queries);
+      }
     },
   },
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
+section {
+  margin-top: 2rem;
+}
+
 .adjust {
   width: 60rem;
+  height: 60rem;
 
   @include respond(phone) {
     width: 100%;
@@ -194,6 +319,22 @@ export default {
     align-items: center;
     justify-content: flex-end;
     gap: 1rem;
+
+    label {
+      cursor: pointer;
+    }
+  }
+
+  &__footer {
+    padding-top: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+
+    button {
+      max-width: 14rem;
+    }
   }
 }
 </style>
