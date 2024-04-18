@@ -4,23 +4,11 @@ import {
   RecoverCode,
   RecoverPassword,
   UserCredentials,
+  UserDetails,
 } from "@/interfaces/auth/auth.interface";
 
-export type User = {
-  id: number;
-  cnpj: string;
-  email: string;
-  image: string;
-  token: string;
-  gender: string;
-  lastName: string;
-  firstName: string;
-  companyName: string;
-  role: string | string[];
-};
-
 type AuthState = {
-  user: User | null;
+  user: UserDetails | null;
   authenticated: boolean;
 };
 

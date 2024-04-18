@@ -51,10 +51,8 @@
             <span class="caption__primary">Solicitante:</span>
 
             <div class="adjust__info--employee">
-              <p class="body__primary">{{ userPendingRequests?.name }}</p>
-              <span class="caption__primary">{{
-                userPendingRequests?.role
-              }}</span>
+              <p class="body__primary">{{ selectedUser?.name }}</p>
+              <span class="caption__primary">{{ selectedUser?.role }}</span>
             </div>
           </div>
 
@@ -68,9 +66,9 @@
 
           <div class="adjust__accordion">
             <TimeSheetAdjustAccordion
-              v-if="userPendingRequests"
+              v-if="selectedUser"
               :approve-all="approveAll"
-              :user="nodes[0]"
+              :user="selectedUser"
               @approved-all="handleApproveAll"
               @button-handler="buttonHandler"
             />
@@ -111,8 +109,8 @@ import { FilterMatchMode } from "primevue/api";
 import { mapActions, mapState } from "pinia";
 import { PageState } from "primevue/paginator";
 import {
-  PendingAdjust,
   QueryParams,
+  User,
 } from "~/interfaces/time-sheet/time-sheet.interface";
 import { Filter } from "~/interfaces/table.interface";
 
@@ -175,6 +173,7 @@ export default {
       approveAll: false,
       updatedPendingRequests: [] as Request[],
       showErrorMessage: false,
+      selectedUser: {} as User,
     };
   },
   computed: {
@@ -235,9 +234,9 @@ export default {
         this.tableLoading = false;
       }
     },
-    async logSelectedItem({ data }: PendingAdjust) {
+    async logSelectedItem({ data }: User) {
       this.toggleDialog();
-
+      this.selectedUser = data;
       try {
         // await this.getUserPendingAdjustments(data.userId);
       } catch (err) {
@@ -250,7 +249,7 @@ export default {
       }
     },
     async submitPendingRequests() {
-      if (!this.userPendingRequests || !this.updatedPendingRequests.length) {
+      if (!this.selectedUser || !this.updatedPendingRequests.length) {
         this.showErrorMessage = true;
         return;
       }
@@ -258,7 +257,7 @@ export default {
       this.dialogLoading = true;
       try {
         await this.updateRequestsApproval(
-          this.userPendingRequests.userId,
+          this.selectedUser.userId,
           this.updatedPendingRequests,
         );
 
@@ -293,7 +292,6 @@ section {
 .adjust {
   width: 60rem;
   height: 60rem;
-  overflow-x: hidden;
 
   @include respond(phone) {
     width: 100%;

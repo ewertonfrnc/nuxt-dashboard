@@ -9,13 +9,13 @@
       </label>
 
       <BaseTable
-        :loading="loading"
         :columns="columns"
+        :custom-filters="filters"
+        :loading="loading"
         :nodes="nodes"
         :total-pages="totalPages"
-        :custom-filters="filters"
-        header-shown
         has-action
+        header-shown
         @update-filter-handler="getClocks"
         @change-page="changePageHandler"
       >
@@ -35,14 +35,16 @@
         </template>
 
         <template #column-header>
-          <span style="width: 1rem" class="heading__quinary">Ações</span>
+          <span class="heading__quinary" style="max-width: min-content"
+            >Ações</span
+          >
         </template>
 
         <template #column-action="slotData">
           <BaseTableAction
-            tooltip-text="Ver detalhes no perfil"
-            :icon="'pi-user'"
             :data="slotData"
+            :icon="'pi-user'"
+            tooltip-text="Ver detalhes no perfil"
             @action-handler="goToEmployeeDetails"
           />
         </template>
@@ -168,7 +170,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 section {
   margin-top: 2rem;
 }

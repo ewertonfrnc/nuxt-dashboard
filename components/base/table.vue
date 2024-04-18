@@ -132,6 +132,7 @@
       :show-filter-menu="true"
       :show-filter-operator="false"
       :sortable="col.sortable"
+      style="min-width: 20rem"
     >
       <template #body="{ data, field }">
         <slot :data="data" :field="field" name="body-cell" />
@@ -178,7 +179,6 @@
         headercell: 'table__header--cell',
         bodycell: 'table__body--cell',
       }"
-      style="width: 1rem"
     >
       <template #header>
         <slot name="column-header" />

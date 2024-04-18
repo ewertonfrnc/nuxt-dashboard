@@ -32,27 +32,7 @@ class TimeSheetService {
   fetchAllClocks(params: AllClocksParams) {
     const { page, limit, name, hour, department, tag, date } = params;
 
-    return api().get("/time-sheet/clocks", {
-      params: {
-        page,
-        limit,
-        date: date || "",
-        tag: tag?.value || "",
-        name: name?.value || "",
-        hour: hour?.value || "",
-        department: department?.value || "",
-      },
-    });
-  }
-
-  updatePendingAdjustments(userId: number, payload: Request[]) {
-    return api().put(`/api/time-sheet/pending/${userId}`, payload);
-  }
-
-  fetchAllClocks(params: AllClocksParams) {
-    const { page, limit, name, hour, department, tag, date } = params;
-
-    return api().get("/api/time-sheet/clocks", {
+    return api().get("time-sheet/clocks", {
       params: {
         page,
         limit,
