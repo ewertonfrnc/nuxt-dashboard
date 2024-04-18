@@ -4,20 +4,20 @@
 
     <InputMask
       v-model="value"
-      :mask="mask"
       :auto-clear="false"
-      :disabled="disabled"
-      :readonly="readonly"
       :class="[
         'input__field',
         (errorMessage || wrongCrendentialsMessage) && 'error',
       ]"
+      :disabled="disabled"
+      :mask="mask"
       :placeholder="placeholder"
+      :readonly="readonly"
     />
   </div>
 
-  <small v-if="!wrongCrendentialsMessage" class="input__error">{{
-    errorMessage
+  <small class="input__error">{{
+    wrongCrendentialsMessage || errorMessage
   }}</small>
 </template>
 
