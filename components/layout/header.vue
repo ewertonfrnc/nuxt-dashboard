@@ -1,6 +1,6 @@
 <template>
   <header class="header">
-    <button class="header__toggle" @click="toggleSidebar">
+    <button v-if="showNavButton" class="header__toggle" @click="toggleSidebar">
       <i class="pi pi-bars"></i>
     </button>
 
@@ -54,8 +54,12 @@ export default {
   },
   data() {
     return {
+      showNavButton: false,
       home: { icon: "pi pi-home", route: "/" },
     };
+  },
+  mounted() {
+    this.handleNavButton();
   },
   computed: {
     ...mapState(useAuthStore, ["user"]),
@@ -65,6 +69,9 @@ export default {
     },
   },
   methods: {
+    handleNavButton() {
+      this.showNavButton = window.matchMedia("(max-width: 37.5em)").matches;
+    },
     toggle(event) {
       this.$refs.op.toggle(event);
     },

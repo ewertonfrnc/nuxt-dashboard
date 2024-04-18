@@ -21,6 +21,18 @@
     visibility: hidden;
   }
 
+  &__mobile {
+    @include respond(phone) {
+      transform: translateX(-25rem);
+    }
+
+    &--visible {
+      @include respond(phone) {
+        transform: translateX(0);
+      }
+    }
+  }
+
   &__expanded {
     width: 25rem;
 
