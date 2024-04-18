@@ -1,7 +1,7 @@
 <template>
   <UiModal>
     <div class="login fadein animation-duration-500">
-      <img alt="Itera logo" class="logo" src="~/assets/img/LOGO.png" />
+      <img alt="Itera logo" class="login__logo" src="~/assets/img/LOGO.png" />
 
       <div class="login__header">
         <h3 class="heading__tertiary">Área do RH</h3>
@@ -152,11 +152,11 @@ export default {
   width: 30rem;
   display: grid;
   gap: $spacing-md;
-}
 
-.logo {
-  max-width: 20rem;
-  justify-self: center;
+  &__logo {
+    max-width: 20rem;
+    justify-self: center;
+  }
 }
 
 .form {

@@ -41,7 +41,7 @@
     color: map-get($color-scheme-light, "$color-neutral-neutral-2");
 
     & > p {
-      margin: 0 0 1rem 3rem;
+      margin: 0 0 1rem 8rem;
     }
   }
 
@@ -119,6 +119,74 @@
 
       &:not(:last-child) {
         margin-bottom: 2rem;
+      }
+    }
+  }
+}
+
+.dark-mode .accordion {
+  &__tab {
+    margin-bottom: 0.5rem;
+  }
+
+  &__header-action {
+    border: $border-dark;
+  }
+
+  &__button-group {
+    &--time {
+      color: map-get($color-scheme-dark, "$color-feedback-danger-0");
+
+      .positive {
+        color: map-get($color-scheme-dark, "$color-feedback-success-0");
+      }
+    }
+  }
+
+  &__content {
+    border: $border-dark;
+    border-top-style: none;
+    color: map-get($color-scheme-dark, "$color-neutral-neutral-2");
+  }
+
+  &__diff {
+    &--before {
+      border-right: 1px solid
+        map-get($color-scheme-dark, "$color-neutral-neutral-4");
+    }
+  }
+
+  &__total-hour {
+    color: map-get($color-scheme-dark, "$color-neutral-neutral-2");
+
+    &--before {
+      background-color: map-get($color-scheme-dark, "$color-feedback-danger-1");
+
+      .pi + span {
+        color: map-get($color-scheme-dark, "$color-feedback-danger-0");
+      }
+    }
+
+    &--after {
+      background-color: map-get(
+        $color-scheme-dark,
+        "$color-feedback-success-1"
+      );
+
+      .pi + span {
+        color: map-get($color-scheme-dark, "$color-feedback-success-0");
+      }
+    }
+  }
+
+  &__time-count {
+    p {
+      .time-count {
+        color: map-get($color-scheme-dark, "$color-neutral-neutral-0");
+      }
+
+      .manipulated {
+        color: map-get($color-scheme-dark, "$color-feedback-warning-0");
       }
     }
   }
