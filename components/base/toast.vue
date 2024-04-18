@@ -1,3 +1,37 @@
+<template>
+  <Toast
+    :pt="{
+      root: 'toast-root',
+      content: 'toast__content',
+      closeButton: 'toast__button fadeindown animation-duration-500',
+    }"
+  >
+    <template #message="slotProps">
+      <div
+        :class="[
+          'toast',
+          'fadeindown',
+          'animation-duration-500',
+          getSeverityClass(slotProps.message.severity),
+        ]"
+      >
+        <div class="toast__icon">
+          <i :class="getIconClass(slotProps.message.severity)" />
+        </div>
+
+        <div class="toast__info">
+          <div class="toast__summary subtitle__primary">
+            {{ slotProps.message.summary }}
+          </div>
+          <div class="toast__detail caption__primary">
+            {{ slotProps.message.detail }}
+          </div>
+        </div>
+      </div>
+    </template>
+  </Toast>
+</template>
+
 <script lang="ts">
 export default {
   methods: {
@@ -22,32 +56,3 @@ export default {
   },
 };
 </script>
-
-<template>
-  <Toast
-    :pt="{
-      content: 'toast__content',
-      closeButton: 'toast__button fadeindown animation-duration-500',
-    }"
-  >
-    <template #message="slotProps">
-      <div
-        :class="[
-          'toast',
-          'fadeindown',
-          'animation-duration-500',
-          getSeverityClass(slotProps.message.severity),
-        ]"
-      >
-        <div class="toast__icon">
-          <i :class="getIconClass(slotProps.message.severity)" />
-        </div>
-
-        <div class="toast__info">
-          <div class="toast__summary">{{ slotProps.message.summary }}</div>
-          <div class="toast__detail">{{ slotProps.message.detail }}</div>
-        </div>
-      </div>
-    </template>
-  </Toast>
-</template>
