@@ -66,6 +66,11 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      height: 100%;
+      background-color: map-get(
+        $color-scheme-light,
+        "$color-neutral-neutral-6"
+      );
     }
 
     &--options {
@@ -114,6 +119,16 @@
         padding-left: 3.5rem;
         width: 20rem;
       }
+
+      @include respond(phone) {
+        flex-direction: column;
+        gap: 2rem;
+
+        button,
+        input {
+          width: 100%;
+        }
+      }
     }
 
     &--see-selected {
@@ -123,10 +138,14 @@
     }
 
     &--cell {
-      width: 2rem;
+      min-width: 20rem;
       height: 4.3rem;
       padding: 0 1rem;
       border: 1px solid map-get($color-scheme-light, "$color-neutral-neutral-4");
+    }
+
+    &--frozen-cell {
+      left: 0 !important;
     }
   }
 
@@ -144,7 +163,7 @@
     }
 
     &--cell {
-      width: 2rem;
+      min-width: 20rem;
       padding: 2rem 1rem;
       border: $border-light;
       background-color: map-get(
@@ -166,6 +185,10 @@
             map-get($color-scheme-light, "$color-neutral-neutral-5");
         }
       }
+    }
+
+    &--frozen-cell {
+      left: 0 !important;
     }
 
     &--cell-icon {
@@ -249,6 +272,10 @@
 
   &__header {
     background-color: map-get($color-scheme-dark, "$color-neutral-neutral-6");
+
+    &--content {
+      background-color: map-get($color-scheme-dark, "$color-neutral-neutral-6");
+    }
 
     &--options {
       border: $border-dark;
