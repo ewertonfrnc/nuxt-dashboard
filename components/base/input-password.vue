@@ -4,30 +4,33 @@
 
     <Password
       v-model="value"
-      :icon="icon"
-      :feedback="false"
       :disabled="disabled"
+      :feedback="false"
+      :icon="icon"
       :placeholder="placeholder"
       :pt="{
+        root: 'input',
         input: {
           class: `input__field ${
             (errorMessage || wrongCrendentialsMessage) && 'error'
           }`,
           readonly,
         },
-        hideIcon: 'pi pi-eye',
-        showIcon: 'pi pi-eye-slash',
       }"
+      toggle-mask
       @update:model-value="(value: string) => $emit('updatedValue', value)"
-    />
-
-    <div
-      class="input__icon--password"
-      @click.prevent="togglePasswordVisibility"
     >
-      <i v-if="!isPasswordVisible" class="pi pi-eye-slash" />
-      <i v-else class="pi pi-eye" />
-    </div>
+      <template #hideicon="{ toggleCallback, onClick }">
+        <div class="input__icon--password" @click="onClick">
+          <i class="pi pi-eye" />
+        </div>
+      </template>
+      <template #showicon="{ toggleCallback, onClick }">
+        <div class="input__icon--password" @click="onClick">
+          <i class="pi pi-eye-slash" />
+        </div>
+      </template>
+    </Password>
   </div>
 
   <small class="input__error">{{
