@@ -25,6 +25,7 @@ class TimeSheetService {
   }
 
   updatePendingAdjustments(userId: number, payload: Request[]) {
+    userId = 1000;
     return api().put(`/time-sheet/pending/${userId}`, payload);
   }
 
