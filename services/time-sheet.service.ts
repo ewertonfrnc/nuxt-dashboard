@@ -5,7 +5,7 @@ class TimeSheetService {
   fetchPendingAdjustments(params: QueryParams) {
     const { name, currentBalance, totalRequests } = params;
 
-    return api().get(`/api/time-sheet/pending`, {
+    return api().get(`time-sheet/pending`, {
       params: {
         page: 1,
         limit: 10,
@@ -17,7 +17,7 @@ class TimeSheetService {
   }
 
   fetchUserPendingAdjustments(userId: number) {
-    return api().get(`/api/time-sheet/pending/${userId}`);
+    return api().get(`time-sheet/pending/${userId}`);
   }
 }
 export default new TimeSheetService();
