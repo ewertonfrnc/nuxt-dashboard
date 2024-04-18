@@ -1,13 +1,17 @@
 import api from "~/services/api.service";
-import { QueryParams } from "~/interfaces/time-sheet/time-sheet.interface";
+import {
+  QueryParams,
+  AllClocksParams,
+  Request,
+} from "~/interfaces/time-sheet/time-sheet.interface";
 
 class TimeSheetService {
   fetchPendingAdjustments(params: QueryParams) {
-    const { name, currentBalance, totalRequests } = params;
+    const { page, name, currentBalance, totalRequests } = params;
 
-    return api().get(`time-sheet/pending`, {
+    return api().get(`/time-sheet/pending`, {
       params: {
-        page: 1,
+        page,
         limit: 10,
         name: name?.value || "",
         currentBalance: currentBalance?.value || "",
@@ -17,7 +21,27 @@ class TimeSheetService {
   }
 
   fetchUserPendingAdjustments(userId: number) {
-    return api().get(`time-sheet/pending/${userId}`);
+    return api().get(`/time-sheet/pending/${userId}`);
+  }
+
+  updatePendingAdjustments(userId: number, payload: Request[]) {
+    return api().put(`/time-sheet/pending/${userId}`, payload);
+  }
+
+  fetchAllClocks(params: AllClocksParams) {
+    const { page, limit, name, hour, department, tag, date } = params;
+
+    return api().get("/time-sheet/clocks", {
+      params: {
+        page,
+        limit,
+        date: date || "",
+        tag: tag?.value || "",
+        name: name?.value || "",
+        hour: hour?.value || "",
+        department: department?.value || "",
+      },
+    });
   }
 }
 export default new TimeSheetService();

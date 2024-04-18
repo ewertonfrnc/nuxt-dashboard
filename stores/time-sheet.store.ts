@@ -2,33 +2,60 @@ import { timeSheetService } from "~/services";
 import {
   QueryParams,
   User,
+  Request,
+  AllClocksParams,
 } from "~/interfaces/time-sheet/time-sheet.interface";
 
-type TimeSheetstate = {};
+type TimeSheetstate = {
+  userPendingRequests: User | null;
+};
 
 export const useTimeSheetStore = defineStore("time-sheet", {
   persist: true,
   state(): TimeSheetstate {
-    return {};
+    return {
+      userPendingRequests: null,
+    };
   },
   actions: {
     async getPendingAdjustments(params: QueryParams) {
       try {
         const {
-          data: { pending },
+          data: { pending, total },
         } = await timeSheetService.fetchPendingAdjustments(params);
-        return pending;
+        return { pending, total };
       } catch (err) {
         return err;
       }
     },
-    async getUserPendingAdjustments(userId: number): Promise<User | Error> {
+    async getUserPendingAdjustments(userId: number) {
       try {
-        const { data: userPendingDetails } =
+        const { data } =
           await timeSheetService.fetchUserPendingAdjustments(userId);
-        return userPendingDetails;
+
+        this.userPendingRequests = data;
+
+        return data;
       } catch (err) {
         return err as Error;
+      }
+    },
+    async updateRequestsApproval(userId: number, updatedRequests: Request[]) {
+      try {
+        await timeSheetService.updatePendingAdjustments(
+          userId,
+          updatedRequests,
+        );
+      } catch (err) {
+        return err as Error;
+      }
+    },
+    async fetchAllClocks(params: AllClocksParams) {
+      try {
+        const { data } = await timeSheetService.fetchAllClocks(params);
+        return data;
+      } catch (error) {
+        return error as Error;
       }
     },
   },

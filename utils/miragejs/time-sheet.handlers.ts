@@ -245,34 +245,6 @@ const nodes = [
         },
       },
     ],
-    // requests: [
-    //   {
-    //     id: 1,
-    //     balance: "- 03:10:00",
-    //     pendingFix: true,
-    //     negative: true,
-    //     date: "02/06 (Sexta)",
-    //     dateBalance: "+ 5h 40min",
-    //   },
-    //   {
-    //     id: 2,
-    //     balance: "- 03:10:00",
-    //     date: "01/06 (Quinta)",
-    //     dateBalance: "+ 21h 33min",
-    //   },
-    //   {
-    //     id: 3,
-    //     balance: "- 03:10:00",
-    //     date: "31/05 (Quarta)",
-    //     dateBalance: "+ 23h 45min",
-    //   },
-    //   {
-    //     id: 4,
-    //     balance: "- 03:10:00",
-    //     date: "30/05 (Terça)",
-    //     dateBalance: "+ 6h 48min",
-    //   },
-    // ],
   },
   {
     userId: 1000,
