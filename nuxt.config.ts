@@ -41,4 +41,9 @@ export default defineNuxtConfig({
     transpile: ["primevue"],
   },
   ssr: false,
+  runtimeConfig: {
+    public: {
+      baseUrl: process.env.NUXT_BASE_URL,
+    },
+  },
 });

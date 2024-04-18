@@ -31,7 +31,7 @@
           label="Próximo"
           :loading="loading"
           class="btn__primary"
-          @click.prevent="recoverPassword"
+          @click.prevent="recoverHandler"
         />
       </div>
     </div>
@@ -40,6 +40,8 @@
 
 <script lang="ts">
 import { useForm } from "vee-validate";
+import { mapActions } from "pinia";
+import { RecoverPassword } from "~/interfaces/auth/auth.interface";
 
 export default {
   emits: ["changeStep", "recoverEmail"],
@@ -55,26 +57,25 @@ export default {
   data() {
     return {
       loading: false,
-      formData: {},
+      formData: {} as RecoverPassword | undefined,
     };
   },
   methods: {
+    ...mapActions(useAuthStore, ["recoverPassword"]),
     goToLogin() {
       this.$emit("changeStep", "login");
     },
     goToChangePassword() {
       this.$emit("changeStep", "code");
     },
-    async recoverPassword() {
+    async recoverHandler() {
       try {
         this.formData = await this.onSubmit();
         if (!this.formData) return;
 
         this.loading = true;
 
-        const {
-          data: { userEmail },
-        } = await this.$axios.post("/api/recover-password", this.formData);
+        const userEmail = await this.recoverPassword(this.formData);
         this.goToChangePassword();
         this.$emit("recoverEmail", userEmail);
 
