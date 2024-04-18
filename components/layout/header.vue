@@ -101,7 +101,7 @@ export default {
     flex: 1;
     padding: 0.8rem 1.6rem;
     background-color: map-get($color-scheme-light, "$color-neutral-neutral-7");
-    box-shadow: $box-shadow-dark;
+    box-shadow: $box-shadow-light;
     border-radius: 1rem;
     border: 1px solid #e1dfef;
   }
