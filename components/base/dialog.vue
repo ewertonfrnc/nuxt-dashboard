@@ -1,9 +1,6 @@
 <template>
   <Dialog
-    :visible="isVisible"
-    modal
     :draggable="false"
-    close-on-escape
     :pt="{
       root: 'dialog',
       mask: 'dialog__mask fadein',
@@ -11,6 +8,9 @@
       header: 'dialog__header',
       footer: 'dialog__footer',
     }"
+    :visible="isVisible"
+    close-on-escape
+    modal
   >
     <template #header>
       <h5 class="heading__quinary">{{ title }}</h5>
@@ -24,7 +24,9 @@
       <slot />
     </template>
 
-    <template #footer>Footer</template>
+    <template #footer>
+      <slot name="footer" />
+    </template>
   </Dialog>
 </template>
 
