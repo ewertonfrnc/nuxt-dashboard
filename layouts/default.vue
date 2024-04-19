@@ -63,7 +63,7 @@ export default {
     this.colorMode.preference = colorMode || this.colorPreference;
   },
   updated() {
-    this.path = this.$route.path;
+    this.path = this.$route.matched[0].path;
   },
   mounted() {
     window.addEventListener("resize", this.handleResize);

@@ -1,7 +1,7 @@
 <template>
-  <Tag severity="secondary" :value="value">
+  <Tag :value="value" severity="secondary">
     <template #default>
-      <span :class="['tag', 'body__primary', getSeverityClass(severity)]">{{
+      <span :class="['tag', 'caption__primary', getSeverityClass(severity)]">{{
         value
       }}</span>
     </template>
@@ -34,6 +34,7 @@ export default {
       const severityToClassMap: Record<string, string> = {
         Success: "tag__success",
         Danger: "tag__danger",
+        Warning: "tag__warning",
       };
 
       return severityToClassMap[severity];
@@ -54,6 +55,10 @@ export default {
   &__danger {
     background-color: map-get($color-scheme-light, "$color-feedback-danger-2");
   }
+
+  &__warning {
+    background-color: map-get($color-scheme-light, "$color-feedback-warning-2");
+  }
 }
 
 .dark-mode .tag {
@@ -63,6 +68,10 @@ export default {
 
   &__danger {
     background-color: map-get($color-scheme-dark, "$color-feedback-danger-2");
+  }
+
+  &__warning {
+    background-color: map-get($color-scheme-dark, "$color-feedback-warning-2");
   }
 }
 </style>
