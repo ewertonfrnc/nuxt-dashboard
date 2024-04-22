@@ -8,7 +8,7 @@ import {
 
 class AuthService {
   login(userCredentials: UserCredentials) {
-    return api().post("/login", userCredentials);
+    return api().post("/auth/login", userCredentials);
   }
 
   recoverPassword(userId: RecoverPassword) {

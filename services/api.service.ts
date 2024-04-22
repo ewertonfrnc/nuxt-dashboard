@@ -18,7 +18,7 @@ export default function api() {
     },
   });
 
-  const errorsToRedirect = [401, 402, 403];
+  const errorsToRedirect = [];
   axiosInstance.interceptors.response.use(null, (error) => {
     const err = error.toJSON();
 
