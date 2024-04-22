@@ -214,6 +214,10 @@
       cursor: pointer;
       color: map-get($color-scheme-light, "$color-brand-primary-0");
     }
+
+    .success {
+      color: map-get($color-scheme-light, "$color-feedback-success-0");
+    }
   }
 
   &__loading,
@@ -310,8 +314,14 @@
       }
     }
 
-    &__action .pi {
-      color: map-get($color-scheme-dark, "$color-brand-primary-0");
+    &__action {
+      .pi {
+        color: map-get($color-scheme-dark, "$color-brand-primary-0");
+      }
+
+      .success {
+        color: map-get($color-scheme-dark, "$color-feedback-success-0");
+      }
     }
   }
 

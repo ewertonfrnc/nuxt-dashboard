@@ -1,6 +1,7 @@
 import api from "~/services/api.service";
 import {
   ActiveEmployeeQueryParams,
+  Employees,
   InactiveEmployeeQueryParams,
 } from "~/interfaces/employees/employees.interface";
 
@@ -34,6 +35,10 @@ class EmployeesService {
         dismissalDate: dismissalDate?.value || "",
       },
     });
+  }
+
+  reactivateEmployee(employee: Employees) {
+    return api().post(`/employees/reactivate-employee`, employee);
   }
 }
 

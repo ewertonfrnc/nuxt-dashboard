@@ -1,6 +1,7 @@
 import employeesService from "~/services/employees.service";
 import {
   ActiveEmployeeQueryParams,
+  Employees,
   InactiveEmployeeQueryParams,
 } from "~/interfaces/employees/employees.interface";
 
@@ -28,6 +29,13 @@ export const useEmployeesStore = defineStore("employees", {
           data: { employees, total },
         } = await employeesService.fetchInactiveEmployees(params);
         return { employees, total };
+      } catch (err) {
+        return err as Error;
+      }
+    },
+    async reactivateEmployee(employee: Employees) {
+      try {
+        await employeesService.reactivateEmployee(employee);
       } catch (err) {
         return err as Error;
       }

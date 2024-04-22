@@ -26,18 +26,7 @@
 
     <template #footer>
       <div class="dialog__footer">
-        <BaseButton
-          class="btn__danger--outlined"
-          icon="pi pi-times"
-          label="Cancelar"
-          @click="toggleDialog"
-        />
-        <BaseButton
-          class="btn__secondary"
-          icon="pi pi-save"
-          label="Salvar"
-          @click="onSave"
-        />
+        <slot name="footer" />
       </div>
     </template>
   </Dialog>
@@ -58,7 +47,7 @@ export default {
   emits: ["save"],
   methods: {
     onSave() {
-      this.$emit("save", this.toggleDialog);
+      this.$emit("save");
     },
   },
 };

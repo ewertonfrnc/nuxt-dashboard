@@ -6,7 +6,7 @@
       <BaseTable
         :columns="columns"
         :custom-filters="filters"
-        :loading="loading"
+        :loading="tableLoading"
         :nodes="nodes"
         :total-pages="totalPages"
         has-action
@@ -41,9 +41,9 @@
           />
           <BaseTableAction
             :data="{ slotData }"
-            :icon="'pi-user-plus'"
+            :icon="'pi-user-plus success'"
             tooltip-text="Reativar colaborador"
-            @action-handler="reactivateEmployee"
+            @action-handler="handleReactivationDialog"
           />
         </template>
       </BaseTable>
@@ -53,9 +53,25 @@
       :is-visible="isVisible"
       :toggle-dialog="toggleVisibility"
       title="Reativar colaborador"
-      @save=""
     >
       <EmployeesReactivateDialog :user="selectedEmployee.name" />
+
+      <template #footer>
+        <BaseButton
+          class="btn__danger--outlined"
+          icon="pi pi-times"
+          label="Cancelar"
+          :disabled="dialogLoading"
+          @click="toggleVisibility"
+        />
+        <BaseButton
+          class="btn__secondary"
+          icon="pi pi-save"
+          label="Salvar"
+          :loading="dialogLoading"
+          @click="reactivateEmployeeHandler"
+        />
+      </template>
     </BaseDialog>
   </div>
 </template>
@@ -76,7 +92,7 @@ export default {
   },
   data() {
     return {
-      loading: false,
+      tableLoading: false,
       totalPages: 0,
       currentPage: 1,
       columns: [
@@ -146,23 +162,53 @@ export default {
         },
       },
       selectedEmployee: {} as Employees,
+      dialogLoading: false,
     };
   },
   async mounted() {
     await this.getTableValues(this.queries);
   },
   methods: {
-    ...mapActions(useEmployeesStore, ["getInactiveEmployees"]),
-    reactivateEmployee(data: Employees) {
+    ...mapActions(useEmployeesStore, [
+      "getInactiveEmployees",
+      "reactivateEmployee",
+    ]),
+    handleReactivationDialog(data: Employees) {
       this.toggleVisibility();
       this.selectedEmployee = data;
+    },
+    async reactivateEmployeeHandler() {
+      this.dialogLoading = true;
+
+      try {
+        await this.reactivateEmployee(this.selectedEmployee);
+        this.toggleVisibility();
+
+        this.$toast.add({
+          severity: "success",
+          summary: "Sucesso!",
+          detail: "Ação realizada com sucesso.",
+          life: 4000,
+        });
+
+        await this.getTableValues(this.queries);
+      } catch (err) {
+        this.$toast.add({
+          severity: "error",
+          summary: "Ocorreu um erro!",
+          detail: "Ocorreu um erro de processamento, tente novamente.",
+          life: 4000,
+        });
+      } finally {
+        this.dialogLoading = false;
+      }
     },
     async changePageHandler(currentPage: PageState) {
       this.currentPage = currentPage.page + 1;
       await this.getTableValues(this.queries);
     },
     async getTableValues(queries: InactiveEmployeeQueryParams) {
-      this.loading = true;
+      this.tableLoading = true;
       try {
         const { employees, total } = await this.getInactiveEmployees(queries);
         this.nodes = employees;
@@ -175,7 +221,7 @@ export default {
           life: 4000,
         });
       } finally {
-        this.loading = false;
+        this.tableLoading = false;
       }
     },
   },
