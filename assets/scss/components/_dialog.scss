@@ -18,7 +18,8 @@
 
   &__footer {
     display: flex;
-    flex-direction: column;
+    justify-content: flex-end;
+    gap: 8px;
     padding-top: 2rem;
   }
 

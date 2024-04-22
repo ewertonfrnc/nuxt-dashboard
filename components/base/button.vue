@@ -1,15 +1,15 @@
 <template>
   <Button
-    :label="label"
     :icon="`${icon}`"
+    :label="label"
     :loading="loading"
-    :type="type"
     :pt="{
       root: 'btn',
     }"
+    :type="type"
   >
-    <template #loadingicon>
-      <i class="pi pi-spinner btn__icon--loading" />
+    <template #icon>
+      <i :class="['btn__icon', icon]" />
     </template>
   </Button>
 </template>
