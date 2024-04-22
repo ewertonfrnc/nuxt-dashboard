@@ -1,6 +1,7 @@
 <template>
   <BaseCard class="fadein animation-duration-500">
     <BaseTabMenu :items="items" />
+    <NuxtPage />
   </BaseCard>
 </template>
 

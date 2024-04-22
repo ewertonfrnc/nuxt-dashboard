@@ -1,5 +1,6 @@
 <template>
   <TabMenu
+    :active-index="currentTab"
     :model="items"
     :pt="{
       root: 'tab-list',
@@ -8,10 +9,10 @@
     @tab-change="handleTabChange"
   >
     <template #item="{ item }">
-      <div class="tab-list__item">
+      <NuxtLink :to="item.route" class="tab-list__item">
         <i :class="item.icon"></i>
         <p class="subtitle__primary">{{ item.label }}</p>
-      </div>
+      </NuxtLink>
     </template>
   </TabMenu>
 
@@ -31,9 +32,13 @@ export default {
       currentTab: 0,
     };
   },
+  created() {
+    this.currentTab = Number(sessionStorage.getItem("current-tab"));
+  },
   methods: {
     handleTabChange(event: TabMenuChangeEvent) {
       this.currentTab = event.index;
+      sessionStorage.setItem("current-tab", String(this.currentTab));
     },
   },
 };

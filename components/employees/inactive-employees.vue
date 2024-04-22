@@ -38,6 +38,7 @@
             :data="{ slotData }"
             :icon="'pi-user'"
             tooltip-text="Acessar perfil"
+            @action-handler="handleProfilePage"
           />
           <BaseTableAction
             :data="{ slotData }"
@@ -173,6 +174,9 @@ export default {
       "getInactiveEmployees",
       "reactivateEmployee",
     ]),
+    handleProfilePage(data: Employees) {
+      this.$router.push(`/employees/${data.id}`);
+    },
     handleReactivationDialog(data: Employees) {
       this.toggleVisibility();
       this.selectedEmployee = data;

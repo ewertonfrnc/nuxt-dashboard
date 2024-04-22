@@ -9,7 +9,7 @@ class EmployeesService {
   fetchActiveEmployees(params: ActiveEmployeeQueryParams) {
     const { page, name, role, department, workType, status } = params;
 
-    return api().get("/employees/active-employees", {
+    return api().get("/employees/active", {
       params: {
         page,
         limit: 10,
@@ -25,7 +25,7 @@ class EmployeesService {
   fetchInactiveEmployees(params: InactiveEmployeeQueryParams) {
     const { page, name, hireDate, workType, dismissalDate } = params;
 
-    return api().get("employees/inactive-employees", {
+    return api().get("employees/inactive", {
       params: {
         page,
         limit: 10,

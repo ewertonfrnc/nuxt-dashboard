@@ -1,9 +1,3 @@
-function paginate(array, page: string, limit: string) {
-  const initialIdx = (+page - 1) * +limit;
-  const finalIdx = initialIdx + +limit;
-  return array.slice(initialIdx, finalIdx);
-}
-
 export default defineEventHandler((event) => {
   const { page, limit } = getQuery(event);
 
@@ -138,10 +132,8 @@ export default defineEventHandler((event) => {
     },
   ];
 
-  const results = paginate(employees, page, limit);
-
   return {
     total: 15,
-    employees: results,
+    employees,
   };
 });
