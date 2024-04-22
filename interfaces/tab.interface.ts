@@ -5,9 +5,3 @@ export type Tabs = {
   icon: string;
   component: Component;
 };
-
-export type TabMenu = {
-  label: string;
-  icon: string;
-  route: string;
-};

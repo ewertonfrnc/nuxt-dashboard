@@ -1,7 +1,7 @@
 <template>
   <span class="body__primary">
     <i
-      v-tooltip.top="{
+      v-tooltip="{
         value: tooltipText,
         pt: { root: 'tooltip' },
       }"
@@ -20,7 +20,10 @@ export default {
   },
   emits: ["action-handler"],
   methods: {
-    actionHandler(data: Object) {
+    actionHandler(userInfo: any) {
+      const {
+        slotData: { data },
+      } = userInfo;
       this.$emit("action-handler", data);
     },
   },

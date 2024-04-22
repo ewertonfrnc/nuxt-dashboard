@@ -1,6 +1,6 @@
 <template>
   <div class="container fadein animation-duration-500">
-    <h2 class="heading__secondary">Colaboradores ativos</h2>
+    <h2 class="heading__secondary">Desativados</h2>
 
     <section>
       <BaseTable
@@ -35,23 +35,45 @@
 
         <template #column-action="slotData">
           <BaseTableAction
-            :data="slotData"
+            :data="{ slotData }"
             :icon="'pi-user'"
             tooltip-text="Acessar perfil"
+          />
+          <BaseTableAction
+            :data="{ slotData }"
+            :icon="'pi-user-plus'"
+            tooltip-text="Reativar colaborador"
+            @action-handler="reactivateEmployee"
           />
         </template>
       </BaseTable>
     </section>
+
+    <BaseDialog
+      :is-visible="isVisible"
+      :toggle-dialog="toggleVisibility"
+      title="Reativar colaborador"
+      @save=""
+    >
+      <EmployeesReactivateDialog :user="selectedEmployee.name" />
+    </BaseDialog>
   </div>
 </template>
 
 <script lang="ts">
-import { mapActions } from "pinia";
-import { PageState } from "primevue/paginator";
 import { FilterMatchMode } from "primevue/api";
-import { QueryParams } from "~/interfaces/employees/employees.interface";
+import { PageState } from "primevue/paginator";
+import { mapActions } from "pinia";
+import {
+  Employees,
+  InactiveEmployeeQueryParams,
+} from "~/interfaces/employees/employees.interface";
 
 export default {
+  setup() {
+    const { isVisible, toggleVisibility } = useToggle();
+    return { isVisible, toggleVisibility };
+  },
   data() {
     return {
       loading: false,
@@ -66,49 +88,54 @@ export default {
           frozen: true,
         },
         {
-          field: "role",
-          header: "Cargo",
+          field: "lastRole",
+          header: "Antigo cargo",
           sortable: false,
           hasFilter: true,
           frozen: false,
         },
         {
-          field: "department",
-          header: "Departamento",
+          field: "hireDate",
+          header: "Data da contratação",
+          sortable: false,
+          hasFilter: true,
+          frozen: false,
+        },
+        {
+          field: "dismissalDate",
+          header: "Data do desligamento",
           sortable: false,
           hasFilter: true,
           frozen: false,
         },
         {
           field: "workType",
-          header: "Modelo de trabalho",
-          sortable: false,
-          hasFilter: true,
-          frozen: false,
-        },
-        {
-          field: "status",
-          header: "Status",
+          header: "Modelo de contrato",
           sortable: false,
           hasFilter: true,
           frozen: false,
         },
       ],
       nodes: [],
-      queries: {} as QueryParams,
+      queries: {} as InactiveEmployeeQueryParams,
       filters: {
         name: {
           field: "name",
           value: null,
           matchMode: FilterMatchMode.CONTAINS,
         },
-        role: {
-          field: "role",
+        lastRole: {
+          field: "lastRole",
           value: null,
           matchMode: FilterMatchMode.CONTAINS,
         },
-        department: {
-          field: "department",
+        hireDate: {
+          field: "hireDate",
+          value: null,
+          matchMode: FilterMatchMode.CONTAINS,
+        },
+        dismissalDate: {
+          field: "dismissalDate",
           value: null,
           matchMode: FilterMatchMode.CONTAINS,
         },
@@ -117,27 +144,27 @@ export default {
           value: null,
           matchMode: FilterMatchMode.CONTAINS,
         },
-        status: {
-          field: "status",
-          value: null,
-          matchMode: FilterMatchMode.CONTAINS,
-        },
       },
+      selectedEmployee: {} as Employees,
     };
   },
   async mounted() {
     await this.getTableValues(this.queries);
   },
   methods: {
-    ...mapActions(useEmployeesStore, ["getActiveEmployees"]),
+    ...mapActions(useEmployeesStore, ["getInactiveEmployees"]),
+    reactivateEmployee(data: Employees) {
+      this.toggleVisibility();
+      this.selectedEmployee = data;
+    },
     async changePageHandler(currentPage: PageState) {
       this.currentPage = currentPage.page + 1;
       await this.getTableValues(this.queries);
     },
-    async getTableValues(queries: QueryParams) {
+    async getTableValues(queries: InactiveEmployeeQueryParams) {
       this.loading = true;
       try {
-        const { employees, total } = await this.getActiveEmployees(queries);
+        const { employees, total } = await this.getInactiveEmployees(queries);
         this.nodes = employees;
         this.totalPages = total;
       } catch (err) {

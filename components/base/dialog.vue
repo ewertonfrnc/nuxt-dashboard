@@ -1,6 +1,6 @@
 <template>
   <Dialog
-    :draggable="false"
+    :draggable="true"
     :pt="{
       root: 'dialog',
       mask: 'dialog__mask fadein',
@@ -25,7 +25,20 @@
     </template>
 
     <template #footer>
-      <slot name="footer" />
+      <div class="dialog__footer">
+        <BaseButton
+          class="btn__danger--outlined"
+          icon="pi pi-times"
+          label="Cancelar"
+          @click="toggleDialog"
+        />
+        <BaseButton
+          class="btn__secondary"
+          icon="pi pi-save"
+          label="Salvar"
+          @click="onSave"
+        />
+      </div>
     </template>
   </Dialog>
 </template>
@@ -41,6 +54,12 @@ export default {
       required: true,
     },
     title: { type: String, default: "", required: true },
+  },
+  emits: ["save"],
+  methods: {
+    onSave() {
+      this.$emit("save", this.toggleDialog);
+    },
   },
 };
 </script>

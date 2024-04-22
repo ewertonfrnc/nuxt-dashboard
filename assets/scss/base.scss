@@ -73,33 +73,9 @@ hr {
   border-radius: 0.8rem;
   background: map-get($color-scheme-light, "$color-neutral-neutral-1");
   color: map-get($color-scheme-light, "$color-neutral-neutral-7");
-
-  z-index: 9999;
-  position: absolute;
-  top: -50%;
-
-  &::after {
-    content: "";
-    width: 1.5rem;
-    height: 1.5rem;
-    background: white;
-
-    z-index: 1000;
-    position: absolute;
-    bottom: -30%;
-    left: 50%;
-    transform: translate(-50%);
-    clip-path: polygon(0 0%, 50% 70%, 100% 0%);
-    background: map-get($color-scheme-light, "$color-neutral-neutral-1");
-  }
 }
 
 .dark-mode .tooltip {
   background: map-get($color-scheme-dark, "$color-neutral-neutral-1");
   color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
-
-  &::after {
-    background: map-get($color-scheme-dark, "$color-neutral-neutral-1");
-    color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
-  }
 }

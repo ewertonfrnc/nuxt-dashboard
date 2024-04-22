@@ -8,21 +8,23 @@
     @tab-change="handleTabChange"
   >
     <template #item="{ item }">
-      <NuxtLink :to="item.route" class="tab-list__item">
+      <div class="tab-list__item">
         <i :class="item.icon"></i>
         <p class="subtitle__primary">{{ item.label }}</p>
-      </NuxtLink>
+      </div>
     </template>
   </TabMenu>
+
+  <component :is="{ ...items[currentTab].component }" />
 </template>
 
 <script lang="ts">
 import { TabMenuChangeEvent } from "primevue/tabmenu";
-import { TabMenu } from "~/interfaces/tab.interface";
+import { Tabs } from "~/interfaces/tab.interface";
 
 export default {
   props: {
-    items: { type: Array<TabMenu>, required: true },
+    items: { type: Array<Tabs>, required: true },
   },
   data() {
     return {
