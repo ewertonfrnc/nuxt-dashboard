@@ -1,6 +1,5 @@
 <template>
   <TabMenu
-    :active-index="currentTab"
     :model="items"
     :pt="{
       root: 'tab-list',
@@ -32,13 +31,9 @@ export default {
       currentTab: 0,
     };
   },
-  created() {
-    this.currentTab = Number(sessionStorage.getItem("current-tab"));
-  },
   methods: {
     handleTabChange(event: TabMenuChangeEvent) {
       this.currentTab = event.index;
-      sessionStorage.setItem("current-tab", String(this.currentTab));
     },
   },
 };
