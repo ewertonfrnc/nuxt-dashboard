@@ -9,10 +9,10 @@
     @tab-change="handleTabChange"
   >
     <template #item="{ item }">
-      <NuxtLink :to="item.route" class="tab-list__item">
+      <div class="tab-list__item">
         <i :class="item.icon"></i>
         <p class="subtitle__primary">{{ item.label }}</p>
-      </NuxtLink>
+      </div>
     </template>
   </TabMenu>
 
