@@ -42,7 +42,7 @@
 
         <template #column-action="slotData">
           <BaseTableAction
-            :data="slotData"
+            :data="{ slotData }"
             :icon="'pi-user'"
             tooltip-text="Ver detalhes no perfil"
             @action-handler="goToEmployeeDetails"

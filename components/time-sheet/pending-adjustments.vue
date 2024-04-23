@@ -33,7 +33,7 @@
 
         <template #column-action="slotData">
           <BaseTableAction
-            :data="slotData"
+            :data="{ slotData }"
             :icon="'pi-search'"
             tooltip-text="Verificar ajuste"
             @action-handler="logSelectedItem"
@@ -237,7 +237,8 @@ export default {
         this.tableLoading = false;
       }
     },
-    async logSelectedItem({ data }: User) {
+    async logSelectedItem(data) {
+      console.log("data", data);
       this.toggleDialog();
       this.selectedUser = data;
       try {
