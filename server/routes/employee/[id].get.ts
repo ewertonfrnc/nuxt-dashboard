@@ -1,7 +1,4 @@
 export default defineEventHandler((event) => {
-  const params = getRouterParams(event);
-  console.log(params);
-
   return {
     status: "success",
     employee: {

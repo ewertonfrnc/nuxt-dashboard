@@ -16,16 +16,28 @@
       >
         <template #body-cell="{ data, field }">
           <BaseTag
-            v-if="field === 'status'"
-            :severity="data[field] === 'Trabalhando' ? 'Success' : 'Warning'"
+            v-if="field === 'dayStatus'"
+            :severity="
+              data[field] === 'Ajuste pendente'
+                ? 'Warning'
+                : data[field] === 'Em andamento'
+                ? 'Secondary'
+                : data[field] === 'Falta check-out'
+                ? 'Danger'
+                : 'Primary'
+            "
             :value="data[field]"
           />
 
           <span
             v-else
-            :class="['body__primary', field === 'totalRequests' && 'highlight']"
+            :class="[
+              'body__primary',
+              field === 'currentBalance' && data.negative && 'negative',
+              field === 'currentBalance' && !data.negative && 'positive',
+            ]"
           >
-            {{ data[field] }}
+            {{ data[field] || "--:--:--" }}
           </span>
         </template>
 
@@ -36,8 +48,8 @@
         <template #column-action="slotData">
           <BaseTableAction
             :data="{ slotData }"
-            :icon="'pi-user'"
-            tooltip-text="Acessar perfil"
+            :icon="'pi-list'"
+            tooltip-text="Ver detalhes do dia"
           />
         </template>
       </BaseTable>
@@ -46,8 +58,10 @@
 </template>
 
 <script lang="ts">
+import { mapActions } from "pinia";
 import { FilterMatchMode } from "primevue/api";
 import { PageState } from "primevue/paginator";
+import { EmployeeQueryParams } from "~/interfaces/employee/employee.interface";
 
 export default {
   data() {
@@ -95,6 +109,7 @@ export default {
       nodes: [],
       queries: {
         page: 1,
+        limit: 2,
         global: { value: "", matchMode: "" },
         date: { value: "", matchMode: "" },
         currentBalance: { value: "", matchMode: "" },
@@ -131,12 +146,36 @@ export default {
       },
     };
   },
+  async created() {
+    await this.getTableValues(this.queries);
+  },
   methods: {
+    ...mapActions(useEmployeeStore, ["getRegisteredClocks"]),
     async changePageHandler(currentPage: PageState) {
       this.queries.page = currentPage.page + 1;
       await this.getTableValues(this.queries);
     },
-    getTableValues() {},
+    async getTableValues(queryParams: EmployeeQueryParams) {
+      this.loading = true;
+      try {
+        const { clocks, total } = await this.getRegisteredClocks(
+          String(this.$route.params.id),
+          queryParams,
+        );
+
+        this.nodes = clocks;
+        this.totalPages = total;
+      } catch (error) {
+        this.$toast.add({
+          severity: "error",
+          summary: "Algo deu errado!",
+          detail: "Tente novamente mais tarde.",
+          life: 4000,
+        });
+      } finally {
+        this.loading = false;
+      }
+    },
   },
 };
 </script>

@@ -13,16 +13,20 @@
       </section>
 
       <section class="info">
-        <img
-          class="info__img"
-          :src="employee.photo"
-          :alt="`Foto de perfil de ${employee.name}`"
-        />
+        <UiActivityIndicator v-if="loading" size="medium" />
 
-        <div class="info__name">
-          <h4 class="heading__quaternary">{{ employee.name }}</h4>
-          <h5 class="heading__quinary">{{ employee.role }}</h5>
-        </div>
+        <template v-else>
+          <img
+            class="info__img"
+            :src="employee.photo"
+            :alt="`Foto de perfil de ${employee.name}`"
+          />
+
+          <div class="info__name">
+            <h4 class="heading__quaternary">{{ employee.name }}</h4>
+            <h5 class="heading__quinary">{{ employee.role }}</h5>
+          </div>
+        </template>
       </section>
 
       <section>
@@ -45,6 +49,7 @@ import EmployeeSchools from "~/components/employees/employee-schools.vue";
 export default {
   data() {
     return {
+      loading: false,
       items: [
         {
           label: "Pontos",
@@ -88,6 +93,7 @@ export default {
   methods: {
     ...mapActions(useEmployeeStore, ["getEmployeeData"]),
     async getEmployee() {
+      this.loading = true;
       try {
         await this.getEmployeeData(String(this.$route.params.id));
       } catch (error) {
@@ -97,10 +103,12 @@ export default {
           detail: "Tente novamente mais tarde.",
           life: 4000,
         });
+      } finally {
+        this.loading = false;
       }
     },
     goBack() {
-      this.$router.back();
+      this.$router.push("/employees");
     },
   },
 };
@@ -135,6 +143,7 @@ export default {
 }
 
 .info {
+  height: 6.4rem;
   display: flex;
   align-items: center;
   gap: 1.6rem;

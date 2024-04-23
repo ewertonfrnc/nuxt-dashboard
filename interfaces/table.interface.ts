@@ -3,6 +3,8 @@ export type FilterOption = {
   code: string;
 };
 
+export type FilterQueries = { value: string; matchMode: string };
+
 export type Filter = {
   field: string;
   value: null;
