@@ -15,7 +15,9 @@
     </template>
   </TabMenu>
 
-  <component :is="{ ...items[currentTab].component }" />
+  <section>
+    <component :is="{ ...items[currentTab].component }" />
+  </section>
 </template>
 
 <script lang="ts">
@@ -38,3 +40,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+section {
+  margin-top: 2.3rem;
+}
+</style>

@@ -15,13 +15,13 @@
       <section class="info">
         <img
           class="info__img"
-          src="https://randomuser.me/api/portraits/women/39.jpg"
-          alt="user"
+          :src="employee.photo"
+          :alt="`Foto de perfil de ${employee.name}`"
         />
 
         <div class="info__name">
-          <h4 class="heading__quaternary">Ana Maria Martins Rocha</h4>
-          <h5 class="heading__quinary">Nutricionista</h5>
+          <h4 class="heading__quaternary">{{ employee.name }}</h4>
+          <h5 class="heading__quinary">{{ employee.role }}</h5>
         </div>
       </section>
 
@@ -33,6 +33,8 @@
 </template>
 
 <script lang="ts">
+import { mapActions, mapState } from "pinia";
+
 import EmployeeClocks from "~/components/employees/employee-clocks.vue";
 import EmployeeData from "~/components/employees/employee-data.vue";
 import EmployeeContacts from "~/components/employees/employee-contact.vue";
@@ -77,7 +79,26 @@ export default {
       ],
     };
   },
+  computed: {
+    ...mapState(useEmployeeStore, ["employee"]),
+  },
+  async created() {
+    await this.getEmployee();
+  },
   methods: {
+    ...mapActions(useEmployeeStore, ["getEmployeeData"]),
+    async getEmployee() {
+      try {
+        await this.getEmployeeData(String(this.$route.params.id));
+      } catch (error) {
+        this.$toast.add({
+          severity: "error",
+          summary: "Algo deu errado!",
+          detail: "Tente novamente mais tarde.",
+          life: 4000,
+        });
+      }
+    },
     goBack() {
       this.$router.back();
     },
