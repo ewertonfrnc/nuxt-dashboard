@@ -5,10 +5,23 @@
       isNarrowScreen && 'nav__collapsed',
       mouseover && 'nav__open',
       isNavVisible && 'nav__expanded',
+      isMobileScreen && 'nav__mobile',
+      isMobileScreen && isNavVisible && 'nav__mobile--visible',
     ]"
     @mouseleave="handleMouseLeave"
     @mouseover="handleMouseOver"
   >
+    <button
+      v-if="!isNarrowScreen"
+      :class="[
+        'btn__primary',
+        'sidebar__btn',
+        !isNavVisible && 'sidebar__btn--collapsed',
+      ]"
+      @click="toggleSidebar"
+    >
+      <i class="pi pi-angle-double-right" />
+    </button>
     <Menu :model="items">
       <template #start>
         <div class="nav__header">
@@ -106,7 +119,12 @@ import { routes } from "~/utils/routes.utils";
 export default {
   props: {
     isNavVisible: { type: Boolean, default: true, required: true },
+    isMobileScreen: { type: Boolean, default: true, required: true },
     isNarrowScreen: { type: Boolean, default: false, required: true },
+    toggleSidebar: {
+      type: Function as PropType<(payload: MouseEvent) => void>,
+      required: true,
+    },
   },
   emits: ["close-nav", "mouse-over"],
   setup() {
