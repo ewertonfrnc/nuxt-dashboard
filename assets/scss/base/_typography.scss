@@ -34,7 +34,7 @@
 
 body {
   font-family: "Rajdhani", sans-serif;
-  font-size: $default-font-size;
+  font-size: 1.6rem;
 }
 
 .light-mode body {
@@ -47,98 +47,94 @@ body {
 
 .heading {
   &__primary {
-    font-size: 4rem;
-    line-height: 5.3rem;
-    font-weight: 700;
+    font-size: $font-size-title-1;
+    line-height: $line-height-title-1;
+    font-weight: $font-weight-title-1;
   }
 
   &__secondary {
-    font-size: 3.5rem;
-    line-height: 4.2rem;
-    font-weight: 700;
+    font-size: $font-size-title-2;
+    line-height: $line-height-title-2;
+    font-weight: $font-weight-title-2;
   }
 
   &__tertiary {
-    font-size: 2.8rem;
-    line-height: 3.6rem;
-    font-weight: 600;
+    font-size: $font-size-title-3;
+    line-height: $line-height-title-3;
+    font-weight: $font-weight-title-3;
   }
 
   &__quaternary {
-    font-size: 2.3rem;
-    line-height: 3.2rem;
-    font-weight: 600;
+    font-size: $font-size-title-4;
+    line-height: $line-height-title-4;
+    font-weight: $font-weight-title-4;
   }
 
   &__quinary {
-    font-size: 1.8rem;
-    line-height: 2.7rem;
-    font-weight: 600;
+    font-size: $font-size-title-5;
+    line-height: $line-height-title-5;
+    font-weight: $font-weight-title-5;
   }
 
   &__senary {
-    font-size: 1.8rem;
-    line-height: 2.1rem;
-    font-weight: 700;
+    font-size: $font-size-title-5;
+    line-height: $line-height-title-5;
+    font-weight: $font-weight-title-5;
   }
 }
 
 .subtitle {
   &__primary {
-    font-size: 2.1rem;
-    line-height: 2.7rem;
-    font-weight: 700;
+    font-size: $font-size-subtitle-primary;
+    line-height: $line-height-subtitle-primary;
+    font-weight: $font-weight-subtitle-primary;
   }
 
   &__secondary {
-    font-size: 2.1rem;
-    line-height: 2.7rem;
-    font-weight: 400;
+    font-size: $font-size-subtitle-secondary;
+    line-height: $line-height-subtitle-secondary;
+    font-weight: $font-weight-subtitle-secondary;
   }
 }
 
 .body {
-  font-weight: 500;
-
   &__primary {
-    font-size: 1.9rem;
-    line-height: 2.1rem;
-    font-weight: 500;
+    font-size: $font-size-body-primary;
+    line-height: $line-height-body-primary;
+    font-weight: $font-weight-body-primary;
   }
 
   &__secondary {
-    font-size: 1.6rem;
-    line-height: 2.4rem;
-    font-weight: 500;
+    font-size: $font-size-body-secondary;
+    line-height: $line-height-body-secondary;
+    font-weight: $font-weight-body-secondary;
   }
 }
 
 .button {
-  font-weight: 700;
-
   &__primary {
-    font-size: 1.9rem;
-    line-height: 2.4rem;
-    font-weight: 700;
+    font-size: $font-size-button-primary;
+    line-height: $line-height-button-primary;
+    font-weight: $font-weight-button-primary;
   }
 
   &__secondary {
-    font-size: 1.6rem;
-    line-height: 2.4rem;
-    font-weight: 700;
+    font-size: $font-size-button-secondary;
+    line-height: $line-height-button-secondary;
+    font-weight: $font-weight-button-secondary;
   }
 }
 
 .caption {
   &__primary {
-    font-size: 1.4rem;
-    line-height: 1.8rem;
-    font-weight: 500;
+    font-size: $font-size-caption-primary;
+    line-height: $line-height-caption-primary;
+    font-weight: $font-weight-caption-primary;
   }
 
   &__secondary {
-    font-size: 1.4rem;
-    line-height: 1.8rem;
-    font-weight: 600;
+    font-size: $font-size-caption-primary;
+    line-height: $line-height-caption-primary;
+    font-weight: $font-weight-caption-secondary;
   }
 }

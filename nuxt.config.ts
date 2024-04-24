@@ -11,7 +11,7 @@ export default defineNuxtConfig({
   ],
   primevue: {
     usePrimeVue: true,
-    options: { ripple: false, unstyled: true },
+    options: { ripple: true, unstyled: false },
   },
   veeValidate: {
     autoImports: true,

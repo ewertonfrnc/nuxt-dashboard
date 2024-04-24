@@ -35,7 +35,9 @@ export const useAuthStore = defineStore("auth", {
   actions: {
     async authenticateUser(userCredentials: UserCredentials) {
       try {
-        const { data: user } = await authService.login(userCredentials);
+        const {
+          data: { user },
+        } = await authService.login(userCredentials);
         this.user = { ...user, role: ["manager"] };
         this.authenticated = true;
       } catch (error) {

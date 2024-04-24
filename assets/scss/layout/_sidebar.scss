@@ -1,20 +1,68 @@
 .nav {
-  width: 30rem;
-  padding: 2.4rem 0;
-  background-color: map-get($color-scheme-light, "$color-neutral-neutral-7");
-  box-shadow: $box-shadow-light;
-  border: 1px solid map-get($color-scheme-light, "$color-surface-surface-4");
-
-  overflow-y: auto;
-  transform: translateX(0);
-  transition: all 0.5s ease-out;
-
+  width: 5.25rem;
+  padding: 1.4rem 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  transition: all 0.3s cubic-bezier(0, 0, 0.2, 1);
+
+  height: 100%;
+  z-index: 999;
+  position: fixed;
+  box-shadow: $box-shadow-light;
+  background-color: map-get($color-scheme-light, "$color-neutral-neutral-7");
+
+  h6,
+  span {
+    transition: all 0.3s cubic-bezier(0, 0, 0.2, 1);
+    white-space: nowrap;
+    transform: translateX(5rem);
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  &__expanded {
+    width: 25rem;
+
+    h6,
+    span {
+      transition: all 0.3s cubic-bezier(0, 0, 0.2, 1);
+      transform: translateX(0);
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .nav__item--subitem {
+      padding: 0.8rem 1.6rem 0.8rem 3rem;
+    }
+  }
+
+  &__open {
+    &:hover {
+      width: 25rem;
+
+      h6,
+      span {
+        transition: all 0.3s cubic-bezier(0, 0, 0.2, 1);
+        transform: translateX(0);
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .nav__item--subitem {
+        padding: 0.8rem 1.6rem 0.8rem 3rem;
+      }
+
+      .nav__header {
+        img {
+        }
+      }
+    }
+  }
 
   &__header {
-    padding: 0 1.6rem;
+    position: relative;
+    padding: 6rem 1.6rem 0 1.6rem;
     margin-bottom: 2rem;
 
     span {
@@ -28,10 +76,14 @@
     align-items: center;
     gap: 1rem;
     color: map-get($color-scheme-light, "$color-neutral-neutral-0");
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
 
     h6 {
       color: map-get($color-scheme-light, "$color-brand-primary-4");
+    }
+
+    &--expander {
+      width: 100%;
     }
 
     &--active,
@@ -46,7 +98,7 @@
     }
 
     &--subitem {
-      padding: 0.8rem 1.6rem 0.8rem 3rem;
+      padding: 0.8rem 1.6rem;
     }
 
     span {
@@ -70,7 +122,14 @@
 
   &__logo {
     max-width: 100%;
+    margin-left: 1rem;
     margin-bottom: 1rem;
+
+    &--narrow {
+      width: 5rem;
+      transform: translateX(-2px);
+      margin-bottom: 1rem;
+    }
   }
 
   &__collapsed {
@@ -86,9 +145,7 @@
 
 .dark-mode .nav {
   background-color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
-  border: 1px solid map-get($color-scheme-dark, "$color-surface-surface-4");
   box-shadow: $box-shadow-dark;
-  border: $border-dark;
 }
 
 .mask {
@@ -99,4 +156,29 @@
 
   z-index: 9998;
   position: absolute;
+}
+
+.logo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: all 0.3s ease;
+
+  &:nth-child(2) {
+    transform: translateX(4.7rem);
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  &-move:first-child {
+    transform: translateX(-4.7rem);
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  &-move:nth-child(2) {
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
+  }
 }

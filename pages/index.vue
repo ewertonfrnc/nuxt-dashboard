@@ -2,7 +2,7 @@
   <div class="login fadein animation-duration-500">
     <h1 class="heading__primary">Indicadores</h1>
     <div class="summary">
-      <NuxtLink to="/time-sheet" class="indicator">
+      <NuxtLink class="indicator" to="/time-sheet">
         <i class="pi pi-pencil" />
         <div class="indicator__info">
           <h6 class="heading__senary">Ajustes pendentes</h6>
@@ -14,7 +14,7 @@
         </div>
       </NuxtLink>
 
-      <NuxtLink to="/employees" class="indicator">
+      <NuxtLink class="indicator" to="/employees">
         <i class="pi pi-users" />
         <div class="indicator__info">
           <h6 class="heading__senary">Colaboradores</h6>
@@ -26,7 +26,7 @@
         </div>
       </NuxtLink>
 
-      <NuxtLink to="/time-tracking" class="indicator">
+      <NuxtLink class="indicator" to="/time-tracking">
         <i class="pi pi-file" />
         <div class="indicator__info">
           <h6 class="heading__senary">Fechamentos disponíveis</h6>
@@ -41,7 +41,7 @@
 
     <h3 class="heading__tertiary">Outros</h3>
     <div class="summary">
-      <NuxtLink to="/" class="indicator">
+      <NuxtLink class="indicator" to="/">
         <i class="pi pi-sort-alt" />
         <div class="indicator__info">
           <h6 class="heading__senary">Turnover mensal</h6>
@@ -56,7 +56,7 @@
         </div>
       </NuxtLink>
 
-      <NuxtLink to="/" class="indicator">
+      <NuxtLink class="indicator" to="/">
         <i class="pi pi-sort-alt" />
         <div class="indicator__info">
           <h6 class="heading__senary">Turnover anual</h6>
@@ -78,6 +78,9 @@
 import { mapState, mapActions } from "pinia";
 
 export default {
+  setup() {
+    useSeoMeta({ title: "Indicadores" });
+  },
   data() {
     return {
       loading: false,
@@ -110,7 +113,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .summary {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
@@ -126,7 +129,7 @@ export default {
   padding: 1.6rem 1.6rem 1.6rem 0;
   border-radius: 0.8rem;
   transition: transform 0.2s linear;
-  border: $border-light;
+  border: 1px solid map-get($color-scheme-light, "$color-surface-surface-4");
   box-shadow: $box-shadow-light;
   color: map-get($color-scheme-light, "$color-neutral-neutral-0");
   background-color: map-get($color-scheme-light, "$color-neutral-neutral-7");
@@ -154,7 +157,8 @@ export default {
 }
 
 .dark-mode .indicator {
-  border: $border-dark;
+  border: 1px solid map-get($color-scheme-dark, "$color-surface-surface-4");
+
   box-shadow: $box-shadow-dark;
   color: map-get($color-scheme-dark, "$color-neutral-neutral-0");
   background-color: map-get($color-scheme-dark, "$color-neutral-neutral-7");

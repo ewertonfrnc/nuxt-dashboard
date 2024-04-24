@@ -3,6 +3,9 @@ import PendingAdjustments from "~/components/time-sheet/pending-adjustments.vue"
 import ClockOverview from "~/components/time-sheet/clock-overview.vue";
 
 export default {
+  setup() {
+    useSeoMeta({ title: "Pontos" });
+  },
   data() {
     return {
       tabs: [
@@ -16,11 +19,6 @@ export default {
           icon: "pi-users",
           component: ClockOverview,
         },
-        {
-          label: "Busca avançada",
-          icon: "pi-search",
-          component: PendingAdjustments,
-        },
       ],
     };
   },
@@ -28,7 +26,7 @@ export default {
 </script>
 
 <template>
-  <BaseTabs class="fadein animation-duration-500" :tabs-data="tabs" />
+  <BaseTabs :tabs-data="tabs" class="fadein animation-duration-500" />
 </template>
 
-<style scoped lang="scss"></style>
+<style lang="scss" scoped></style>

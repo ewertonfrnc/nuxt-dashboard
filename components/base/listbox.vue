@@ -1,7 +1,7 @@
 <script lang="ts">
 export default {
   props: {
-    options: { type: Array, required: true, default: [] },
+    options: { type: Array, required: true, default: () => [] },
     onUpdateHandler: { type: Function, required: true },
   },
   data() {

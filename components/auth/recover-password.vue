@@ -12,8 +12,9 @@
             <label class="caption__primary">
               Usuário
               <BaseInputMask
-                name="username"
+                :wrong-crendentials-message="wrongCpfMessage"
                 mask="999.999.999-99"
+                name="username"
                 placeholder="Insira seu CPF"
               />
             </label>
@@ -23,14 +24,14 @@
 
       <div class="recover__footer">
         <BaseButton
-          label="Cancelar"
           class="btn__primary--outlined"
+          label="Cancelar"
           @click.prevent="goToLogin"
         />
         <BaseButton
-          label="Próximo"
           :loading="loading"
           class="btn__primary"
+          label="Próximo"
           @click.prevent="recoverHandler"
         />
       </div>
@@ -42,6 +43,7 @@
 import { useForm } from "vee-validate";
 import { mapActions } from "pinia";
 import { RecoverPassword } from "~/interfaces/auth/auth.interface";
+import { validateCPF } from "~/utils/validators";
 
 export default {
   emits: ["changeStep", "recoverEmail"],
@@ -58,6 +60,7 @@ export default {
     return {
       loading: false,
       formData: {} as RecoverPassword | undefined,
+      wrongCpfMessage: "",
     };
   },
   methods: {
@@ -72,6 +75,10 @@ export default {
       try {
         this.formData = await this.onSubmit();
         if (!this.formData) return;
+        if (!validateCPF(this.formData.username)) {
+          this.wrongCpfMessage = "CPF inválido!";
+          return;
+        }
 
         this.loading = true;
 
@@ -104,7 +111,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .recover {
   width: 35rem;
 

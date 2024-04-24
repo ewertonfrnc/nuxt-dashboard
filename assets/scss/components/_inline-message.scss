@@ -7,6 +7,7 @@
 
   display: flex;
   align-items: center;
+  justify-content: flex-start;
 
   &__info {
     background-color: map-get($color-scheme-light, "$color-brand-primary-1");
