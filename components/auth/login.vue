@@ -1,7 +1,7 @@
 <template>
   <UiModal>
     <div class="login fadein animation-duration-500">
-      <img alt="Itera logo" class="login__logo" src="~/assets/img/LOGO.png" />
+      <img alt="Itera logo" class="login__logo" src="~/assets/img/LOGO.svg" />
 
       <div class="login__header">
         <h3 class="heading__tertiary">Área do RH</h3>
@@ -17,6 +17,7 @@
               mask="999.999.999-99"
               name="username"
               placeholder="Insira seu CPF"
+              @handle-change="cpfValidate"
             />
           </label>
         </div>
@@ -76,7 +77,6 @@
 import { useForm } from "vee-validate";
 import { mapActions, mapState } from "pinia";
 import { UserCredentials } from "@/interfaces/auth/auth.interface";
-import { validateCPF } from "@/utils/validators";
 
 export default {
   emits: ["changeStep"],
@@ -108,14 +108,13 @@ export default {
     goToRecoverPassword() {
       this.$emit("changeStep", "recover");
     },
+    cpfValidate(value: string) {
+      this.wrongCpfMessage = value;
+    },
     async login() {
       try {
         this.formData = await this.onSubmit();
         if (!this.formData) return;
-        if (!validateCPF(this.formData.username)) {
-          this.wrongCpfMessage = "CPF inválido!";
-          return;
-        }
 
         this.isLoading = true;
         await this.authenticateUser(this.formData);
@@ -149,7 +148,6 @@ export default {
 
 <style lang="scss" scoped>
 .login {
-  width: 30rem;
   display: grid;
   gap: $spacing-md;
 

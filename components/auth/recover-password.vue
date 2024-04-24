@@ -16,6 +16,7 @@
                 mask="999.999.999-99"
                 name="username"
                 placeholder="Insira seu CPF"
+                @handle-change="cpfValidate"
               />
             </label>
           </div>
@@ -43,7 +44,6 @@
 import { useForm } from "vee-validate";
 import { mapActions } from "pinia";
 import { RecoverPassword } from "~/interfaces/auth/auth.interface";
-import { validateCPF } from "~/utils/validators";
 
 export default {
   emits: ["changeStep", "recoverEmail"],
@@ -71,14 +71,13 @@ export default {
     goToChangePassword() {
       this.$emit("changeStep", "code");
     },
+    cpfValidate(value: string) {
+      this.wrongCpfMessage = value;
+    },
     async recoverHandler() {
       try {
         this.formData = await this.onSubmit();
         if (!this.formData) return;
-        if (!validateCPF(this.formData.username)) {
-          this.wrongCpfMessage = "CPF inválido!";
-          return;
-        }
 
         this.loading = true;
 
@@ -113,8 +112,6 @@ export default {
 
 <style lang="scss" scoped>
 .recover {
-  width: 35rem;
-
   &__header {
     margin-bottom: 1.6rem;
   }
