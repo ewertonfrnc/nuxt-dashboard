@@ -127,8 +127,6 @@ export default {
 
 <style scoped lang="scss">
 .change-password {
-  width: 35rem;
-
   &__header {
     margin-bottom: $spacing-md;
   }

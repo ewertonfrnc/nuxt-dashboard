@@ -102,8 +102,6 @@ export default {
 
 <style scoped lang="scss">
 .recover-code {
-  width: 35rem;
-
   &__header {
     margin-bottom: $spacing-md;
     display: grid;
