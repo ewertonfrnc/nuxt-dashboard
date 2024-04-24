@@ -50,10 +50,44 @@
             :data="{ slotData }"
             :icon="'pi-list'"
             tooltip-text="Ver detalhes do dia"
+            @action-handler="handleClockDialog"
           />
         </template>
       </BaseTable>
     </section>
+
+    <BaseDialog
+      :is-visible="isVisible"
+      :toggle-dialog="toggleVisibility"
+      title="Pontos"
+    >
+      <div class="clocks">
+        <div class="clocks__header">
+          <div class="clocks__date">
+            <span class="caption__primary">Data:</span>
+            <span class="body__secondary">02/05/2024</span>
+          </div>
+
+          <BaseButton class="btn__primary" icon="pi pi-pencil" label="Editar" />
+        </div>
+
+        <div class="clocks__content">
+          <SharedHoursView
+            :requests="selectedClock.requests"
+            :show-total="false"
+          />
+        </div>
+      </div>
+
+      <template #footer>
+        <BaseButton
+          class="btn__primary--outlined"
+          icon="pi pi-times"
+          label="Fechar"
+          @click="toggleVisibility"
+        />
+      </template>
+    </BaseDialog>
   </div>
 </template>
 
@@ -61,9 +95,16 @@
 import { mapActions } from "pinia";
 import { FilterMatchMode } from "primevue/api";
 import { PageState } from "primevue/paginator";
-import { EmployeeQueryParams } from "~/interfaces/employee/employee.interface";
+import {
+  EmployeeClocks,
+  EmployeeQueryParams,
+} from "~/interfaces/employee/employee.interface";
 
 export default {
+  setup() {
+    const { isVisible, toggleVisibility } = useToggle();
+    return { isVisible, toggleVisibility };
+  },
   data() {
     return {
       loading: false,
@@ -144,6 +185,9 @@ export default {
           matchMode: FilterMatchMode.CONTAINS,
         },
       },
+
+      // Dialog
+      selectedClock: {} as EmployeeClocks,
     };
   },
   async created() {
@@ -151,6 +195,10 @@ export default {
   },
   methods: {
     ...mapActions(useEmployeeStore, ["getRegisteredClocks"]),
+    handleClockDialog(data: EmployeeClocks) {
+      this.toggleVisibility();
+      this.selectedClock = data;
+    },
     async changePageHandler(currentPage: PageState) {
       this.queries.page = currentPage.page + 1;
       await this.getTableValues(this.queries);
@@ -183,5 +231,29 @@ export default {
 <style lang="scss" scoped>
 h2 {
   margin-bottom: 2rem;
+}
+
+.clocks {
+  width: 40rem;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    button {
+      max-width: 115px;
+    }
+  }
+
+  &__date {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    span:nth-child(2) {
+      color: map-get($color-scheme-light, "$color-neutral-neutral-2");
+    }
+  }
 }
 </style>

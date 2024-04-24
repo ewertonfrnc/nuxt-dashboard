@@ -1,4 +1,5 @@
 import { FilterQueries } from "../table.interface";
+import { Request } from "~/interfaces/time-sheet/time-sheet.interface";
 
 export type EmployeeClocks = {
   date: string;
@@ -6,6 +7,7 @@ export type EmployeeClocks = {
   firstCheckIn: string;
   lastCheckOut: string;
   dayStatus: string;
+  requests: Request[];
 };
 
 export type Employee = {

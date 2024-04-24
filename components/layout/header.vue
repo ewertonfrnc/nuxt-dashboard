@@ -70,7 +70,9 @@ export default {
   },
   methods: {
     handleNavButton() {
-      this.showNavButton = window.matchMedia("(max-width: 37.5em)").matches;
+      this.showNavButton =
+        window.matchMedia("(max-width: 37.5em)").matches ||
+        window.matchMedia("(min-width: 75em)").matches;
     },
     toggle(event) {
       this.$refs.op.toggle(event);

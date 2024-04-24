@@ -9,6 +9,66 @@ export default defineEventHandler((event) => {
         lastCheckOut: "17:50:30",
         dayStatus: "Ajuste pendente",
         negative: false,
+        requests: {
+          id: 1,
+          date: "02/06 - Sexta-feira",
+          negative: false,
+          before: {
+            total: "08:00:00",
+            negative: false,
+            checkins: [
+              {
+                time: "08:00:00",
+                manipulated: false,
+              },
+              {
+                time: "16:00:00",
+                manipulated: false,
+              },
+            ],
+            checkouts: [
+              {
+                time: "12:00:00",
+                manipulated: false,
+              },
+              {
+                time: "16:10:00",
+                manipulated: false,
+              },
+            ],
+          },
+          after: {
+            total: "08:00:00",
+            checkins: [
+              {
+                time: "08:00:00",
+                manipulated: false,
+              },
+              {
+                time: "13:00:00",
+                manipulated: true,
+              },
+              {
+                time: "15:30:00",
+                manipulated: true,
+              },
+            ],
+            checkouts: [
+              {
+                time: "12:00:00",
+                manipulated: false,
+              },
+              {
+                time: "15:30:00",
+                manipulated: true,
+              },
+              {
+                time: "18:30:00",
+                manipulated: true,
+              },
+            ],
+          },
+        },
       },
       {
         date: "04/06",

@@ -52,6 +52,7 @@ export default {
 
   &__primary {
     background-color: map-get($color-scheme-light, "$color-brand-primary-2");
+    color: map-get($color-scheme-light, "$color-neutral-neutral-7");
   }
 
   &__secondary {
@@ -74,10 +75,12 @@ export default {
 .dark-mode .tag {
   &__primary {
     background-color: map-get($color-scheme-dark, "$color-brand-primary-2");
+    color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
   }
 
   &__secondary {
     background-color: map-get($color-scheme-dark, "$color-neutral-neutral-4");
+    color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
   }
 
   &__success {
