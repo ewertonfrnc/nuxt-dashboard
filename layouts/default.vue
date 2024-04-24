@@ -8,15 +8,23 @@
     <transition name="slide">
       <div class="sidebar">
         <LayoutSidebar
+          :is-mobile-screen="isMobileScreen"
           :is-narrow-screen="isNarrowScreen"
           :is-nav-visible="sidebarExpanded"
+          :toggle-sidebar="toggleSidebar"
           @close-nav="handleNarrowNavigation"
           @mouse-over="handleMouseover"
         />
       </div>
     </transition>
 
-    <section :class="['section', sidebarExpanded && 'section__adapted']">
+    <section
+      :class="[
+        'section',
+        sidebarExpanded && 'section__adapted',
+        isMobileScreen && 'section__full',
+      ]"
+    >
       <LayoutHeader :route-path="path" :toggle-sidebar="toggleSidebar" />
       <BaseToast />
       <slot />
@@ -43,6 +51,7 @@ export default {
     return {
       mouseover: false,
       isNarrowScreen: false,
+      isMobileScreen: false,
       sidebarExpanded: false,
       path: "",
     };
@@ -59,6 +68,7 @@ export default {
   },
   mounted() {
     window.addEventListener("resize", this.handleResize);
+    this.handleResize();
   },
   unmounted() {
     window.removeEventListener("resize", this.handleResize);
@@ -78,6 +88,8 @@ export default {
         this.isNarrowScreen = false;
         this.sidebarExpanded = true;
       }
+
+      this.isMobileScreen = window.matchMedia("(max-width: 37.5em)").matches;
     },
     handleNarrowNavigation() {
       if (this.isNarrowScreen) {
@@ -114,7 +126,11 @@ export default {
   flex-direction: column;
 
   &__adapted {
-    margin-left: 25rem;
+    margin-left: 250px;
+  }
+
+  &__full {
+    margin-left: 0;
   }
 }
 
