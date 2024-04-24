@@ -34,7 +34,9 @@
 <script lang="ts">
 export default {
   setup() {
+    useSeoMeta({ title: "Autorização" });
     definePageMeta({ layout: "auth", colorMode: "light" });
+
     const authSteps = ["login", "recover", "code", "change"];
     return { authSteps };
   },
