@@ -29,7 +29,7 @@
             <img
               alt="Itera logo"
               class="nav__logo--narrow fadein animation-duration-500"
-              src="~/assets/img/logo-narrow.png"
+              src="~/assets/img/logo-narrow.svg"
             />
           </div>
 
@@ -38,20 +38,44 @@
               v-if="colorMode.preference === 'light'"
               alt="Itera logo"
               class="nav__logo fadein animation-duration-500"
-              src="~/assets/img/logo-black.png"
+              src="~/assets/img/logo-black.svg"
             />
             <img
               v-else
               alt="Itera logo"
               class="nav__logo fadein animation-duration-500"
-              src="~/assets/img/logo-white.png"
+              src="~/assets/img/logo-white.svg"
             />
           </div>
 
-          <span class="caption__secondary"
-            >Usemobile Soluções em Tecnologia</span
-          >
-          <span class="caption__primary">01.270.742/0001-08</span>
+          <Accordion :active-index="0">
+            <AccordionTab>
+              <template #header>
+                <div class="nav__company">
+                  <div>
+                    <p class="caption__secondary">
+                      Usemobile Soluções em
+                      TecnologiaTecnologiaTecnologiaTecnologia
+                    </p>
+                    <p class="caption__primary">01.270.742/0001-08</p>
+                  </div>
+
+                  <span class="nav__item--icon">
+                    <i class="pi pi-angle-down" />
+                  </span>
+                </div>
+              </template>
+
+              <template #headericon />
+
+              <template #default>
+                <div class="nav__company--item">
+                  <span class="caption__secondary"> Eva Benefícios </span>
+                  <span class="caption__primary"> 01.270.742/0001-08 </span>
+                </div>
+              </template>
+            </AccordionTab>
+          </Accordion>
         </div>
       </template>
 
