@@ -102,7 +102,31 @@
     &--item {
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
       padding: 0.8rem 1.6rem;
+    }
+
+    &--option {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.8rem 1.6rem;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background-color: map-get(
+          $color-scheme-light,
+          "$color-brand-primary-1"
+        );
+        color: map-get($color-scheme-light, "$color-brand-primary-0");
+      }
+
+      label {
+        width: 180px;
+        display: flex;
+        flex-direction: column;
+        padding-left: 1.6rem;
+        cursor: pointer;
+      }
     }
   }
 

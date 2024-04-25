@@ -53,15 +53,17 @@
             />
           </div>
 
-          <Accordion :active-index="0">
+          <Accordion>
             <AccordionTab>
               <template #header>
                 <div class="nav__company">
                   <div class="nav__company--item">
                     <span class="caption__secondary">
-                      Usemobile Soluções em Tecnologia
+                      {{ selectedCompany.name }}
                     </span>
-                    <span class="caption__primary">01.270.742/0001-08</span>
+                    <span class="caption__primary">
+                      {{ selectedCompany.cnpj }}
+                    </span>
                   </div>
 
                   <span class="nav__item--icon">
@@ -73,9 +75,19 @@
               <template #headericon />
 
               <template #default>
-                <div class="nav__company--item">
-                  <span class="caption__secondary"> Eva Benefícios </span>
-                  <span class="caption__primary"> 01.270.742/0001-08 </span>
+                <div
+                  v-for="company in companies"
+                  :key="company.id"
+                  class="nav__company--option"
+                >
+                  <label :for="company.name">
+                    <span class="caption__secondary"> {{ company.name }} </span>
+                    <span class="caption__primary"> {{ company.cnpj }} </span>
+                  </label>
+                  <BaseRadioButton
+                    :input-id="company.name"
+                    @change="selectCompany(company)"
+                  />
                 </div>
               </template>
             </AccordionTab>
@@ -161,11 +173,28 @@ export default {
   },
   data() {
     return {
+      selectedCompany: {},
+      companies: [
+        {
+          id: 0,
+          name: "Usemobile Soluções em Tecnologia",
+          cnpj: "01.270.742/0001-08",
+        },
+        { id: 1, name: "UseMinas", cnpj: "01.270.742/0001-08" },
+        { id: 2, name: "UseNordeste", cnpj: "01.270.742/0001-08" },
+        { id: 3, name: "UseBH", cnpj: "01.270.742/0001-08" },
+      ],
       items: routes,
       mouseover: false,
     };
   },
+  mounted() {
+    this.selectedCompany = this.companies[0];
+  },
   methods: {
+    selectCompany(company) {
+      this.selectedCompany = company;
+    },
     handleNavigation() {
       this.$emit("close-nav", !this.isNavVisible);
     },
