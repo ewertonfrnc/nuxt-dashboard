@@ -13,11 +13,11 @@
     modal
   >
     <template #header>
-      <h5 class="heading__quinary">{{ title }}</h5>
+      <h4 class="heading__quaternary">{{ title }}</h4>
     </template>
 
     <template #closeicon>
-      <i class="pi pi-times" @click="toggleDialog"></i>
+      <i class="pi pi-times close-icon" @click="toggleDialog"></i>
     </template>
 
     <template #default>
@@ -25,7 +25,9 @@
     </template>
 
     <template #footer>
-      <slot name="footer" />
+      <div class="dialog__footer">
+        <slot name="footer" />
+      </div>
     </template>
   </Dialog>
 </template>
@@ -42,11 +44,21 @@ export default {
     },
     title: { type: String, default: "", required: true },
   },
+  emits: ["save"],
+  methods: {
+    onSave() {
+      this.$emit("save");
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-h5 {
+h4 {
   margin-bottom: 2rem;
+}
+
+.close-icon {
+  font-size: 15px;
 }
 </style>

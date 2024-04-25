@@ -1,7 +1,7 @@
 .dialog {
   background-color: map-get($color-scheme-light, "$color-neutral-neutral-7");
   transition: all 0.2s ease-in-out;
-  padding: 1.6rem 3.2rem 4rem 3.2rem;
+  padding: 16px 32px 40px 32px;
   border-radius: 1.6rem;
   width: max-content;
 
@@ -18,7 +18,8 @@
 
   &__footer {
     display: flex;
-    flex-direction: column;
+    justify-content: flex-end;
+    gap: 8px;
     padding-top: 2rem;
   }
 
