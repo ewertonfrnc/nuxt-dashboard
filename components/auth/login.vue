@@ -55,8 +55,8 @@
 
         <div class="form__submit">
           <BaseButton
-            :loading="isLoading"
-            :disabled="wrongCpfMessage.length"
+            :loading="true"
+            :disabled="wrongCpfMessage.length || isLoading"
             class="btn__primary"
             label="Entrar"
             @click.prevent="login"
@@ -113,11 +113,12 @@ export default {
       this.wrongCpfMessage = value;
     },
     async login() {
+      this.isLoading = true;
+
       try {
         this.formData = await this.onSubmit();
         if (!this.formData) return;
 
-        this.isLoading = true;
         await this.authenticateUser(this.formData);
 
         if (this.user && !this.remindUser) {
