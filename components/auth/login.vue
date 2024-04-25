@@ -56,6 +56,7 @@
         <div class="form__submit">
           <BaseButton
             :loading="isLoading"
+            :disabled="wrongCpfMessage.length"
             class="btn__primary"
             label="Entrar"
             @click.prevent="login"
@@ -173,6 +174,7 @@ export default {
     }
 
     &--label {
+      cursor: pointer;
       color: map-get($color-scheme-light, "$color-neutral-neutral-2");
       display: flex;
       gap: 0.8rem;

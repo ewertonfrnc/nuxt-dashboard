@@ -1,6 +1,26 @@
 export function validateCPF(cpf: string) {
-  const cpfRegex =
-    /^(?!000\.000\.000-00|111\.111\.111-11|222\.222\.222-22|333\.333\.333-33|444\.444\.444-44|555\.555\.555-55|666\.666\.666-66|777\.777\.777-77|888\.888\.888-88|999\.999\.999-99)(\d{3}\.\d{3}\.\d{3}-\d{2})$/;
+  const cleanCPF = cpf.replace(/[^\d]/g, "");
 
-  return cpfRegex.test(cpf);
+  if (cleanCPF.length !== 11) return false;
+  if (/^(\d)\1+$/.test(cleanCPF)) return false;
+
+  let sum = 0;
+  for (let i = 0; i < 9; i++) {
+    sum += parseInt(cleanCPF.charAt(i)) * (10 - i);
+  }
+  let remainder = (sum * 10) % 11;
+  if (remainder === 10 || remainder !== parseInt(cleanCPF.charAt(9))) {
+    return false;
+  }
+
+  sum = 0;
+  for (let i = 0; i < 10; i++) {
+    sum += parseInt(cleanCPF.charAt(i)) * (11 - i);
+  }
+  remainder = (sum * 10) % 11;
+  if (remainder === 10 || remainder !== parseInt(cleanCPF.charAt(10))) {
+    return false;
+  }
+
+  return true;
 }
