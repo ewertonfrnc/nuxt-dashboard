@@ -113,7 +113,7 @@
           <span> {{ item.label }} </span>
         </NuxtLink>
 
-        <Accordion v-if="!item.route && item.items" :active-index="0">
+        <Accordion v-if="!item.route && item.items">
           <AccordionTab>
             <template #header>
               <div class="nav__item nav__item--expander">
