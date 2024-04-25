@@ -22,7 +22,12 @@
     >
       <i class="pi pi-angle-double-right" />
     </button>
-    <Menu :model="items">
+    <Menu
+      :model="items"
+      :pt="{
+        root: 'nav__menu',
+      }"
+    >
       <template #start>
         <div class="nav__header">
           <div :class="['logo', (mouseover || isNavVisible) && 'logo-move']">
@@ -52,12 +57,11 @@
             <AccordionTab>
               <template #header>
                 <div class="nav__company">
-                  <div>
-                    <p class="caption__secondary">
-                      Usemobile Soluções em
-                      TecnologiaTecnologiaTecnologiaTecnologia
-                    </p>
-                    <p class="caption__primary">01.270.742/0001-08</p>
+                  <div class="nav__company--item">
+                    <span class="caption__secondary">
+                      Usemobile Soluções em Tecnologia
+                    </span>
+                    <span class="caption__primary">01.270.742/0001-08</span>
                   </div>
 
                   <span class="nav__item--icon">
