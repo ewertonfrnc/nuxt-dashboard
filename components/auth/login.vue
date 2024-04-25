@@ -55,7 +55,7 @@
 
         <div class="form__submit">
           <BaseButton
-            :loading="true"
+            :loading="isLoading"
             :disabled="wrongCpfMessage.length || isLoading"
             class="btn__primary"
             label="Entrar"
