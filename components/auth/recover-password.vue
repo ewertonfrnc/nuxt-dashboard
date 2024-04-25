@@ -31,6 +31,7 @@
         />
         <BaseButton
           :loading="loading"
+          :disabled="wrongCpfMessage.length"
           class="btn__primary"
           label="Próximo"
           @click.prevent="recoverHandler"

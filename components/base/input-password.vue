@@ -18,6 +18,7 @@
         },
       }"
       toggle-mask
+      @change="handleErrors"
       @update:model-value="(value: string) => $emit('updatedValue', value)"
     >
       <template #hideicon="{ toggleCallback, onClick }">
@@ -52,7 +53,7 @@ export default {
     disabled: { type: Boolean, default: false, required: false },
     wrongCrendentialsMessage: { type: String, default: "", required: false },
   },
-  emits: ["updatedValue"],
+  emits: ["updatedValue", "invalid-field"],
   setup(props) {
     const { value, errorMessage } = useField(props.name);
     return { value, errorMessage };
@@ -63,6 +64,13 @@ export default {
     };
   },
   methods: {
+    handleErrors() {
+      if (this.wrongCrendentialsMessage || this.errorMessage) {
+        this.$emit("invalid-field", false);
+      } else {
+        this.$emit("invalid-field", true);
+      }
+    },
     togglePasswordVisibility() {
       this.isPasswordVisible = !this.isPasswordVisible;
 

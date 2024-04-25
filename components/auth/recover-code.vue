@@ -5,7 +5,7 @@
         <h1 class="heading__tertiary">Código de recuperação</h1>
         <p class="body__primary">
           Insira o código que enviamos para seu e-mail
-          <span class="highlight"> {{ recoverEmail }}. </span>
+          <span class="highlight"> {{ recoverEmail }} </span>.
         </p>
       </div>
 
