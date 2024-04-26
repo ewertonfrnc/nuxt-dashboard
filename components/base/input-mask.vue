@@ -13,6 +13,7 @@
       :mask="mask"
       :placeholder="placeholder"
       :readonly="readonly"
+      @update:model-value="handleChange"
     />
   </div>
 
@@ -21,8 +22,9 @@
   }}</small>
 </template>
 
-<script>
+<script lang="ts">
 import { useField } from "vee-validate";
+import { validateCPF } from "~/utils/validators";
 
 export default {
   props: {
@@ -35,9 +37,15 @@ export default {
     disabled: { type: Boolean, default: false, required: false },
     wrongCrendentialsMessage: { type: String, default: "", required: false },
   },
+  emits: ["handle-change"],
   setup(props) {
     const { value, errorMessage } = useField(props.name);
     return { value, errorMessage };
+  },
+  methods: {
+    handleChange(value: string) {
+      this.$emit("handle-change", !validateCPF(value) ? "CPF inválido!" : "");
+    },
   },
 };
 </script>
