@@ -15,14 +15,25 @@
   h6,
   span {
     transition: all 0.3s cubic-bezier(0, 0, 0.2, 1);
-    white-space: nowrap;
     transform: translateX(5rem);
     opacity: 0;
     visibility: hidden;
   }
 
+  &__mobile {
+    @include respond(phone) {
+      transform: translateX(-250px);
+    }
+
+    &--visible {
+      @include respond(phone) {
+        transform: translateX(0);
+      }
+    }
+  }
+
   &__expanded {
-    width: 25rem;
+    width: 250px;
 
     h6,
     span {
@@ -39,7 +50,7 @@
 
   &__open {
     &:hover {
-      width: 25rem;
+      width: 250px;
 
       h6,
       span {
@@ -53,20 +64,69 @@
         padding: 0.8rem 1.6rem 0.8rem 3rem;
       }
 
-      .nav__header {
-        img {
-        }
+      .sidebar__btn {
+        left: 237px;
+        transform: rotate(180deg);
       }
     }
   }
 
   &__header {
     position: relative;
-    padding: 6rem 1.6rem 0 1.6rem;
-    margin-bottom: 2rem;
+    padding-top: 6rem;
+    margin-bottom: 1rem;
 
     span {
       display: inline-block;
+    }
+  }
+
+  &__company {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.8rem 1.6rem 0 0;
+    margin-top: 1.6rem;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: map-get($color-scheme-light, "$color-brand-primary-1");
+      color: map-get($color-scheme-light, "$color-brand-primary-0");
+    }
+
+    & > div {
+      max-width: 20rem;
+    }
+
+    &--item {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 0.8rem 1.6rem;
+    }
+
+    &--option {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.8rem 1.6rem;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background-color: map-get(
+          $color-scheme-light,
+          "$color-brand-primary-1"
+        );
+        color: map-get($color-scheme-light, "$color-brand-primary-0");
+      }
+
+      label {
+        width: 180px;
+        display: flex;
+        flex-direction: column;
+        padding-left: 1.6rem;
+        cursor: pointer;
+      }
     }
   }
 
@@ -126,10 +186,15 @@
     margin-bottom: 1rem;
 
     &--narrow {
-      width: 5rem;
-      transform: translateX(-2px);
+      width: 4rem;
+      transform: translate(5px, 10px);
       margin-bottom: 1rem;
     }
+  }
+
+  &__menu {
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   &__collapsed {
@@ -146,6 +211,13 @@
 .dark-mode .nav {
   background-color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
   box-shadow: $box-shadow-dark;
+
+  &__company {
+    &:hover {
+      background-color: map-get($color-scheme-dark, "$color-brand-primary-1");
+      color: map-get($color-scheme-dark, "$color-brand-primary-0");
+    }
+  }
 }
 
 .mask {
@@ -165,20 +237,39 @@
   transition: all 0.3s ease;
 
   &:nth-child(2) {
-    transform: translateX(4.7rem);
+    transform: translateX(47px);
     opacity: 0;
     visibility: hidden;
   }
 
   &-move:first-child {
-    transform: translateX(-4.7rem);
+    transform: translateX(-47px);
     opacity: 0;
     visibility: hidden;
   }
 
   &-move:nth-child(2) {
-    transform: translateX(0);
+    transform: translateX(35px);
     opacity: 1;
     visibility: visible;
+  }
+}
+
+.sidebar__btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 77px;
+  cursor: pointer;
+
+  z-index: 100;
+  position: absolute;
+  top: 70px;
+  left: 237px;
+  transform: rotate(180deg);
+  transition: all 0.3s cubic-bezier(0, 0, 0.2, 1);
+
+  &--collapsed {
+    transform: rotate(0);
+    left: 40px;
   }
 }
