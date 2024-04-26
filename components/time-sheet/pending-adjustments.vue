@@ -126,7 +126,7 @@ export default {
           header: "Nome",
           sortable: false,
           hasFilter: true,
-          frozen: true,
+          frozen: false,
         },
         {
           field: "currentBalance",
