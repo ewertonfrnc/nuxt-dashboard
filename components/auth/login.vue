@@ -35,6 +35,7 @@
         <div class="form__reminder">
           <div>
             <BaseCheckbox
+              :checked="remindUser"
               input-id="remindUser"
               @change="remindUser = !remindUser"
             />

@@ -5,9 +5,8 @@
         'btn__primary--outlined',
         'split__button-left',
         selectedBtn === 'left' && 'active',
-        disableLeftBtn && 'inactive',
+        (request.approved || disableLeftBtn) && 'inactive',
       ]"
-      :disabled="approveAll"
       label="Reprovar"
       @click.stop="leftButtonHandler(request)"
     />
@@ -15,8 +14,8 @@
       :class="[
         'btn__primary--outlined',
         'split__button-right',
-        (approveAll || selectedBtn === 'right') && 'active',
         disableRightBtn && 'inactive',
+        (request.approved || selectedBtn === 'right') && 'active',
       ]"
       label="Aprovar"
       @click.stop="rightButtonHandler(request)"
@@ -30,7 +29,7 @@ import { Request } from "~/interfaces/time-sheet/time-sheet.interface";
 
 export default {
   props: {
-    requests: { type: Array as PropType<Request[]>, required: true },
+    requests: { type: Set, required: true },
     request: { type: Object as PropType<Request>, required: true },
     approveAll: { type: Boolean, default: false, required: true },
   },
@@ -41,6 +40,17 @@ export default {
       disableLeftBtn: false,
       disableRightBtn: false,
     };
+  },
+  watch: {
+    approveAll(newValue) {
+      if (newValue) {
+        this.selectedBtn = "right";
+        this.disableLeftBtn = true;
+      }
+    },
+  },
+  updated() {
+    console.log("request approved", this.request.approved);
   },
   methods: {
     leftButtonHandler(request: Request) {

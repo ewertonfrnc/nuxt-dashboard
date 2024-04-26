@@ -1,6 +1,6 @@
 <template>
   <Checkbox
-    v-model="checked"
+    v-model="checkedValue"
     :binary="true"
     :pt="{
       root: ({ context }) => {
@@ -15,16 +15,22 @@
 
 <script lang="ts">
 export default {
+  props: {
+    checked: { type: Boolean, default: false, required: true },
+  },
   emits: ["checkbox-value"],
   data() {
     return {
-      checked: false,
+      checkedValue: this.checked,
     };
+  },
+  updated() {
+    this.checkedValue = this.checked;
   },
   methods: {
     toggleChecked() {
-      this.checked = !this.checked;
-      this.$emit("checkbox-value", this.checked);
+      this.checkedValue = !this.checkedValue;
+      this.$emit("checkbox-value", this.checkedValue);
     },
   },
 };

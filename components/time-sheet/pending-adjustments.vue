@@ -33,7 +33,7 @@
 
         <template #column-action="slotData">
           <BaseTableAction
-            :data="slotData"
+            :data="{ slotData }"
             :icon="'pi-search'"
             tooltip-text="Verificar ajuste"
             @action-handler="logSelectedItem"
@@ -51,15 +51,14 @@
             <span class="caption__primary">Solicitante:</span>
 
             <div class="adjust__info--employee">
-              <p class="body__primary">{{ userPendingRequests?.name }}</p>
-              <span class="caption__primary">{{
-                userPendingRequests?.role
-              }}</span>
+              <p class="body__primary">{{ selectedUser?.name }}</p>
+              <span class="caption__primary">{{ selectedUser?.role }}</span>
             </div>
           </div>
 
           <div class="adjust__approval">
             <BaseCheckbox
+              :checked="approveAll"
               input-id="approval"
               @checkbox-value="handleApproveAll"
             />
@@ -68,9 +67,9 @@
 
           <div class="adjust__accordion">
             <TimeSheetAdjustAccordion
-              v-if="userPendingRequests"
+              v-if="selectedUser"
               :approve-all="approveAll"
-              :user="nodes[0]"
+              :user="selectedUser"
               @approved-all="handleApproveAll"
               @button-handler="buttonHandler"
             />
@@ -111,8 +110,8 @@ import { FilterMatchMode } from "primevue/api";
 import { mapActions, mapState } from "pinia";
 import { PageState } from "primevue/paginator";
 import {
-  PendingAdjust,
   QueryParams,
+  User,
 } from "~/interfaces/time-sheet/time-sheet.interface";
 import { Filter } from "~/interfaces/table.interface";
 
@@ -127,18 +126,21 @@ export default {
           header: "Nome",
           sortable: false,
           hasFilter: true,
+          frozen: true,
         },
         {
           field: "currentBalance",
           header: "Saldo atual",
           sortable: false,
           hasFilter: true,
+          frozen: false,
         },
         {
           field: "totalRequests",
           header: "Ajustes pendentes",
           sortable: false,
           hasFilter: true,
+          frozen: false,
         },
       ],
       nodes: [],
@@ -175,6 +177,7 @@ export default {
       approveAll: false,
       updatedPendingRequests: [] as Request[],
       showErrorMessage: false,
+      selectedUser: {} as User,
     };
   },
   computed: {
@@ -203,7 +206,6 @@ export default {
     },
     handleApproveAll(value: boolean) {
       this.approveAll = value;
-      if (!value) this.updatedPendingRequests = [];
     },
     buttonHandler(requests: Request[]) {
       this.updatedPendingRequests = requests;
@@ -235,22 +237,12 @@ export default {
         this.tableLoading = false;
       }
     },
-    async logSelectedItem({ data }: PendingAdjust) {
+    logSelectedItem(data) {
       this.toggleDialog();
-
-      try {
-        // await this.getUserPendingAdjustments(data.userId);
-      } catch (err) {
-        this.$toast.add({
-          severity: "error",
-          summary: "Algo deu errado",
-          detail: "Tente novamente mais tarde.",
-          life: 4000,
-        });
-      }
+      this.selectedUser = data;
     },
     async submitPendingRequests() {
-      if (!this.userPendingRequests || !this.updatedPendingRequests.length) {
+      if (!this.selectedUser || !this.updatedPendingRequests.length) {
         this.showErrorMessage = true;
         return;
       }
@@ -258,7 +250,7 @@ export default {
       this.dialogLoading = true;
       try {
         await this.updateRequestsApproval(
-          this.userPendingRequests.userId,
+          this.selectedUser.userId,
           this.updatedPendingRequests,
         );
 
@@ -293,6 +285,7 @@ section {
 .adjust {
   width: 60rem;
   height: 60rem;
+  padding-right: 10px;
   overflow-x: hidden;
 
   @include respond(phone) {
