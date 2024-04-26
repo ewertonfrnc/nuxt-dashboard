@@ -116,12 +116,17 @@
       :key="col.field"
       :field="col.field"
       :filter-field="col.field"
+      :frozen="col.frozen"
       :header="col.header"
       :pt="{
-        headercell: 'table__header--cell',
+        headercell: `table__header--cell ${
+          col.frozen && 'table__header--frozen-cell'
+        }`,
         headertitle: 'heading__quinary',
         headercontent: 'table__header--content',
-        bodycell: 'table__body--cell',
+        bodycell: `table__body--cell ${
+          col.frozen && 'table__body--frozen-cell'
+        }`,
         filteraddrule: 'filter__add-rule',
         filterConstraints: 'table__filter',
         filtermenubutton: 'table__filter--icon',
@@ -177,8 +182,9 @@
       :pt="{
         headercell: 'table__header--cell',
         bodycell: 'table__body--cell',
+        headercontent: 'table__header-content'
       }"
-      style="width: 1rem"
+      style="min-width: 2rem"
     >
       <template #header>
         <slot name="column-header" />
