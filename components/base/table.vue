@@ -182,6 +182,7 @@
       :pt="{
         headercell: 'table__header--cell',
         bodycell: 'table__body--cell',
+        headercontent: 'table__header-content'
       }"
       style="min-width: 2rem"
     >

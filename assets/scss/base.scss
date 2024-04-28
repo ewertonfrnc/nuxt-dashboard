@@ -14,23 +14,28 @@
 html {
   // This defines 1rem
   font-size: 62.5%; // 1rem = 10px; 10px/16px = 62.5%
-
-  @include respond(tab-land) {
-    font-size: 56.25%; // 1rem = 9px; 9px/16px = 56.25%
-  }
-
-  @include respond(tab-port) {
-    font-size: 50%; // 1rem = 8px; 8px/16px = 50%
-  }
-
-  @include respond(big-desktop) {
-    font-size: 75%; // 1rem = 12px; 12px/16px = 75%
-  }
 }
 
 body {
   box-sizing: border-box;
   scroll-behavior: smooth;
+
+  @supports selector(::-webkit-scrollbar) {
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 4px;
+      background-color: map-get(
+        $color-scheme-light,
+        "$color-neutral-neutral-6"
+      );
+    }
+    ::-webkit-scrollbar-thumb {
+      width: 100%;
+      border-radius: 8px;
+
+      background: map-get($color-scheme-light, "$color-neutral-neutral-3");
+    }
+  }
 }
 
 a {
@@ -73,33 +78,9 @@ hr {
   border-radius: 0.8rem;
   background: map-get($color-scheme-light, "$color-neutral-neutral-1");
   color: map-get($color-scheme-light, "$color-neutral-neutral-7");
-
-  z-index: 9999;
-  position: absolute;
-  top: -50%;
-
-  &::after {
-    content: "";
-    width: 1.5rem;
-    height: 1.5rem;
-    background: white;
-
-    z-index: 1000;
-    position: absolute;
-    bottom: -30%;
-    left: 50%;
-    transform: translate(-50%);
-    clip-path: polygon(0 0%, 50% 70%, 100% 0%);
-    background: map-get($color-scheme-light, "$color-neutral-neutral-1");
-  }
 }
 
 .dark-mode .tooltip {
   background: map-get($color-scheme-dark, "$color-neutral-neutral-1");
   color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
-
-  &::after {
-    background: map-get($color-scheme-dark, "$color-neutral-neutral-1");
-    color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
-  }
 }

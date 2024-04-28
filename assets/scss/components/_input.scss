@@ -57,12 +57,20 @@
       border: 1px solid map-get($color-scheme-light, "$color-neutral-neutral-3");
       cursor: not-allowed;
     }
+
+    &:focus {
+      outline-color: map-get($color-scheme-light, "$color-brand-primary-0");
+    }
   }
 
   .dark-mode &__field {
     color: map-get($color-scheme-dark, "$color-neutral-neutral-2");
     border: 1px solid map-get($color-scheme-dark, "$color-neutral-neutral-4");
     background-color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
+
+    &:focus {
+      outline-color: map-get($color-scheme-dark, "$color-brand-primary-0");
+    }
   }
 
   .error {

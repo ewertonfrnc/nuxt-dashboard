@@ -63,6 +63,7 @@
     position: relative;
 
     &--content {
+      min-width: max-content;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -75,16 +76,18 @@
 
     &--options {
       transition: all 0.5s ease-in-out;
-      display: grid;
-      grid-template-columns: 1fr;
-      justify-content: end;
-      padding: 2rem 0.8rem;
+      height: 68px;
+      padding: 12px 8px;
       background-color: map-get(
         $color-scheme-light,
         "$color-neutral-neutral-6"
       );
       border: $border-light;
       border-bottom-style: none;
+
+      @include respond(phone) {
+        height: 110px;
+      }
     }
 
     &--options-selection {
@@ -118,6 +121,20 @@
         @extend .input__field;
         padding-left: 3.5rem;
         width: 20rem;
+
+        @include respond(phone) {
+          padding-left: 5.5rem;
+        }
+      }
+
+      @include respond(phone) {
+        flex-direction: column;
+        gap: 2rem;
+
+        button,
+        input {
+          width: 100%;
+        }
       }
 
       @include respond(phone) {
@@ -138,7 +155,6 @@
     }
 
     &--cell {
-      min-width: 20rem;
       height: 4.3rem;
       padding: 0 1rem;
       border: 1px solid map-get($color-scheme-light, "$color-neutral-neutral-4");
@@ -146,6 +162,13 @@
 
     &--frozen-cell {
       left: 0 !important;
+    }
+
+    &-content {
+      span {
+        width: 100%;
+        text-align: center;
+      }
     }
   }
 
@@ -163,8 +186,8 @@
     }
 
     &--cell {
-      min-width: 20rem;
-      padding: 2rem 1rem;
+      min-width: 16rem;
+      padding: 1.5rem;
       border: $border-light;
       background-color: map-get(
         $color-scheme-light,
@@ -212,6 +235,10 @@
     .pi {
       cursor: pointer;
       color: map-get($color-scheme-light, "$color-brand-primary-0");
+    }
+
+    .success {
+      color: map-get($color-scheme-light, "$color-feedback-success-0");
     }
   }
 
@@ -309,8 +336,14 @@
       }
     }
 
-    &__action .pi {
-      color: map-get($color-scheme-dark, "$color-brand-primary-0");
+    &__action {
+      .pi {
+        color: map-get($color-scheme-dark, "$color-brand-primary-0");
+      }
+
+      .success {
+        color: map-get($color-scheme-dark, "$color-feedback-success-0");
+      }
     }
   }
 

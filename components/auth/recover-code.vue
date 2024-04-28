@@ -5,7 +5,7 @@
         <h1 class="heading__tertiary">Código de recuperação</h1>
         <p class="body__primary">
           Insira o código que enviamos para seu e-mail
-          <span class="highlight"> {{ recoverEmail }}. </span>
+          <span class="highlight"> {{ recoverEmail }} </span>.
         </p>
       </div>
 
@@ -102,8 +102,6 @@ export default {
 
 <style scoped lang="scss">
 .recover-code {
-  width: 35rem;
-
   &__header {
     margin-bottom: $spacing-md;
     display: grid;

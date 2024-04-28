@@ -36,6 +36,7 @@
               <BaseInputPassword
                 name="passwordConfirm"
                 placeholder="Repita a nova senha"
+                @invalid-field="checkInvalidFields"
               />
             </label>
           </div>
@@ -49,6 +50,8 @@
           @click.prevent="goToLogin"
         />
         <BaseButton
+          :loading="loading"
+          :disabled="anyInvalidField"
           label="Salvar"
           class="btn__primary"
           @click.prevent="changePasswordHandler"
@@ -79,11 +82,16 @@ export default {
     return {
       loading: false,
       isValidPassword: true,
-      formData: {} as ChangePassword | undefined,
+      anyInvalidField: false,
+      formData: { password: "", passwordConfirm: "" } as ChangePassword,
     };
   },
   methods: {
     ...mapActions(useAuthStore, ["changePassword"]),
+    checkInvalidFields(value: boolean) {
+      console.log({ value });
+      this.anyInvalidField = value;
+    },
     goToLogin() {
       this.$emit("changeStep", "login");
     },
@@ -127,8 +135,6 @@ export default {
 
 <style scoped lang="scss">
 .change-password {
-  width: 35rem;
-
   &__header {
     margin-bottom: $spacing-md;
   }

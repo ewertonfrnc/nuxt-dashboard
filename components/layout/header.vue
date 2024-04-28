@@ -68,6 +68,13 @@ export default {
       return [routeAndLabel];
     },
   },
+  mounted() {
+    window.addEventListener("resize", this.handleNavButton);
+    this.handleNavButton();
+  },
+  unmounted() {
+    window.removeEventListener("resize", this.handleNavButton);
+  },
   methods: {
     handleNavButton() {
       this.showNavButton = window.matchMedia("(max-width: 37.5em)").matches;
