@@ -42,7 +42,7 @@
 
         <template #column-action="slotData">
           <BaseTableAction
-            :data="slotData"
+            :data="{ slotData }"
             :icon="'pi-user'"
             tooltip-text="Ver detalhes no perfil"
             @action-handler="goToEmployeeDetails"
@@ -137,7 +137,7 @@ export default {
   },
   methods: {
     ...mapActions(useTimeSheetStore, ["fetchAllClocks"]),
-    goToEmployeeDetails({ data }) {
+    goToEmployeeDetails(data) {
       this.$router.push(`/employees/${data.id}`);
     },
     async datePickerHandler(date: Date) {
