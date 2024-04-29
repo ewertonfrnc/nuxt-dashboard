@@ -133,6 +133,16 @@
           width: 100%;
         }
       }
+
+      @include respond(phone) {
+        flex-direction: column;
+        gap: 2rem;
+
+        button,
+        input {
+          width: 100%;
+        }
+      }
     }
 
     &--see-selected {

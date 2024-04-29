@@ -132,6 +132,10 @@ export default {
   &__full {
     margin-left: 0;
   }
+
+  &__full {
+    margin-left: 0;
+  }
 }
 
 .sidebar {
