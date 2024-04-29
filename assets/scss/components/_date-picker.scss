@@ -98,6 +98,10 @@
     background-color: map-get($color-scheme-light, "$color-brand-primary-1");
     color: map-get($color-scheme-light, "$color-brand-primary-0");
   }
+
+  &__disabled {
+    color: map-get($color-scheme-light, "$color-neutral-neutral-2");
+  }
 }
 
 .dark-mode .date-picker {
