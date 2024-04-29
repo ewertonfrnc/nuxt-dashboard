@@ -108,6 +108,7 @@
 
     &--option {
       display: flex;
+      align-items: center;
       justify-content: space-between;
       padding: 0.8rem 1.6rem;
       transition: all 0.3s ease;
@@ -126,6 +127,23 @@
         flex-direction: column;
         padding-left: 1.6rem;
         cursor: pointer;
+      }
+    }
+
+    &--see-all {
+      cursor: pointer;
+      padding: 8px 16px;
+      text-align: center;
+      color: map-get($color-scheme-light, "$color-brand-primary-0");
+
+      transition: all 0.3s linear;
+
+      &:hover {
+        background-color: map-get(
+          $color-scheme-light,
+          "$color-brand-primary-1"
+        );
+        color: map-get($color-scheme-light, "$color-brand-primary-0");
       }
     }
   }
@@ -216,6 +234,21 @@
     &:hover {
       background-color: map-get($color-scheme-dark, "$color-brand-primary-1");
       color: map-get($color-scheme-dark, "$color-brand-primary-0");
+    }
+
+    &--option {
+      &:hover {
+        background-color: map-get($color-scheme-dark, "$color-brand-primary-1");
+        color: map-get($color-scheme-dark, "$color-brand-primary-0");
+      }
+    }
+
+    &--see-all {
+      color: map-get($color-scheme-dark, "$color-brand-primary-0");
+      &:hover {
+        background-color: map-get($color-scheme-dark, "$color-brand-primary-1");
+        color: map-get($color-scheme-dark, "$color-brand-primary-0");
+      }
     }
   }
 }
