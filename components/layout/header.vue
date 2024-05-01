@@ -68,11 +68,16 @@ export default {
       return [routeAndLabel];
     },
   },
+  mounted() {
+    window.addEventListener("resize", this.handleNavButton);
+    this.handleNavButton();
+  },
+  unmounted() {
+    window.removeEventListener("resize", this.handleNavButton);
+  },
   methods: {
     handleNavButton() {
-      this.showNavButton =
-        window.matchMedia("(max-width: 37.5em)").matches ||
-        window.matchMedia("(min-width: 75em)").matches;
+      this.showNavButton = window.matchMedia("(max-width: 37.5em)").matches;
     },
     toggle(event) {
       this.$refs.op.toggle(event);

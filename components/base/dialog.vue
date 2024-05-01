@@ -3,6 +3,7 @@
     :draggable="false"
     :pt="{
       root: 'dialog',
+      content: 'overflow-hidden',
       mask: 'dialog__mask fadein',
       closeButton: 'dialog__close-btn',
       header: 'dialog__header',

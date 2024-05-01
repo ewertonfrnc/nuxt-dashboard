@@ -1,7 +1,7 @@
 <template>
   <Accordion>
     <AccordionTab
-      v-for="(request, index) in user.requests"
+      v-for="(request, index) in requests"
       :key="index"
       :pt="{
         root: 'accordion__tab',
@@ -32,7 +32,7 @@
           <BaseSplitButton
             :approve-all="approveAll"
             :request="request"
-            :requests="user.requests"
+            :requests="approvedRequests"
             @button-handler="buttonHandler"
           />
         </div>
@@ -145,6 +145,7 @@ export default {
   emits: ["button-handler", "approved-all"],
   data() {
     return {
+      requests: this.user.requests,
       updatedRequests: [] as Request[],
       rejectedRequests: new Set<Request>(),
       approvedRequests: new Set<Request>(),
@@ -157,18 +158,24 @@ export default {
   },
   unmounted() {
     this.updatedRequests = [];
+    this.removeApproval();
+    this.$emit("approved-all", false);
   },
   methods: {
     ...mapActions(useTimeSheetStore, ["updateRequestsApproval"]),
     buttonHandler(request: Request) {
       if (request.approved) {
+        this.rejectedRequests.delete(request);
         this.approvedRequests.add(request);
       } else {
+        this.approvedRequests.delete(request);
         this.rejectedRequests.add(request);
       }
 
       if (this.approvedRequests.size === this.user.requests.length) {
-        this.$emit("approved-all");
+        this.$emit("approved-all", true);
+      } else {
+        this.$emit("approved-all", false);
       }
 
       this.updatedRequests = [
@@ -179,11 +186,26 @@ export default {
       this.$emit("button-handler", this.updatedRequests);
     },
     handleApproveAll() {
-      for (const request of this.user.requests) {
-        this.approvedRequests.add({ ...request, approved: true });
+      this.rejectedRequests.clear();
+
+      for (const request of this.requests) {
+        if (this.approvedRequests.has(request)) return;
+        request.approved = true;
+        this.approvedRequests.add(request);
       }
+
       this.updatedRequests = [...this.approvedRequests];
       this.$emit("button-handler", this.updatedRequests);
+    },
+    removeApproval() {
+      const newRequests = [];
+
+      for (const request of this.requests) {
+        delete request.approved;
+        newRequests.push(request);
+      }
+
+      this.requests = newRequests;
     },
   },
 };

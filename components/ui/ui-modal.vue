@@ -15,8 +15,15 @@ export default {};
 
 .modal {
   z-index: 1;
-  padding: 3.8rem;
-  border-radius: 1.6rem;
-  box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+
+  width: 439px;
+  padding: 48px;
+  border-radius: 16px;
+
+  @include respond(phone) {
+    width: 375px;
+    padding: 38px;
+  }
 }
 </style>
