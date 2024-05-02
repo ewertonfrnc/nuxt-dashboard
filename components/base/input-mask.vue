@@ -1,21 +1,23 @@
 <template>
-  <div class="input">
-    <i v-if="!readonly && icon" :class="`${icon} input__icon`" />
+  <VeeField :name="name">
+    <div class="input">
+      <i v-if="!readonly && icon" :class="`${icon} input__icon`" />
 
-    <InputMask
-      v-model="value"
-      :auto-clear="false"
-      :class="[
-        'input__field',
-        (errorMessage || wrongCrendentialsMessage) && 'error',
-      ]"
-      :disabled="disabled"
-      :mask="mask"
-      :placeholder="placeholder"
-      :readonly="readonly"
-      @update:model-value="handleChange"
-    />
-  </div>
+      <InputMask
+        v-model="value"
+        :auto-clear="false"
+        :class="[
+          'input__field body__primary',
+          (errorMessage || wrongCrendentialsMessage) && 'error',
+        ]"
+        :disabled="disabled"
+        :mask="mask"
+        :placeholder="placeholder"
+        :readonly="readonly"
+        @update:model-value="handleChange"
+      />
+    </div>
+  </VeeField>
 
   <small class="input__error">{{
     wrongCrendentialsMessage || errorMessage

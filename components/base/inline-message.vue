@@ -16,7 +16,7 @@ export default {
 <template>
   <InlineMessage
     :pt="{
-      root: `inline-message inline-message__${severity}`,
+      root: `inline-message inline-message__${severity} fadein animation-duration-500`,
       icon: 'inline-message__icon body__secondary',
       text: 'inline-message__text body__secondary',
     }"

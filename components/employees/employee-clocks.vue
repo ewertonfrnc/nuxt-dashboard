@@ -6,7 +6,7 @@
       <BaseTable
         :columns="columns"
         :custom-filters="filters"
-        :loading="loading"
+        :loading="tableLoading"
         :nodes="nodes"
         :total-pages="totalPages"
         has-action
@@ -68,34 +68,39 @@
             <span class="body__secondary">02/05/2024</span>
           </div>
 
-          <BaseButton class="btn__primary" icon="pi pi-pencil" label="Editar" />
+          <Transition>
+            <BaseButton
+              v-if="!isEditing"
+              class="btn__primary"
+              icon="pi pi-pencil"
+              label="Editar"
+              @click="isEditing = true"
+            />
+          </Transition>
         </div>
 
-        <div class="clocks__content">
-          <SharedHoursView
-            :requests="selectedClock.requests"
-            :show-total="false"
-          />
-        </div>
-      </div>
-
-      <template #footer>
-        <BaseButton
-          class="btn__primary--outlined"
-          icon="pi pi-times"
-          label="Fechar"
-          @click="toggleVisibility"
+        <EmployeesAdjustClocksForm
+          :selected-clock="selectedClock"
+          :is-editing="isEditing"
+          :loading="dialogLoading"
+          :has-changes="hasChanges"
+          :show-error-message="showErrorMessage"
+          :handle-cancel="handleCancelEditing"
+          :handle-save="handleSaveEditing"
+          @handle-change="handleChange"
         />
-      </template>
+      </div>
     </BaseDialog>
   </div>
 </template>
 
 <script lang="ts">
-import { mapActions } from "pinia";
+import { mapActions, mapState } from "pinia";
 import { FilterMatchMode } from "primevue/api";
 import { PageState } from "primevue/paginator";
+import { DateTime } from "luxon";
 import {
+  AdjustClocks,
   EmployeeClocks,
   EmployeeQueryParams,
 } from "~/interfaces/employee/employee.interface";
@@ -107,7 +112,7 @@ export default {
   },
   data() {
     return {
-      loading: false,
+      tableLoading: false,
       totalPages: 0,
       currentPage: 1,
       columns: [
@@ -187,14 +192,73 @@ export default {
       },
 
       // Dialog
+      dialogLoading: false,
       selectedClock: {} as EmployeeClocks,
+      isEditing: false,
+      hasChanges: false,
+      showErrorMessage: false,
+      cancelRequest: false,
     };
   },
   async created() {
     await this.getTableValues(this.queries);
   },
+  computed: {
+    ...mapState(useEmployeeStore, ["employee"]),
+  },
   methods: {
-    ...mapActions(useEmployeeStore, ["getRegisteredClocks"]),
+    ...mapActions(useEmployeeStore, ["getRegisteredClocks", "updateDayClock"]),
+    handleChange(value: boolean) {
+      this.hasChanges = value;
+      this.cancelRequest = false;
+    },
+    handleCancelEditing() {
+      this.toggleVisibility();
+      this.resetDialog();
+    },
+    resetDialog() {
+      this.isEditing = false;
+      this.hasChanges = false;
+      this.showErrorMessage = false;
+    },
+    async handleSaveEditing(values: AdjustClocks) {
+      if (!this.hasChanges) {
+        this.showErrorMessage = true;
+        return;
+      }
+
+      Object.values(values).forEach((value) => {
+        if (!DateTime.fromISO(value).c) {
+          this.cancelRequest = true;
+        }
+      });
+
+      if (this.cancelRequest)
+        return this.$toast.add({
+          severity: "error",
+          summary: "Horas inválidas!",
+          detail: "Verifique e tente novamente.",
+          life: 4000,
+        });
+
+      this.dialogLoading = true;
+      try {
+        await this.updateDayClock(this.employee.id, values);
+        await this.getTableValues(this.queries);
+
+        this.toggleVisibility();
+        this.resetDialog();
+      } catch (error) {
+        this.$toast.add({
+          severity: "error",
+          summary: "Algo deu errado!",
+          detail: "Tente novamente mais tarde.",
+          life: 4000,
+        });
+      } finally {
+        this.dialogLoading = false;
+      }
+    },
     handleClockDialog(data: EmployeeClocks) {
       this.toggleVisibility();
       this.selectedClock = data;
@@ -204,7 +268,7 @@ export default {
       await this.getTableValues(this.queries);
     },
     async getTableValues(queryParams: EmployeeQueryParams) {
-      this.loading = true;
+      this.tableLoading = true;
       try {
         const { clocks, total } = await this.getRegisteredClocks(
           String(this.$route.params.id),
@@ -221,7 +285,7 @@ export default {
           life: 4000,
         });
       } finally {
-        this.loading = false;
+        this.tableLoading = false;
       }
     },
   },
@@ -234,7 +298,7 @@ h2 {
 }
 
 .clocks {
-  width: 40rem;
+  width: 50rem;
 
   &__header {
     display: flex;
@@ -253,6 +317,18 @@ h2 {
 
     span:nth-child(2) {
       color: map-get($color-scheme-light, "$color-neutral-neutral-2");
+    }
+  }
+}
+
+.dark-mode .clocks {
+  &__summary {
+    &--positive {
+      color: map-get($color-scheme-dark, "$color-feedback-success-0");
+    }
+
+    &--negative {
+      color: map-get($color-scheme-dark, "$color-feedback-danger-0");
     }
   }
 }
