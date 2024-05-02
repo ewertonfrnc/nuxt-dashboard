@@ -27,3 +27,7 @@ export type EmployeeQueryParams = {
   lastCheckOut: FilterQueries;
   dayStatus: FilterQueries;
 };
+
+export type AdjustClocks = {
+  [key: string]: string;
+};
