@@ -1,5 +1,6 @@
 import api from "~/services/api.service";
 import {
+  AdjustClocks,
   Employee,
   EmployeeClocks,
   EmployeeQueryParams,
@@ -41,6 +42,10 @@ class EmployeeService {
         dayStatus: dayStatus?.value || "",
       },
     });
+  }
+
+  updateDayClock(employeeId: number, clock: AdjustClocks) {
+    return api().put(`/employee/clocks/${employeeId}`, clock);
   }
 }
 
