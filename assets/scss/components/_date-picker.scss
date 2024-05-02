@@ -1,0 +1,158 @@
+.date-picker {
+  width: 30rem;
+
+  &__input {
+    @extend .input__field;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  button {
+    width: 5.6rem;
+    height: 4.4rem;
+    border-top-right-radius: 0.8rem;
+    border-bottom-right-radius: 0.8rem;
+    background-color: map-get($color-scheme-light, "$color-brand-primary-0");
+    color: map-get($color-scheme-light, "$color-neutral-neutral-7");
+    border: none;
+  }
+
+  &__panel {
+    width: 35rem;
+    padding: 1rem;
+    border-radius: 0.8rem;
+    background-color: map-get($color-scheme-light, "$color-neutral-neutral-7");
+    box-shadow: $box-shadow-calendar-panel-light;
+  }
+
+  &__header {
+    padding: 1rem;
+    border-bottom: 1px solid
+      map-get($color-scheme-light, "$color-neutral-neutral-4");
+    color: map-get($color-scheme-light, "$color-neutral-neutral-1");
+
+    button {
+      color: inherit;
+      padding: 1rem;
+      transition: background 0.2s ease;
+      border-radius: 10rem;
+
+      &:hover {
+        background-color: map-get(
+          $color-scheme-light,
+          "$color-brand-primary-0"
+        );
+        color: map-get($color-scheme-light, "$color-neutral-neutral-7");
+      }
+    }
+
+    &--title {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+
+      button {
+        font-size: $font-size-title-6;
+        line-height: $line-height-title-6;
+        font-weight: $font-weight-title-6;
+        color: inherit;
+        font-family: inherit;
+        transition: color 0.2s ease;
+
+        &:hover {
+          background-color: transparent;
+          color: map-get($color-scheme-light, "$color-brand-primary-0");
+        }
+      }
+    }
+  }
+
+  &__container {
+    padding: 1rem;
+  }
+
+  &__table {
+    tr {
+      height: 3.2rem;
+    }
+
+    &--day {
+      width: 3.2rem;
+      height: 3.2rem;
+      transition: all 0.2s ease-in-out;
+      border-radius: 10rem;
+      display: grid;
+      place-content: center;
+
+      &:hover {
+        background-color: map-get(
+          $color-scheme-light,
+          "$color-brand-primary-1"
+        );
+        color: map-get($color-scheme-light, "$color-brand-primary-0");
+      }
+    }
+  }
+
+  &__selected-day {
+    background-color: map-get($color-scheme-light, "$color-brand-primary-1");
+    color: map-get($color-scheme-light, "$color-brand-primary-0");
+  }
+
+  &__disabled {
+    color: map-get($color-scheme-light, "$color-neutral-neutral-2");
+  }
+}
+
+.dark-mode .date-picker {
+  button {
+    background-color: map-get($color-scheme-dark, "$color-brand-primary-0");
+    color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
+    border: none;
+  }
+
+  &__panel {
+    background-color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
+    box-shadow: $box-shadow-calendar-panel-light;
+  }
+
+  &__header {
+    border-bottom: 1px solid
+      map-get($color-scheme-dark, "$color-neutral-neutral-4");
+    color: map-get($color-scheme-dark, "$color-neutral-neutral-1");
+
+    button {
+      color: inherit;
+      &:hover {
+        background-color: map-get($color-scheme-dark, "$color-brand-primary-0");
+        color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
+      }
+    }
+
+    &--title {
+      button {
+        color: inherit;
+        transition: color 0.2s ease;
+
+        &:hover {
+          background-color: transparent;
+          color: map-get($color-scheme-dark, "$color-brand-primary-0");
+        }
+      }
+    }
+  }
+
+  &__table {
+    &--day {
+      &:hover {
+        background-color: map-get($color-scheme-dark, "$color-brand-primary-1");
+        color: map-get($color-scheme-dark, "$color-brand-primary-0");
+      }
+    }
+  }
+
+  &__selected-day {
+    background-color: map-get($color-scheme-dark, "$color-brand-primary-1");
+    color: map-get($color-scheme-dark, "$color-brand-primary-0");
+  }
+}

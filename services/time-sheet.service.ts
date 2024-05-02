@@ -32,7 +32,7 @@ class TimeSheetService {
   fetchAllClocks(params: AllClocksParams) {
     const { page, limit, name, hour, department, tag, date } = params;
 
-    return api().get("/time-sheet/clocks", {
+    return api().get("time-sheet/clocks", {
       params: {
         page,
         limit,

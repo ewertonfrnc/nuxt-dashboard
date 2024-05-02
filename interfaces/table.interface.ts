@@ -15,3 +15,11 @@ export type Filters = {
   currentBalance: Filter;
   totalRequests: Filter;
 };
+
+export type TableColumn = {
+  field: string;
+  header: string;
+  sortable: boolean;
+  hasFilter: boolean;
+  frozen: boolean;
+};
