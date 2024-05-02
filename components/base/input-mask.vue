@@ -17,7 +17,7 @@
     />
   </div>
 
-  <small class="input__error">{{
+  <small class="input__error caption__primary">{{
     wrongCrendentialsMessage || errorMessage
   }}</small>
 </template>
