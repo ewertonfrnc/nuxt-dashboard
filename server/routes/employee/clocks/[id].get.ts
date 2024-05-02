@@ -4,70 +4,20 @@ export default defineEventHandler((event) => {
     clocks: [
       {
         date: "02/06",
-        currentBalance: "+ 08h 09m",
-        firstCheckIn: "09:50:30",
-        lastCheckOut: "17:50:30",
+        currentBalance: "+ 8h 09m",
+        firstCheckIn: "08:30:00",
+        lastCheckOut: "16:10:00",
         dayStatus: "Ajuste pendente",
         negative: false,
         requests: {
           id: 1,
-          date: "02/06 - Sexta-feira",
           negative: false,
-          before: {
-            total: "08:00:00",
-            negative: false,
-            checkins: [
-              {
-                time: "08:00:00",
-                manipulated: false,
-              },
-              {
-                time: "16:00:00",
-                manipulated: false,
-              },
-            ],
-            checkouts: [
-              {
-                time: "12:00:00",
-                manipulated: false,
-              },
-              {
-                time: "16:10:00",
-                manipulated: false,
-              },
-            ],
-          },
-          after: {
-            total: "08:00:00",
-            checkins: [
-              {
-                time: "08:00:00",
-                manipulated: false,
-              },
-              {
-                time: "13:00:00",
-                manipulated: true,
-              },
-              {
-                time: "15:30:00",
-                manipulated: true,
-              },
-            ],
-            checkouts: [
-              {
-                time: "12:00:00",
-                manipulated: false,
-              },
-              {
-                time: "15:30:00",
-                manipulated: true,
-              },
-              {
-                time: "18:30:00",
-                manipulated: true,
-              },
-            ],
-          },
+          date: "02/06 - Sexta-feira",
+          currentBalance: "+ 8h 09m",
+          hours: [
+            { in: "08:30:00", out: "12:00:00" },
+            { in: "13:00:00", out: "16:10:00" },
+          ],
         },
       },
       {
