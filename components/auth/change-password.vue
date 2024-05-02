@@ -22,12 +22,12 @@
           <BaseInlineMessage
             v-if="!values.password"
             severity="info"
-            text="4 dígitos numéricos"
+            text="6 dígitos contendo letras e números"
           />
           <BaseInlineMessage
             v-else
             :severity="isValidPassword ? 'success' : 'error'"
-            text="4 dígitos numéricos"
+            text="6 dígitos contendo letras e números"
           />
 
           <div class="form__control">
@@ -89,7 +89,6 @@ export default {
   methods: {
     ...mapActions(useAuthStore, ["changePassword"]),
     checkInvalidFields(value: boolean) {
-      console.log({ value });
       this.anyInvalidField = value;
     },
     goToLogin() {
@@ -97,7 +96,7 @@ export default {
     },
     validatePassword(password: string) {
       if (!password) return;
-      this.isValidPassword = password.length >= 4;
+      this.isValidPassword = password.length >= 6;
     },
     async changePasswordHandler() {
       try {

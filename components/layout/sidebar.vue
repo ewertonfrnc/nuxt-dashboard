@@ -89,6 +89,10 @@
                     @change="selectCompany(company)"
                   />
                 </div>
+
+                <p class="nav__company--see-all caption__secondary">
+                  Ver todas as empresas
+                </p>
               </template>
             </AccordionTab>
           </Accordion>
@@ -182,7 +186,6 @@ export default {
         },
         { id: 1, name: "UseMinas", cnpj: "01.270.742/0001-08" },
         { id: 2, name: "UseNordeste", cnpj: "01.270.742/0001-08" },
-        { id: 3, name: "UseBH", cnpj: "01.270.742/0001-08" },
       ],
       items: routes,
       mouseover: false,

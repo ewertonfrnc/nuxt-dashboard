@@ -137,7 +137,7 @@ export default {
   },
   methods: {
     ...mapActions(useTimeSheetStore, ["fetchAllClocks"]),
-    goToEmployeeDetails({ data }) {
+    goToEmployeeDetails(data) {
       this.$router.push(`/employees/${data.id}`);
     },
     async datePickerHandler(date: Date) {
