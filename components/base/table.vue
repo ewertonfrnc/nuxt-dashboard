@@ -178,7 +178,7 @@
     </Column>
 
     <Column
-      v-if="!loading && hasAction"
+      v-if="!loading && nodes.length && hasAction"
       :pt="{
         headercell: 'table__header--cell',
         bodycell: 'table__body--cell',
