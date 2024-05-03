@@ -11,6 +11,7 @@
           :is-mobile-screen="isMobileScreen"
           :is-narrow-screen="isNarrowScreen"
           :is-nav-visible="sidebarExpanded"
+          :toggle-sidebar="toggleSidebar"
           @close-nav="handleNarrowNavigation"
           @mouse-over="handleMouseover"
         />
@@ -125,7 +126,11 @@ export default {
   flex-direction: column;
 
   &__adapted {
-    margin-left: 25rem;
+    margin-left: 250px;
+  }
+
+  &__full {
+    margin-left: 0;
   }
 
   &__full {

@@ -8,19 +8,19 @@ import {
 
 class AuthService {
   login(userCredentials: UserCredentials) {
-    return api().post("/login", userCredentials);
+    return api().post("/auth/login", userCredentials);
   }
 
   recoverPassword(userId: RecoverPassword) {
-    return api().post("/recover-password", userId);
+    return api().post("/auth/recover-password", userId);
   }
 
   recoverCode(code: RecoverCode) {
-    return api().post("/recover-code", code);
+    return api().post("/auth/recover-code", code);
   }
 
   changePassword(newPassword: ChangePassword) {
-    return api().post("/change-password", newPassword);
+    return api().post("/auth/change-password", newPassword);
   }
 }
 

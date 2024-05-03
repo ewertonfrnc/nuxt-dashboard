@@ -33,7 +33,7 @@
 
         <template #column-action="slotData">
           <BaseTableAction
-            :data="slotData"
+            :data="{ slotData }"
             :icon="'pi-search'"
             tooltip-text="Verificar ajuste"
             @action-handler="logSelectedItem"
@@ -58,6 +58,7 @@
 
           <div class="adjust__approval">
             <BaseCheckbox
+              :checked="approveAll"
               input-id="approval"
               @checkbox-value="handleApproveAll"
             />
@@ -125,7 +126,7 @@ export default {
           header: "Nome",
           sortable: false,
           hasFilter: true,
-          frozen: true,
+          frozen: false,
         },
         {
           field: "currentBalance",
@@ -205,7 +206,6 @@ export default {
     },
     handleApproveAll(value: boolean) {
       this.approveAll = value;
-      if (!value) this.updatedPendingRequests = [];
     },
     buttonHandler(requests: Request[]) {
       this.updatedPendingRequests = requests;
@@ -237,19 +237,9 @@ export default {
         this.tableLoading = false;
       }
     },
-    async logSelectedItem({ data }: User) {
+    logSelectedItem(data) {
       this.toggleDialog();
       this.selectedUser = data;
-      try {
-        // await this.getUserPendingAdjustments(data.userId);
-      } catch (err) {
-        this.$toast.add({
-          severity: "error",
-          summary: "Algo deu errado",
-          detail: "Tente novamente mais tarde.",
-          life: 4000,
-        });
-      }
     },
     async submitPendingRequests() {
       if (!this.selectedUser || !this.updatedPendingRequests.length) {
@@ -295,6 +285,8 @@ section {
 .adjust {
   width: 60rem;
   height: 60rem;
+  padding-right: 10px;
+  overflow-x: hidden;
 
   @include respond(phone) {
     width: 100%;

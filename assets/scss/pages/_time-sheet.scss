@@ -1,6 +1,14 @@
 .accordion {
   &__tab {
     margin-bottom: 0.5rem;
+
+    &--header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
   }
 
   &__header-action {
@@ -13,7 +21,15 @@
     position: relative;
   }
 
+  &__header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
   &__button-group {
+    margin-left: auto;
     display: flex;
     align-items: center;
     margin-left: auto;
@@ -32,7 +48,7 @@
   }
 
   &__content {
-    padding: 2.4rem 1.7rem 1.7rem 1.7rem;
+    padding: 2.4rem 1.2rem 1.2rem 1.2rem;
     border-bottom-left-radius: 0.8rem;
     border-bottom-right-radius: 0.8rem;
     margin-top: -1rem;
@@ -42,6 +58,13 @@
 
     & > p {
       margin: 0 0 1rem 8rem;
+    }
+
+    @include respond(phone) {
+      span,
+      p {
+        font-size: 16px;
+      }
     }
   }
 
@@ -54,11 +77,19 @@
       padding-right: 2rem;
       border-right: 1px solid
         map-get($color-scheme-light, "$color-neutral-neutral-4");
+
+      @include respond(phone) {
+        padding-right: 1rem;
+      }
     }
 
     &--after {
       width: 20rem;
       padding-left: 2rem;
+
+      @include respond(phone) {
+        padding-left: 1rem;
+      }
     }
   }
 
@@ -70,6 +101,15 @@
     align-items: center;
     justify-content: space-between;
     color: map-get($color-scheme-light, "$color-neutral-neutral-2");
+
+    @include respond(phone) {
+      padding: 0.2rem 1rem;
+
+      span,
+      p {
+        font-size: 16px;
+      }
+    }
 
     .pi {
       font-size: 1.4rem;

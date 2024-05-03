@@ -17,8 +17,8 @@ export default {
   <InlineMessage
     :pt="{
       root: `inline-message inline-message__${severity}`,
-      icon: 'inline-message__icon body__secondary',
-      text: 'inline-message__text body__secondary',
+      icon: 'inline-message__icon caption__primary',
+      text: 'inline-message__text caption__primary',
     }"
     :severity="severity"
   >

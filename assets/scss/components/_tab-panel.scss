@@ -18,6 +18,12 @@
     padding: 1.6rem;
     border-bottom: 2px solid
       map-get($color-scheme-light, "$color-neutral-neutral-5");
+
+    @include respond(phone) {
+      .pi {
+        display: none;
+      }
+    }
   }
 
   &__content {

@@ -11,14 +11,30 @@
     @mouseleave="handleMouseLeave"
     @mouseover="handleMouseOver"
   >
-    <Menu :model="items">
+    <button
+      v-if="!isNarrowScreen"
+      :class="[
+        'btn__primary',
+        'sidebar__btn',
+        !isNavVisible && 'sidebar__btn--collapsed',
+      ]"
+      @click="toggleSidebar"
+    >
+      <i class="pi pi-angle-double-right" />
+    </button>
+    <Menu
+      :model="items"
+      :pt="{
+        root: 'nav__menu',
+      }"
+    >
       <template #start>
         <div class="nav__header">
           <div :class="['logo', (mouseover || isNavVisible) && 'logo-move']">
             <img
               alt="Itera logo"
               class="nav__logo--narrow fadein animation-duration-500"
-              src="~/assets/img/logo-narrow.png"
+              src="~/assets/img/logo-narrow.svg"
             />
           </div>
 
@@ -27,20 +43,59 @@
               v-if="colorMode.preference === 'light'"
               alt="Itera logo"
               class="nav__logo fadein animation-duration-500"
-              src="~/assets/img/logo-black.png"
+              src="~/assets/img/logo-black.svg"
             />
             <img
               v-else
               alt="Itera logo"
               class="nav__logo fadein animation-duration-500"
-              src="~/assets/img/logo-white.png"
+              src="~/assets/img/logo-white.svg"
             />
           </div>
 
-          <span class="caption__secondary"
-            >Usemobile Soluções em Tecnologia</span
-          >
-          <span class="caption__primary">01.270.742/0001-08</span>
+          <Accordion>
+            <AccordionTab>
+              <template #header>
+                <div class="nav__company">
+                  <div class="nav__company--item">
+                    <span class="caption__secondary">
+                      {{ selectedCompany.name }}
+                    </span>
+                    <span class="caption__primary">
+                      {{ selectedCompany.cnpj }}
+                    </span>
+                  </div>
+
+                  <span class="nav__item--icon">
+                    <i class="pi pi-angle-down" />
+                  </span>
+                </div>
+              </template>
+
+              <template #headericon />
+
+              <template #default>
+                <div
+                  v-for="company in companies"
+                  :key="company.id"
+                  class="nav__company--option"
+                >
+                  <label :for="company.name">
+                    <span class="caption__secondary"> {{ company.name }} </span>
+                    <span class="caption__primary"> {{ company.cnpj }} </span>
+                  </label>
+                  <BaseRadioButton
+                    :input-id="company.name"
+                    @change="selectCompany(company)"
+                  />
+                </div>
+
+                <p class="nav__company--see-all caption__secondary">
+                  Ver todas as empresas
+                </p>
+              </template>
+            </AccordionTab>
+          </Accordion>
         </div>
       </template>
 
@@ -62,7 +117,7 @@
           <span> {{ item.label }} </span>
         </NuxtLink>
 
-        <Accordion v-if="!item.route && item.items" :active-index="0">
+        <Accordion v-if="!item.route && item.items">
           <AccordionTab>
             <template #header>
               <div class="nav__item nav__item--expander">
@@ -110,6 +165,10 @@ export default {
     isNavVisible: { type: Boolean, default: true, required: true },
     isMobileScreen: { type: Boolean, default: true, required: true },
     isNarrowScreen: { type: Boolean, default: false, required: true },
+    toggleSidebar: {
+      type: Function as PropType<(payload: MouseEvent) => void>,
+      required: true,
+    },
   },
   emits: ["close-nav", "mouse-over"],
   setup() {
@@ -118,11 +177,27 @@ export default {
   },
   data() {
     return {
+      selectedCompany: {},
+      companies: [
+        {
+          id: 0,
+          name: "Usemobile Soluções em Tecnologia",
+          cnpj: "01.270.742/0001-08",
+        },
+        { id: 1, name: "UseMinas", cnpj: "01.270.742/0001-08" },
+        { id: 2, name: "UseNordeste", cnpj: "01.270.742/0001-08" },
+      ],
       items: routes,
       mouseover: false,
     };
   },
+  mounted() {
+    this.selectedCompany = this.companies[0];
+  },
   methods: {
+    selectCompany(company) {
+      this.selectedCompany = company;
+    },
     handleNavigation() {
       this.$emit("close-nav", !this.isNavVisible);
     },
