@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="fadein animation-duration-500">
     <section>
       <BaseTable
         :columns="columns"
