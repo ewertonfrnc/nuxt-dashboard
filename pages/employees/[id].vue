@@ -39,12 +39,12 @@
 <script lang="ts">
 import { mapActions, mapState } from "pinia";
 
-import EmployeeClocks from "~/components/employees/employee-clocks.vue";
-import EmployeeData from "~/components/employees/employee-data.vue";
-import EmployeeContacts from "~/components/employees/employee-contact.vue";
-import EmployeeJobs from "~/components/employees/employee-jobs.vue";
-import EmployeeDocuments from "~/components/employees/employee-documents.vue";
-import EmployeeSchools from "~/components/employees/employee-schools.vue";
+import EmployeeClocks from "~/components/employee/employee-clocks.vue";
+import EmployeeData from "~/components/employee/employee-data.vue";
+import EmployeeContacts from "~/components/employee/employee-contact.vue";
+import EmployeeJobs from "~/components/employee/employee-jobs.vue";
+import EmployeeDocuments from "~/components/employee/employee-documents.vue";
+import EmployeeSchools from "~/components/employee/employee-schools.vue";
 
 export default {
   data() {

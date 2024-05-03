@@ -57,22 +57,11 @@
     >
       <EmployeesReactivateDialog :user="selectedEmployee.name" />
 
-      <template #footer>
-        <BaseButton
-          class="btn__danger--outlined"
-          icon="pi pi-times"
-          label="Cancelar"
-          :disabled="dialogLoading"
-          @click="toggleVisibility"
-        />
-        <BaseButton
-          class="btn__secondary"
-          icon="pi pi-save"
-          label="Salvar"
-          :loading="dialogLoading"
-          @click="reactivateEmployeeHandler"
-        />
-      </template>
+      <BaseDialogFooter
+        :loading="dialogLoading"
+        message="Efetue um alteração para prosseguir"
+        @click-handler="dialogFooterHandler"
+      />
     </BaseDialog>
   </div>
 </template>
@@ -102,7 +91,7 @@ export default {
           header: "Nome",
           sortable: true,
           hasFilter: true,
-          frozen: true,
+          frozen: false,
         },
         {
           field: "lastRole",
@@ -174,6 +163,10 @@ export default {
       "getInactiveEmployees",
       "reactivateEmployee",
     ]),
+    dialogFooterHandler(btnClicked: string) {
+      if (btnClicked === "confirm") this.reactivateEmployeeHandler();
+      else this.toggleVisibility();
+    },
     handleProfilePage(data: Employees) {
       this.$router.push(`/employees/${data.id}`);
     },

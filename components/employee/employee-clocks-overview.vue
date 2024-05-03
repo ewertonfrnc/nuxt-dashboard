@@ -1,7 +1,5 @@
 <template>
-  <div class="container fadein animation-duration-500">
-    <h2 class="heading__secondary">Pontos</h2>
-
+  <div>
     <section>
       <BaseTable
         :columns="columns"
@@ -79,7 +77,7 @@
           </Transition>
         </div>
 
-        <EmployeesAdjustClocksForm
+        <EmployeeAdjustClocksForm
           :selected-clock="selectedClock"
           :is-editing="isEditing"
           :loading="dialogLoading"
@@ -121,35 +119,35 @@ export default {
           header: "Data",
           sortable: true,
           hasFilter: true,
-          frozen: true,
+          frozen: false,
         },
         {
           field: "currentBalance",
           header: "Saldo do dia",
           sortable: false,
           hasFilter: true,
-          frozen: true,
+          frozen: false,
         },
         {
           field: "firstCheckIn",
           header: "Primeiro check-in",
           sortable: true,
           hasFilter: true,
-          frozen: true,
+          frozen: false,
         },
         {
           field: "lastCheckOut",
           header: "Último check-out",
           sortable: true,
           hasFilter: true,
-          frozen: true,
+          frozen: false,
         },
         {
           field: "dayStatus",
           header: "Status do dia",
           sortable: false,
           hasFilter: true,
-          frozen: true,
+          frozen: false,
         },
       ],
       nodes: [],
@@ -200,12 +198,13 @@ export default {
       cancelRequest: false,
     };
   },
-  async created() {
-    await this.getTableValues(this.queries);
-  },
   computed: {
     ...mapState(useEmployeeStore, ["employee"]),
   },
+  async created() {
+    await this.getTableValues(this.queries);
+  },
+
   methods: {
     ...mapActions(useEmployeeStore, ["getRegisteredClocks", "updateDayClock"]),
     handleChange(value: boolean) {
@@ -300,10 +299,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-h2 {
-  margin-bottom: 2rem;
-}
-
 .clocks {
   width: 50rem;
 
