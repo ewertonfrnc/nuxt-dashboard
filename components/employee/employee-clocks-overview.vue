@@ -150,7 +150,7 @@ export default {
           frozen: false,
         },
       ],
-      nodes: [],
+      nodes: [] as EmployeeClocks[],
       queries: {
         page: 1,
         limit: 2,
@@ -199,7 +199,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(useEmployeeStore, ["employee"]),
+    ...mapState(useEmployeeStore, ["employee", "clocks", "total"]),
   },
   async created() {
     await this.getTableValues(this.queries);
@@ -227,7 +227,7 @@ export default {
       }
 
       Object.values(values).forEach((value) => {
-        if (!DateTime.fromISO(value).c) {
+        if (!DateTime.fromISO(value)?.hour) {
           this.cancelRequest = true;
         }
       });
@@ -276,13 +276,13 @@ export default {
     async getTableValues(queryParams: EmployeeQueryParams) {
       this.tableLoading = true;
       try {
-        const { clocks, total } = await this.getRegisteredClocks(
+        await this.getRegisteredClocks(
           String(this.$route.params.id),
           queryParams,
         );
 
-        this.nodes = clocks;
-        this.totalPages = total;
+        this.nodes = this.clocks;
+        this.totalPages = this.total;
       } catch (error) {
         this.$toast.add({
           severity: "error",
