@@ -246,13 +246,20 @@ export default {
         await this.updateDayClock(this.employee.id, values);
         await this.getTableValues(this.queries);
 
+        this.$toast.add({
+          severity: "success",
+          summary: "Sucesso!",
+          detail: "Ação realizada com sucesso.",
+          life: 4000,
+        });
+
         this.toggleVisibility();
         this.resetDialog();
       } catch (error) {
         this.$toast.add({
           severity: "error",
-          summary: "Algo deu errado!",
-          detail: "Tente novamente mais tarde.",
+          summary: "Ocorreu um erro!!",
+          detail: "Ocorreu um erro de processamento, tente novamente.",
           life: 4000,
         });
       } finally {

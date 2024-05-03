@@ -125,30 +125,20 @@ export default {
 
       let totalHours = 0;
       let totalMinutes = 0;
-
-      // Loop para processar cada valor
       let newDate = DateTime.fromISO(values["checkin-0"]);
-      Object.values(values).forEach((value, index) => {
+      Object.values(values).forEach((value) => {
         const dateTime = DateTime.fromISO(value);
-        // Calcular a diferença de tempo entre previousDateTime e dateTime
+
         const diff = dateTime.diff(newDate, ["hours", "minutes"]);
         const { hours, minutes } = diff.toObject();
 
-        console.log("initial", {
-          hours: newDate.hour,
-          minutes: newDate.minute,
-        });
-        console.log("difference", { hours, minutes });
-        // Atualizar previousDateTime para o dateTime atual
         newDate = dateTime;
 
-        // Somar as horas e minutos com a diferença calculada
         totalHours += hours;
         totalMinutes += minutes;
 
         totalHours += Math.floor(totalMinutes / 60);
         totalMinutes %= 60;
-        console.log("final", { totalHours, totalMinutes });
       });
 
       const currentBalance = DateTime.fromFormat(
@@ -159,8 +149,7 @@ export default {
         hour: totalHours,
         minute: totalMinutes,
       });
-      console.log({ currentBalance, diffDate });
-      console.log(currentBalance > diffDate);
+
       this.balanceAfterAdjusts = diffDate.toFormat("+ h'h' mm'm'");
     },
     generateHourField() {
