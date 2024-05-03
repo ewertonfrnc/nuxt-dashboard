@@ -35,9 +35,10 @@
 
         <template #column-action="slotData">
           <BaseTableAction
-            :data="slotData"
+            :data="{ slotData }"
             :icon="'pi-user'"
             tooltip-text="Acessar perfil"
+            @action-handler="handleProfilePage"
           />
         </template>
       </BaseTable>
@@ -49,7 +50,10 @@
 import { mapActions } from "pinia";
 import { PageState } from "primevue/paginator";
 import { FilterMatchMode } from "primevue/api";
-import { ActiveEmployeeQueryParams } from "~/interfaces/employees/employees.interface";
+import {
+  ActiveEmployeeQueryParams,
+  Employees,
+} from "~/interfaces/employees/employees.interface";
 
 export default {
   data() {
@@ -130,6 +134,9 @@ export default {
   },
   methods: {
     ...mapActions(useEmployeesStore, ["getActiveEmployees"]),
+    handleProfilePage(data: Employees) {
+      this.$router.push(`/employees/${data.id}`);
+    },
     async changePageHandler(currentPage: PageState) {
       this.currentPage = currentPage.page + 1;
       await this.getTableValues(this.queries);

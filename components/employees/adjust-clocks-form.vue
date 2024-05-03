@@ -83,8 +83,7 @@
 
 <script lang="ts">
 import { PropType } from "vue";
-// import yup from "~/utils/validator";
-import { DateTime, Duration } from "luxon";
+import { DateTime } from "luxon";
 import { AdjustClocks } from "~/interfaces/employee/employee.interface";
 
 export default {
@@ -111,7 +110,6 @@ export default {
     };
   },
   created() {
-    // this.generateFormRules();
     this.generateInitialValues();
   },
   methods: {
@@ -177,21 +175,6 @@ export default {
 
       this.initialValues = values;
     },
-    // generateFormRules() {
-    //   let rules = {};
-    //   const commonRule = yup.string().required().trim();
-    //
-    //   this.selectedClock.requests.hours.forEach((hour, index) => {
-    //     Object.keys(hour).forEach((hour) => {
-    //       if (hour === "in") {
-    //         rules = { ...rules, [`checkin-${index}`]: commonRule };
-    //       } else {
-    //         rules = { ...rules, [`checkout-${index}`]: commonRule };
-    //       }
-    //     });
-    //   });
-    //   return rules;
-    // },
   },
 };
 </script>
