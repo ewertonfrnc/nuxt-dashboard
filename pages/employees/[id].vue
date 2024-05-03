@@ -108,7 +108,7 @@ export default {
       }
     },
     goBack() {
-      this.$router.push("/employees");
+      this.$router.back();
     },
   },
 };
