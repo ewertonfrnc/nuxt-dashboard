@@ -1,7 +1,8 @@
 import api from "~/services/api.service";
 import {
-  AdjustClocks,
+  AdjustQueryParams,
   Employee,
+  EmployeeAdjusts,
   EmployeeClocks,
   EmployeeQueryParams,
 } from "~/interfaces/employee/employee.interface";
@@ -12,6 +13,11 @@ type EmployeeResponse = {
 
 type RegisteredClocks = {
   clocks: EmployeeClocks[];
+  total: number;
+};
+
+type AdjustClocks = {
+  adjusts: EmployeeAdjusts[];
   total: number;
 };
 
@@ -46,6 +52,20 @@ class EmployeeService {
 
   updateDayClock(employeeId: number, clock: AdjustClocks) {
     return api().put(`/employee/clocks/${employeeId}`, clock);
+  }
+
+  getDatesToAdjust(employeeId: string, queryParams: AdjustQueryParams) {
+    const { page, limit, dateToAdjust, requestDate, status } = queryParams;
+
+    return api().get<AdjustClocks>(`/employee/adjusts/${employeeId}`, {
+      params: {
+        page,
+        limit,
+        dateToAdjust: dateToAdjust?.value || "",
+        requestDate: requestDate?.value || "",
+        status: status?.value || "",
+      },
+    });
   }
 }
 

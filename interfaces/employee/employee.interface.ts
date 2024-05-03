@@ -10,6 +10,13 @@ export type EmployeeClocks = {
   requests: Request[];
 };
 
+export type EmployeeAdjusts = {
+  id: number;
+  dateToAdjust: string;
+  requestDate: string;
+  status: string;
+};
+
 export type Employee = {
   id: number;
   name: string;
@@ -26,6 +33,15 @@ export type EmployeeQueryParams = {
   firstCheckIn: FilterQueries;
   lastCheckOut: FilterQueries;
   dayStatus: FilterQueries;
+};
+
+export type AdjustQueryParams = {
+  page: number;
+  limit: number;
+  global: FilterQueries;
+  dateToAdjust: FilterQueries;
+  requestDate: FilterQueries;
+  status: FilterQueries;
 };
 
 export type AdjustClocks = {
