@@ -149,6 +149,7 @@ export default {
       try {
         await this.getActiveEmployees(queries);
         this.nodes = this.employees;
+        this.totalPages = this.total;
       } catch (err) {
         this.$toast.add({
           severity: "error",
