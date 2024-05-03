@@ -25,7 +25,7 @@
 export default {
   props: {
     loading: { type: Boolean, default: false, required: true },
-    showErrorMessage: { type: Boolean, default: false, required: true },
+    showErrorMessage: { type: Boolean, default: false, required: false },
     message: { type: String, default: "", required: true },
   },
   emits: ["click-handler"],

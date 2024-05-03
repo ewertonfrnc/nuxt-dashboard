@@ -7,7 +7,7 @@
       mask: 'dialog__mask fadein',
       closeButton: 'dialog__close-btn',
       header: 'dialog__header',
-      footer: 'dialog__footer',
+      // footer: 'dialog__footer',
     }"
     :visible="isVisible"
     close-on-escape
@@ -26,9 +26,7 @@
     </template>
 
     <template #footer>
-      <div class="dialog__footer">
-        <slot name="footer" />
-      </div>
+      <slot name="footer" />
     </template>
   </Dialog>
 </template>
