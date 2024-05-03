@@ -1,11 +1,13 @@
 <template>
   <BaseCard class="fadein animation-duration-500">
     <BaseTabMenu :items="items" />
-    <NuxtPage />
   </BaseCard>
 </template>
 
 <script lang="ts">
+import ActiveEmployees from "~/components/employees/active-employees.vue";
+import InactiveEmployees from "~/components/employees/inactive-employees.vue";
+
 export default {
   data() {
     return {
@@ -13,18 +15,15 @@ export default {
         {
           label: "Colaboradores ativos",
           icon: "pi pi-users",
-          route: "/employees/active-employees",
+          component: ActiveEmployees,
         },
         {
           label: "Desativados",
           icon: "pi pi-minus-circle",
-          route: "/employees/inactive-employees",
+          component: InactiveEmployees,
         },
       ],
     };
-  },
-  created() {
-    this.$router.push(this.items[0].route);
   },
   methods: {},
 };
