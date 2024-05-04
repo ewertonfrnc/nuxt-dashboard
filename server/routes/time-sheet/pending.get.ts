@@ -9,241 +9,192 @@ export default defineEventHandler((event) => {
         totalRequests: 4,
         requests: [
           {
-            id: 1,
-            date: "02/06 - Sexta-feira",
+            date: "02-06-2024",
+            total: "08:00:00",
             negative: false,
-            before: {
-              total: "08:00:00",
+            pendingFix: false,
+            title: "02/06 - Terça-feira",
+            motive: "Esquecimento",
+            beforeTotal: {
+              negative: true,
+              total: "03:10:00",
+            },
+            afterTotal: {
               negative: false,
-              checkins: [
-                {
-                  time: "08:00:00",
-                  manipulated: false,
-                },
-                {
-                  time: "16:00:00",
-                  manipulated: false,
-                },
-              ],
-              checkouts: [
-                {
-                  time: "12:00:00",
-                  manipulated: false,
-                },
-                {
-                  time: "16:10:00",
-                  manipulated: false,
-                },
-              ],
-            },
-            after: {
               total: "08:00:00",
-              checkins: [
-                {
-                  time: "08:00:00",
-                  manipulated: false,
-                },
-                {
-                  time: "13:00:00",
-                  manipulated: true,
-                },
-                {
-                  time: "15:30:00",
-                  manipulated: true,
-                },
-              ],
-              checkouts: [
-                {
-                  time: "12:00:00",
-                  manipulated: false,
-                },
-                {
-                  time: "15:30:00",
-                  manipulated: true,
-                },
-                {
-                  time: "18:30:00",
-                  manipulated: true,
-                },
-              ],
             },
+            beforeHours: [
+              { in: "08:00:00", out: "12:00:00" },
+              { in: "16:00:00", out: "16:10:00" },
+            ],
+            afterHours: [
+              {
+                in: "08:00:00",
+                out: "12:00:00",
+                changedIn: false,
+                changedOut: false,
+              },
+              {
+                in: "13:00:00",
+                out: "15:00:00",
+                changedIn: true,
+                changedOut: true,
+              },
+              {
+                in: "15:30:00",
+                out: "18:30:00",
+                changedIn: true,
+                changedOut: true,
+              },
+            ],
           },
           {
-            id: 2,
-            date: "01/06 - Quinta-feira",
+            date: "03-06-2024",
+            total: "07:45:00",
             negative: true,
-            before: {
-              total: "02:13:28",
-              checkins: [
-                {
-                  time: "04:18:26",
-                  manipulated: false,
-                },
-                {
-                  time: "06:46:50",
-                  manipulated: false,
-                },
-              ],
-              checkouts: [
-                {
-                  time: "05:35:04",
-                  manipulated: false,
-                },
-                {
-                  time: "02:31:03",
-                  manipulated: false,
-                },
-              ],
+            pendingFix: true,
+            title: "03/06 - Quarta-feira",
+            motive: "Atraso",
+            beforeTotal: {
+              negative: true,
+              total: "04:00:00",
             },
-            after: {
-              total: "05:46:32",
-              checkins: [
-                {
-                  time: "00:51:36",
-                  manipulated: true,
-                },
-                {
-                  time: "04:27:20",
-                  manipulated: true,
-                },
-                {
-                  time: "05:05:42",
-                  manipulated: true,
-                },
-              ],
-              checkouts: [
-                {
-                  time: "07:31:38",
-                  manipulated: true,
-                },
-                {
-                  time: "03:31:35",
-                  manipulated: true,
-                },
-                {
-                  time: "07:24:49",
-                  manipulated: true,
-                },
-              ],
+            afterTotal: {
+              negative: true,
+              total: "05:45:00",
             },
+            beforeHours: [
+              { in: "07:45:00", out: "11:45:00" },
+              { in: "13:00:00", out: "15:00:00" },
+            ],
+            afterHours: [
+              {
+                in: "07:45:00",
+                out: "11:45:00",
+                changedIn: false,
+                changedOut: false,
+              },
+              {
+                in: "13:00:00",
+                out: "15:00:00",
+                changedIn: false,
+                changedOut: true,
+              },
+              {
+                in: "15:30:00",
+                out: "18:30:00",
+                changedIn: true,
+                changedOut: true,
+              },
+            ],
           },
           {
-            id: 3,
-            date: "31/05 - Quarta-feira",
-            negative: true,
-            before: {
-              total: "02:13:28",
-              checkins: [
-                {
-                  time: "04:18:26",
-                  manipulated: false,
-                },
-                {
-                  time: "06:46:50",
-                  manipulated: false,
-                },
-              ],
-              checkouts: [
-                {
-                  time: "05:35:04",
-                  manipulated: false,
-                },
-                {
-                  time: "02:31:03",
-                  manipulated: false,
-                },
-              ],
+            date: "04-06-2024",
+            total: "08:30:00",
+            negative: false,
+            pendingFix: false,
+            title: "04/06 - Quinta-feira",
+            motive: "Regularidade",
+            beforeTotal: {
+              negative: false,
+              total: "08:30:00",
             },
-            after: {
-              total: "05:46:32",
-              checkins: [
-                {
-                  time: "00:51:36",
-                  manipulated: true,
-                },
-                {
-                  time: "04:27:20",
-                  manipulated: true,
-                },
-                {
-                  time: "05:05:42",
-                  manipulated: true,
-                },
-              ],
-              checkouts: [
-                {
-                  time: "07:31:38",
-                  manipulated: true,
-                },
-                {
-                  time: "03:31:35",
-                  manipulated: true,
-                },
-                {
-                  time: "07:24:49",
-                  manipulated: true,
-                },
-              ],
+            afterTotal: {
+              negative: false,
+              total: "08:30:00",
             },
+            beforeHours: [
+              { in: "08:30:00", out: "12:30:00" },
+              { in: "13:30:00", out: "16:30:00" },
+            ],
+            afterHours: [
+              {
+                in: "08:30:00",
+                out: "12:30:00",
+                changedIn: false,
+                changedOut: false,
+              },
+              {
+                in: "13:30:00",
+                out: "16:30:00",
+                changedIn: false,
+                changedOut: false,
+              },
+            ],
           },
           {
-            id: 4,
-            date: "30/06 - Terça-feira",
+            date: "05-06-2024",
+            total: "07:00:00",
             negative: true,
-            before: {
-              total: "02:13:28",
-              checkins: [
-                {
-                  time: "04:18:26",
-                  manipulated: false,
-                },
-                {
-                  time: "06:46:50",
-                  manipulated: false,
-                },
-              ],
-              checkouts: [
-                {
-                  time: "05:35:04",
-                  manipulated: false,
-                },
-                {
-                  time: "02:31:03",
-                  manipulated: false,
-                },
-              ],
+            pendingFix: true,
+            title: "05/06 - Sexta-feira",
+            motive: "Falta",
+            beforeTotal: {
+              negative: true,
+              total: "05:00:00",
             },
-            after: {
-              total: "05:46:32",
-              checkins: [
-                {
-                  time: "00:51:36",
-                  manipulated: true,
-                },
-                {
-                  time: "04:27:20",
-                  manipulated: true,
-                },
-                {
-                  time: "05:05:42",
-                  manipulated: true,
-                },
-              ],
-              checkouts: [
-                {
-                  time: "07:31:38",
-                  manipulated: true,
-                },
-                {
-                  time: "03:31:35",
-                  manipulated: true,
-                },
-                {
-                  time: "07:24:49",
-                  manipulated: true,
-                },
-              ],
+            afterTotal: {
+              negative: true,
+              total: "07:00:00",
             },
+            beforeHours: [
+              { in: "07:00:00", out: "11:00:00" },
+              { in: "13:00:00", out: "14:30:00" },
+            ],
+            afterHours: [
+              {
+                in: "07:00:00",
+                out: "11:00:00",
+                changedIn: false,
+                changedOut: false,
+              },
+              {
+                in: "13:00:00",
+                out: "14:30:00",
+                changedIn: false,
+                changedOut: true,
+              },
+              {
+                in: "15:00:00",
+                out: "17:30:00",
+                changedIn: true,
+                changedOut: true,
+              },
+            ],
+          },
+          {
+            date: "06-06-2024",
+            total: "08:15:00",
+            negative: false,
+            pendingFix: false,
+            title: "06/06 - Sábado",
+            motive: "Trabalho Extra",
+            beforeTotal: {
+              negative: false,
+              total: "08:15:00",
+            },
+            afterTotal: {
+              negative: false,
+              total: "08:15:00",
+            },
+            beforeHours: [
+              { in: "08:15:00", out: "12:15:00" },
+              { in: "13:30:00", out: "17:00:00" },
+            ],
+            afterHours: [
+              {
+                in: "08:15:00",
+                out: "12:15:00",
+                changedIn: false,
+                changedOut: false,
+              },
+              {
+                in: "13:30:00",
+                out: "17:00:00",
+                changedIn: false,
+                changedOut: false,
+              },
+            ],
           },
         ],
       },
@@ -256,232 +207,192 @@ export default defineEventHandler((event) => {
         negative: true,
         requests: [
           {
-            date: "02/06 - Sexta-feira",
-            before: {
+            date: "02-06-2024",
+            total: "08:00:00",
+            negative: false,
+            pendingFix: false,
+            title: "02/06 - Terça-feira",
+            motive: "Esquecimento",
+            beforeTotal: {
+              negative: true,
               total: "03:10:00",
-              checkins: [
-                {
-                  time: "08:00:00",
-                  manipulated: false,
-                },
-                {
-                  time: "16:00:00",
-                  manipulated: false,
-                },
-              ],
-              checkouts: [
-                {
-                  time: "12:00:00",
-                  manipulated: false,
-                },
-                {
-                  time: "16:10:00",
-                  manipulated: false,
-                },
-              ],
             },
-            after: {
+            afterTotal: {
+              negative: false,
               total: "08:00:00",
-              checkins: [
-                {
-                  time: "08:00:00",
-                  manipulated: false,
-                },
-                {
-                  time: "13:00:00",
-                  manipulated: true,
-                },
-                {
-                  time: "15:30:00",
-                  manipulated: true,
-                },
-              ],
-              checkouts: [
-                {
-                  time: "12:00:00",
-                  manipulated: false,
-                },
-                {
-                  time: "15:30:00",
-                  manipulated: true,
-                },
-                {
-                  time: "18:30:00",
-                  manipulated: true,
-                },
-              ],
             },
+            beforeHours: [
+              { in: "08:00:00", out: "12:00:00" },
+              { in: "16:00:00", out: "16:10:00" },
+            ],
+            afterHours: [
+              {
+                in: "08:00:00",
+                out: "12:00:00",
+                changedIn: false,
+                changedOut: false,
+              },
+              {
+                in: "13:00:00",
+                out: "15:00:00",
+                changedIn: true,
+                changedOut: true,
+              },
+              {
+                in: "15:30:00",
+                out: "18:30:00",
+                changedIn: true,
+                changedOut: true,
+              },
+            ],
           },
           {
-            date: "01/06 - Quinta-feira",
-            before: {
-              total: "02:13:28",
-              checkins: [
-                {
-                  time: "04:18:26",
-                  manipulated: false,
-                },
-                {
-                  time: "06:46:50",
-                  manipulated: false,
-                },
-              ],
-              checkouts: [
-                {
-                  time: "05:35:04",
-                  manipulated: false,
-                },
-                {
-                  time: "02:31:03",
-                  manipulated: false,
-                },
-              ],
+            date: "03-06-2024",
+            total: "07:45:00",
+            negative: true,
+            pendingFix: true,
+            title: "03/06 - Quarta-feira",
+            motive: "Atraso",
+            beforeTotal: {
+              negative: true,
+              total: "04:00:00",
             },
-            after: {
-              total: "05:46:32",
-              checkins: [
-                {
-                  time: "00:51:36",
-                  manipulated: true,
-                },
-                {
-                  time: "04:27:20",
-                  manipulated: true,
-                },
-                {
-                  time: "05:05:42",
-                  manipulated: true,
-                },
-              ],
-              checkouts: [
-                {
-                  time: "07:31:38",
-                  manipulated: true,
-                },
-                {
-                  time: "03:31:35",
-                  manipulated: true,
-                },
-                {
-                  time: "07:24:49",
-                  manipulated: true,
-                },
-              ],
+            afterTotal: {
+              negative: true,
+              total: "05:45:00",
             },
+            beforeHours: [
+              { in: "07:45:00", out: "11:45:00" },
+              { in: "13:00:00", out: "15:00:00" },
+            ],
+            afterHours: [
+              {
+                in: "07:45:00",
+                out: "11:45:00",
+                changedIn: false,
+                changedOut: false,
+              },
+              {
+                in: "13:00:00",
+                out: "15:00:00",
+                changedIn: false,
+                changedOut: true,
+              },
+              {
+                in: "15:30:00",
+                out: "18:30:00",
+                changedIn: true,
+                changedOut: true,
+              },
+            ],
           },
           {
-            date: "31/05 - Quarta-feira",
-            before: {
-              total: "02:13:28",
-              checkins: [
-                {
-                  time: "04:18:26",
-                  manipulated: false,
-                },
-                {
-                  time: "06:46:50",
-                  manipulated: false,
-                },
-              ],
-              checkouts: [
-                {
-                  time: "05:35:04",
-                  manipulated: false,
-                },
-                {
-                  time: "02:31:03",
-                  manipulated: false,
-                },
-              ],
+            date: "04-06-2024",
+            total: "08:30:00",
+            negative: false,
+            pendingFix: false,
+            title: "04/06 - Quinta-feira",
+            motive: "Regularidade",
+            beforeTotal: {
+              negative: false,
+              total: "08:30:00",
             },
-            after: {
-              total: "05:46:32",
-              checkins: [
-                {
-                  time: "00:51:36",
-                  manipulated: true,
-                },
-                {
-                  time: "04:27:20",
-                  manipulated: true,
-                },
-                {
-                  time: "05:05:42",
-                  manipulated: true,
-                },
-              ],
-              checkouts: [
-                {
-                  time: "07:31:38",
-                  manipulated: true,
-                },
-                {
-                  time: "03:31:35",
-                  manipulated: true,
-                },
-                {
-                  time: "07:24:49",
-                  manipulated: true,
-                },
-              ],
+            afterTotal: {
+              negative: false,
+              total: "08:30:00",
             },
+            beforeHours: [
+              { in: "08:30:00", out: "12:30:00" },
+              { in: "13:30:00", out: "16:30:00" },
+            ],
+            afterHours: [
+              {
+                in: "08:30:00",
+                out: "12:30:00",
+                changedIn: false,
+                changedOut: false,
+              },
+              {
+                in: "13:30:00",
+                out: "16:30:00",
+                changedIn: false,
+                changedOut: false,
+              },
+            ],
           },
           {
-            date: "30/06 - Terça-feira",
-            before: {
-              total: "02:13:28",
-              checkins: [
-                {
-                  time: "04:18:26",
-                  manipulated: false,
-                },
-                {
-                  time: "06:46:50",
-                  manipulated: false,
-                },
-              ],
-              checkouts: [
-                {
-                  time: "05:35:04",
-                  manipulated: false,
-                },
-                {
-                  time: "02:31:03",
-                  manipulated: false,
-                },
-              ],
+            date: "05-06-2024",
+            total: "07:00:00",
+            negative: true,
+            pendingFix: true,
+            title: "05/06 - Sexta-feira",
+            motive: "Falta",
+            beforeTotal: {
+              negative: true,
+              total: "05:00:00",
             },
-            after: {
-              total: "05:46:32",
-              checkins: [
-                {
-                  time: "00:51:36",
-                  manipulated: true,
-                },
-                {
-                  time: "04:27:20",
-                  manipulated: true,
-                },
-                {
-                  time: "05:05:42",
-                  manipulated: true,
-                },
-              ],
-              checkouts: [
-                {
-                  time: "07:31:38",
-                  manipulated: true,
-                },
-                {
-                  time: "03:31:35",
-                  manipulated: true,
-                },
-                {
-                  time: "07:24:49",
-                  manipulated: true,
-                },
-              ],
+            afterTotal: {
+              negative: true,
+              total: "07:00:00",
             },
+            beforeHours: [
+              { in: "07:00:00", out: "11:00:00" },
+              { in: "13:00:00", out: "14:30:00" },
+            ],
+            afterHours: [
+              {
+                in: "07:00:00",
+                out: "11:00:00",
+                changedIn: false,
+                changedOut: false,
+              },
+              {
+                in: "13:00:00",
+                out: "14:30:00",
+                changedIn: false,
+                changedOut: true,
+              },
+              {
+                in: "15:00:00",
+                out: "17:30:00",
+                changedIn: true,
+                changedOut: true,
+              },
+            ],
+          },
+          {
+            date: "06-06-2024",
+            total: "08:15:00",
+            negative: false,
+            pendingFix: false,
+            title: "06/06 - Sábado",
+            motive: "Trabalho Extra",
+            beforeTotal: {
+              negative: false,
+              total: "08:15:00",
+            },
+            afterTotal: {
+              negative: false,
+              total: "08:15:00",
+            },
+            beforeHours: [
+              { in: "08:15:00", out: "12:15:00" },
+              { in: "13:30:00", out: "17:00:00" },
+            ],
+            afterHours: [
+              {
+                in: "08:15:00",
+                out: "12:15:00",
+                changedIn: false,
+                changedOut: false,
+              },
+              {
+                in: "13:30:00",
+                out: "17:00:00",
+                changedIn: false,
+                changedOut: false,
+              },
+            ],
           },
         ],
       },
@@ -489,63 +400,198 @@ export default defineEventHandler((event) => {
         userId: 1001,
         name: "Juliana Mariana",
         role: "Arquiteto",
-        requests: {
-          date: "02/06 - Quarta-feira",
-          before: {
-            total: "07:00:07",
-            checkins: [
-              {
-                time: "07:36:24",
-                manipulated: false,
-              },
-              {
-                time: "02:24:28",
-                manipulated: false,
-              },
+        currentBalance: "- 05h 38min",
+        totalRequests: 2,
+        requests: [
+          {
+            date: "02-06-2024",
+            total: "08:00:00",
+            negative: false,
+            pendingFix: false,
+            title: "02/06 - Terça-feira",
+            motive: "Esquecimento",
+            beforeTotal: {
+              negative: true,
+              total: "03:10:00",
+            },
+            afterTotal: {
+              negative: false,
+              total: "08:00:00",
+            },
+            beforeHours: [
+              { in: "08:00:00", out: "12:00:00" },
+              { in: "16:00:00", out: "16:10:00" },
             ],
-            checkouts: [
+            afterHours: [
               {
-                time: "04:03:51",
-                manipulated: false,
+                in: "08:00:00",
+                out: "12:00:00",
+                changedIn: false,
+                changedOut: false,
               },
               {
-                time: "07:10:15",
-                manipulated: false,
-              },
-            ],
-          },
-          after: {
-            total: "00:59:53",
-            checkins: [
-              {
-                time: "00:17:42",
-                manipulated: true,
+                in: "13:00:00",
+                out: "15:00:00",
+                changedIn: true,
+                changedOut: true,
               },
               {
-                time: "06:34:01",
-                manipulated: true,
-              },
-              {
-                time: "03:47:35",
-                manipulated: true,
-              },
-            ],
-            checkouts: [
-              {
-                time: "06:47:39",
-                manipulated: true,
-              },
-              {
-                time: "01:32:11",
-                manipulated: true,
-              },
-              {
-                time: "06:53:42",
-                manipulated: true,
+                in: "15:30:00",
+                out: "18:30:00",
+                changedIn: true,
+                changedOut: true,
               },
             ],
           },
-        },
+          {
+            date: "03-06-2024",
+            total: "07:45:00",
+            negative: true,
+            pendingFix: true,
+            title: "03/06 - Quarta-feira",
+            motive: "Atraso",
+            beforeTotal: {
+              negative: true,
+              total: "04:00:00",
+            },
+            afterTotal: {
+              negative: true,
+              total: "05:45:00",
+            },
+            beforeHours: [
+              { in: "07:45:00", out: "11:45:00" },
+              { in: "13:00:00", out: "15:00:00" },
+            ],
+            afterHours: [
+              {
+                in: "07:45:00",
+                out: "11:45:00",
+                changedIn: false,
+                changedOut: false,
+              },
+              {
+                in: "13:00:00",
+                out: "15:00:00",
+                changedIn: false,
+                changedOut: true,
+              },
+              {
+                in: "15:30:00",
+                out: "18:30:00",
+                changedIn: true,
+                changedOut: true,
+              },
+            ],
+          },
+          {
+            date: "04-06-2024",
+            total: "08:30:00",
+            negative: false,
+            pendingFix: false,
+            title: "04/06 - Quinta-feira",
+            motive: "Regularidade",
+            beforeTotal: {
+              negative: false,
+              total: "08:30:00",
+            },
+            afterTotal: {
+              negative: false,
+              total: "08:30:00",
+            },
+            beforeHours: [
+              { in: "08:30:00", out: "12:30:00" },
+              { in: "13:30:00", out: "16:30:00" },
+            ],
+            afterHours: [
+              {
+                in: "08:30:00",
+                out: "12:30:00",
+                changedIn: false,
+                changedOut: false,
+              },
+              {
+                in: "13:30:00",
+                out: "16:30:00",
+                changedIn: false,
+                changedOut: false,
+              },
+            ],
+          },
+          {
+            date: "05-06-2024",
+            total: "07:00:00",
+            negative: true,
+            pendingFix: true,
+            title: "05/06 - Sexta-feira",
+            motive: "Falta",
+            beforeTotal: {
+              negative: true,
+              total: "05:00:00",
+            },
+            afterTotal: {
+              negative: true,
+              total: "07:00:00",
+            },
+            beforeHours: [
+              { in: "07:00:00", out: "11:00:00" },
+              { in: "13:00:00", out: "14:30:00" },
+            ],
+            afterHours: [
+              {
+                in: "07:00:00",
+                out: "11:00:00",
+                changedIn: false,
+                changedOut: false,
+              },
+              {
+                in: "13:00:00",
+                out: "14:30:00",
+                changedIn: false,
+                changedOut: true,
+              },
+              {
+                in: "15:00:00",
+                out: "17:30:00",
+                changedIn: true,
+                changedOut: true,
+              },
+            ],
+          },
+          {
+            date: "06-06-2024",
+            total: "08:15:00",
+            negative: false,
+            pendingFix: false,
+            title: "06/06 - Sábado",
+            motive: "Trabalho Extra",
+            beforeTotal: {
+              negative: false,
+              total: "08:15:00",
+            },
+            afterTotal: {
+              negative: false,
+              total: "08:15:00",
+            },
+            beforeHours: [
+              { in: "08:15:00", out: "12:15:00" },
+              { in: "13:30:00", out: "17:00:00" },
+            ],
+            afterHours: [
+              {
+                in: "08:15:00",
+                out: "12:15:00",
+                changedIn: false,
+                changedOut: false,
+              },
+              {
+                in: "13:30:00",
+                out: "17:00:00",
+                changedIn: false,
+                changedOut: false,
+              },
+            ],
+          },
+        ],
       },
     ],
   };

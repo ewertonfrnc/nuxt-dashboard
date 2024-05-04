@@ -322,6 +322,22 @@ export default {
   }
 }
 
+.dark-mode .accordion {
+  &__header-action {
+    border: $border-dark;
+  }
+
+  &__button-group {
+    &--time {
+      color: map-get($color-scheme-dark, "$color-feedback-danger-0");
+
+      .positive {
+        color: map-get($color-scheme-dark, "$color-feedback-success-0");
+      }
+    }
+  }
+}
+
 .adjusts {
   width: 600px;
   display: grid;
@@ -467,6 +483,76 @@ export default {
 
     span:nth-child(2) {
       padding: 10px 7px 10px 0;
+    }
+  }
+
+  &__footer {
+  }
+}
+
+.dark-mode .adjusts {
+  &__header {
+    p span {
+      &:first-child {
+        color: map-get($color-scheme-dark, "$color-neutral-neutral-2");
+      }
+      &:last-child {
+        color: map-get($color-scheme-dark, "$color-neutral-neutral-3");
+      }
+    }
+  }
+
+  &__motive {
+    border: 1px solid map-get($color-scheme-dark, "$color-neutral-neutral-5");
+    background-color: map-get($color-scheme-dark, "$color-neutral-neutral-5");
+  }
+
+  &__container {
+    border: 1px solid map-get($color-scheme-dark, "$color-neutral-neutral-4");
+    border-top-style: none;
+  }
+
+  &__overview {
+    span:first-child {
+      color: map-get($color-scheme-dark, "$color-neutral-neutral-2");
+    }
+
+    &--negative {
+      background-color: map-get($color-scheme-dark, "$color-feedback-danger-1");
+
+      .pi,
+      span:last-child {
+        color: map-get($color-scheme-dark, "$color-feedback-danger-0");
+      }
+    }
+
+    &--positive {
+      background-color: map-get(
+        $color-scheme-dark,
+        "$color-feedback-success-1"
+      );
+
+      .pi,
+      span:last-child {
+        color: map-get($color-scheme-dark, "$color-feedback-success-0");
+      }
+    }
+  }
+
+  &__diff {
+    & > div:first-child {
+      border-right: 1px solid
+        map-get($color-scheme-dark, "$color-neutral-neutral-4");
+    }
+  }
+
+  &__item {
+    &--label {
+      color: map-get($color-scheme-dark, "$color-neutral-neutral-2");
+    }
+
+    &--highlight {
+      color: map-get($color-scheme-dark, "$color-feedback-warning-0");
     }
   }
 
