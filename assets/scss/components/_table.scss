@@ -7,6 +7,21 @@
   border: $border-light;
   border-collapse: collapse;
 
+  &__sort {
+    display: grid;
+    place-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 40px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: map-get($color-scheme-light, "$color-brand-primary-1");
+      color: map-get($color-scheme-light, "$color-brand-primary-0");
+    }
+  }
+
   &__filter {
     padding: 1.2rem 0;
     border-top-left-radius: 0.8rem;
@@ -21,10 +36,9 @@
 
     &--icon {
       background-color: transparent;
-      border-radius: 2.1rem;
-      display: grid;
-      place-content: center;
-      padding: 0.8rem;
+      width: 30px;
+      height: 30px;
+      border-radius: 40px;
       border: none;
       cursor: pointer;
       transition: all 0.3s ease;
@@ -34,6 +48,7 @@
           $color-scheme-light,
           "$color-brand-primary-1"
         );
+        color: map-get($color-scheme-light, "$color-brand-primary-0");
       }
 
       svg {
@@ -71,6 +86,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 8px;
       height: 100%;
       background-color: map-get(
         $color-scheme-light,
@@ -226,6 +242,10 @@
     .pi {
       cursor: pointer;
       color: map-get($color-scheme-light, "$color-brand-primary-0");
+    }
+
+    .disabled {
+      color: map-get($color-scheme-light, "$color-neutral-neutral-3");
     }
 
     .success {

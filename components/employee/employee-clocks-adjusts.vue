@@ -14,28 +14,19 @@
       >
         <template #body-cell="{ data, field }">
           <BaseTag
-            v-if="field === 'dayStatus'"
+            v-if="field === 'status'"
             :severity="
-              data[field] === 'Ajuste pendente'
+              data[field] === 'Pendente'
                 ? 'Warning'
-                : data[field] === 'Em andamento'
-                ? 'Secondary'
-                : data[field] === 'Falta check-out'
+                : data[field] === 'Reprovado'
                 ? 'Danger'
-                : 'Primary'
+                : 'Success'
             "
             :value="data[field]"
           />
 
-          <span
-            v-else
-            :class="[
-              'body__primary',
-              field === 'currentBalance' && data.negative && 'negative',
-              field === 'currentBalance' && !data.negative && 'positive',
-            ]"
-          >
-            {{ data[field] || "--:--:--" }}
+          <span v-else class="body__primary">
+            {{ data[field] }}
           </span>
         </template>
 
@@ -46,12 +37,31 @@
         <template #column-action="slotData">
           <BaseTableAction
             :data="{ slotData }"
-            :icon="'pi-list'"
+            :icon="'pi-pencil'"
+            :disabled="slotData.data.status !== 'Pendente'"
             tooltip-text="Ver detalhes do dia"
-            @action-handler="() => {}"
+            @action-handler="logSelectedItem"
           />
         </template>
       </BaseTable>
+
+      <BaseDialog
+        :is-visible="isVisible"
+        :toggle-dialog="toggleVisibility"
+        title="Ajustar ponto"
+      >
+        <EmployeeAdjustClockDialog
+          :employee="employee"
+          :loading="dialogLoading"
+          :approve-all="approveAll"
+          :adjusts="selectedAdjust.requests"
+          :show-error-message="showErrorMessage"
+          :cancel-handler="toggleDialog"
+          :confirm-handler="submitPendingRequests"
+          @approved-all="handleApproveAll"
+          @button-handler="buttonHandler"
+        />
+      </BaseDialog>
     </section>
   </div>
 </template>
@@ -63,9 +73,14 @@ import { PageState } from "primevue/paginator";
 import {
   AdjustQueryParams,
   EmployeeAdjusts,
+  WorkLog,
 } from "~/interfaces/employee/employee.interface";
 
 export default {
+  setup() {
+    const { isVisible, toggleVisibility } = useToggle();
+    return { isVisible, toggleVisibility };
+  },
   data() {
     return {
       tableLoading: false,
@@ -125,16 +140,36 @@ export default {
       hasChanges: false,
       showErrorMessage: false,
       cancelRequest: false,
+      selectedAdjust: {} as EmployeeAdjusts,
+      approveAll: false,
+      updatedPendingRequests: [] as WorkLog[],
     };
   },
   computed: {
-    ...mapState(useEmployeeStore, ["adjusts", "total"]),
+    ...mapState(useEmployeeStore, ["employee", "adjusts", "total"]),
   },
   async created() {
     await this.getTableValues(this.queries);
   },
   methods: {
     ...mapActions(useEmployeeStore, ["getDatesToAdjust"]),
+    ...mapActions(useTimeSheetStore, ["updateRequestsApproval"]),
+    logSelectedItem(data: EmployeeAdjusts) {
+      this.toggleVisibility();
+      this.selectedAdjust = data;
+    },
+    handleApproveAll(value: boolean) {
+      this.approveAll = value;
+    },
+    buttonHandler(requests: WorkLog[]) {
+      this.updatedPendingRequests = requests;
+    },
+    toggleDialog() {
+      this.toggleVisibility();
+      this.showErrorMessage = false;
+      this.updatedPendingRequests = [];
+      this.approveAll = false;
+    },
     async changePageHandler(currentPage: PageState) {
       this.queries.page = currentPage.page + 1;
       await this.getTableValues(this.queries);
@@ -154,6 +189,38 @@ export default {
         });
       } finally {
         this.tableLoading = false;
+      }
+    },
+    async submitPendingRequests() {
+      if (!this.updatedPendingRequests.length) {
+        this.showErrorMessage = true;
+        return;
+      }
+
+      this.dialogLoading = true;
+      try {
+        await this.updateRequestsApproval(
+          this.employee.id,
+          this.updatedPendingRequests,
+        );
+        await this.getTableValues(this.queries);
+
+        this.$toast.add({
+          severity: "success",
+          summary: "Sucesso!",
+          detail: "Ação realizada com sucesso.",
+          life: 4000,
+        });
+      } catch (error) {
+        this.$toast.add({
+          severity: "error",
+          summary: "Ocorreu um erro!",
+          detail: "Ocorreu um erro de processamento, tente novamente.",
+          life: 4000,
+        });
+      } finally {
+        this.dialogLoading = false;
+        this.toggleDialog();
       }
     },
   },

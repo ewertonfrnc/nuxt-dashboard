@@ -131,6 +131,7 @@
         filterConstraints: 'table__filter',
         filtermenubutton: 'table__filter--icon',
         filterbuttonbar: 'table__filter--footer',
+        sort: '',
       }"
       :show-add-button="false"
       :show-filter-match-modes="false"
@@ -140,6 +141,26 @@
     >
       <template #body="{ data, field }">
         <slot :data="data" :field="field" name="body-cell" />
+      </template>
+
+      <template #sorticon="{ sortOrder }">
+        <!--        <button type="button">-->
+        <div class="table__sort">
+          <i
+            :class="[
+              'caption__primary pi',
+              sortOrder === 0
+                ? 'pi-sort-alt'
+                : sortOrder === 1
+                ? 'pi-sort-amount-down-alt'
+                : 'pi-sort-amount-down',
+            ]"
+          />
+        </div>
+        <!--        </button>-->
+      </template>
+      <template #filtericon>
+        <i class="pi pi-filter"></i>
       </template>
 
       <template v-if="col.hasFilter" #filter="{ filterModel }">

@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <EmployeeClocksOverview v-if="!showAdjustTable" />
+    <EmployeeClocksOverview v-if="showAdjustTable" />
     <EmployeeClocksAdjusts v-else />
   </div>
 </template>

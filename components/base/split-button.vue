@@ -47,12 +47,12 @@
 
 <script lang="ts">
 import { PropType } from "vue";
-import { Request } from "~/interfaces/time-sheet/time-sheet.interface";
+import { WorkLog } from "~/interfaces/employee/employee.interface";
 
 export default {
   props: {
     requests: { type: Set, required: true },
-    request: { type: Object as PropType<Request>, required: true },
+    request: { type: Object as PropType<WorkLog>, required: true },
     approveAll: { type: Boolean, default: false, required: true },
   },
   emits: ["button-handler"],
@@ -80,14 +80,14 @@ export default {
     window.removeEventListener("resize", this.handleResize);
   },
   methods: {
-    leftButtonHandler(request: Request) {
+    leftButtonHandler(request: WorkLog) {
       this.selectedBtn = "left";
       this.disableRightBtn = true;
 
       request.approved = false;
       this.$emit("button-handler", request);
     },
-    rightButtonHandler(request: Request) {
+    rightButtonHandler(request: WorkLog) {
       this.selectedBtn = "right";
       this.disableLeftBtn = true;
 

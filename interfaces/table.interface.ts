@@ -23,5 +23,4 @@ export type TableColumn = {
   header: string;
   sortable: boolean;
   hasFilter: boolean;
-  frozen: boolean;
 };
