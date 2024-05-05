@@ -1,12 +1,14 @@
 <template>
   <Dialog
     :draggable="false"
+    :maximizable="true"
     :pt="{
-      root: 'dialog',
+      root: `dialog ${matchScreenSize && 'p-dialog-maximized'}`,
       content: 'overflow-hidden',
       mask: 'dialog__mask fadein',
       closeButton: 'dialog__close-btn',
       header: 'dialog__header',
+      maximizableButton: 'hidden',
       // footer: 'dialog__footer',
     }"
     :visible="isVisible"
@@ -44,6 +46,10 @@ export default {
     title: { type: String, default: "", required: true },
   },
   emits: ["save"],
+  setup() {
+    const { matchScreenSize } = useWindow("modal");
+    return { matchScreenSize };
+  },
   methods: {
     onSave() {
       this.$emit("save");

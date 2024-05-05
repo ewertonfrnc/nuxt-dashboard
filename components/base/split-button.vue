@@ -56,6 +56,10 @@ export default {
     approveAll: { type: Boolean, default: false, required: true },
   },
   emits: ["button-handler"],
+  setup() {
+    const { matchScreenSize } = useWindow("phone");
+    return { matchScreenSize };
+  },
   data() {
     return {
       isMobileScreen: false,
@@ -95,7 +99,7 @@ export default {
       this.$emit("button-handler", request);
     },
     handleResize() {
-      if (window.matchMedia("(max-width: 37.5em)").matches) {
+      if (this.matchScreenSize) {
         this.isMobileScreen = true;
       } else {
         this.isMobileScreen = false;

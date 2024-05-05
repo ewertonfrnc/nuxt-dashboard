@@ -40,6 +40,13 @@ $breakpoint argument choices:
     }
   }
 
+  @if $breakpoint == modal {
+    // 700px
+    @media (max-width: 45em) {
+      @content;
+    }
+  }
+
   @if $breakpoint == tab-port {
     // 900px
     @media (max-width: 56.25em) {

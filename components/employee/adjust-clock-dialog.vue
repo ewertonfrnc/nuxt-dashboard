@@ -343,6 +343,10 @@ export default {
   display: grid;
   gap: 24px;
 
+  @include respond(modal) {
+    width: 100%;
+  }
+
   &__header {
     p span {
       display: block;
