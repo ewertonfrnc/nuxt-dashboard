@@ -51,6 +51,9 @@
     </section>
 
     <BaseDialog
+      confirm-warn
+      confirm-dialog
+      confirm-icon="pi-exclamation-circle"
       :is-visible="isVisible"
       :toggle-dialog="toggleVisibility"
       title="Reativar colaborador"
@@ -60,27 +63,12 @@
       <template #footer>
         <BaseDialogFooter
           :loading="dialogLoading"
+          confirm-icon="pi pi-check"
+          confirmlabel="Confirmar"
           message="Selecione uma ação para prosseguir"
           @click-handler="footerActionHandler"
         />
       </template>
-
-      <!--      <template #footer>-->
-      <!--        <BaseButton-->
-      <!--          class="btn__danger&#45;&#45;outlined"-->
-      <!--          icon="pi pi-times"-->
-      <!--          label="Cancelar"-->
-      <!--          :disabled="dialogLoading"-->
-      <!--          @click="toggleVisibility"-->
-      <!--        />-->
-      <!--        <BaseButton-->
-      <!--          class="btn__secondary"-->
-      <!--          icon="pi pi-save"-->
-      <!--          label="Salvar"-->
-      <!--          :loading="dialogLoading"-->
-      <!--          @click="reactivateEmployeeHandler"-->
-      <!--        />-->
-      <!--      </template>-->
     </BaseDialog>
   </div>
 </template>
