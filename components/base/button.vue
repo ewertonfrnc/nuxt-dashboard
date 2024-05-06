@@ -8,8 +8,11 @@
     }"
     :type="type"
   >
-    <template #icon>
-      <i :class="['btn__icon', icon]" />
+    <template #default>
+      <i v-if="loading" class="pi pi-spinner btn__icon btn__icon--loading" />
+
+      <i v-if="icon" :class="[icon, 'btn__icon']" />
+      <span v-if="label" class="button__primary">{{ label }}</span>
     </template>
   </Button>
 </template>

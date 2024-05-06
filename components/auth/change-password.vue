@@ -22,12 +22,12 @@
           <BaseInlineMessage
             v-if="!values.password"
             severity="info"
-            text="4 dígitos numéricos"
+            text="6 dígitos contendo letras e números"
           />
           <BaseInlineMessage
             v-else
             :severity="isValidPassword ? 'success' : 'error'"
-            text="4 dígitos numéricos"
+            text="6 dígitos contendo letras e números"
           />
 
           <div class="form__control">
@@ -36,6 +36,7 @@
               <BaseInputPassword
                 name="passwordConfirm"
                 placeholder="Repita a nova senha"
+                @invalid-field="checkInvalidFields"
               />
             </label>
           </div>
@@ -49,6 +50,8 @@
           @click.prevent="goToLogin"
         />
         <BaseButton
+          :loading="loading"
+          :disabled="anyInvalidField"
           label="Salvar"
           class="btn__primary"
           @click.prevent="changePasswordHandler"
@@ -79,17 +82,21 @@ export default {
     return {
       loading: false,
       isValidPassword: true,
-      formData: {} as ChangePassword | undefined,
+      anyInvalidField: false,
+      formData: { password: "", passwordConfirm: "" } as ChangePassword,
     };
   },
   methods: {
     ...mapActions(useAuthStore, ["changePassword"]),
+    checkInvalidFields(value: boolean) {
+      this.anyInvalidField = value;
+    },
     goToLogin() {
       this.$emit("changeStep", "login");
     },
     validatePassword(password: string) {
       if (!password) return;
-      this.isValidPassword = password.length >= 4;
+      this.isValidPassword = password.length >= 6;
     },
     async changePasswordHandler() {
       try {
@@ -127,8 +134,6 @@ export default {
 
 <style scoped lang="scss">
 .change-password {
-  width: 35rem;
-
   &__header {
     margin-bottom: $spacing-md;
   }

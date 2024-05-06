@@ -1,13 +1,12 @@
 <template>
-  <div class="split">
+  <div v-if="!isMobileScreen" class="split">
     <BaseButton
       :class="[
         'btn__primary--outlined',
         'split__button-left',
         selectedBtn === 'left' && 'active',
-        disableLeftBtn && 'inactive',
+        (request.approved || disableLeftBtn) && 'inactive',
       ]"
-      :disabled="approveAll"
       label="Reprovar"
       @click.stop="leftButtonHandler(request)"
     />
@@ -15,10 +14,32 @@
       :class="[
         'btn__primary--outlined',
         'split__button-right',
-        (approveAll || selectedBtn === 'right') && 'active',
         disableRightBtn && 'inactive',
+        (request.approved || selectedBtn === 'right') && 'active',
       ]"
       label="Aprovar"
+      @click.stop="rightButtonHandler(request)"
+    />
+  </div>
+  <div v-else class="split">
+    <BaseButton
+      :class="[
+        'btn btn__primary--outlined',
+        'split__button-left',
+        selectedBtn === 'left' && 'active',
+        (request.approved || disableLeftBtn) && 'inactive',
+      ]"
+      icon="pi pi-times"
+      @click.stop="leftButtonHandler(request)"
+    />
+    <BaseButton
+      :class="[
+        'btn btn__primary--outlined',
+        'split__button-right',
+        disableRightBtn && 'inactive',
+        (request.approved || selectedBtn === 'right') && 'active',
+      ]"
+      icon="pi pi-check"
       @click.stop="rightButtonHandler(request)"
     />
   </div>
@@ -30,17 +51,33 @@ import { Request } from "~/interfaces/time-sheet/time-sheet.interface";
 
 export default {
   props: {
-    requests: { type: Array as PropType<Request[]>, required: true },
+    requests: { type: Set, required: true },
     request: { type: Object as PropType<Request>, required: true },
     approveAll: { type: Boolean, default: false, required: true },
   },
   emits: ["button-handler"],
   data() {
     return {
+      isMobileScreen: false,
       selectedBtn: "",
       disableLeftBtn: false,
       disableRightBtn: false,
     };
+  },
+  watch: {
+    approveAll(newValue) {
+      if (newValue) {
+        this.selectedBtn = "right";
+        this.disableLeftBtn = true;
+      }
+    },
+  },
+  mounted() {
+    window.addEventListener("resize", this.handleResize);
+    this.handleResize();
+  },
+  unmounted() {
+    window.removeEventListener("resize", this.handleResize);
   },
   methods: {
     leftButtonHandler(request: Request) {
@@ -57,6 +94,13 @@ export default {
       request.approved = true;
       this.$emit("button-handler", request);
     },
+    handleResize() {
+      if (window.matchMedia("(max-width: 37.5em)").matches) {
+        this.isMobileScreen = true;
+      } else {
+        this.isMobileScreen = false;
+      }
+    },
   },
 };
 </script>
@@ -66,7 +110,15 @@ export default {
   display: flex;
   align-items: center;
 
+  @include respond(phone) {
+    button {
+      padding: 0.6rem 1.2rem;
+      text-align: center;
+    }
+  }
+
   &__button-left {
+    min-width: max-content;
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;
     border-right-width: 1px;
@@ -78,6 +130,7 @@ export default {
   }
 
   &__button-right {
+    min-width: max-content;
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
     border-left-width: 0;

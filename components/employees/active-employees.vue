@@ -35,9 +35,10 @@
 
         <template #column-action="slotData">
           <BaseTableAction
-            :data="slotData"
+            :data="{ slotData }"
             :icon="'pi-user'"
             tooltip-text="Acessar perfil"
+            @action-handler="goToEmployeeDetails"
           />
         </template>
       </BaseTable>
@@ -46,10 +47,13 @@
 </template>
 
 <script lang="ts">
-import { mapActions } from "pinia";
+import { mapActions, mapState } from "pinia";
 import { PageState } from "primevue/paginator";
 import { FilterMatchMode } from "primevue/api";
-import { ActiveEmployeeQueryParams } from "~/interfaces/employees/employees.interface";
+import {
+  QueryParams,
+  Employees,
+} from "~/interfaces/employees/employees.interface";
 
 export default {
   data() {
@@ -63,7 +67,7 @@ export default {
           header: "Nome",
           sortable: true,
           hasFilter: true,
-          frozen: true,
+          frozen: false,
         },
         {
           field: "role",
@@ -94,8 +98,8 @@ export default {
           frozen: false,
         },
       ],
-      nodes: [],
-      queries: {} as ActiveEmployeeQueryParams,
+      nodes: [] as Employees[],
+      queries: {} as QueryParams,
       filters: {
         name: {
           field: "name",
@@ -125,11 +129,17 @@ export default {
       },
     };
   },
+  computed: {
+    ...mapState(useEmployeesStore, ["employees", "total"]),
+  },
   async mounted() {
     await this.getTableValues(this.queries);
   },
   methods: {
     ...mapActions(useEmployeesStore, ["getActiveEmployees"]),
+    goToEmployeeDetails(data: Employees) {
+      this.$router.push(`/employees/${data.id}`);
+    },
     async changePageHandler(currentPage: PageState) {
       this.currentPage = currentPage.page + 1;
       await this.getTableValues(this.queries);
@@ -137,9 +147,9 @@ export default {
     async getTableValues(queries: ActiveEmployeeQueryParams) {
       this.loading = true;
       try {
-        const { employees, total } = await this.getActiveEmployees(queries);
-        this.nodes = employees;
-        this.totalPages = total;
+        await this.getActiveEmployees(queries);
+        this.nodes = this.employees;
+        this.totalPages = this.total;
       } catch (err) {
         this.$toast.add({
           severity: "error",

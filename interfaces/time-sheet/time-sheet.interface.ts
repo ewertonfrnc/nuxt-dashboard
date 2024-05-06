@@ -44,7 +44,7 @@ export type Request = {
   id: number;
   date: string;
   negative: boolean;
-  approved: boolean;
+  approved?: boolean;
   before: DayDetails;
   after: DayDetails;
 };

@@ -122,7 +122,7 @@
         headercell: `table__header--cell ${
           col.frozen && 'table__header--frozen-cell'
         }`,
-        headertitle: 'heading__quinary',
+        headertitle: 'heading__quinary mr-auto	',
         headercontent: 'table__header--content',
         bodycell: `table__body--cell ${
           col.frozen && 'table__body--frozen-cell'
@@ -182,6 +182,7 @@
       :pt="{
         headercell: 'table__header--cell',
         bodycell: 'table__body--cell',
+        headercontent: 'table__header-content',
       }"
       style="min-width: 2rem"
     >

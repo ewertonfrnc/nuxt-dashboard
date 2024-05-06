@@ -3,6 +3,7 @@
     :draggable="true"
     :pt="{
       root: 'dialog',
+      content: 'overflow-hidden',
       mask: 'dialog__mask fadein',
       closeButton: 'dialog__close-btn',
       header: 'dialog__header',
@@ -13,11 +14,11 @@
     modal
   >
     <template #header>
-      <h5 class="heading__quinary">{{ title }}</h5>
+      <h4 class="heading__quaternary">{{ title }}</h4>
     </template>
 
     <template #closeicon>
-      <i class="pi pi-times" @click="toggleDialog"></i>
+      <i class="pi pi-times close-icon" @click="toggleDialog"></i>
     </template>
 
     <template #default>
@@ -54,7 +55,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-h5 {
+h4 {
   margin-bottom: 2rem;
+}
+
+.close-icon {
+  font-size: 15px;
 }
 </style>

@@ -20,7 +20,10 @@
       <span
         :class="[
           'date-picker__table--day',
-          selectedDay === date.day && 'date-picker__selected-day',
+          !date.selectable && 'date-picker__disabled',
+          selectedDay === date.day &&
+            date.selectable &&
+            'date-picker__selected-day',
         ]"
       >
         {{ date.day }}

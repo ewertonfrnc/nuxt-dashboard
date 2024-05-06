@@ -1,0 +1,14 @@
+.radio {
+  width: 1.8rem;
+  height: 1.8rem;
+  border: 0.2rem solid map-get($color-scheme-light, "$color-neutral-neutral-4");
+  border-radius: 100%;
+  padding: 0.2rem;
+  transition: all 0.3s cubic-bezier(0, 0, 0.2, 1);
+
+  &--checked {
+    background-color: map-get($color-scheme-light, "$color-brand-primary-0");
+    color: map-get($color-scheme-light, "$color-neutral-neutral-7");
+    border-color: map-get($color-scheme-light, "$color-brand-primary-0");
+  }
+}
