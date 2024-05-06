@@ -38,6 +38,7 @@
             :data="{ slotData }"
             :icon="'pi-user'"
             tooltip-text="Acessar perfil"
+            @action-handler="goToEmployeeDetails"
           />
           <BaseTableAction
             :data="{ slotData }"
@@ -57,21 +58,29 @@
       <EmployeesReactivateDialog :user="selectedEmployee.name" />
 
       <template #footer>
-        <BaseButton
-          class="btn__danger--outlined"
-          icon="pi pi-times"
-          label="Cancelar"
-          :disabled="dialogLoading"
-          @click="toggleVisibility"
-        />
-        <BaseButton
-          class="btn__secondary"
-          icon="pi pi-save"
-          label="Salvar"
+        <BaseDialogFooter
           :loading="dialogLoading"
-          @click="reactivateEmployeeHandler"
+          message="Selecione uma ação para prosseguir"
+          @click-handler="footerActionHandler"
         />
       </template>
+
+      <!--      <template #footer>-->
+      <!--        <BaseButton-->
+      <!--          class="btn__danger&#45;&#45;outlined"-->
+      <!--          icon="pi pi-times"-->
+      <!--          label="Cancelar"-->
+      <!--          :disabled="dialogLoading"-->
+      <!--          @click="toggleVisibility"-->
+      <!--        />-->
+      <!--        <BaseButton-->
+      <!--          class="btn__secondary"-->
+      <!--          icon="pi pi-save"-->
+      <!--          label="Salvar"-->
+      <!--          :loading="dialogLoading"-->
+      <!--          @click="reactivateEmployeeHandler"-->
+      <!--        />-->
+      <!--      </template>-->
     </BaseDialog>
   </div>
 </template>
@@ -173,6 +182,13 @@ export default {
       "getInactiveEmployees",
       "reactivateEmployee",
     ]),
+    goToEmployeeDetails(data: Employees) {
+      this.$router.push(`/employees/${data.id}`);
+    },
+    footerActionHandler(btnClicked: string) {
+      if (btnClicked === "confirm") this.reactivateEmployeeHandler();
+      else this.toggleVisibility();
+    },
     handleReactivationDialog(data: Employees) {
       this.toggleVisibility();
       this.selectedEmployee = data;
