@@ -116,16 +116,22 @@
       :key="col.field"
       :field="col.field"
       :filter-field="col.field"
+      :frozen="col.frozen"
       :header="col.header"
       :pt="{
-        headercell: 'table__header--cell',
-        headertitle: 'heading__quinary mr-auto',
+        headercell: `table__header--cell ${
+          col.frozen && 'table__header--frozen-cell'
+        }`,
+        headertitle: 'heading__quinary mr-auto	',
         headercontent: 'table__header--content',
-        bodycell: 'table__body--cell',
+        bodycell: `table__body--cell ${
+          col.frozen && 'table__body--frozen-cell'
+        }`,
         filteraddrule: 'filter__add-rule',
         filterConstraints: 'table__filter',
         filtermenubutton: 'table__filter--icon',
         filterbuttonbar: 'table__filter--footer',
+        sort: '',
       }"
       :show-add-button="false"
       :show-filter-match-modes="false"
@@ -135,6 +141,24 @@
     >
       <template #body="{ data, field }">
         <slot :data="data" :field="field" name="body-cell" />
+      </template>
+
+      <template #sorticon="{ sortOrder }">
+        <div class="table__sort">
+          <i
+            :class="[
+              'caption__primary pi',
+              sortOrder === 0
+                ? 'pi-sort-alt'
+                : sortOrder === 1
+                ? 'pi-sort-amount-down-alt'
+                : 'pi-sort-amount-down',
+            ]"
+          />
+        </div>
+      </template>
+      <template #filtericon>
+        <i class="pi pi-filter"></i>
       </template>
 
       <template v-if="col.hasFilter" #filter="{ filterModel }">
@@ -173,7 +197,7 @@
     </Column>
 
     <Column
-      v-if="!loading && hasAction"
+      v-if="!loading && nodes.length && hasAction"
       :pt="{
         headercell: 'table__header--cell',
         bodycell: 'table__body--cell',
