@@ -279,7 +279,7 @@ export default {
 
 <style lang="scss">
 .accordion {
-  height: 400px;
+  height: 200px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -340,7 +340,9 @@ export default {
 
 .adjusts {
   width: 600px;
-  display: grid;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
   gap: 24px;
 
   @include respond(modal) {
