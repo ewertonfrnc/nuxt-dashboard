@@ -51,7 +51,7 @@ import { mapActions, mapState } from "pinia";
 import { PageState } from "primevue/paginator";
 import { FilterMatchMode } from "primevue/api";
 import {
-  QueryParams,
+  ActiveEmployeeQueryParams,
   Employees,
 } from "~/interfaces/employees/employees.interface";
 

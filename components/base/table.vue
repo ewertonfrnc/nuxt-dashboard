@@ -116,17 +116,12 @@
       :key="col.field"
       :field="col.field"
       :filter-field="col.field"
-      :frozen="col.frozen"
       :header="col.header"
       :pt="{
-        headercell: `table__header--cell ${
-          col.frozen && 'table__header--frozen-cell'
-        }`,
-        headertitle: 'heading__quinary mr-auto	',
+        headercell: 'table__header--cell',
+        headertitle: 'heading__quinary mr-auto',
         headercontent: 'table__header--content',
-        bodycell: `table__body--cell ${
-          col.frozen && 'table__body--frozen-cell'
-        }`,
+        bodycell: 'table__body--cell',
         filteraddrule: 'filter__add-rule',
         filterConstraints: 'table__filter',
         filtermenubutton: 'table__filter--icon',
