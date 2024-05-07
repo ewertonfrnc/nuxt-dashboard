@@ -42,9 +42,9 @@ deploy s3:
   #   ID_TOKEN:
   #     aud: itera-dashboard
   script:
-    - apk add --no-cache curl jq python3 py3-pip
-    - pip install awscli
-    - source ~/.bashrc
+    # - apk add --no-cache curl jq python3 py3-pip
+    # - pip install awscli
+    # - source ~/.bashrc
     - printenv
     - *assume_role
     - aws s3 sync build/ s3://qa.itera.dashboard.com
