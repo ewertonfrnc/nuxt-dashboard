@@ -1,0 +1,59 @@
+stages:
+  - build-qa
+  - deploy-qa
+  - build-prod
+  - deploy-prod
+
+build-qa:
+  stage: build-qa
+  script:
+    - npm install && npm run generate
+    - npm run test
+  artifacts:
+    when: on_success
+    paths:
+      - .output/public/
+    expire_in: 20 mins
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "develop"'
+      when: always
+
+deploy-qa:
+  stage: deploy-qa
+  needs:
+    - build-qa
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "develop"'
+      when: always
+  script:
+    - echo "Running deploy"
+    - aws s3 cp ./.output/public/ s3://$S3_BUCKET/ --recursive
+    - echo "Deployment successful"
+
+build-prod:
+  stage: build-prod
+  script:
+    - npm install && npm run generate
+    - npm run test
+  artifacts:
+    when: on_success
+    paths:
+      - .output/public/
+    expire_in: 20 mins
+  rules:
+    - if: $CI_COMMIT_TAG
+    - if: '$CI_COMMIT_REF_NAME == "main"'
+
+deploy-prod:
+  stage: deploy-prod
+  needs:
+    - build-prod
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+  rules:
+    - if: $CI_COMMIT_TAG
+    - if: '$CI_COMMIT_REF_NAME == "main"'
+  script:
+    - echo "Running deploy"
+    - aws s3 cp ./.output/public/ s3://$S3_BUCKET/ --recursive
+    - echo "Deployment successful"
