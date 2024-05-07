@@ -125,7 +125,11 @@
         <label class="form__label">
           Etnia
 
-          <BaseInputText name="ethnicity" :readonly="!isEditing" />
+          <BaseDropdown
+            name="ethnicity"
+            :readonly="!isEditing"
+            :options="['Amarelos', 'Brancos', 'Indígenas', 'Negros', 'Pardos']"
+          />
         </label>
       </div>
     </form>
@@ -137,12 +141,6 @@ import { mapState } from "pinia";
 import { checkEqualObjs } from "~/utils/validators";
 
 export default {
-  computed: {
-    ...mapState(useEmployeeStore, ["employee"]),
-    userInfo() {
-      return this.employee.personalData;
-    },
-  },
   data() {
     return {
       isEditing: false,
@@ -150,6 +148,12 @@ export default {
       usePreferredName: false,
       wrongCrendentialsMessage: "",
     };
+  },
+  computed: {
+    ...mapState(useEmployeeStore, ["employee"]),
+    userInfo() {
+      return this.employee.personalData;
+    },
   },
   methods: {
     handleCheckbox(value: boolean) {
