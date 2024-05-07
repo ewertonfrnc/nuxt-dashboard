@@ -253,14 +253,7 @@ export default {
       this.$emit("button-handler", this.updatedRequests);
     },
     removeApproval() {
-      const newRequests = [];
-
-      for (const request of this.requests) {
-        delete request.approved;
-        newRequests.push(request);
-      }
-
-      this.requests = newRequests;
+      this.requests.forEach((item) => delete item.approved);
     },
   },
 };
