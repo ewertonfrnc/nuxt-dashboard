@@ -147,6 +147,8 @@
             />
           </label>
         </div>
+
+        <BaseUpload />
       </div>
     </form>
   </VeeForm>
