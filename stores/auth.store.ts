@@ -23,9 +23,7 @@ export const useAuthStore = defineStore("auth", {
   actions: {
     async authenticateUser(userCredentials: UserCredentials) {
       try {
-        const {
-          data: { user },
-        } = await authService.login(userCredentials);
+        const { user } = await authService.login(userCredentials);
         this.user = { ...user, role: ["manager"] };
         this.authenticated = true;
       } catch (error) {
@@ -34,9 +32,7 @@ export const useAuthStore = defineStore("auth", {
     },
     async recoverPassword(userId: RecoverPassword) {
       try {
-        const {
-          data: { userEmail },
-        } = await authService.recoverPassword(userId);
+        const { userEmail } = await authService.recoverPassword(userId);
         return userEmail;
       } catch (error) {
         return error as Error;
@@ -44,9 +40,7 @@ export const useAuthStore = defineStore("auth", {
     },
     async recoverCode(code: RecoverCode) {
       try {
-        const {
-          data: { status },
-        } = await authService.recoverCode(code);
+        const { status } = await authService.recoverCode(code);
         return status;
       } catch (error) {
         return error as Error;
@@ -54,9 +48,7 @@ export const useAuthStore = defineStore("auth", {
     },
     async changePassword(newPassword: ChangePassword) {
       try {
-        const {
-          data: { status },
-        } = await authService.changePassword(newPassword);
+        const { status } = await authService.changePassword(newPassword);
         return status;
       } catch (error) {
         return error as Error;
