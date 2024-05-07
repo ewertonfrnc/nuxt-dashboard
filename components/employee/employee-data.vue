@@ -64,7 +64,11 @@
           <label class="form__label">
             Apelido
 
-            <BaseInputText name="nickname" :readonly="!isEditing" />
+            <BaseInputText
+              name="nickname"
+              :readonly="!isEditing"
+              :wrong-crendentials-message="wrongCrendentialsMessage"
+            />
           </label>
         </div>
 
