@@ -2,46 +2,27 @@ stages:
   - build
   - deploy
 
-.assume_role: &assume_role
-  - >
-    STS=($(aws sts assume-role-with-web-identity
-    --role-arn "arn:aws:iam::768987577863:role/itera-dashboard-roles"
-    --role-session-name "GitLabRunner-${CI_PROJECT_ID}-${CI_PIPELINE_ID}"
-    --web-identity-token $ID_TOKEN
-    --duration-seconds 3600
-    --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]'
-    --output text))
-  - export AWS_ACCESS_KEY_ID="${STS[0]}"
-  - export AWS_SECRET_ACCESS_KEY="${STS[1]}"
-  - export AWS_SESSION_TOKEN="${STS[2]}"
-
-build artifact:
+build:
   stage: build
-  image: node:latest
-  before_script:
-    - npm install
   script:
-    - npm run generate
+  # We simulate a build phase by manually creating files in a build folder
+  # An example would be using `yarn build` to build a react project that would create static files in a build or public folder
+    - npm install && npm run generate
   artifacts:
+    when: on_success
     paths:
       - .output/public/
-    when: always
-  rules:
-    - if: '$CI_COMMIT_REF_NAME == "deploy-qa"'
-      when: always
+    expire_in: 20 mins
 
-deploy s3:
+
+deploy:
   stage: deploy
-  image:
-    name: amazon/aws-cli:latest
-    entrypoint:
-      - '/usr/bin/env'
-  # id_tokens:
-  #   ID_TOKEN:
-  #     aud: itera-dashboard
-  script:
-    - *assume_role
-    - aws s3 sync build/ s3://qa.itera.dashboard.com
+  needs:
+    - build
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   rules:
-    - if: '$CI_COMMIT_REF_NAME == "deploy-qa"'
-      when: always
+    - if: $CI_COMMIT_TAG # Run this job when a tag is created
+  script:
+    - echo "Running deploy"
+    - aws s3 cp ./build s3://$S3_BUCKET/ --recursive
+    - echo "Deployment successful"
