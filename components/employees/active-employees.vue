@@ -51,7 +51,7 @@ import { mapActions, mapState } from "pinia";
 import { PageState } from "primevue/paginator";
 import { FilterMatchMode } from "primevue/api";
 import {
-  QueryParams,
+  ActiveEmployeeQueryParams,
   Employees,
 } from "~/interfaces/employees/employees.interface";
 
@@ -144,7 +144,7 @@ export default {
       this.currentPage = currentPage.page + 1;
       await this.getTableValues(this.queries);
     },
-    async getTableValues(queries: QueryParams) {
+    async getTableValues(queries: ActiveEmployeeQueryParams) {
       this.loading = true;
       try {
         await this.getActiveEmployees(queries);

@@ -47,15 +47,19 @@
 
 <script lang="ts">
 import { PropType } from "vue";
-import { Request } from "~/interfaces/time-sheet/time-sheet.interface";
+import { WorkLog } from "~/interfaces/employee/employee.interface";
 
 export default {
   props: {
     requests: { type: Set, required: true },
-    request: { type: Object as PropType<Request>, required: true },
+    request: { type: Object as PropType<WorkLog>, required: true },
     approveAll: { type: Boolean, default: false, required: true },
   },
   emits: ["button-handler"],
+  setup() {
+    const { matchScreenSize } = useWindow("phone");
+    return { matchScreenSize };
+  },
   data() {
     return {
       isMobileScreen: false,
@@ -80,14 +84,14 @@ export default {
     window.removeEventListener("resize", this.handleResize);
   },
   methods: {
-    leftButtonHandler(request: Request) {
+    leftButtonHandler(request: WorkLog) {
       this.selectedBtn = "left";
       this.disableRightBtn = true;
 
       request.approved = false;
       this.$emit("button-handler", request);
     },
-    rightButtonHandler(request: Request) {
+    rightButtonHandler(request: WorkLog) {
       this.selectedBtn = "right";
       this.disableLeftBtn = true;
 
@@ -95,7 +99,7 @@ export default {
       this.$emit("button-handler", request);
     },
     handleResize() {
-      if (window.matchMedia("(max-width: 37.5em)").matches) {
+      if (this.matchScreenSize) {
         this.isMobileScreen = true;
       } else {
         this.isMobileScreen = false;

@@ -1,0 +1,10 @@
+.highlight {
+  color: map-get($color-scheme-light, "$color-feedback-warning-4");
+  font-size: $font-size-subtitle-primary;
+  line-height: $line-height-subtitle-primary;
+  font-weight: $font-weight-subtitle-primary;
+}
+
+.dark-mode .highlight {
+  color: map-get($color-scheme-dark, "$color-feedback-warning-4");
+}

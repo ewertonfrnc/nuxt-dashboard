@@ -16,7 +16,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 1.5rem;
+    gap: 8px;
 
     font-size: $font-size-button-primary;
     line-height: $line-height-button-primary;
@@ -24,7 +24,8 @@
   }
 
   &__icon {
-    font-size: 16px;
+    font-size: 15px;
+
     &--loading {
       animation: rotation 1s linear infinite;
     }
@@ -513,6 +514,102 @@
         @include buttonStyles(
           transparent,
           map-get($color-scheme-light, "$color-neutral-neutral-3"),
+          transparent
+        );
+      }
+    }
+  }
+
+  .dark-mode &__danger {
+    @include buttonStyles(
+      map-get($color-scheme-dark, "$color-feedback-danger-0"),
+      map-get($color-scheme-dark, "$color-neutral-neutral-7"),
+      map-get($color-scheme-dark, "$color-feedback-danger-0")
+    );
+
+    &:hover {
+      @include buttonStyles(
+        map-get($color-scheme-dark, "$color-feedback-danger-3"),
+        map-get($color-scheme-dark, "$color-neutral-neutral-7"),
+        map-get($color-scheme-dark, "$color-feedback-danger-3")
+      );
+    }
+
+    &:focus {
+      @include buttonStyles(
+        map-get($color-scheme-dark, "$color-feedback-danger-3"),
+        map-get($color-scheme-dark, "$color-neutral-neutral-7"),
+        map-get($color-scheme-dark, "$color-feedback-danger-3")
+      );
+    }
+
+    &:disabled {
+      @include buttonStyles(
+        map-get($color-scheme-dark, "$color-neutral-neutral-3"),
+        map-get($color-scheme-dark, "$color-neutral-neutral-7"),
+        map-get($color-scheme-dark, "$color-neutral-neutral-3")
+      );
+    }
+
+    &--outlined {
+      @include buttonStyles(
+        map-get($color-scheme-dark, "$color-feedback-danger-0"),
+        map-get($color-scheme-dark, "$color-neutral-neutral-7"),
+        map-get($color-scheme-dark, "$color-feedback-danger-0")
+      );
+
+      &:hover {
+        @include buttonStyles(
+          map-get($color-scheme-dark, "$color-feedback-danger-3"),
+          map-get($color-scheme-dark, "$color-neutral-neutral-7"),
+          map-get($color-scheme-dark, "$color-feedback-danger-3")
+        );
+      }
+
+      &:focus {
+        @include buttonStyles(
+          map-get($color-scheme-dark, "$color-feedback-danger-3"),
+          map-get($color-scheme-dark, "$color-neutral-neutral-7"),
+          map-get($color-scheme-dark, "$color-feedback-danger-3")
+        );
+      }
+
+      &:disabled {
+        @include buttonStyles(
+          transparent,
+          map-get($color-scheme-dark, "$color-neutral-neutral-3"),
+          map-get($color-scheme-dark, "$color-neutral-neutral-3")
+        );
+      }
+    }
+
+    &--text {
+      @include buttonStyles(
+        transparent,
+        map-get($color-scheme-dark, "$color-feedback-danger-0"),
+        transparent
+      );
+
+      &:hover {
+        @include buttonStyles(
+          map-get($color-scheme-dark, "$color-feedback-danger-1"),
+          map-get($color-scheme-dark, "$color-feedback-danger-0"),
+          transparent
+        );
+      }
+
+      &:focus {
+        @include buttonStyles(
+          transparent,
+          map-get($color-scheme-dark, "$color-feedback-danger-0"),
+          map-get($color-scheme-dark, "$color-neutral-neutral-3")
+        );
+      }
+
+      &:disabled {
+        @include buttonStyles(
+          transparent,
+          map-get($color-scheme-dark, "$color-neutral-neutral-3"),
           transparent
         );
       }

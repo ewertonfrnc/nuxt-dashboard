@@ -4,11 +4,11 @@
   padding: 16px 32px 40px 32px;
   border-radius: 1.6rem;
   width: max-content;
+  gap: 24px;
 
-  @include respond(phone) {
-    width: 100%;
-    height: 100%;
-    padding: 16px;
+  &__confirm {
+    max-width: 500px;
+    gap: 0;
   }
 
   &__header {
@@ -17,13 +17,23 @@
     justify-content: space-between;
   }
 
+  &__content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 21px;
+
+    &--highlight {
+      color: map-get($color-scheme-light, "$color-feedback-warning-4");
+    }
+  }
+
   &__footer {
     width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     gap: 8px;
-    padding-top: 2rem;
   }
 
   &__close-btn {
@@ -40,4 +50,10 @@
 
 .dark-mode .dialog {
   background-color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
+
+  &__content {
+    &--highlight {
+      color: map-get($color-scheme-dark, "$color-feedback-warning-4");
+    }
+  }
 }

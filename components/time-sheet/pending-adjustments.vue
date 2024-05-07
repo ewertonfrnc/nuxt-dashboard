@@ -46,59 +46,25 @@
         :toggle-dialog="toggleDialog"
         title="Ajustar ponto"
       >
-        <div class="adjust">
-          <div class="adjust__info">
-            <span class="caption__primary">Solicitante:</span>
-
-            <div class="adjust__info--employee">
-              <p class="body__primary">{{ selectedUser?.name }}</p>
-              <span class="caption__primary">{{ selectedUser?.role }}</span>
-            </div>
-          </div>
-
-          <div class="adjust__approval">
-            <BaseCheckbox
-              :checked="approveAll"
-              input-id="approval"
-              @checkbox-value="handleApproveAll"
-            />
-            <label class="body__primary" for="approval">Aprovar tudo</label>
-          </div>
-
-          <div class="adjust__accordion">
-            <TimeSheetAdjustAccordion
-              v-if="selectedUser"
-              :approve-all="approveAll"
-              :user="selectedUser"
-              @approved-all="handleApproveAll"
-              @button-handler="buttonHandler"
-            />
-          </div>
-        </div>
+        <SharedAdjustClockDialog
+          :employee="selectedUser"
+          :loading="dialogLoading"
+          :approve-all="approveAll"
+          :adjusts="selectedUser.requests"
+          :show-error-message="showErrorMessage"
+          :cancel-handler="toggleDialog"
+          :confirm-handler="submitPendingRequests"
+          @approved-all="handleApproveAll"
+          @button-handler="buttonHandler"
+        />
 
         <template #footer>
-          <BaseInlineMessage
-            v-if="showErrorMessage"
-            severity="error"
-            text="Selecione uma ação para prosseguir"
+          <BaseDialogFooter
+            :loading="dialogLoading"
+            :show-error-message="showErrorMessage"
+            message="Selecione uma ação para prosseguir"
+            @click-handler="footerActionHandler"
           />
-
-          <div class="adjust__footer">
-            <BaseButton
-              :disabled="dialogLoading"
-              class="btn__danger--outlined"
-              icon="pi pi-times"
-              label="Cancelar"
-              @click="toggleDialog"
-            />
-            <BaseButton
-              :loading="dialogLoading"
-              class="btn__secondary"
-              icon="pi pi-save"
-              label="Salvar"
-              @click="submitPendingRequests"
-            />
-          </div>
         </template>
       </BaseDialog>
     </section>
@@ -114,6 +80,7 @@ import {
   User,
 } from "~/interfaces/time-sheet/time-sheet.interface";
 import { Filter } from "~/interfaces/table.interface";
+import { WorkLog } from "~/interfaces/employee/employee.interface";
 
 export default {
   data() {
@@ -175,7 +142,7 @@ export default {
       dialogLoading: false,
       isVisible: false,
       approveAll: false,
-      updatedPendingRequests: [] as Request[],
+      updatedPendingRequests: [] as WorkLog[],
       showErrorMessage: false,
       selectedUser: {} as User,
     };
@@ -192,6 +159,10 @@ export default {
       "getUserPendingAdjustments",
       "updateRequestsApproval",
     ]),
+    footerActionHandler(btnClicked: string) {
+      if (btnClicked === "confirm") this.submitPendingRequests();
+      else this.toggleDialog();
+    },
     arrayToObject(array: Filter[]) {
       return array.reduce((accumulator, currentValue) => {
         const { field, value, matchMode } = currentValue;
@@ -207,7 +178,7 @@ export default {
     handleApproveAll(value: boolean) {
       this.approveAll = value;
     },
-    buttonHandler(requests: Request[]) {
+    buttonHandler(requests: WorkLog[]) {
       this.updatedPendingRequests = requests;
     },
     async changePageHandler(currentPage: PageState) {
@@ -237,7 +208,7 @@ export default {
         this.tableLoading = false;
       }
     },
-    logSelectedItem(data) {
+    logSelectedItem(data: User) {
       this.toggleDialog();
       this.selectedUser = data;
     },
