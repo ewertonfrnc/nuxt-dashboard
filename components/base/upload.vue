@@ -4,7 +4,7 @@
     url="/api/upload"
     accept="image/png"
     :multiple="true"
-    :max-file-size="1000000"
+    :max-file-size="5000000"
     :pt="{
       root: 'upload',
     }"
@@ -26,7 +26,7 @@
           icon="pi pi-upload"
           label="Fazer upload"
           :disabled="!files || files.length === 0"
-          @click="uploadEvent(uploadCallback)"
+          @click="uploadCallback"
         />
         <BaseButton
           class="btn__primary"
@@ -46,8 +46,11 @@
         removeFileCallback,
       }"
     >
-      <div v-if="files.length" class="upload__content">
-        <div v-if="files.length > 0">
+      <div
+        v-if="files.length || uploadedFiles.length"
+        class="upload__content upload__display"
+      >
+        <div v-if="files.length > 0" class="">
           <TransitionGroup>
             <div
               v-for="(file, index) of files"
@@ -83,36 +86,36 @@
         </div>
 
         <div v-if="uploadedFiles.length > 0">
-          <h5>Completed</h5>
-          <div class="">
+          <TransitionGroup>
             <div
               v-for="(file, index) of uploadedFiles"
               :key="file.name + file.type + file.size"
-              class=""
+              class="upload__file"
             >
-              <div>
-                <img
-                  role="presentation"
-                  :alt="file.name"
-                  :src="file.objectURL"
-                  width="100"
-                  height="50"
-                />
+              <div class="upload__file--info">
+                <figure class="upload__file--img">
+                  <img :alt="file.name" :src="file.objectURL" />
+                </figure>
+
+                <div class="body__primary">
+                  <p>{{ file.name }}</p>
+
+                  <div class="upload__file--stats">
+                    <span> {{ formatSize(file.size) }} </span>
+                    <BaseBadge label="Completo" type="success" />
+                  </div>
+                </div>
               </div>
 
-              <span class="font-semibold">{{ file.name }}</span>
-
-              <div>{{ formatSize(file.size) }}</div>
-              <Badge value="Completed" class="mt-3" severity="success" />
-              <Button
-                icon="pi pi-times"
-                outlined
-                rounded
-                severity="danger"
-                @click="removeUploadedFileCallback(index)"
-              />
+              <div>
+                <BaseButton
+                  icon="pi pi-times"
+                  class="btn__danger--text"
+                  @click="removeUploadedFileCallback(index)"
+                />
+              </div>
             </div>
-          </div>
+          </TransitionGroup>
         </div>
       </div>
     </template>
@@ -128,6 +131,11 @@
 </template>
 
 <script lang="ts">
+import {
+  FileUploadSelectEvent,
+  FileUploadUploadEvent,
+} from "primevue/fileupload";
+
 export default {
   data() {
     return {
@@ -137,35 +145,39 @@ export default {
     };
   },
   methods: {
-    onRemoveTemplatingFile(file, removeFileCallback, index) {
+    onRemoveTemplatingFile(
+      file: File,
+      removeFileCallback: Function,
+      index: number,
+    ) {
       removeFileCallback(index);
       this.totalSize -= parseInt(this.formatSize(file.size));
       this.totalSizePercent = this.totalSize / 10;
     },
-    onClearTemplatingUpload(clear) {
+    onClearTemplatingUpload(clear: Function) {
       clear();
       this.totalSize = 0;
       this.totalSizePercent = 0;
     },
-    onSelectedFiles(event) {
+    onSelectedFiles(event: FileUploadSelectEvent) {
       this.files = event.files;
       this.files.forEach((file) => {
         this.totalSize += parseInt(this.formatSize(file.size));
       });
     },
-    uploadEvent(callback) {
-      this.totalSizePercent = this.totalSize / 10;
+    uploadEvent(callback: Function) {
       callback();
     },
-    onTemplatedUpload() {
+    onTemplatedUpload(event: FileUploadUploadEvent) {
+      console.log("onTemplatedUpload", event);
       this.$toast.add({
-        severity: "info",
-        summary: "Success",
-        detail: "File Uploaded",
-        life: 3000,
+        severity: "success",
+        summary: "Successo",
+        detail: "Operação realizada com sucesso",
+        life: 4000,
       });
     },
-    formatSize(bytes) {
+    formatSize(bytes: number) {
       const k = 1024;
       const dm = 3;
       const sizes = this.$primevue.config.locale.fileSizeTypes;
@@ -189,6 +201,12 @@ export default {
   overflow: hidden;
   border-radius: 8px;
   border: 1px solid map-get($color-scheme-light, "$color-neutral-neutral-5");
+
+  &__display {
+    display: grid;
+    flex-direction: column;
+    gap: 8px;
+  }
 
   &__header {
     width: 100%;
