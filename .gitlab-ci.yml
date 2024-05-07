@@ -1,6 +1,7 @@
 stages:
   - build
   - deploy-qa
+  - deploy-prod
 
 build:
   stage: build
