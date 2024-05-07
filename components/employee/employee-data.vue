@@ -38,99 +38,115 @@
     <!--    <pre>values: {{ values }}</pre>-->
 
     <form class="form" @change="handleChange">
-      <div class="form__control">
-        <label class="form__label">
-          Nome completo ou social
-
-          <BaseInputText
-            name="fullname"
-            :readonly="!isEditing"
-            :wrong-crendentials-message="wrongCrendentialsMessage"
-          />
-        </label>
-      </div>
-
-      <transition>
-        <div v-if="isEditing" class="form__control form__control--checkbox">
+      <div class="form__container">
+        <div class="form__control">
           <label class="form__label">
-            <BaseCheckbox
-              :checked="usePreferredName"
-              @checkbox-value="handleCheckbox"
+            Nome completo ou social
+
+            <BaseInputText
+              name="fullname"
+              :readonly="!isEditing"
+              :wrong-crendentials-message="wrongCrendentialsMessage"
             />
-            Utilizar nome social
           </label>
         </div>
-      </transition>
 
-      <div class="form__control">
-        <label class="form__label">
-          Apelido
+        <transition>
+          <div v-if="isEditing" class="form__control form__control--checkbox">
+            <label class="form__label">
+              <BaseCheckbox
+                :checked="usePreferredName"
+                @checkbox-value="handleCheckbox"
+              />
+              Utilizar nome social
+            </label>
+          </div>
+        </transition>
 
-          <BaseInputText name="nickname" :readonly="!isEditing" />
-        </label>
+        <div class="form__control">
+          <label class="form__label">
+            Apelido
+
+            <BaseInputText name="nickname" :readonly="!isEditing" />
+          </label>
+        </div>
+
+        <div class="form__control">
+          <label class="form__label">
+            CPF
+
+            <BaseInputMask
+              name="cpf"
+              mask="999.999.999-99"
+              :readonly="!isEditing"
+              :wrong-crendentials-message="wrongCrendentialsMessage"
+            />
+          </label>
+        </div>
+
+        <div class="form__control">
+          <label class="form__label">
+            RG
+
+            <BaseInputMask
+              name="rg"
+              mask="99.999.999-9"
+              :readonly="!isEditing"
+              :wrong-crendentials-message="wrongCrendentialsMessage"
+            />
+          </label>
+        </div>
+
+        <div class="form__control">
+          <label class="form__label">
+            Data de nascimento
+
+            <BaseInputMask
+              name="birthDate"
+              mask="99/99/9999"
+              :readonly="!isEditing"
+              :wrong-crendentials-message="wrongCrendentialsMessage"
+            />
+          </label>
+        </div>
+
+        <div class="form__control">
+          <label class="form__label">
+            Cidade natal
+
+            <BaseInputText
+              name="birthCity"
+              :readonly="!isEditing"
+              :wrong-crendentials-message="wrongCrendentialsMessage"
+            />
+          </label>
+        </div>
+
+        <div class="form__control">
+          <label class="form__label">
+            Etnia
+
+            <BaseDropdown
+              name="ethnicity"
+              :readonly="!isEditing"
+              :options="ethnicityOptions"
+            />
+          </label>
+        </div>
       </div>
 
-      <div class="form__control">
-        <label class="form__label">
-          CPF
+      <div>
+        <div class="form__control form__control--highlight">
+          <label class="form__label">
+            Visualização
 
-          <BaseInputMask
-            name="cpf"
-            mask="999.999.999-99"
-            :readonly="!isEditing"
-            :wrong-crendentials-message="wrongCrendentialsMessage"
-          />
-        </label>
-      </div>
-
-      <div class="form__control">
-        <label class="form__label">
-          RG
-
-          <BaseInputMask
-            name="rg"
-            mask="99.999.999-9"
-            :readonly="!isEditing"
-            :wrong-crendentials-message="wrongCrendentialsMessage"
-          />
-        </label>
-      </div>
-
-      <div class="form__control">
-        <label class="form__label">
-          Data de nascimento
-
-          <BaseInputMask
-            name="birthDate"
-            mask="99/99/9999"
-            :readonly="!isEditing"
-            :wrong-crendentials-message="wrongCrendentialsMessage"
-          />
-        </label>
-      </div>
-
-      <div class="form__control">
-        <label class="form__label">
-          Cidade natal
-
-          <BaseInputText
-            name="birthCity"
-            :readonly="!isEditing"
-            :wrong-crendentials-message="wrongCrendentialsMessage"
-          />
-        </label>
-      </div>
-
-      <div class="form__control">
-        <label class="form__label">
-          Etnia
-
-          <BaseDropdown
-            name="ethnicity"
-            :readonly="!isEditing"
-            :options="['Amarelos', 'Brancos', 'Indígenas', 'Negros', 'Pardos']"
-          />
-        </label>
+            <BaseDropdown
+              name="role"
+              :readonly="!isEditing"
+              :options="visualizeOptions"
+            />
+          </label>
+        </div>
       </div>
     </form>
   </VeeForm>
@@ -147,6 +163,14 @@ export default {
       hasChanges: false,
       usePreferredName: false,
       wrongCrendentialsMessage: "",
+      visualizeOptions: ["Administrador", "Colaborador"],
+      ethnicityOptions: [
+        "Amarelos",
+        "Branco(a)",
+        "Indígenas",
+        "Negros",
+        "Pardos",
+      ],
     };
   },
   computed: {
@@ -195,9 +219,12 @@ export default {
 }
 
 .form {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 24px;
+  &__container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+    margin-bottom: 24px;
+  }
 
   &__control {
     &--checkbox {
@@ -206,11 +233,19 @@ export default {
       justify-items: start;
 
       label {
+        color: map-get($color-scheme-light, "$color-neutral-neutral-2");
         cursor: pointer;
         display: flex;
         align-items: center;
         gap: 8px;
       }
+    }
+
+    &--highlight {
+      width: 359px;
+      padding: 10px;
+      border: 1px solid #6e57f5;
+      border-radius: 8px;
     }
   }
 }
