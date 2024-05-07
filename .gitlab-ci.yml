@@ -1,6 +1,5 @@
 stages:
   - build
-  # - test
   - deploy
 
 .assume_role: &assume_role
@@ -16,22 +15,6 @@ stages:
     - export AWS_SECRET_ACCESS_KEY="${STS[1]}"
     - export AWS_SESSION_TOKEN="${STS[2]}"
 
-# unit test:
-#   image: node:latest
-#   stage: test
-#   before_script:
-#     - npm install
-#   script:
-#     - npm run test:ci
-#   coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
-#   artifacts:
-#     paths:
-#       - coverage/
-#     when: always
-#     reports:
-#       junit:
-#         - junit.xml
-
 build artifact:
   stage: build
   image: node:latest
@@ -41,12 +24,11 @@ build artifact:
     - npm run generate
   artifacts:
     paths:
-      - build/
+      - .output/public/
     when: always
   rules:
     - if: '$CI_COMMIT_REF_NAME == "deploy-qa"'
       when: always
-
 
 deploy s3:
   stage: deploy
