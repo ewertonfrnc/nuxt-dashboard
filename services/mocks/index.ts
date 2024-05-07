@@ -1,9 +1,11 @@
 import { authMock } from "./auth.mock";
 import { homeMock } from "./home.mock";
+import { timeSheet } from "./time-sheet.mock";
 
 const mockTypes = {
   auth: authMock,
   home: homeMock,
+  timeSheet,
 };
 
 export const getResponse = (
