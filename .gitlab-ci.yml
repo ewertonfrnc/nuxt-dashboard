@@ -1,0 +1,65 @@
+stages:
+  - build
+  # - test
+  - deploy
+
+.assume_role: &assume_role
+    - >
+      STS=($(aws sts assume-role-with-web-identity
+      --role-arn "arn:aws:iam::768987577863:role/itera-dashboard-roles"
+      --role-session-name "GitLabRunner-${CI_PROJECT_ID}-${CI_PIPELINE_ID}"
+      --web-identity-token $ID_TOKEN
+      --duration-seconds 3600
+      --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]'
+      --output text))
+    - export AWS_ACCESS_KEY_ID="${STS[0]}"
+    - export AWS_SECRET_ACCESS_KEY="${STS[1]}"
+    - export AWS_SESSION_TOKEN="${STS[2]}"
+
+# unit test:
+#   image: node:latest
+#   stage: test
+#   before_script:
+#     - npm install
+#   script:
+#     - npm run test:ci
+#   coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
+#   artifacts:
+#     paths:
+#       - coverage/
+#     when: always
+#     reports:
+#       junit:
+#         - junit.xml
+
+build artifact:
+  stage: build
+  image: node:latest
+  before_script:
+    - npm install
+  script:
+    - npm run generate
+  artifacts:
+    paths:
+      - build/
+    when: always
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "deploy-qa"'
+      when: always
+
+
+deploy s3:
+  stage: deploy
+  image:
+    name: amazon/aws-cli:latest
+    entrypoint:
+      - '/usr/bin/env'
+  id_tokens:
+      ID_TOKEN:
+        aud: itera-dashboard
+  script:
+    - *assume_role
+    - aws s3 sync build/ s3://qa.itera.dashboard.com
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "deploy-qa"'
+      when: always
