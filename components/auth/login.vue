@@ -4,7 +4,7 @@
       <img alt="Itera logo" class="login__logo" src="~/assets/img/LOGO.svg" />
 
       <div class="login__header">
-        <h3 class="heading__tertiary">Área do RH</h3>
+        <h3 class="heading__tertiary">Área do RH...</h3>
         <p class="body__primary">Insira suas credenciais de acesso:</p>
       </div>
 
