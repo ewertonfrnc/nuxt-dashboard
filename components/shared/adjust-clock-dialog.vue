@@ -222,13 +222,8 @@ export default {
         this.rejectedRequests.add(request);
       }
 
-      if (this.approvedRequests.size === this.adjusts.length) {
-        this.selectedAll = true;
-        this.$emit("approved-all", this.selectedAll);
-      } else {
-        this.selectedAll = false;
-        this.$emit("approved-all", this.selectedAll);
-      }
+      this.selectedAll = this.approvedRequests.size === this.adjusts.length;
+      this.$emit("approved-all", this.selectedAll);
 
       this.updatedRequests = [
         ...this.approvedRequests,
