@@ -1,11 +1,13 @@
 import { authMock } from "./auth.mock";
 import { homeMock } from "./home.mock";
 import { timeSheet } from "./time-sheet.mock";
+import { employeesMock } from "./employees.mock";
 
 const mockTypes = {
   auth: authMock,
   home: homeMock,
   timeSheet,
+  employees: employeesMock,
 };
 
 export const getResponse = (

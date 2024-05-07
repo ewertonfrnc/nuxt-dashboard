@@ -1,4 +1,5 @@
-import api from "~/services/api.service";
+import { getResponse } from "./mocks";
+import api, { MOCKED } from "~/services/api.service";
 import {
   ActiveEmployeeQueryParams,
   Employees,
@@ -8,6 +9,8 @@ import {
 class EmployeesService {
   fetchActiveEmployees(params: ActiveEmployeeQueryParams) {
     const { page, name, role, department, workType, status } = params;
+
+    if (MOCKED) return getResponse("fetchActiveEmployees", "employees");
 
     return api().get("/employees/active-employees", {
       params: {
@@ -25,6 +28,8 @@ class EmployeesService {
   fetchInactiveEmployees(params: InactiveEmployeeQueryParams) {
     const { page, name, hireDate, workType, dismissalDate } = params;
 
+    if (MOCKED) return getResponse("fetchInactiveEmployees", "employees");
+
     return api().get("employees/inactive-employees", {
       params: {
         page,
@@ -38,6 +43,7 @@ class EmployeesService {
   }
 
   reactivateEmployee(employee: Employees) {
+    if (MOCKED) return getResponse("reactivateEmployee", "employees");
     return api().post(`/employees/reactivate-employee`, employee);
   }
 }

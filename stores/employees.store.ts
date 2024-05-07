@@ -21,9 +21,8 @@ export const useEmployeesStore = defineStore("employees", {
   actions: {
     async getActiveEmployees(params: ActiveEmployeeQueryParams) {
       try {
-        const {
-          data: { employees, total },
-        } = await employeesService.fetchActiveEmployees(params);
+        const { employees, total } =
+          await employeesService.fetchActiveEmployees(params);
         this.employees = employees;
         this.total = total;
       } catch (err) {
@@ -32,9 +31,8 @@ export const useEmployeesStore = defineStore("employees", {
     },
     async getInactiveEmployees(params: InactiveEmployeeQueryParams) {
       try {
-        const {
-          data: { employees, total },
-        } = await employeesService.fetchInactiveEmployees(params);
+        const { employees, total } =
+          await employeesService.fetchInactiveEmployees(params);
         return { employees, total };
       } catch (err) {
         return err as Error;
