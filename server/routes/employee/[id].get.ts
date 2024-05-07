@@ -4,7 +4,8 @@ export default defineEventHandler((event) => {
       id: 1000,
       name: "Ana Maria Martins Rocha",
       role: "Nutricionista",
-      photo: "https://randomuser.me/api/portraits/women/92.jpg",
+      photo:
+        "https://images.unsplash.com/photo-1463453091185-61582044d556?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       personalData: {
         fullname: "Ana Maria Martins Rocha",
         preferredName: "",
@@ -15,7 +16,8 @@ export default defineEventHandler((event) => {
         birthCity: "Conselheiro Lafaiete",
         ethnicity: "Branco(a)",
         role: "Administrador",
-        profileImg: "https://randomuser.me/api/portraits/women/92.jpg",
+        profileImg:
+          "https://images.unsplash.com/photo-1463453091185-61582044d556?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       },
       contacts: {},
       professionalData: {},

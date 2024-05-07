@@ -153,6 +153,7 @@ export default {
     width: 64px;
     height: 64px;
     border-radius: 72px;
+    object-fit: cover;
   }
 
   &__name h5 {

@@ -2,7 +2,7 @@
   <VeeForm
     v-slot="{ values }"
     :initial-values="userInfo"
-    class="container"
+    class="container fadein animation-duration-500"
     as="section"
   >
     <div class="container__header">
@@ -33,9 +33,6 @@
         />
       </div>
     </div>
-
-    <!--    <pre>userInfo: {{ userInfo }}</pre>-->
-    <!--    <pre>values: {{ values }}</pre>-->
 
     <form class="form" @change="handleChange">
       <div class="form__container">
@@ -135,7 +132,7 @@
         </div>
       </div>
 
-      <div>
+      <div class="form__additional">
         <div class="form__control form__control--highlight">
           <label class="form__label">
             Visualização
@@ -148,7 +145,20 @@
           </label>
         </div>
 
-        <BaseUpload />
+        <div v-if="isEditing" class="fadein animation-duration-500">
+          <BaseUpload />
+        </div>
+
+        <div v-else class="fadein animation-duration-500">
+          <figure class="form__figure">
+            <img
+              :src="userInfo.profileImg"
+              :alt="`Foto de perfil de ${userInfo.name}`"
+            />
+
+            <figcaption class="body__primary">Foto de perfil</figcaption>
+          </figure>
+        </div>
       </div>
     </form>
   </VeeForm>
@@ -208,6 +218,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 24px;
 
     &--btns {
       display: flex;
@@ -225,7 +236,29 @@ export default {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 24px;
-    margin-bottom: 24px;
+  }
+
+  &__additional {
+    margin-top: 24px;
+    display: grid;
+    gap: 24px;
+  }
+
+  &__figure {
+    width: 100%;
+    display: flex;
+    gap: 24px;
+
+    img {
+      border-radius: 8px;
+      overflow: hidden;
+      width: 130px;
+      height: 92px;
+    }
+
+    figcaption {
+      align-self: center;
+    }
   }
 
   &__control {
