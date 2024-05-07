@@ -1,15 +1,15 @@
 .dropdown {
   cursor: pointer;
 
-  width: 20rem;
-  height: 3.4rem;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
 
   padding: $input-padding;
   border-radius: $input-border-radius;
-  border: 1px solid $color-brand-primary-4;
+  border: $border-light;
+  color: $input-color-light;
   transition: all 0.3s;
 
   &:focus-visible {
@@ -25,7 +25,9 @@
 
   &[readonly] {
     border: 1px solid transparent;
+    padding: 1rem 0;
     pointer-events: none;
+    outline: none;
 
     .dropdown__trigger {
       opacity: 0;
@@ -42,7 +44,7 @@
   }
 
   &__options {
-    background-color: $color-neutral-neutral-7;
+    background-color: map-get($color-scheme-light, "$color-neutral-neutral-7");
   }
 
   &__list {
@@ -55,13 +57,16 @@
       transition: all 0.2s;
 
       &:hover {
-        background-color: $color-brand-primary-1;
+        background-color: map-get(
+          $color-scheme-light,
+          "$color-brand-primary-1"
+        );
       }
     }
   }
 
   &__error {
     display: block;
-    color: $color-feedback-danger-0;
+    color: map-get($color-scheme-light, "$color-feedback-danger-0");
   }
 }

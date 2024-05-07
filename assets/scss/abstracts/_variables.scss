@@ -449,6 +449,12 @@ $box-shadow-calendar-panel-light: 0 0 7px 0 #47474733;
 
 $border-radius: 8px;
 
+// inputs
+$input-padding: 10px 7px 10px 10px;
+$input-border-radius: 8px;
+$input-color-light: map-get($color-scheme-light, "$color-neutral-neutral-0");
+$input-color-dark: map-get($color-scheme-dark, "$color-neutral-neutral-0");
+
 // Fonts
 $font-size-title-1: 40px;
 $line-height-title-1: 53px;
