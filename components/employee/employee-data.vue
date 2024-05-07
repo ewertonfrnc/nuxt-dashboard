@@ -51,7 +51,7 @@
       </div>
 
       <transition>
-        <div v-if="isEditing" class="form__control">
+        <div v-if="isEditing" class="form__control form__control--checkbox">
           <label class="form__label">
             <BaseCheckbox
               :checked="usePreferredName"
@@ -200,6 +200,18 @@ export default {
   gap: 24px;
 
   &__control {
+    &--checkbox {
+      display: grid;
+      align-items: center;
+      justify-items: start;
+
+      label {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+    }
   }
 }
 </style>
