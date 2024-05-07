@@ -35,7 +35,7 @@ deploy s3:
   image:
     name: amazon/aws-cli:latest
     entrypoint:
-      - "/usr/bin/env"
+      - '/usr/bin/env'
   id_tokens:
     ID_TOKEN:
       aud: itera-dashboard
