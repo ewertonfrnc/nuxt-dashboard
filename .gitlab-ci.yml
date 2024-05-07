@@ -36,9 +36,9 @@ deploy s3:
     name: amazon/aws-cli:latest
     entrypoint:
       - '/usr/bin/env'
-  id_tokens:
-    ID_TOKEN:
-      aud: itera-dashboard
+  # id_tokens:
+  #   ID_TOKEN:
+  #     aud: itera-dashboard
   script:
     - *assume_role
     - aws s3 sync build/ s3://qa.itera.dashboard.com
