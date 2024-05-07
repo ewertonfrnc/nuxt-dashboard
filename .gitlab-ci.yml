@@ -43,6 +43,8 @@ deploy s3:
     - *assume_role
     - apk add --no-cache curl jq python3 py3-pip
     - pip install awscli
+    - source ~/.bashrc
+    - printenv
     - aws s3 sync build/ s3://qa.itera.dashboard.com
   rules:
     - if: '$CI_COMMIT_REF_NAME == "deploy-qa"'
