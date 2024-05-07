@@ -30,7 +30,17 @@ export default {
       input: 'dropdown__input',
       trigger: 'dropdown__trigger',
     }"
-  />
+  >
+    <template #value="{ value }">
+      <p class="body__primary">{{ value }}</p>
+    </template>
+
+    <template #dropdownicon>
+      <i class="pi pi-chevron-down caption__primary" />
+    </template>
+
+    <template #option="{ option }">{{ option }}</template>
+  </Dropdown>
 
   <small class="dropdown__error">{{ errorMessage }}</small>
 </template>
