@@ -1,6 +1,7 @@
 <template>
   <TabMenu
     :model="items"
+    :active-index="currentTab"
     :pt="{
       root: 'tab-list',
       inkbar: 'tab-list__inkbar',
@@ -33,9 +34,16 @@ export default {
       currentTab: 0,
     };
   },
+  mounted() {
+    this.currentTab = Number(sessionStorage.getItem("current-tab"));
+  },
+  beforeUnmount() {
+    sessionStorage.removeItem("current-tab");
+  },
   methods: {
     handleTabChange(event: TabMenuChangeEvent) {
       this.currentTab = event.index;
+      sessionStorage.setItem("current-tab", String(this.currentTab));
     },
   },
 };
