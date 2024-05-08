@@ -63,6 +63,7 @@ class EmployeeService {
   }
 
   updateDayClock(employeeId: number, clock: AdjustClocks) {
+    if (MOCKED) return getResponse("updateDayClock", "employee");
     return api().put(`/employee/clocks/${employeeId}`, clock);
   }
 

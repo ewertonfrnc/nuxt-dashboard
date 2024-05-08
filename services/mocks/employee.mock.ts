@@ -929,4 +929,5 @@ export const employeeMock = {
       },
     ],
   },
+  updateDayClock: { message: "success" },
 };
