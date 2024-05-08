@@ -2,6 +2,7 @@
   <VeeForm
     v-slot="{ values }"
     :initial-values="contactInfo"
+    :validation-schema="formSchema"
     class="container fadein animation-duration-500"
     as="section"
   >
@@ -34,7 +35,7 @@
       </div>
     </div>
 
-    <form class="form form__editing" @change="handleChange">
+    <form class="form form__editing" @change="handleChange(values)">
       <div class="form__control">
         <label class="form__label caption__primary">
           E-mail
@@ -53,29 +54,23 @@
 
           <BaseInputMask
             name="phone"
-            mask="(99) 9 9999-9999"
+            mask="(99) 99999-9999"
             :readonly="!isEditing"
             :wrong-crendentials-message="wrongCrendentialsMessage"
           />
         </label>
       </div>
 
-      <div
-        :class="[
-          'form__control form__control--search',
-          isEditing && 'form__control--cep',
-        ]"
-      >
+      <div :class="['form__control', isEditing && 'form__control--cep']">
         <label class="form__label caption__primary">
           CEP
 
           <BaseInputMask
             name="cep"
-            mask="99999-9999"
-            right-icon="pi pi-search"
+            mask="99999-999"
+            :right-icon="isSearchable ? 'pi pi-search' : 'pi pi-pencil'"
             :disabled="isEditing && !isSearchable"
             :readonly="!isEditing"
-            :wrong-crendentials-message="wrongCrendentialsMessage"
             @right-icon-click="toggleSearch"
           />
         </label>
@@ -99,8 +94,7 @@
           <BaseInputText
             name="state"
             :readonly="!isEditing"
-            :disabled="isEditing && !isSearchable"
-            :wrong-crendentials-message="wrongCrendentialsMessage"
+            :disabled="isEditing"
           />
         </label>
       </div>
@@ -112,8 +106,7 @@
           <BaseInputText
             name="city"
             :readonly="!isEditing"
-            :disabled="isEditing && !isSearchable"
-            :wrong-crendentials-message="wrongCrendentialsMessage"
+            :disabled="isEditing"
           />
         </label>
       </div>
@@ -122,11 +115,7 @@
         <label class="form__label caption__primary">
           Logradouro
 
-          <BaseInputText
-            name="street"
-            :readonly="!isEditing"
-            :wrong-crendentials-message="wrongCrendentialsMessage"
-          />
+          <BaseInputText name="street" :readonly="!isEditing" />
         </label>
       </div>
 
@@ -135,11 +124,7 @@
           <label class="form__label caption__primary">
             Número
 
-            <BaseInputText
-              name="houseNumber"
-              :readonly="!isEditing"
-              :wrong-crendentials-message="wrongCrendentialsMessage"
-            />
+            <BaseInputText name="houseNumber" :readonly="!isEditing" />
           </label>
         </div>
       </Transition>
@@ -155,7 +140,6 @@
             <BaseInputText
               name="additionalAddressDetails"
               :readonly="!isEditing"
-              :wrong-crendentials-message="wrongCrendentialsMessage"
             />
           </label>
           <small class="caption__secondary">Opcional</small>
@@ -180,7 +164,7 @@
 
           <BaseInputMask
             name="emergencyNumber"
-            mask="(99) 9 9999-9999"
+            mask="(99) 99999-9999"
             :readonly="!isEditing"
             :wrong-crendentials-message="wrongCrendentialsMessage"
           />
@@ -205,10 +189,13 @@
 <script lang="ts">
 import { mapActions, mapState } from "pinia";
 import { EmployeeContact } from "~/interfaces/employee/employee.interface";
+import { contactFormSchema } from "~/utils/schemas/employee/employee.schema";
+import { checkEqualObjs } from "~/utils/validators";
 
 export default {
   data() {
     return {
+      loading: false,
       hasChanges: false,
       isEditing: false,
       isSearchable: false,
@@ -220,9 +207,15 @@ export default {
     contactInfo() {
       return this.employee.contact;
     },
+    formSchema() {
+      return contactFormSchema;
+    },
   },
   methods: {
-    ...mapActions(useEmployeeStore, ["searchEmployeeAddres"]),
+    ...mapActions(useEmployeeStore, [
+      "searchEmployeeAddres",
+      "updateEmployeeData",
+    ]),
     toggleSearch() {
       this.isSearchable = !this.isSearchable;
     },
@@ -239,11 +232,38 @@ export default {
         });
       } catch (error) {}
     },
-    handleSubmit(values: EmployeeContact) {
-      console.log("handleSubmit", { ...values });
+    async handleSubmit(values) {
+      if (!this.hasChanges) {
+        this.wrongCrendentialsMessage = "Preencha o campo para prosseguir";
+        return;
+      }
+
+      this.loading = true;
+      this.wrongCrendentialsMessage = "";
+
+      try {
+        await this.updateEmployeeData(String(this.employee.id), values);
+        this.isEditing = false;
+
+        this.$toast.add({
+          severity: "success",
+          summary: "Sucesso!",
+          detail: "Ação realizada com sucesso.",
+          life: 4000,
+        });
+      } catch (error) {
+        this.$toast.add({
+          severity: "error",
+          summary: "Ocorreu um erro!",
+          detail: "Ocorreu um erro de processamento, tente novamente.",
+          life: 4000,
+        });
+      } finally {
+        this.loading = false;
+      }
     },
-    handleChange() {
-      this.hasChanges = true;
+    handleChange(values) {
+      this.hasChanges = !checkEqualObjs(values, this.employee.contact);
     },
   },
 };
@@ -288,16 +308,15 @@ export default {
           padding-top: 10px;
         }
       }
-    }
+      &--city {
+        width: 345px;
+        grid-column: 2/4;
+      }
 
-    &--city {
-      width: 345px;
-      grid-column: 2/4;
-    }
-
-    &--details {
-      width: 345px;
-      grid-column: 1 / 4;
+      &--details {
+        width: 345px;
+        grid-column: 1 / 4;
+      }
     }
   }
 }
