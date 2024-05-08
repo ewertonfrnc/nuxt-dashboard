@@ -26,8 +26,6 @@ export function validateCPF(cpf: string) {
 }
 
 export function checkEqualObjs(obj1: Object, obj2: Object) {
-  console.log(obj1);
-  console.log(obj2);
   const keys1 = Object.keys(obj1);
   const keys2 = Object.keys(obj2);
 

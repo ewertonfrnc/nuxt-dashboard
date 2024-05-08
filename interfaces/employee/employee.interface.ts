@@ -73,3 +73,15 @@ export type EmployeeAdjusts = {
   status: string;
   requests: WorkLog[];
 };
+
+export type EmployeePersonalData = {
+  fullname: string;
+  nickname: string;
+  rg: string;
+  cpf: string;
+  role: string;
+  birthDate: string;
+  birthCity: string;
+  ethnicity: string;
+  profileImg: string;
+};

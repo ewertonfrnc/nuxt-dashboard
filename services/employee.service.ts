@@ -5,6 +5,7 @@ import {
   EmployeeAdjusts,
   EmployeeClocks,
   EmployeeQueryParams,
+  EmployeePersonalData,
 } from "~/interfaces/employee/employee.interface";
 
 type EmployeeResponse = {
@@ -24,6 +25,13 @@ type AdjustClocks = {
 class EmployeeService {
   getEmployeeData(employeeId: string) {
     return api().get<EmployeeResponse>(`/employee/${employeeId}`);
+  }
+
+  updateEmployeeData(
+    employeeId: string,
+    updatedEmployeeData: EmployeePersonalData,
+  ) {
+    return api().put(`/employee/${employeeId}`, updatedEmployeeData);
   }
 
   getRegisteredClocks(employeeId: string, queryParams: EmployeeQueryParams) {

@@ -37,7 +37,7 @@
     <form class="form" @change="handleChange">
       <div class="form__container">
         <div class="form__control">
-          <label class="form__label">
+          <label class="form__label caption__primary">
             Nome completo ou social
 
             <BaseInputText
@@ -50,18 +50,19 @@
 
         <transition>
           <div v-if="isEditing" class="form__control form__control--checkbox">
-            <label class="form__label">
-              <BaseCheckbox
-                :checked="usePreferredName"
-                @checkbox-value="handleCheckbox"
-              />
+            <BaseCheckbox
+              input-id="preferredName"
+              :checked="usePreferredName"
+              @checkbox-value="handleCheckbox"
+            />
+            <label class="form__label" for="preferredName">
               Utilizar nome social
             </label>
           </div>
         </transition>
 
         <div class="form__control">
-          <label class="form__label">
+          <label class="form__label caption__primary">
             Apelido
 
             <BaseInputText
@@ -73,7 +74,7 @@
         </div>
 
         <div class="form__control">
-          <label class="form__label">
+          <label class="form__label caption__primary">
             CPF
 
             <BaseInputMask
@@ -86,7 +87,7 @@
         </div>
 
         <div class="form__control">
-          <label class="form__label">
+          <label class="form__label caption__primary">
             RG
 
             <BaseInputMask
@@ -99,7 +100,7 @@
         </div>
 
         <div class="form__control">
-          <label class="form__label">
+          <label class="form__label caption__primary">
             Data de nascimento
 
             <BaseInputMask
@@ -112,7 +113,7 @@
         </div>
 
         <div class="form__control">
-          <label class="form__label">
+          <label class="form__label caption__primary">
             Cidade natal
 
             <BaseInputText
@@ -124,7 +125,7 @@
         </div>
 
         <div class="form__control">
-          <label class="form__label">
+          <label class="form__label caption__primary">
             Etnia
 
             <BaseDropdown
@@ -138,7 +139,7 @@
 
       <div class="form__additional">
         <div class="form__control form__control--highlight">
-          <label class="form__label">
+          <label class="form__label caption__primary">
             Visualização
 
             <BaseDropdown
@@ -169,12 +170,13 @@
 </template>
 
 <script lang="ts">
-import { mapState } from "pinia";
+import { mapState, mapActions } from "pinia";
 import { checkEqualObjs } from "~/utils/validators";
 
 export default {
   data() {
     return {
+      loading: false,
       isEditing: false,
       hasChanges: false,
       usePreferredName: false,
@@ -196,20 +198,42 @@ export default {
     },
   },
   methods: {
+    ...mapActions(useEmployeeStore, ["updateEmployeeData"]),
     handleCheckbox(value: boolean) {
       this.usePreferredName = value;
     },
-    handleSubmit(values) {
+    async handleSubmit(values) {
       this.hasChanges = !checkEqualObjs(values, this.employee.personalData);
 
       if (this.hasChanges) {
+        this.loading = true;
         this.wrongCrendentialsMessage = "";
+
+        try {
+          await this.updateEmployeeData(String(this.employee.id), values);
+          this.isEditing = false;
+
+          this.$toast.add({
+            severity: "success",
+            summary: "Sucesso!",
+            detail: "Ação realizada com sucesso.",
+            life: 4000,
+          });
+        } catch (error) {
+          this.$toast.add({
+            severity: "error",
+            summary: "Ocorreu um erro!",
+            detail: "Ocorreu um erro de processamento, tente novamente.",
+            life: 4000,
+          });
+        } finally {
+          this.loading = false;
+        }
       } else {
         this.wrongCrendentialsMessage = "Preencha o campo para prosseguir";
       }
     },
     handleChange() {
-      console.log("changed");
       this.hasChanges = true;
     },
   },
@@ -267,9 +291,9 @@ export default {
 
   &__control {
     &--checkbox {
-      display: grid;
+      display: flex;
       align-items: center;
-      justify-items: start;
+      gap: 8px;
 
       label {
         color: map-get($color-scheme-light, "$color-neutral-neutral-2");

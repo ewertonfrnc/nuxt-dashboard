@@ -5,6 +5,7 @@ import {
   Employee,
   EmployeeAdjusts,
   EmployeeClocks,
+  EmployeePersonalData,
   EmployeeQueryParams,
 } from "~/interfaces/employee/employee.interface";
 
@@ -32,6 +33,22 @@ export const useEmployeeStore = defineStore("employee", {
           data: { employee },
         } = await employeeService.getEmployeeData(employeeId);
 
+        this.employee = employee;
+      } catch (error) {
+        return error as Error;
+      }
+    },
+    async updateEmployeeData(
+      employeeId: string,
+      updatedEmployeeData: EmployeePersonalData,
+    ) {
+      try {
+        const {
+          data: { employee },
+        } = await employeeService.updateEmployeeData(
+          employeeId,
+          updatedEmployeeData,
+        );
         this.employee = employee;
       } catch (error) {
         return error as Error;
