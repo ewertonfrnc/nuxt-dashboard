@@ -6,6 +6,15 @@
     padding-left: 3.5rem;
   }
 
+  &__icon-right {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    right: 5%;
+    transform: translateY(-50%);
+    color: map-get($color-scheme-light, "$color-brand-primary-0");
+  }
+
   &__icon {
     position: absolute;
     top: 50%;
@@ -53,11 +62,11 @@
     &:disabled {
       background-color: map-get(
         $color-scheme-light,
-        "$color-neutral-neutral-3"
+        "$color-neutral-neutral-7"
       );
-      color: map-get($color-scheme-light, "$color-neutral-neutral-3");
-      border: 1px solid map-get($color-scheme-light, "$color-neutral-neutral-3");
-      cursor: not-allowed;
+      color: map-get($color-scheme-light, "$color-neutral-neutral-4");
+      border: 1px solid map-get($color-scheme-light, "$color-neutral-neutral-4");
+      padding: $input-padding;
     }
 
     &:focus {
