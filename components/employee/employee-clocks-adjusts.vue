@@ -50,7 +50,7 @@
         :toggle-dialog="toggleVisibility"
         title="Ajustar ponto"
       >
-        <EmployeeAdjustClockDialog
+        <SharedAdjustClockDialog
           :employee="employee"
           :loading="dialogLoading"
           :approve-all="approveAll"
@@ -61,6 +61,15 @@
           @approved-all="handleApproveAll"
           @button-handler="buttonHandler"
         />
+
+        <template #footer>
+          <BaseDialogFooter
+            :loading="dialogLoading"
+            :show-error-message="showErrorMessage"
+            message="Selecione uma ação para prosseguir"
+            @click-handler="footerActionHandler"
+          />
+        </template>
       </BaseDialog>
     </section>
   </div>
@@ -154,6 +163,10 @@ export default {
   methods: {
     ...mapActions(useEmployeeStore, ["getDatesToAdjust"]),
     ...mapActions(useTimeSheetStore, ["updateRequestsApproval"]),
+    footerActionHandler(btnClicked: string) {
+      if (btnClicked === "confirm") this.submitPendingRequests();
+      else this.toggleDialog();
+    },
     logSelectedItem(data: EmployeeAdjusts) {
       this.toggleVisibility();
       this.selectedAdjust = data;

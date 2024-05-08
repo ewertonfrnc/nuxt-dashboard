@@ -1,4 +1,4 @@
-import api from "~/services/api.service";
+import api, { MOCKED } from "~/services/api.service";
 import {
   AdjustQueryParams,
   Employee,
@@ -7,6 +7,7 @@ import {
   EmployeeQueryParams,
   EmployeePersonalData,
 } from "~/interfaces/employee/employee.interface";
+import { getResponse } from "./mocks";
 
 type EmployeeResponse = {
   employee: Employee;
@@ -24,6 +25,7 @@ type AdjustClocks = {
 
 class EmployeeService {
   getEmployeeData(employeeId: string) {
+    if (MOCKED) return getResponse("getEmployeeData", "employee");
     return api().get<EmployeeResponse>(`/employee/${employeeId}`);
   }
 
@@ -31,6 +33,7 @@ class EmployeeService {
     employeeId: string,
     updatedEmployeeData: EmployeePersonalData,
   ) {
+    if (MOCKED) return getResponse("updateEmployeeData", "employee");
     return api().put(`/employee/${employeeId}`, updatedEmployeeData);
   }
 
@@ -45,6 +48,7 @@ class EmployeeService {
       dayStatus,
     } = queryParams;
 
+    if (MOCKED) return getResponse("getRegisteredClocks", "employee");
     return api().get<RegisteredClocks>(`/employee/clocks/${employeeId}`, {
       params: {
         page,
@@ -65,6 +69,7 @@ class EmployeeService {
   getDatesToAdjust(employeeId: string, queryParams: AdjustQueryParams) {
     const { page, limit, dateToAdjust, requestDate, status } = queryParams;
 
+    if (MOCKED) return getResponse("getDatesToAdjust", "employee");
     return api().get<AdjustClocks>(`/employee/adjusts/${employeeId}`, {
       params: {
         page,

@@ -29,9 +29,7 @@ export const useEmployeeStore = defineStore("employee", {
   actions: {
     async getEmployeeData(employeeId: string) {
       try {
-        const {
-          data: { employee },
-        } = await employeeService.getEmployeeData(employeeId);
+        const { employee } = await employeeService.getEmployeeData(employeeId);
 
         this.employee = employee;
       } catch (error) {
@@ -43,9 +41,7 @@ export const useEmployeeStore = defineStore("employee", {
       updatedEmployeeData: EmployeePersonalData,
     ) {
       try {
-        const {
-          data: { employee },
-        } = await employeeService.updateEmployeeData(
+        const { employee } = await employeeService.updateEmployeeData(
           employeeId,
           updatedEmployeeData,
         );
@@ -59,9 +55,10 @@ export const useEmployeeStore = defineStore("employee", {
       queryParams: EmployeeQueryParams,
     ) {
       try {
-        const {
-          data: { clocks, total },
-        } = await employeeService.getRegisteredClocks(employeeId, queryParams);
+        const { clocks, total } = await employeeService.getRegisteredClocks(
+          employeeId,
+          queryParams,
+        );
 
         this.clocks = clocks;
         this.total = total;
@@ -79,9 +76,10 @@ export const useEmployeeStore = defineStore("employee", {
     },
     async getDatesToAdjust(employeeId: string, queryParams: AdjustQueryParams) {
       try {
-        const {
-          data: { adjusts, total },
-        } = await employeeService.getDatesToAdjust(employeeId, queryParams);
+        const { adjusts, total } = await employeeService.getDatesToAdjust(
+          employeeId,
+          queryParams,
+        );
 
         this.adjusts = adjusts;
         this.total = total;
