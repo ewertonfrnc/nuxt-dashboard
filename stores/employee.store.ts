@@ -87,5 +87,13 @@ export const useEmployeeStore = defineStore("employee", {
         return error as Error;
       }
     },
+    async searchEmployeeAddres(cep: string) {
+      try {
+        const { address } = await employeeService.searchEmployeeAddres(cep);
+        return address;
+      } catch (error) {
+        return error as Error;
+      }
+    },
   },
 });

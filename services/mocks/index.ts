@@ -18,6 +18,7 @@ export const getResponse = (
 ) => {
   return new Promise((resolve, reject) => {
     const mock = mockTypes[mockType][request];
+    console.log(`${mockType}: ${request}`, mock);
 
     if (!mock) {
       reject(new Error("Falha na operação. Tente novamente mais tarde!"));

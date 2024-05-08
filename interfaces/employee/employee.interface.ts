@@ -10,11 +10,39 @@ export type EmployeeClocks = {
   requests: Request[];
 };
 
+export type EmployeePersonalData = {
+  fullname: string;
+  nickname: string;
+  rg: string;
+  cpf: string;
+  birthDate: string;
+  birthCity: string;
+  ethnicity: string;
+  profileImg: string;
+};
+
+export type EmployeeContact = {
+  email: string;
+  phone: string;
+  cep: string;
+  state: string;
+  city: string;
+  street: string;
+  linkedinUrl: string;
+  emergencyNumber: string;
+  emergencyContact: string;
+  neighborhood: string;
+  houseNumber: string;
+  additionalAddressDetails: string;
+};
+
 export type Employee = {
   id: number;
   name: string;
   role: string;
   photo: string;
+  personalData: EmployeePersonalData;
+  contact: EmployeeContact;
 };
 
 export type EmployeeQueryParams = {
@@ -72,16 +100,4 @@ export type EmployeeAdjusts = {
   requestDate: string;
   status: string;
   requests: WorkLog[];
-};
-
-export type EmployeePersonalData = {
-  fullname: string;
-  nickname: string;
-  rg: string;
-  cpf: string;
-  role: string;
-  birthDate: string;
-  birthCity: string;
-  ethnicity: string;
-  profileImg: string;
 };

@@ -1,3 +1,4 @@
+import { getResponse } from "./mocks";
 import api, { MOCKED } from "~/services/api.service";
 import {
   AdjustQueryParams,
@@ -7,7 +8,6 @@ import {
   EmployeeQueryParams,
   EmployeePersonalData,
 } from "~/interfaces/employee/employee.interface";
-import { getResponse } from "./mocks";
 
 type EmployeeResponse = {
   employee: Employee;
@@ -80,6 +80,11 @@ class EmployeeService {
         status: status?.value || "",
       },
     });
+  }
+
+  searchEmployeeAddres(cep: string) {
+    if (MOCKED) return getResponse("searchEmployeeAddres", "employee");
+    return api().get(`/employee/address/${cep}`);
   }
 }
 
