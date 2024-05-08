@@ -137,6 +137,7 @@ import {
 } from "primevue/fileupload";
 
 export default {
+  emits: ["on-upload"],
   data() {
     return {
       files: [],
@@ -169,7 +170,7 @@ export default {
       callback();
     },
     onTemplatedUpload(event: FileUploadUploadEvent) {
-      console.log("onTemplatedUpload", event);
+      this.$emit("on-upload", event);
       this.$toast.add({
         severity: "success",
         summary: "Successo",

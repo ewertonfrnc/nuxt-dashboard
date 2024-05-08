@@ -21,7 +21,7 @@
           class="btn__danger--outlined"
           icon="pi pi-times"
           label="Cancelar"
-          @click="isEditing = false"
+          @click="cancelEditing"
         />
         <BaseButton
           v-if="isEditing"
@@ -151,7 +151,7 @@
         </div>
 
         <div v-if="isEditing" class="fadein animation-duration-500">
-          <BaseUpload />
+          <BaseUpload @on-upload="handleUpload" />
         </div>
 
         <div v-else class="fadein animation-duration-500">
@@ -201,6 +201,14 @@ export default {
     ...mapActions(useEmployeeStore, ["updateEmployeeData"]),
     handleCheckbox(value: boolean) {
       this.usePreferredName = value;
+    },
+    handleUpload() {
+      this.employee.personalData.profileImg =
+        "https://images.unsplash.com/photo-1487573884658-a5d3c667584e?q=80&w=2206&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+    },
+    cancelEditing() {
+      this.isEditing = false;
+      this.wrongCrendentialsMessage = "";
     },
     async handleSubmit(values) {
       this.hasChanges = !checkEqualObjs(values, this.employee.personalData);

@@ -28,16 +28,16 @@ export const employeeMock = {
       photo:
         "https://images.unsplash.com/photo-1463453091185-61582044d556?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       personalData: {
-        fullname: "Ana Maria Martins Rocha",
+        fullname: "Ana Maria",
         nickname: "Aninha",
         rg: "26.090.766-2",
         cpf: "075.799.026-64",
-        role: "Administrador",
+        role: "Colaborador",
         birthDate: "05/06/1995",
         birthCity: "Conselheiro Lafaiete",
-        ethnicity: "Branco(a)",
+        ethnicity: "Negros",
         profileImg:
-          "https://images.unsplash.com/photo-1463453091185-61582044d556?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "https://images.unsplash.com/photo-1487573884658-a5d3c667584e?q=80&w=2206&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       },
     },
   },
