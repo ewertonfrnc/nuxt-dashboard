@@ -4,15 +4,10 @@
     :pt="{
       root: `dialog ${confirmDialog && 'dialog__confirm'}`,
       content: 'overflow-x-hidden',
-    :maximizable="true"
-    :pt="{
-      root: `dialog ${matchScreenSize && 'p-dialog-maximized'}`,
-      content: 'overflow-hidden',
       mask: 'dialog__mask fadein',
       closeButton: 'dialog__close-btn',
       header: 'dialog__header',
-      maximizableButton: 'hidden',
-      // footer: 'dialog__footer',
+      footer: 'dialog__footer',
     }"
     :visible="isVisible"
     close-on-escape
@@ -46,7 +41,9 @@
     </template>
 
     <template #footer>
-      <slot name="footer" />
+      <div class="dialog__footer">
+        <slot name="footer" />
+      </div>
     </template>
   </Dialog>
 </template>
@@ -67,10 +64,6 @@ export default {
     title: { type: String, default: "", required: true },
   },
   emits: ["save"],
-  setup() {
-    const { matchScreenSize } = useWindow("modal");
-    return { matchScreenSize };
-  },
   methods: {
     onSave() {
       this.$emit("save");
