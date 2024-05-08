@@ -144,7 +144,6 @@
       </template>
 
       <template #sorticon="{ sortOrder }">
-        <!--        <button type="button">-->
         <div class="table__sort">
           <i
             :class="[
@@ -157,7 +156,6 @@
             ]"
           />
         </div>
-        <!--        </button>-->
       </template>
       <template #filtericon>
         <i class="pi pi-filter"></i>

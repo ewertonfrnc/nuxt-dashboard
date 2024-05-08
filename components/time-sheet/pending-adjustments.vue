@@ -46,7 +46,7 @@
         :toggle-dialog="toggleDialog"
         title="Ajustar ponto"
       >
-        <EmployeeAdjustClockDialog
+        <SharedAdjustClockDialog
           :employee="selectedUser"
           :loading="dialogLoading"
           :approve-all="approveAll"
@@ -57,6 +57,15 @@
           @approved-all="handleApproveAll"
           @button-handler="buttonHandler"
         />
+
+        <template #footer>
+          <BaseDialogFooter
+            :loading="dialogLoading"
+            :show-error-message="showErrorMessage"
+            message="Selecione uma ação para prosseguir"
+            @click-handler="footerActionHandler"
+          />
+        </template>
       </BaseDialog>
     </section>
   </div>
@@ -150,6 +159,10 @@ export default {
       "getUserPendingAdjustments",
       "updateRequestsApproval",
     ]),
+    footerActionHandler(btnClicked: string) {
+      if (btnClicked === "confirm") this.submitPendingRequests();
+      else this.toggleDialog();
+    },
     arrayToObject(array: Filter[]) {
       return array.reduce((accumulator, currentValue) => {
         const { field, value, matchMode } = currentValue;

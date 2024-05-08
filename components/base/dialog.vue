@@ -1,6 +1,9 @@
 <template>
   <Dialog
     :draggable="false"
+    :pt="{
+      root: `dialog ${confirmDialog && 'dialog__confirm'}`,
+      content: 'overflow-x-hidden',
     :maximizable="true"
     :pt="{
       root: `dialog ${matchScreenSize && 'p-dialog-maximized'}`,
@@ -24,7 +27,22 @@
     </template>
 
     <template #default>
-      <slot />
+      <template v-if="confirmDialog">
+        <div class="dialog__content">
+          <i
+            :class="[
+              'pi',
+              confirmIcon,
+              confirmWarn && 'dialog__content--highlight',
+            ]"
+          />
+          <slot />
+        </div>
+      </template>
+
+      <template v-else>
+        <slot />
+      </template>
     </template>
 
     <template #footer>
@@ -38,6 +56,9 @@ import { PropType } from "vue";
 
 export default {
   props: {
+    confirmIcon: { type: String, default: "", required: false },
+    confirmDialog: { type: Boolean, default: false, required: false },
+    confirmWarn: { type: Boolean, default: false, required: false },
     isVisible: { type: Boolean, default: false, required: true },
     toggleDialog: {
       type: Function as PropType<(payload: MouseEvent) => void>,

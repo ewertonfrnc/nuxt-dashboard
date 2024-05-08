@@ -1,4 +1,5 @@
-import api from "~/services/api.service";
+import { getResponse } from "./mocks";
+import api, { MOCKED } from "~/services/api.service";
 import {
   QueryParams,
   AllClocksParams,
@@ -9,6 +10,8 @@ import { WorkLog } from "~/interfaces/employee/employee.interface";
 class TimeSheetService {
   fetchPendingAdjustments(params: QueryParams) {
     const { page, name, currentBalance, totalRequests } = params;
+
+    if (MOCKED) return getResponse("fetchPendingAdjustments", "timeSheet");
 
     return api().get(`/time-sheet/pending`, {
       params: {
@@ -32,6 +35,8 @@ class TimeSheetService {
 
   fetchAllClocks(params: AllClocksParams) {
     const { page, limit, name, hour, department, tag, date } = params;
+
+    if (MOCKED) return getResponse("fetchAllClocks", "timeSheet");
 
     return api().get("time-sheet/clocks", {
       params: {

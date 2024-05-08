@@ -21,9 +21,8 @@ export const useTimeSheetStore = defineStore("time-sheet", {
   actions: {
     async getPendingAdjustments(params: QueryParams) {
       try {
-        const {
-          data: { pending, total },
-        } = await timeSheetService.fetchPendingAdjustments(params);
+        const { pending, total } =
+          await timeSheetService.fetchPendingAdjustments(params);
         return { pending, total };
       } catch (err) {
         return err;
@@ -53,8 +52,9 @@ export const useTimeSheetStore = defineStore("time-sheet", {
     },
     async fetchAllClocks(params: AllClocksParams) {
       try {
-        const { data } = await timeSheetService.fetchAllClocks(params);
-        return data;
+        const { results, total } =
+          await timeSheetService.fetchAllClocks(params);
+        return { results, total };
       } catch (error) {
         return error as Error;
       }

@@ -19,9 +19,7 @@ export const useHomeStore = defineStore("home", {
   actions: {
     async getIndicators() {
       try {
-        const {
-          data: { indicators },
-        } = await homeService.home();
+        const { indicators } = await homeService.home();
         this.indicators = indicators;
       } catch (error) {
         return error;

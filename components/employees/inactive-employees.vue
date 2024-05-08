@@ -38,7 +38,7 @@
             :data="{ slotData }"
             :icon="'pi-user'"
             tooltip-text="Acessar perfil"
-            @action-handler="handleProfilePage"
+            @action-handler="goToEmployeeDetails"
           />
           <BaseTableAction
             :data="{ slotData }"
@@ -51,17 +51,24 @@
     </section>
 
     <BaseDialog
+      confirm-warn
+      confirm-dialog
+      confirm-icon="pi-exclamation-circle"
       :is-visible="isVisible"
       :toggle-dialog="toggleVisibility"
       title="Reativar colaborador"
     >
       <EmployeesReactivateDialog :user="selectedEmployee.name" />
 
-      <BaseDialogFooter
-        :loading="dialogLoading"
-        message="Efetue um alteração para prosseguir"
-        @click-handler="dialogFooterHandler"
-      />
+      <template #footer>
+        <BaseDialogFooter
+          :loading="dialogLoading"
+          confirm-icon="pi pi-check"
+          confirmlabel="Confirmar"
+          message="Selecione uma ação para prosseguir"
+          @click-handler="footerActionHandler"
+        />
+      </template>
     </BaseDialog>
   </div>
 </template>
@@ -91,35 +98,30 @@ export default {
           header: "Nome",
           sortable: true,
           hasFilter: true,
-          frozen: false,
         },
         {
           field: "lastRole",
           header: "Antigo cargo",
           sortable: false,
           hasFilter: true,
-          frozen: false,
         },
         {
           field: "hireDate",
           header: "Data da contratação",
-          sortable: false,
+          sortable: true,
           hasFilter: true,
-          frozen: false,
         },
         {
           field: "dismissalDate",
           header: "Data do desligamento",
-          sortable: false,
+          sortable: true,
           hasFilter: true,
-          frozen: false,
         },
         {
           field: "workType",
           header: "Modelo de contrato",
           sortable: false,
           hasFilter: true,
-          frozen: false,
         },
       ],
       nodes: [],
@@ -163,12 +165,12 @@ export default {
       "getInactiveEmployees",
       "reactivateEmployee",
     ]),
-    dialogFooterHandler(btnClicked: string) {
+    goToEmployeeDetails(data: Employees) {
+      this.$router.push(`/employees/${data.id}`);
+    },
+    footerActionHandler(btnClicked: string) {
       if (btnClicked === "confirm") this.reactivateEmployeeHandler();
       else this.toggleVisibility();
-    },
-    handleProfilePage(data: Employees) {
-      this.$router.push(`/employees/${data.id}`);
     },
     handleReactivationDialog(data: Employees) {
       this.toggleVisibility();

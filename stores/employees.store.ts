@@ -5,29 +5,34 @@ import {
   InactiveEmployeeQueryParams,
 } from "~/interfaces/employees/employees.interface";
 
-type EmployeesState = {};
+type EmployeesState = {
+  total: number;
+  employees: Employees[];
+};
 
 export const useEmployeesStore = defineStore("employees", {
   persist: true,
   state(): EmployeesState {
-    return {};
+    return {
+      total: 0,
+      employees: [],
+    };
   },
   actions: {
     async getActiveEmployees(params: ActiveEmployeeQueryParams) {
       try {
-        const {
-          data: { employees, total },
-        } = await employeesService.fetchActiveEmployees(params);
-        return { employees, total };
+        const { employees, total } =
+          await employeesService.fetchActiveEmployees(params);
+        this.employees = employees;
+        this.total = total;
       } catch (err) {
         return err as Error;
       }
     },
     async getInactiveEmployees(params: InactiveEmployeeQueryParams) {
       try {
-        const {
-          data: { employees, total },
-        } = await employeesService.fetchInactiveEmployees(params);
+        const { employees, total } =
+          await employeesService.fetchInactiveEmployees(params);
         return { employees, total };
       } catch (err) {
         return err as Error;

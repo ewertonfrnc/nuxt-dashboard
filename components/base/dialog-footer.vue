@@ -14,8 +14,8 @@
       :loading="loading"
       :disabled="loading"
       class="btn__secondary fadein animation-duration-500"
-      icon="pi pi-save"
-      label="Salvar"
+      :icon="confirmIcon"
+      :label="confirmlabel"
       @click="buttonHandler('right')"
     />
   </div>
@@ -27,6 +27,8 @@ export default {
     loading: { type: Boolean, default: false, required: true },
     showErrorMessage: { type: Boolean, default: false, required: false },
     message: { type: String, default: "", required: true },
+    confirmlabel: { type: String, default: "Salvar", required: false },
+    confirmIcon: { type: String, default: "pi pi-save", required: false },
   },
   emits: ["click-handler"],
   methods: {
