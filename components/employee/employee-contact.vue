@@ -1,6 +1,6 @@
 <template>
   <VeeForm
-    v-slot="{ values }"
+    v-slot="{ values, errors }"
     :initial-values="contactInfo"
     :validation-schema="formSchema"
     class="container fadein animation-duration-500"
@@ -30,169 +30,140 @@
           class="btn__secondary"
           icon="pi pi-save"
           label="Salvar alterações"
-          @click.prevent="handleSubmit(values)"
+          @click.prevent="handleSubmit(values, errors)"
         />
       </div>
     </div>
 
-    <div v-if="!isEditing" class="form__view fadein animation-duration-500">
-      <div class="form__control">
-        <label class="form__label caption__primary">
-          E-mail
-
-          <BaseInputText
-            name="email"
-            :readonly="!isEditing"
-            :wrong-crendentials-message="wrongCrendentialsMessage"
-          />
-        </label>
-      </div>
-
-      <div class="form__control">
-        <label class="form__label caption__primary">
-          Telefone
-
-          <BaseInputMask
-            name="phone"
-            mask="(99) 99999-9999"
-            :readonly="!isEditing"
-            :wrong-crendentials-message="wrongCrendentialsMessage"
-          />
-        </label>
-      </div>
-
-      <div class="form__control">
-        <label class="form__label caption__primary">
-          CEP
-
-          <BaseInputMask
-            name="cep"
-            mask="99999-999"
-            :right-icon="isSearchable ? 'pi pi-search' : 'pi pi-pencil'"
-            :disabled="isEditing && !isSearchable"
-            :readonly="!isEditing"
-            @right-icon-click="toggleSearch"
-          />
-        </label>
-
-        <Transition>
-          <div v-if="isEditing">
-            <BaseButton
-              label="Buscar"
-              class="btn__primary"
-              :disabled="!isSearchable"
-              @click="searchAddres(values)"
-            />
-          </div>
-        </Transition>
-      </div>
-
-      <div class="form__control">
-        <label class="form__label caption__primary">
-          Estado
-
-          <BaseInputText
-            name="state"
-            :readonly="!isEditing"
-            :disabled="isEditing"
-          />
-        </label>
-      </div>
-
-      <div class="form__control">
-        <label class="form__label caption__primary">
-          Cidade
-
-          <BaseInputText
-            name="city"
-            :readonly="!isEditing"
-            :disabled="isEditing"
-          />
-        </label>
-      </div>
-
-      <div class="form__control">
-        <label class="form__label caption__primary">
-          Logradouro
-
-          <BaseInputText name="street" :readonly="!isEditing" />
-        </label>
-      </div>
-
-      <Transition>
-        <div v-if="isEditing" class="form__control">
+    <form class="form" @change="handleChange(values, errors)">
+      <div
+        :class="[
+          'form__view fadein animation-duration-500',
+          isEditing && 'hidden',
+        ]"
+      >
+        <div class="form__control">
           <label class="form__label caption__primary">
-            Número
-
-            <BaseInputText name="houseNumber" :readonly="!isEditing" />
-          </label>
-        </div>
-      </Transition>
-
-      <Transition>
-        <div v-if="isEditing" class="form__control">
-          <label class="form__label caption__primary">
-            Complemento
+            E-mail
 
             <BaseInputText
-              name="additionalAddressDetails"
+              name="email"
               :readonly="!isEditing"
+              :wrong-crendentials-message="wrongCrendentialsMessage"
             />
           </label>
-          <small class="caption__secondary">Opcional</small>
         </div>
-      </Transition>
 
-      <div class="form__control">
-        <label class="form__label caption__primary">
-          URL para linkedin
+        <div class="form__control">
+          <label class="form__label caption__primary">
+            Telefone
 
-          <BaseInputText
-            name="linkedinUrl"
-            :readonly="!isEditing"
-            :wrong-crendentials-message="wrongCrendentialsMessage"
-          />
-        </label>
+            <BaseInputMask
+              name="phone"
+              mask="(99) 99999-9999"
+              :readonly="!isEditing"
+              :wrong-crendentials-message="wrongCrendentialsMessage"
+            />
+          </label>
+        </div>
+
+        <div class="form__control">
+          <label class="form__label caption__primary">
+            CEP
+
+            <BaseInputMask
+              name="cep"
+              mask="99999-999"
+              :right-icon="isSearchable ? 'pi pi-search' : 'pi pi-pencil'"
+              :disabled="isEditing && !isSearchable"
+              :readonly="!isEditing"
+              @right-icon-click="toggleSearch"
+            />
+          </label>
+        </div>
+
+        <div class="form__control">
+          <label class="form__label caption__primary">
+            Estado
+
+            <BaseInputText
+              name="state"
+              :readonly="!isEditing"
+              :disabled="isEditing"
+            />
+          </label>
+        </div>
+
+        <div class="form__control">
+          <label class="form__label caption__primary">
+            Cidade
+
+            <BaseInputText
+              name="city"
+              :readonly="!isEditing"
+              :disabled="isEditing"
+            />
+          </label>
+        </div>
+
+        <div class="form__control">
+          <label class="form__label caption__primary">
+            Logradouro
+
+            <BaseInputText name="street" :readonly="!isEditing" />
+          </label>
+        </div>
+
+        <div class="form__control">
+          <label class="form__label caption__primary">
+            URL para linkedin
+
+            <BaseInputText
+              name="linkedinUrl"
+              :readonly="!isEditing"
+              :wrong-crendentials-message="wrongCrendentialsMessage"
+            />
+          </label>
+        </div>
+
+        <div class="form__control">
+          <label class="form__label caption__primary">
+            Número de emergência
+
+            <BaseInputMask
+              name="emergencyNumber"
+              mask="(99) 99999-9999"
+              :readonly="!isEditing"
+              :wrong-crendentials-message="wrongCrendentialsMessage"
+            />
+          </label>
+        </div>
+
+        <div class="form__control">
+          <label class="form__label caption__primary">
+            Quem é o contato de emergência
+
+            <BaseInputText
+              name="emergencyContact"
+              :readonly="!isEditing"
+              :wrong-crendentials-message="wrongCrendentialsMessage"
+            />
+          </label>
+        </div>
       </div>
 
-      <div class="form__control">
-        <label class="form__label caption__primary">
-          Número de emergência
-
-          <BaseInputMask
-            name="emergencyNumber"
-            mask="(99) 99999-9999"
-            :readonly="!isEditing"
-            :wrong-crendentials-message="wrongCrendentialsMessage"
-          />
-        </label>
-      </div>
-
-      <div class="form__control">
-        <label class="form__label caption__primary">
-          Quem é o contato de emergência
-
-          <BaseInputText
-            name="emergencyContact"
-            :readonly="!isEditing"
-            :wrong-crendentials-message="wrongCrendentialsMessage"
-          />
-        </label>
-      </div>
-    </div>
-
-    <form v-else class="form" @change="handleChange(values)">
-      <div class="form__editing fadein animation-duration-500">
+      <div
+        :class="[
+          'form__editing fadein animation-duration-500',
+          !isEditing && 'hidden',
+        ]"
+      >
         <div class="form__email-phone">
           <div class="form__control">
             <label class="form__label caption__primary">
               E-mail
 
-              <BaseInputText
-                name="email"
-                :readonly="!isEditing"
-                :wrong-crendentials-message="wrongCrendentialsMessage"
-              />
+              <BaseInputText name="email" :readonly="!isEditing" />
             </label>
           </div>
 
@@ -231,16 +202,14 @@
             </label>
           </div>
 
-          <Transition>
-            <div v-if="isEditing" class="form__search--btn">
-              <BaseButton
-                label="Buscar"
-                class="btn__primary"
-                :disabled="!isSearchable"
-                @click="searchAddres(values)"
-              />
-            </div>
-          </Transition>
+          <div v-if="isEditing" class="form__search--btn">
+            <BaseButton
+              label="Buscar"
+              class="btn__primary"
+              :disabled="!isSearchable"
+              @click="searchAddres(values)"
+            />
+          </div>
         </div>
 
         <div class="form__state-city">
@@ -296,30 +265,26 @@
             </label>
           </div>
 
-          <Transition>
-            <div v-if="isEditing" class="form__control">
-              <label class="form__label caption__primary">
-                Número
-
-                <BaseInputText name="houseNumber" :readonly="!isEditing" />
-              </label>
-            </div>
-          </Transition>
-        </div>
-
-        <Transition>
           <div v-if="isEditing" class="form__control">
             <label class="form__label caption__primary">
-              Complemento
+              Número
 
-              <BaseInputText
-                name="additionalAddressDetails"
-                :readonly="!isEditing"
-              />
+              <BaseInputText name="houseNumber" :readonly="!isEditing" />
             </label>
-            <small class="caption__secondary">Opcional</small>
           </div>
-        </Transition>
+        </div>
+
+        <div v-if="isEditing" class="form__control">
+          <label class="form__label caption__primary">
+            Complemento
+
+            <BaseInputText
+              name="additionalAddressDetails"
+              :readonly="!isEditing"
+            />
+          </label>
+          <small class="caption__secondary">Opcional</small>
+        </div>
 
         <div class="form__additional">
           <div class="form__control">
@@ -367,15 +332,21 @@
 <script lang="ts">
 import { mapActions, mapState } from "pinia";
 import { EmployeeContact } from "~/interfaces/employee/employee.interface";
+import { checkForErrors } from "~/utils/forms";
 import { contactFormSchema } from "~/utils/schemas/employee/employee.schema";
 import { checkEqualObjs } from "~/utils/validators";
 
 export default {
+  setup() {
+    const { getToast } = usePVToast();
+    return { getToast };
+  },
   data() {
     return {
       loading: false,
       hasChanges: false,
       isEditing: false,
+      validForm: false,
       isSearchable: false,
       wrongCrendentialsMessage: "",
     };
@@ -392,7 +363,7 @@ export default {
   methods: {
     ...mapActions(useEmployeeStore, [
       "searchEmployeeAddres",
-      "updateEmployeeData",
+      "updateEmployeeContact",
     ]),
     toggleSearch() {
       this.isSearchable = !this.isSearchable;
@@ -411,37 +382,25 @@ export default {
       } catch (error) {}
     },
     async handleSubmit(values: EmployeeContact) {
-      if (!this.hasChanges) {
-        this.wrongCrendentialsMessage = "Preencha o campo para prosseguir";
-        return;
-      }
+      if (!this.hasChanges) return this.cancelEditing();
+      if (!this.validForm) return;
 
       this.loading = true;
       this.wrongCrendentialsMessage = "";
 
       try {
-        await this.updateEmployeeData(String(this.employee.id), values);
+        await this.updateEmployeeContact(String(this.employee.id), values);
         this.isEditing = false;
-
-        this.$toast.add({
-          severity: "success",
-          summary: "Sucesso!",
-          detail: "Ação realizada com sucesso.",
-          life: 4000,
-        });
+        this.getToast("success");
       } catch (error) {
-        this.$toast.add({
-          severity: "error",
-          summary: "Ocorreu um erro!",
-          detail: "Ocorreu um erro de processamento, tente novamente.",
-          life: 4000,
-        });
+        this.getToast("error");
       } finally {
         this.loading = false;
       }
     },
-    handleChange(values) {
-      this.hasChanges = !checkEqualObjs(values, this.employee.contact);
+    handleChange(values: EmployeeContact, errors: Object) {
+      this.hasChanges = !checkEqualObjs(values, this.employee.personalData);
+      this.validForm = checkForErrors(errors);
     },
   },
 };
@@ -509,9 +468,6 @@ export default {
     button {
       width: max-content;
     }
-  }
-
-  &__state-city {
   }
 }
 </style>
