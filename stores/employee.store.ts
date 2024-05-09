@@ -7,6 +7,7 @@ import {
   EmployeeClocks,
   EmployeePersonalData,
   EmployeeQueryParams,
+  EmployeeSchoolInfo,
   EmployeeWorkInfo,
 } from "~/interfaces/employee/employee.interface";
 
@@ -57,6 +58,20 @@ export const useEmployeeStore = defineStore("employee", {
     ) {
       try {
         const { employee } = await employeeService.updateEmployeeWorkInfo(
+          employeeId,
+          updatedEmployeeData,
+        );
+        this.employee = employee;
+      } catch (error) {
+        return error as Error;
+      }
+    },
+    async updateEmployeeSchool(
+      employeeId: string,
+      updatedEmployeeData: EmployeeSchoolInfo,
+    ) {
+      try {
+        const { employee } = await employeeService.updateEmployeeSchool(
           employeeId,
           updatedEmployeeData,
         );

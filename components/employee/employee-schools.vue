@@ -6,7 +6,6 @@
     class="container fadein animation-duration-500"
     as="section"
   >
-    <pre>{{ errors }}</pre>
     <div class="container__header">
       <h2 class="heading__secondary">Formação acadêmica</h2>
       <div class="container__header--btns">
@@ -125,6 +124,10 @@ import { EmployeeSchoolInfo } from "~/interfaces/employee/employee.interface";
 import { checkForErrors } from "~/utils/forms";
 
 export default {
+  setup() {
+    const { getToast } = usePVToast();
+    return { getToast };
+  },
   data() {
     return {
       loading: false,
@@ -147,7 +150,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(useEmployeeStore, ["updateEmployeeData"]),
+    ...mapActions(useEmployeeStore, ["updateEmployeeSchool"]),
     handleCheckbox(value: boolean) {
       this.usePreferredName = value;
     },
@@ -160,32 +163,25 @@ export default {
       this.wrongCrendentialsMessage = "";
     },
     async handleSubmit(values: EmployeeSchoolInfo) {
-      if (this.hasChanges && this.validForm) {
-        this.loading = true;
-        this.wrongCrendentialsMessage = "";
+      if (!this.hasChanges) return this.cancelEditing();
+      if (!this.validForm) return;
 
-        try {
-          await this.updateEmployeeData(String(this.employee.id), values);
-          this.isEditing = false;
+      this.loading = true;
+      this.wrongCrendentialsMessage = "";
 
-          this.$toast.add({
-            severity: "success",
-            summary: "Sucesso!",
-            detail: "Ação realizada com sucesso.",
-            life: 4000,
-          });
-        } catch (error) {
-          this.$toast.add({
-            severity: "error",
-            summary: "Ocorreu um erro!",
-            detail: "Ocorreu um erro de processamento, tente novamente.",
-            life: 4000,
-          });
-        } finally {
-          this.loading = false;
-        }
-      } else {
-        this.wrongCrendentialsMessage = "Preencha o campo para prosseguir";
+      try {
+        await this.updateEmployeeSchool(String(this.employee.id), values);
+        this.isEditing = false;
+
+        this.getToast("success", "Sucesso!", "Ação realizada com sucesso.");
+      } catch (error) {
+        this.getToast(
+          "error",
+          "Ocorreu um erro!",
+          "Ocorreu um erro de processamento, tente novamente.",
+        );
+      } finally {
+        this.loading = false;
       }
     },
     handleChange(values: EmployeeSchoolInfo, errors: Object) {
