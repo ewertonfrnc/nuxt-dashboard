@@ -45,6 +45,8 @@
 
   &__options {
     background-color: map-get($color-scheme-light, "$color-neutral-neutral-7");
+    box-shadow: $box-shadow-light;
+    border-radius: 8px;
   }
 
   &__list {

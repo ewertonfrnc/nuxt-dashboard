@@ -36,13 +36,52 @@ export type EmployeeContact = {
   additionalAddressDetails: string;
 };
 
+export type EmployeeWorkInfo = {
+  role: string;
+  department: string;
+  admissionDate: string;
+  workType: string;
+  hireType: string;
+  hoursPerWeek: string;
+  ctps: string;
+  pis: string;
+  companyTime: string;
+  shift: string;
+  dismissalDate: string;
+  dismissalReason: string;
+};
+
+export type EmployeeSchoolInfo = {
+  course: string;
+  educationalInstitution: string;
+  status: string;
+  entryYear: string;
+  entrySemester: string;
+  conclusionYear: string;
+};
+
+export type EmployeeDocuments = {
+  rgFront: string;
+  rgBack: string;
+  proofOfAddress: string;
+  weddingCertificate: string;
+  ctps: string;
+  militaryEnlistment: string;
+  birthCertificate: string;
+};
+
 export type Employee = {
   id: number;
   name: string;
   role: string;
   photo: string;
+  isMarried: boolean;
+  hasChildren: boolean;
   personalData: EmployeePersonalData;
   contact: EmployeeContact;
+  workData: EmployeeWorkInfo;
+  schoolInfo: EmployeeSchoolInfo;
+  documents: EmployeeDocuments;
 };
 
 export type EmployeeQueryParams = {
