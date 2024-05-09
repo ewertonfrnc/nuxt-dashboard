@@ -1,7 +1,8 @@
 <template>
   <VeeForm
-    v-slot="{ values }"
+    v-slot="{ values, errors }"
     :initial-values="userInfo"
+    :validation-schema="formSchema"
     class="container fadein animation-duration-500"
     as="section"
   >
@@ -34,7 +35,7 @@
       </div>
     </div>
 
-    <form class="form" @change="handleChange">
+    <form class="form" @change="handleChange(values, errors)">
       <div class="form__container">
         <div class="form__control">
           <label class="form__label caption__primary">
@@ -48,40 +49,28 @@
           </label>
         </div>
 
-        <transition>
-          <div v-if="isEditing" class="form__control form__control--checkbox">
-            <BaseCheckbox
-              input-id="preferredName"
-              :checked="usePreferredName"
-              @checkbox-value="handleCheckbox"
-            />
-            <label class="form__label" for="preferredName">
-              Utilizar nome social
-            </label>
-          </div>
-        </transition>
-
         <div class="form__control">
           <label class="form__label caption__primary">
             Apelido
 
-            <BaseInputText
-              name="nickname"
-              :readonly="!isEditing"
-              :wrong-crendentials-message="wrongCrendentialsMessage"
-            />
+            <BaseInputText name="nickname" :readonly="!isEditing" />
           </label>
         </div>
 
         <div class="form__control">
-          <label class="form__label caption__primary">
+          <label
+            :class="[
+              'form__label caption__primary',
+              isEditing && 'form__label--disabled',
+            ]"
+          >
             CPF
 
             <BaseInputMask
               name="cpf"
               mask="999.999.999-99"
               :readonly="!isEditing"
-              :wrong-crendentials-message="wrongCrendentialsMessage"
+              :disabled="isEditing"
             />
           </label>
         </div>
@@ -94,7 +83,6 @@
               name="rg"
               mask="99.999.999-9"
               :readonly="!isEditing"
-              :wrong-crendentials-message="wrongCrendentialsMessage"
             />
           </label>
         </div>
@@ -116,11 +104,7 @@
           <label class="form__label caption__primary">
             Cidade natal
 
-            <BaseInputText
-              name="birthCity"
-              :readonly="!isEditing"
-              :wrong-crendentials-message="wrongCrendentialsMessage"
-            />
+            <BaseInputText name="birthCity" :readonly="!isEditing" />
           </label>
         </div>
 
@@ -132,6 +116,7 @@
               name="ethnicity"
               :readonly="!isEditing"
               :options="ethnicityOptions"
+              @on-change="handleChange(values, errors)"
             />
           </label>
         </div>
@@ -146,11 +131,16 @@
               name="role"
               :readonly="!isEditing"
               :options="visualizeOptions"
+              @on-change="handleChange(values, errors)"
             />
           </label>
         </div>
 
-        <div v-if="isEditing" class="fadein animation-duration-500">
+        <div
+          v-if="isEditing"
+          class="form__upload fadein animation-duration-500"
+        >
+          <span class="body__primary">Foto de perfil</span>
           <BaseUpload @on-upload="handleUpload" />
         </div>
 
@@ -171,30 +161,36 @@
 
 <script lang="ts">
 import { mapState, mapActions } from "pinia";
+import { usePVToast } from "~/composables/usePVToast";
+import { employeeDataSchema } from "~/utils/schemas/employee/employee.schema";
 import { checkEqualObjs } from "~/utils/validators";
+import { EmployeePersonalData } from "~/interfaces/employee/employee.interface";
+import { checkForErrors } from "~/utils/forms";
 
 export default {
+  setup() {
+    const { getToast } = usePVToast();
+    return { getToast };
+  },
   data() {
     return {
       loading: false,
       isEditing: false,
       hasChanges: false,
+      validForm: false,
       usePreferredName: false,
       wrongCrendentialsMessage: "",
       visualizeOptions: ["Administrador", "Colaborador"],
-      ethnicityOptions: [
-        "Amarelos",
-        "Branco(a)",
-        "Indígenas",
-        "Negros",
-        "Pardos",
-      ],
+      ethnicityOptions: ["Amarelo", "Branco(a)", "Indígena", "Negro", "Pardo"],
     };
   },
   computed: {
     ...mapState(useEmployeeStore, ["employee"]),
     userInfo() {
       return this.employee.personalData;
+    },
+    formSchema() {
+      return employeeDataSchema;
     },
   },
   methods: {
@@ -210,39 +206,26 @@ export default {
       this.isEditing = false;
       this.wrongCrendentialsMessage = "";
     },
-    async handleSubmit(values) {
-      this.hasChanges = !checkEqualObjs(values, this.employee.personalData);
+    async handleSubmit(values: EmployeePersonalData) {
+      if (!this.hasChanges) return this.cancelEditing();
+      if (!this.validForm) return;
 
-      if (this.hasChanges) {
-        this.loading = true;
-        this.wrongCrendentialsMessage = "";
+      this.loading = true;
+      this.wrongCrendentialsMessage = "";
 
-        try {
-          await this.updateEmployeeData(String(this.employee.id), values);
-          this.isEditing = false;
-
-          this.$toast.add({
-            severity: "success",
-            summary: "Sucesso!",
-            detail: "Ação realizada com sucesso.",
-            life: 4000,
-          });
-        } catch (error) {
-          this.$toast.add({
-            severity: "error",
-            summary: "Ocorreu um erro!",
-            detail: "Ocorreu um erro de processamento, tente novamente.",
-            life: 4000,
-          });
-        } finally {
-          this.loading = false;
-        }
-      } else {
-        this.wrongCrendentialsMessage = "Preencha o campo para prosseguir";
+      try {
+        await this.updateEmployeeData(String(this.employee.id), values);
+        this.isEditing = false;
+        this.getToast("success");
+      } catch (error) {
+        this.getToast("error");
+      } finally {
+        this.loading = false;
       }
     },
-    handleChange() {
-      this.hasChanges = true;
+    handleChange(values: EmployeePersonalData, errors: Object) {
+      this.hasChanges = !checkEqualObjs(values, this.employee.personalData);
+      this.validForm = checkForErrors(errors);
     },
   },
 };
@@ -271,6 +254,18 @@ export default {
   &__container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+  }
+
+  &__label {
+    transition: all 0.3s;
+    &--disabled {
+      color: map-get($color-scheme-light, "$color-neutral-neutral-4");
+    }
+  }
+
+  &__upload {
+    display: grid;
     gap: 24px;
   }
 

@@ -1,6 +1,6 @@
 <template>
   <VeeForm
-    v-slot="{ values }"
+    v-slot="{ values, errors }"
     :initial-values="workInfo"
     :validation-schema="formSchema"
     class="container fadein animation-duration-500"
@@ -30,12 +30,12 @@
           class="btn__secondary"
           icon="pi pi-save"
           label="Salvar alterações"
-          @click.prevent="handleSubmit(values)"
+          @click.prevent="handleSubmit(values, errors)"
         />
       </div>
     </div>
 
-    <form class="form" @change="handleChange(values)">
+    <form class="form" @change="handleChange(values, errors)">
       <div class="form__control">
         <label class="form__label caption__primary">
           Cargo
@@ -60,7 +60,6 @@
             name="admissionDate"
             mask="99/99/9999"
             :readonly="!isEditing"
-            :wrong-crendentials-message="wrongCrendentialsMessage"
           />
         </label>
       </div>
@@ -73,7 +72,7 @@
             name="workType"
             :readonly="!isEditing"
             :options="workTypeOptions"
-            @on-change="handleChange(values)"
+            @on-change="handleChange(values, errors)"
           />
         </label>
       </div>
@@ -86,7 +85,7 @@
             name="hireType"
             :readonly="!isEditing"
             :options="hireTypeOptions"
-            @on-change="handleChange(values)"
+            @on-change="handleChange(values, errors)"
           />
         </label>
       </div>
@@ -99,8 +98,7 @@
             name="hoursPerWeek"
             :readonly="!isEditing"
             :options="hoursPerWeekOptions"
-            :wrong-crendentials-message="wrongCrendentialsMessage"
-            @on-change="handleChange(values)"
+            @on-change="handleChange(values, errors)"
           />
         </label>
       </div>
@@ -109,10 +107,10 @@
         <label class="form__label caption__primary">
           CTPS (Carteira de Trabalho e Previdência Social)
 
-          <BaseInputText
+          <BaseInputMask
             name="ctps"
+            mask="99999-9999-aa"
             :readonly="!isEditing"
-            :wrong-crendentials-message="wrongCrendentialsMessage"
           />
         </label>
       </div>
@@ -121,10 +119,10 @@
         <label class="form__label caption__primary">
           PIS (Programa de Integração Social)
 
-          <BaseInputText
+          <BaseInputMask
             name="pis"
+            mask="999.99999.99-9"
             :readonly="!isEditing"
-            :wrong-crendentials-message="wrongCrendentialsMessage"
           />
         </label>
       </div>
@@ -137,7 +135,6 @@
             name="companyTime"
             :readonly="!isEditing"
             :disabled="isEditing"
-            :wrong-crendentials-message="wrongCrendentialsMessage"
           />
         </label>
       </div>
@@ -166,15 +163,20 @@ import { mapState, mapActions } from "pinia";
 import { checkEqualObjs } from "~/utils/validators";
 import { workInfoSchema } from "~/utils/schemas/employee/employee.schema";
 import { EmployeeWorkInfo } from "~/interfaces/employee/employee.interface";
+import { checkForErrors } from "~/utils/forms";
 
 export default {
+  setup() {
+    const { getToast } = usePVToast();
+    return { getToast };
+  },
   data() {
     return {
       loading: false,
       isEditing: false,
       hasChanges: false,
+      validForm: false,
       usePreferredName: false,
-      wrongCrendentialsMessage: "",
       workTypeOptions: ["Presencial", "Híbrido", "Remoto"],
       hireTypeOptions: ["CLT", "PJ"],
       hoursPerWeekOptions: ["40 horas", "30 horas", "20 horas"],
@@ -200,39 +202,26 @@ export default {
     },
     cancelEditing() {
       this.isEditing = false;
-      this.wrongCrendentialsMessage = "";
     },
     async handleSubmit(values: EmployeeWorkInfo) {
-      if (this.hasChanges) {
-        this.loading = true;
-        this.wrongCrendentialsMessage = "";
+      if (!this.hasChanges) return this.cancelEditing();
+      if (!this.validForm) return;
 
-        try {
-          await this.updateEmployeeWorkInfo(String(this.employee.id), values);
-          this.isEditing = false;
+      this.loading = true;
 
-          this.$toast.add({
-            severity: "success",
-            summary: "Sucesso!",
-            detail: "Ação realizada com sucesso.",
-            life: 4000,
-          });
-        } catch (error) {
-          this.$toast.add({
-            severity: "error",
-            summary: "Ocorreu um erro!",
-            detail: "Ocorreu um erro de processamento, tente novamente.",
-            life: 4000,
-          });
-        } finally {
-          this.loading = false;
-        }
-      } else {
-        this.wrongCrendentialsMessage = "Preencha o campo para prosseguir";
+      try {
+        await this.updateEmployeeWorkInfo(String(this.employee.id), values);
+        this.isEditing = false;
+        this.getToast("success");
+      } catch (error) {
+        this.getToast("error");
+      } finally {
+        this.loading = false;
       }
     },
-    handleChange(values: EmployeeWorkInfo) {
+    handleChange(values: EmployeeWorkInfo, errors: Object) {
       this.hasChanges = !checkEqualObjs(values, this.employee.workData);
+      this.validForm = checkForErrors(errors);
     },
   },
 };

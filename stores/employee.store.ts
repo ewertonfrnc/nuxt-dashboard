@@ -5,6 +5,7 @@ import {
   Employee,
   EmployeeAdjusts,
   EmployeeClocks,
+  EmployeeContact,
   EmployeeDocuments,
   EmployeePersonalData,
   EmployeeQueryParams,
@@ -45,6 +46,20 @@ export const useEmployeeStore = defineStore("employee", {
     ) {
       try {
         const { employee } = await employeeService.updateEmployeeData(
+          employeeId,
+          updatedEmployeeData,
+        );
+        this.employee = employee;
+      } catch (error) {
+        return error as Error;
+      }
+    },
+    async updateEmployeeContact(
+      employeeId: string,
+      updatedEmployeeData: EmployeeContact,
+    ) {
+      try {
+        const { employee } = await employeeService.updateEmployeeContact(
           employeeId,
           updatedEmployeeData,
         );
