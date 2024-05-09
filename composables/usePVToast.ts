@@ -3,12 +3,24 @@ import { useToast } from "primevue/usetoast";
 export function usePVToast() {
   const toast = useToast();
 
-  function getToast(
-    severity: "error" | "info" | "success" | "warn",
-    summary: string,
-    detail: string,
-  ) {
-    toast.add({ severity, summary, detail, life: 4000 });
+  const messages = {
+    success: {
+      severity: "success",
+      summary: "Sucesso!",
+      detail: "Ação realizada com sucesso.",
+    },
+    error: {
+      severity: "error",
+      summary: "Ocorreu um erro!",
+      detail: "Ocorreu um erro de processamento, tente novamente.",
+    },
+  };
+
+  function getToast(severity: keyof typeof messages) {
+    const message = messages[severity];
+    if (message) {
+      toast.add({ ...message, life: 4000 });
+    }
   }
 
   return { getToast };
