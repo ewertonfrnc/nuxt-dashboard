@@ -4,6 +4,8 @@ export const employeeMock = {
       id: 1000,
       name: "Ana Maria Martins Rocha",
       role: "Nutricionista",
+      isMarried: true,
+      hasChildren: true,
       photo:
         "https://images.unsplash.com/photo-1463453091185-61582044d556?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       personalData: {
@@ -53,6 +55,21 @@ export const employeeMock = {
         entryYear: "2014",
         entrySemester: "2",
         conclusionYear: "2018",
+      },
+      documents: {
+        rgFront:
+          "https://i0.wp.com/alagoasweb.com/wp-content/uploads/2024/02/Como-fazer-novo-RG-Carteira-de-Identidade-Nacional.jpg?w=1200&ssl=1",
+        rgBack:
+          "https://i0.wp.com/alagoasweb.com/wp-content/uploads/2024/02/Como-fazer-novo-RG-Carteira-de-Identidade-Nacional.jpg?w=1200&ssl=1",
+        proofOfAddress:
+          "https://www.cashme.com.br/blog/wp-content/uploads/2022/12/exemplo-de-conta-para-comprovante-de-residencia-.jpg",
+        weddingCertificate:
+          "https://static.wixstatic.com/media/368b0e_74f7dabb3ae54d40889dc13d72f13088~mv2.jpg/v1/fill/w_480,h_664,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/368b0e_74f7dabb3ae54d40889dc13d72f13088~mv2.jpg",
+        ctps: "https://informanet.com.br/Prodinfo/boletim/2014/trabalhista/2img_18_2014.JPG",
+        militaryEnlistment:
+          "https://upload.wikimedia.org/wikipedia/commons/d/db/Modelo_de_CAM.png",
+        birthCertificate:
+          "https://centraldascertidoes.com.br/img/certidoes/certidao-de-nascimento.png",
       },
     },
   },
@@ -194,6 +211,19 @@ export const employeeMock = {
         entryYear: "2014",
         entrySemester: "2",
         conclusionYear: "2018",
+      },
+      documents: {
+        rgFront:
+          "https://i0.wp.com/alagoasweb.com/wp-content/uploads/2024/02/Como-fazer-novo-RG-Carteira-de-Identidade-Nacional.jpg?w=1200&ssl=1",
+        rgBack:
+          "https://i0.wp.com/alagoasweb.com/wp-content/uploads/2024/02/Como-fazer-novo-RG-Carteira-de-Identidade-Nacional.jpg?w=1200&ssl=1",
+        proofOfAddress:
+          "https://www.cashme.com.br/blog/wp-content/uploads/2022/12/exemplo-de-conta-para-comprovante-de-residencia-.jpg",
+        weddingCertificate:
+          "https://static.wixstatic.com/media/368b0e_74f7dabb3ae54d40889dc13d72f13088~mv2.jpg/v1/fill/w_480,h_664,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/368b0e_74f7dabb3ae54d40889dc13d72f13088~mv2.jpg",
+        ctps: "https://informanet.com.br/Prodinfo/boletim/2014/trabalhista/2img_18_2014.JPG",
+        militaryEnlistment:
+          "https://upload.wikimedia.org/wikipedia/commons/d/db/Modelo_de_CAM.png",
       },
     },
   },
