@@ -24,3 +24,17 @@ export const contactFormSchema = yup.object({
   emergencyContact: yup.string().min(2).max(100),
   additionalAddressDetails: yup.string().max(128),
 });
+
+export const workInfoSchema = yup.object({
+  admissionDate: yup
+    .string()
+    .matches(
+      /^(?!([0-9])\1\/([0-9])\2\/([0-9])\3)\d{2}\/\d{2}\/\d{4}$/,
+      "Data inválida",
+    ),
+  hoursPerWeek: yup.string(),
+  ctps: yup.string(),
+  pis: yup.string(),
+  companyTime: yup.string(),
+  shift: yup.string(),
+});
