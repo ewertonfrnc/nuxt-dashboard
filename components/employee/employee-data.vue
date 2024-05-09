@@ -1,6 +1,6 @@
 <template>
   <VeeForm
-    v-slot="{ values }"
+    v-slot="{ values, errors }"
     :initial-values="userInfo"
     :validation-schema="formSchema"
     class="container fadein animation-duration-500"
@@ -35,7 +35,7 @@
       </div>
     </div>
 
-    <form class="form" @change="handleChange(values)">
+    <form class="form" @change="handleChange(values, errors)">
       <div class="form__container">
         <div class="form__control">
           <label class="form__label caption__primary">
@@ -116,7 +116,7 @@
               name="ethnicity"
               :readonly="!isEditing"
               :options="ethnicityOptions"
-              @on-change="handleChange(values)"
+              @on-change="handleChange(values, errors)"
             />
           </label>
         </div>
@@ -131,7 +131,7 @@
               name="role"
               :readonly="!isEditing"
               :options="visualizeOptions"
-              @on-change="handleChange(values)"
+              @on-change="handleChange(values, errors)"
             />
           </label>
         </div>
@@ -164,6 +164,8 @@ import { mapState, mapActions } from "pinia";
 import { usePVToast } from "~/composables/usePVToast";
 import { employeeDataSchema } from "~/utils/schemas/employee/employee.schema";
 import { checkEqualObjs } from "~/utils/validators";
+import { EmployeePersonalData } from "~/interfaces/employee/employee.interface";
+import { checkForErrors } from "~/utils/forms";
 
 export default {
   setup() {
@@ -175,6 +177,7 @@ export default {
       loading: false,
       isEditing: false,
       hasChanges: false,
+      validForm: false,
       usePreferredName: false,
       wrongCrendentialsMessage: "",
       visualizeOptions: ["Administrador", "Colaborador"],
@@ -203,27 +206,26 @@ export default {
       this.isEditing = false;
       this.wrongCrendentialsMessage = "";
     },
-    async handleSubmit(values) {
-      if (this.hasChanges) {
-        this.loading = true;
-        this.wrongCrendentialsMessage = "";
+    async handleSubmit(values: EmployeePersonalData) {
+      if (!this.hasChanges) return this.cancelEditing();
+      if (!this.validForm) return;
 
-        try {
-          await this.updateEmployeeData(String(this.employee.id), values);
-          this.isEditing = false;
+      this.loading = true;
+      this.wrongCrendentialsMessage = "";
 
-          this.getToast("success");
-        } catch (error) {
-          this.getToast("error");
-        } finally {
-          this.loading = false;
-        }
-      } else {
-        this.wrongCrendentialsMessage = "Preencha o campo para prosseguir";
+      try {
+        await this.updateEmployeeData(String(this.employee.id), values);
+        this.isEditing = false;
+        this.getToast("success");
+      } catch (error) {
+        this.getToast("error");
+      } finally {
+        this.loading = false;
       }
     },
-    handleChange(values) {
+    handleChange(values: EmployeePersonalData, errors: Object) {
       this.hasChanges = !checkEqualObjs(values, this.employee.personalData);
+      this.validForm = checkForErrors(errors);
     },
   },
 };
