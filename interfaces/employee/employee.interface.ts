@@ -10,11 +10,78 @@ export type EmployeeClocks = {
   requests: Request[];
 };
 
+export type EmployeePersonalData = {
+  fullname: string;
+  nickname: string;
+  rg: string;
+  cpf: string;
+  birthDate: string;
+  birthCity: string;
+  ethnicity: string;
+  profileImg: string;
+};
+
+export type EmployeeContact = {
+  email: string;
+  phone: string;
+  cep: string;
+  state: string;
+  city: string;
+  street: string;
+  linkedinUrl: string;
+  emergencyNumber: string;
+  emergencyContact: string;
+  neighborhood: string;
+  houseNumber: string;
+  additionalAddressDetails: string;
+};
+
+export type EmployeeWorkInfo = {
+  role: string;
+  department: string;
+  admissionDate: string;
+  workType: string;
+  hireType: string;
+  hoursPerWeek: string;
+  ctps: string;
+  pis: string;
+  companyTime: string;
+  shift: string;
+  dismissalDate: string;
+  dismissalReason: string;
+};
+
+export type EmployeeSchoolInfo = {
+  course: string;
+  educationalInstitution: string;
+  status: string;
+  entryYear: string;
+  entrySemester: string;
+  conclusionYear: string;
+};
+
+export type EmployeeDocuments = {
+  rgFront: string;
+  rgBack: string;
+  proofOfAddress: string;
+  weddingCertificate: string;
+  ctps: string;
+  militaryEnlistment: string;
+  birthCertificate: string;
+};
+
 export type Employee = {
   id: number;
   name: string;
   role: string;
   photo: string;
+  isMarried: boolean;
+  hasChildren: boolean;
+  personalData: EmployeePersonalData;
+  contact: EmployeeContact;
+  workData: EmployeeWorkInfo;
+  schoolInfo: EmployeeSchoolInfo;
+  documents: EmployeeDocuments;
 };
 
 export type EmployeeQueryParams = {
@@ -72,16 +139,4 @@ export type EmployeeAdjusts = {
   requestDate: string;
   status: string;
   requests: WorkLog[];
-};
-
-export type EmployeePersonalData = {
-  fullname: string;
-  nickname: string;
-  rg: string;
-  cpf: string;
-  role: string;
-  birthDate: string;
-  birthCity: string;
-  ethnicity: string;
-  profileImg: string;
 };
