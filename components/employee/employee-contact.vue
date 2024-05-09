@@ -186,7 +186,7 @@
             <label
               :class="[
                 'form__label caption__primary',
-                isEditing && 'form__label--disabled',
+                isEditing && !isSearchable && 'form__label--disabled',
               ]"
             >
               CEP
@@ -370,6 +370,7 @@ export default {
     },
     cancelEditing() {
       this.isEditing = false;
+      this.isSearchable = false;
       this.wrongCrendentialsMessage = "";
     },
     async searchAddres(values: EmployeeContact) {
