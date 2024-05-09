@@ -65,8 +65,13 @@
     }
   }
 
+  .error {
+    border: 1px solid map-get($color-scheme-light, "$color-feedback-danger-0");
+  }
+
   &__error {
     display: block;
     color: map-get($color-scheme-light, "$color-feedback-danger-0");
+    padding: 0.5rem 1rem 0;
   }
 }
