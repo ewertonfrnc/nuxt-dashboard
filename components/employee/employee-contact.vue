@@ -35,7 +35,7 @@
       </div>
     </div>
 
-    <form class="form form__editing" @change="handleChange(values)">
+    <div v-if="!isEditing" class="form__view fadein animation-duration-500">
       <div class="form__control">
         <label class="form__label caption__primary">
           E-mail
@@ -61,7 +61,7 @@
         </label>
       </div>
 
-      <div :class="['form__control', isEditing && 'form__control--cep']">
+      <div class="form__control">
         <label class="form__label caption__primary">
           CEP
 
@@ -99,7 +99,7 @@
         </label>
       </div>
 
-      <div :class="['form__control', isEditing && ' form__control--city']">
+      <div class="form__control">
         <label class="form__label caption__primary">
           Cidade
 
@@ -130,10 +130,7 @@
       </Transition>
 
       <Transition>
-        <div
-          v-if="isEditing"
-          :class="['form__control ', isEditing && 'form__control--details']"
-        >
+        <div v-if="isEditing" class="form__control">
           <label class="form__label caption__primary">
             Complemento
 
@@ -181,6 +178,187 @@
             :wrong-crendentials-message="wrongCrendentialsMessage"
           />
         </label>
+      </div>
+    </div>
+
+    <form v-else class="form" @change="handleChange(values)">
+      <div class="form__editing fadein animation-duration-500">
+        <div class="form__email-phone">
+          <div class="form__control">
+            <label class="form__label caption__primary">
+              E-mail
+
+              <BaseInputText
+                name="email"
+                :readonly="!isEditing"
+                :wrong-crendentials-message="wrongCrendentialsMessage"
+              />
+            </label>
+          </div>
+
+          <div class="form__control">
+            <label class="form__label caption__primary">
+              Telefone
+
+              <BaseInputMask
+                name="phone"
+                mask="(99) 99999-9999"
+                :readonly="!isEditing"
+                :wrong-crendentials-message="wrongCrendentialsMessage"
+              />
+            </label>
+          </div>
+        </div>
+
+        <div class="form__search">
+          <div class="form__control">
+            <label
+              :class="[
+                'form__label caption__primary',
+                isEditing && 'form__label--disabled',
+              ]"
+            >
+              CEP
+
+              <BaseInputMask
+                name="cep"
+                mask="99999-999"
+                :right-icon="isSearchable ? 'pi pi-search' : 'pi pi-pencil'"
+                :disabled="isEditing && !isSearchable"
+                :readonly="!isEditing"
+                @right-icon-click="toggleSearch"
+              />
+            </label>
+          </div>
+
+          <Transition>
+            <div v-if="isEditing" class="form__search--btn">
+              <BaseButton
+                label="Buscar"
+                class="btn__primary"
+                :disabled="!isSearchable"
+                @click="searchAddres(values)"
+              />
+            </div>
+          </Transition>
+        </div>
+
+        <div class="form__state-city">
+          <div class="form__control">
+            <label
+              :class="[
+                'form__label caption__primary',
+                isEditing && 'form__label--disabled',
+              ]"
+            >
+              Estado
+
+              <BaseInputText
+                name="state"
+                :readonly="!isEditing"
+                :disabled="isEditing"
+              />
+            </label>
+          </div>
+
+          <div class="form__control">
+            <label
+              :class="[
+                'form__label caption__primary',
+                isEditing && 'form__label--disabled',
+              ]"
+            >
+              Cidade
+
+              <BaseInputText
+                name="city"
+                :readonly="!isEditing"
+                :disabled="isEditing"
+              />
+            </label>
+          </div>
+        </div>
+
+        <div class="form__address">
+          <div class="form__control">
+            <label class="form__label caption__primary">
+              Bairro
+
+              <BaseInputText name="neighborhood" :readonly="!isEditing" />
+            </label>
+          </div>
+
+          <div class="form__control">
+            <label class="form__label caption__primary">
+              Logradouro
+
+              <BaseInputText name="street" :readonly="!isEditing" />
+            </label>
+          </div>
+
+          <Transition>
+            <div v-if="isEditing" class="form__control">
+              <label class="form__label caption__primary">
+                Número
+
+                <BaseInputText name="houseNumber" :readonly="!isEditing" />
+              </label>
+            </div>
+          </Transition>
+        </div>
+
+        <Transition>
+          <div v-if="isEditing" class="form__control">
+            <label class="form__label caption__primary">
+              Complemento
+
+              <BaseInputText
+                name="additionalAddressDetails"
+                :readonly="!isEditing"
+              />
+            </label>
+            <small class="caption__secondary">Opcional</small>
+          </div>
+        </Transition>
+
+        <div class="form__additional">
+          <div class="form__control">
+            <label class="form__label caption__primary">
+              URL para linkedin
+
+              <BaseInputText
+                name="linkedinUrl"
+                :readonly="!isEditing"
+                :wrong-crendentials-message="wrongCrendentialsMessage"
+              />
+            </label>
+          </div>
+
+          <div class="form__control">
+            <label class="form__label caption__primary">
+              Número de emergência
+
+              <BaseInputMask
+                name="emergencyNumber"
+                mask="(99) 99999-9999"
+                :readonly="!isEditing"
+                :wrong-crendentials-message="wrongCrendentialsMessage"
+              />
+            </label>
+          </div>
+
+          <div class="form__control">
+            <label class="form__label caption__primary">
+              Quem é o contato de emergência
+
+              <BaseInputText
+                name="emergencyContact"
+                :readonly="!isEditing"
+                :wrong-crendentials-message="wrongCrendentialsMessage"
+              />
+            </label>
+          </div>
+        </div>
       </div>
     </form>
   </VeeForm>
@@ -289,35 +467,51 @@ export default {
 }
 
 .form {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 24px;
+  &__view {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    column-gap: 24px;
+  }
 
-  .form__control {
-    &--cep {
-      gap: 16px;
-      grid-column: 1 / 4;
-
-      display: flex;
-      align-items: center;
-
-      label {
-        width: 345px;
-
-        & + div {
-          padding-top: 10px;
-        }
-      }
-      &--city {
-        width: 345px;
-        grid-column: 2/4;
-      }
-
-      &--details {
-        width: 345px;
-        grid-column: 1 / 4;
-      }
+  &__label {
+    transition: all 0.3s;
+    &--disabled {
+      color: map-get($color-scheme-light, "$color-neutral-neutral-4");
     }
+  }
+
+  &__control {
+    width: 343px;
+    height: 100%;
+    margin-top: 24px;
+  }
+
+  &__email-phone,
+  &__state-city,
+  &__address,
+  &__additional {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+
+  &__search {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr 1fr;
+    grid-auto-rows: 90px;
+    align-items: center;
+
+    &--btn {
+      padding-top: 10px;
+    }
+
+    button {
+      width: max-content;
+    }
+  }
+
+  &__state-city {
   }
 }
 </style>
