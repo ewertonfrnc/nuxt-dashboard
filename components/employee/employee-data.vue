@@ -35,7 +35,7 @@
       </div>
     </div>
 
-    <form class="form" @change="handleChange">
+    <form class="form" @change="handleChange(values)">
       <div class="form__container">
         <div class="form__control">
           <label class="form__label caption__primary">
@@ -116,6 +116,7 @@
               name="ethnicity"
               :readonly="!isEditing"
               :options="ethnicityOptions"
+              @on-change="handleChange(values)"
             />
           </label>
         </div>
@@ -130,6 +131,7 @@
               name="role"
               :readonly="!isEditing"
               :options="visualizeOptions"
+              @on-change="handleChange(values)"
             />
           </label>
         </div>
@@ -202,8 +204,6 @@ export default {
       this.wrongCrendentialsMessage = "";
     },
     async handleSubmit(values) {
-      this.hasChanges = !checkEqualObjs(values, this.employee.personalData);
-
       if (this.hasChanges) {
         this.loading = true;
         this.wrongCrendentialsMessage = "";
@@ -222,8 +222,8 @@ export default {
         this.wrongCrendentialsMessage = "Preencha o campo para prosseguir";
       }
     },
-    handleChange() {
-      this.hasChanges = true;
+    handleChange(values) {
+      this.hasChanges = !checkEqualObjs(values, this.employee.personalData);
     },
   },
 };

@@ -1,20 +1,3 @@
-<script lang="ts">
-import { useField } from "vee-validate";
-
-export default {
-  props: {
-    name: { type: String, default: "", required: true },
-    options: { type: Array, default: [], required: true },
-    disabled: { type: Boolean, default: false, required: false },
-    readonly: { type: Boolean, default: false, required: false },
-  },
-  setup(props) {
-    const { value, errorMessage } = useField(props.name);
-    return { value, errorMessage };
-  },
-};
-</script>
-
 <template>
   <Dropdown
     v-model="value"
@@ -30,6 +13,7 @@ export default {
       input: 'dropdown__input',
       trigger: 'dropdown__trigger',
     }"
+    @update:model-value="handleChange"
   >
     <template #value="{ value }">
       <p class="body__primary">{{ value }}</p>
@@ -42,5 +26,31 @@ export default {
     <template #option="{ option }">{{ option }}</template>
   </Dropdown>
 
-  <small class="dropdown__error">{{ errorMessage }}</small>
+  <small class="dropdown__error caption__primary">{{
+    wrongCrendentialsMessage || errorMessage
+  }}</small>
 </template>
+
+<script lang="ts">
+import { useField } from "vee-validate";
+
+export default {
+  props: {
+    name: { type: String, default: "", required: true },
+    options: { type: Array, default: [], required: true },
+    disabled: { type: Boolean, default: false, required: false },
+    readonly: { type: Boolean, default: false, required: false },
+    wrongCrendentialsMessage: { type: String, default: "", required: false },
+  },
+  emits: ["on-change"],
+  setup(props) {
+    const { value, errorMessage } = useField(props.name);
+    return { value, errorMessage };
+  },
+  methods: {
+    handleChange() {
+      this.$emit("on-change");
+    },
+  },
+};
+</script>
