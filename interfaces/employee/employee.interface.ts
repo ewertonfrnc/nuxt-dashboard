@@ -36,6 +36,21 @@ export type EmployeeContact = {
   additionalAddressDetails: string;
 };
 
+export type EmployeeWorkInfo = {
+  role: string;
+  department: string;
+  admissionDate: string;
+  workType: string;
+  hireType: string;
+  hoursPerWeek: string;
+  ctps: string;
+  pis: string;
+  companyTime: string;
+  shift: string;
+  dismissalDate: string;
+  dismissalReason: string;
+};
+
 export type Employee = {
   id: number;
   name: string;
@@ -43,6 +58,7 @@ export type Employee = {
   photo: string;
   personalData: EmployeePersonalData;
   contact: EmployeeContact;
+  workData: EmployeeWorkInfo;
 };
 
 export type EmployeeQueryParams = {

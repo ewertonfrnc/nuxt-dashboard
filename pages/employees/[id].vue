@@ -42,7 +42,7 @@ import { mapActions, mapState } from "pinia";
 import EmployeeClocks from "~/components/employee/employee-clocks.vue";
 import EmployeeData from "~/components/employee/employee-data.vue";
 import EmployeeContacts from "~/components/employee/employee-contact.vue";
-import EmployeeJobs from "~/components/employee/employee-jobs.vue";
+import EmployeeWorkInfo from "~/components/employee/employee-work-info.vue";
 import EmployeeDocuments from "~/components/employee/employee-documents.vue";
 import EmployeeSchools from "~/components/employee/employee-schools.vue";
 
@@ -69,7 +69,7 @@ export default {
         {
           label: "Dados profissionais",
           icon: "pi pi-building",
-          component: EmployeeJobs,
+          component: EmployeeWorkInfo,
         },
         {
           label: "Documentos",
