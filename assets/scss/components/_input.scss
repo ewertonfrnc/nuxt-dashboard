@@ -53,11 +53,11 @@
     &:disabled {
       background-color: map-get(
         $color-scheme-light,
-        "$color-neutral-neutral-3"
+        "$color-neutral-neutral-7"
       );
-      color: map-get($color-scheme-light, "$color-neutral-neutral-3");
-      border: 1px solid map-get($color-scheme-light, "$color-neutral-neutral-3");
-      cursor: not-allowed;
+      color: map-get($color-scheme-light, "$color-neutral-neutral-4");
+      border: 1px solid map-get($color-scheme-light, "$color-neutral-neutral-4");
+      padding: $input-padding;
     }
 
     &:focus {
