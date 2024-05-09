@@ -7,6 +7,7 @@ import {
   EmployeeClocks,
   EmployeeQueryParams,
   EmployeePersonalData,
+  EmployeeContact,
   EmployeeWorkInfo,
 } from "~/interfaces/employee/employee.interface";
 
@@ -38,12 +39,20 @@ class EmployeeService {
     return api().put(`/employee/${employeeId}`, updatedEmployeeData);
   }
 
-  updateEmployeeWorkInfo(
+  updateEmployeeContact(
+    employeeId: string,
+    updatedEmployeeData: EmployeeContact,
+  ) {
+    if (MOCKED) return getResponse("updateEmployeeContact", "employee");
+    return api().put(`/employee/${employeeId}`, updatedEmployeeData);
+  }
+  
+   updateEmployeeWorkInfo(
     employeeId: string,
     updatedEmployeeData: EmployeeWorkInfo,
   ) {
     if (MOCKED) return getResponse("updateEmployeeWorkInfo", "employee");
-    return api().put(`/employee/${employeeId}`, updatedEmployeeData);
+     return api().put(`/employee/${employeeId}`, updatedEmployeeData);
   }
 
   getRegisteredClocks(employeeId: string, queryParams: EmployeeQueryParams) {

@@ -5,6 +5,7 @@ import {
   Employee,
   EmployeeAdjusts,
   EmployeeClocks,
+  EmployeeContact,
   EmployeePersonalData,
   EmployeeQueryParams,
   EmployeeWorkInfo,
@@ -51,6 +52,20 @@ export const useEmployeeStore = defineStore("employee", {
         return error as Error;
       }
     },
+    async updateEmployeeContact(
+      employeeId: string,
+      updatedEmployeeData: EmployeeContact,
+    ) {
+      try {
+        const { employee } = await employeeService.updateEmployeeContact(
+          employeeId,
+          updatedEmployeeData,
+        );
+        this.employee = employee;
+      } catch (error) {
+        return error as Error;
+      }
+    },
     async updateEmployeeWorkInfo(
       employeeId: string,
       updatedEmployeeData: EmployeeWorkInfo,
@@ -65,6 +80,7 @@ export const useEmployeeStore = defineStore("employee", {
         return error as Error;
       }
     },
+
     async getRegisteredClocks(
       employeeId: string,
       queryParams: EmployeeQueryParams,
