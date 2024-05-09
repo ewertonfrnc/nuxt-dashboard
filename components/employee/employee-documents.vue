@@ -34,7 +34,7 @@
       </div>
     </div>
 
-    <form class="form" @change="handleChange">
+    <form class="form" @change="handleChange(values)">
       <section class="form__section">
         <p class="subtitle__primary form__section--subtitle">
           Documento de identidade
@@ -209,6 +209,10 @@ import { mapState, mapActions } from "pinia";
 import { checkEqualObjs } from "~/utils/validators";
 
 export default {
+  setup() {
+    const { getToast } = usePVToast();
+    return { getToast };
+  },
   data() {
     return {
       loading: false,
@@ -223,41 +227,31 @@ export default {
     },
   },
   methods: {
-    ...mapActions(useEmployeeStore, ["updateEmployeeData"]),
+    ...mapActions(useEmployeeStore, ["updateEmployeeDocs"]),
 
-    handleUpload() {
-      this.employee.personalData.profileImg =
-        "https://images.unsplash.com/photo-1487573884658-a5d3c667584e?q=80&w=2206&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
-    },
+    handleUpload() {},
     cancelEditing() {
       this.isEditing = false;
     },
     async handleSubmit(values) {
       this.loading = true;
-      console.log("values", values);
 
       try {
-        // await this.updateEmployeeData(String(this.employee.id), values);
+        await this.updateEmployeeDocs(String(this.employee.id), values);
         this.isEditing = false;
 
-        this.$toast.add({
-          severity: "success",
-          summary: "Sucesso!",
-          detail: "Ação realizada com sucesso.",
-          life: 4000,
-        });
+        this.getToast("success", "Sucesso!", "Ação realizada com sucesso.");
       } catch (error) {
-        this.$toast.add({
-          severity: "error",
-          summary: "Ocorreu um erro!",
-          detail: "Ocorreu um erro de processamento, tente novamente.",
-          life: 4000,
-        });
+        this.getToast(
+          "error",
+          "Ocorreu um erro!",
+          "Ocorreu um erro de processamento, tente novamente.",
+        );
       } finally {
         this.loading = false;
       }
     },
-    handleChange() {
+    handleChange(values) {
       this.hasChanges = !checkEqualObjs(values, this.employee.personalData);
     },
   },

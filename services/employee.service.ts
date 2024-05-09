@@ -9,6 +9,7 @@ import {
   EmployeePersonalData,
   EmployeeWorkInfo,
   EmployeeSchoolInfo,
+  EmployeeDocuments,
 } from "~/interfaces/employee/employee.interface";
 
 type EmployeeResponse = {
@@ -52,6 +53,14 @@ class EmployeeService {
     updatedEmployeeData: EmployeeSchoolInfo,
   ) {
     if (MOCKED) return getResponse("updateEmployeeSchool", "employee");
+    return api().put(`/employee/${employeeId}`, updatedEmployeeData);
+  }
+
+  updateEmployeeDocs(
+    employeeId: string,
+    updatedEmployeeData: EmployeeDocuments,
+  ) {
+    if (MOCKED) return getResponse("updateEmployeeDocs", "employee");
     return api().put(`/employee/${employeeId}`, updatedEmployeeData);
   }
 
