@@ -10,6 +10,8 @@ export const clockSchema = yup.object({
 export const employeeDataSchema = yup.object({
   fullname: yup.string().required(),
   birthDate: yup.string().matches(dateRegex, "Data inválida"),
+});
+
 export const contactFormSchema = yup.object({
   email: yup.string().required().email().min(10).max(50),
   phone: yup

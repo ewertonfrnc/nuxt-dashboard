@@ -232,7 +232,7 @@ export default {
         });
       } catch (error) {}
     },
-    async handleSubmit(values) {
+    async handleSubmit(values: EmployeeContact) {
       if (!this.hasChanges) {
         this.wrongCrendentialsMessage = "Preencha o campo para prosseguir";
         return;

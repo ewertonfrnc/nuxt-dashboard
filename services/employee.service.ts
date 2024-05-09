@@ -7,6 +7,7 @@ import {
   EmployeeClocks,
   EmployeeQueryParams,
   EmployeePersonalData,
+  EmployeeContact,
 } from "~/interfaces/employee/employee.interface";
 
 type EmployeeResponse = {
@@ -34,6 +35,14 @@ class EmployeeService {
     updatedEmployeeData: EmployeePersonalData,
   ) {
     if (MOCKED) return getResponse("updateEmployeeData", "employee");
+    return api().put(`/employee/${employeeId}`, updatedEmployeeData);
+  }
+
+  updateEmployeeContact(
+    employeeId: string,
+    updatedEmployeeData: EmployeeContact,
+  ) {
+    if (MOCKED) return getResponse("updateEmployeeContact", "employee");
     return api().put(`/employee/${employeeId}`, updatedEmployeeData);
   }
 
