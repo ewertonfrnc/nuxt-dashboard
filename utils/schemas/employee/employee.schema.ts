@@ -3,6 +3,8 @@ import yup from "~/utils/validator";
 const dateRegex = /^(?!([0-9])\1\/([0-9])\2\/([0-9])\3)\d{2}\/\d{2}\/\d{4}$/;
 const phoneRegex = /^(?!.*_).*$/;
 const cepRegex = /^(?!(\d)\1{4}-?(\d)\2{2})\d{5}-?\d{3}$/;
+const PISRegex = /^(?!(\d)\1{2}\.\1{5}\.\1{2}-\1)\d{3}\.\d{5}\.\d{2}-\d$/;
+const CTPSRegex = /^(?!(\d)\1{4}-\1{4}-\1{2}$)\d{5}-\d{4}-[A-Z]{2}$/;
 
 export const clockSchema = yup.object({
   checkin: yup.string().required().min(3).trim(),
@@ -25,15 +27,10 @@ export const contactFormSchema = yup.object({
 });
 
 export const workInfoSchema = yup.object({
-  admissionDate: yup
-    .string()
-    .matches(
-      /^(?!([0-9])\1\/([0-9])\2\/([0-9])\3)\d{2}\/\d{2}\/\d{4}$/,
-      "Data inválida",
-    ),
+  admissionDate: yup.string().matches(dateRegex, "Data inválida"),
   hoursPerWeek: yup.string(),
-  ctps: yup.string(),
-  pis: yup.string(),
-  companyTime: yup.string(),
+  ctps: yup.string().required().matches(CTPSRegex, "CTPS inválido"),
+  pis: yup.string().required().matches(PISRegex, "PIS inválido"),
+  companyTime: yup.string().required(),
   shift: yup.string(),
 });
