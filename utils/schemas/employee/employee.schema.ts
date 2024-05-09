@@ -38,3 +38,10 @@ export const workInfoSchema = yup.object({
   companyTime: yup.string(),
   shift: yup.string(),
 });
+
+export const schoolFormSchema = yup.object({
+  course: yup.string().matches(/^[^\d]*$/, "Somente letras são permitidas"),
+  educationalInstitution: yup
+    .string()
+    .matches(/^[^\d]*$/, "Somente letras são permitidas"),
+});

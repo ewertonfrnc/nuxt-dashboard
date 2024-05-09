@@ -46,6 +46,14 @@ export const employeeMock = {
         dismissalDate: "01/06/2024",
         dismissalReason: "Pediu demissão",
       },
+      schoolInfo: {
+        course: "Nutrição",
+        educationalInstitution: "Unicamp",
+        status: "Concluído",
+        entryYear: "2014",
+        entrySemester: "2",
+        conclusionYear: "2018",
+      },
     },
   },
   updateEmployeeData: {

@@ -51,6 +51,15 @@ export type EmployeeWorkInfo = {
   dismissalReason: string;
 };
 
+export type EmployeeSchoolInfo = {
+  course: string;
+  educationalInstitution: string;
+  status: string;
+  entryYear: string;
+  entrySemester: string;
+  conclusionYear: string;
+};
+
 export type Employee = {
   id: number;
   name: string;
@@ -59,6 +68,7 @@ export type Employee = {
   personalData: EmployeePersonalData;
   contact: EmployeeContact;
   workData: EmployeeWorkInfo;
+  schoolInfo: EmployeeSchoolInfo;
 };
 
 export type EmployeeQueryParams = {
