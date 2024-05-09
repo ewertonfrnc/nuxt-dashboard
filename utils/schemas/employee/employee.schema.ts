@@ -5,6 +5,7 @@ const phoneRegex = /^(?!.*_).*$/;
 const cepRegex = /^(?!(\d)\1{4}-?(\d)\2{2})\d{5}-?\d{3}$/;
 const PISRegex = /^(?!(\d)\1{2}\.\1{5}\.\1{2}-\1)\d{3}\.\d{5}\.\d{2}-\d$/;
 const CTPSRegex = /^(?!(\d)\1{4}-\1{4}-\1{2}$)\d{5}-\d{4}-[A-Z]{2}$/;
+const noNumRegex = /^[^\d]*$/;
 
 export const clockSchema = yup.object({
   checkin: yup.string().required().min(3).trim(),
@@ -36,8 +37,12 @@ export const workInfoSchema = yup.object({
 });
 
 export const schoolFormSchema = yup.object({
-  course: yup.string().matches(/^[^\d]*$/, "Somente letras são permitidas"),
+  course: yup
+    .string()
+    .required()
+    .matches(noNumRegex, "Somente letras são permitidas"),
   educationalInstitution: yup
     .string()
-    .matches(/^[^\d]*$/, "Somente letras são permitidas"),
+    .required()
+    .matches(noNumRegex, "Somente letras são permitidas"),
 });
