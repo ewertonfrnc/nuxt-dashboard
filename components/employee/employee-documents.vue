@@ -240,13 +240,9 @@ export default {
         await this.updateEmployeeDocs(String(this.employee.id), values);
         this.isEditing = false;
 
-        this.getToast("success", "Sucesso!", "Ação realizada com sucesso.");
+        this.getToast("success");
       } catch (error) {
-        this.getToast(
-          "error",
-          "Ocorreu um erro!",
-          "Ocorreu um erro de processamento, tente novamente.",
-        );
+        this.getToast("error");
       } finally {
         this.loading = false;
       }
