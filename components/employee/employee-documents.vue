@@ -290,12 +290,23 @@ export default {
     padding-bottom: 24px;
     border-bottom: 1px solid
       map-get($color-scheme-light, "$color-neutral-neutral-5");
+
+    @include respond(phone) {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 12px;
+    }
   }
 
   &__identity {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
     gap: 24px;
+
+    @include respond(modal) {
+      display: flex;
+      flex-direction: column;
+    }
 
     & > div {
       display: flex;

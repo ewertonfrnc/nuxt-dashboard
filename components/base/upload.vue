@@ -18,20 +18,20 @@
         <BaseButton
           class="btn__primary"
           icon="pi pi-plus"
-          label="Escolher arquivo"
+          :label="!isNarrowScreen ? 'Escolher arquivo' : ''"
           @click="chooseCallback()"
         />
         <BaseButton
           class="btn__primary"
           icon="pi pi-upload"
-          label="Fazer upload"
+          :label="!isNarrowScreen ? 'Fazer upload' : ''"
           :disabled="!files || files.length === 0"
           @click="uploadCallback"
         />
         <BaseButton
           class="btn__primary"
           icon="pi pi-times"
-          label="Cancelar"
+          :label="!isNarrowScreen ? 'Cancelar' : ''"
           :disabled="!files || files.length === 0"
           @click="clearCallback()"
         />
@@ -138,12 +138,24 @@ import {
 
 export default {
   emits: ["on-upload"],
+  setup() {
+    const { matchScreenSize } = useWindow("modal");
+    return { matchScreenSize };
+  },
   data() {
     return {
       files: [],
       totalSize: 0,
       totalSizePercent: 0,
+      isNarrowScreen: false,
     };
+  },
+  mounted() {
+    window.addEventListener("resize", this.handleResize);
+    this.handleResize();
+  },
+  unmounted() {
+    window.removeEventListener("resize", this.handleResize);
   },
   methods: {
     onRemoveTemplatingFile(
@@ -191,6 +203,13 @@ export default {
       const formattedSize = parseFloat((bytes / Math.pow(k, i)).toFixed(dm));
 
       return `${formattedSize} ${sizes[i]}`;
+    },
+    handleResize() {
+      if (this.matchScreenSize) {
+        this.isNarrowScreen = true;
+      } else {
+        this.isNarrowScreen = false;
+      }
     },
   },
 };
@@ -255,12 +274,23 @@ export default {
       display: flex;
       align-items: center;
       gap: 24px;
+
+      @include respond(phone) {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+      }
     }
 
     &--stats {
       display: flex;
       align-items: center;
       gap: 8px;
+
+      @include respond(phone) {
+        align-items: flex-start;
+        flex-direction: column;
+      }
     }
   }
 }
