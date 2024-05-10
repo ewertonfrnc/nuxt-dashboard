@@ -489,7 +489,7 @@ export default {
     justify-content: space-between;
 
     @include respond(phone) {
-      align-items: center;
+      align-items: flex-start;
       flex-direction: column;
     }
   }
