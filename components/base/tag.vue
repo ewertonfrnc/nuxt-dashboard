@@ -32,6 +32,8 @@ export default {
   methods: {
     getSeverityClass(severity: string): string {
       const severityToClassMap: Record<string, string> = {
+        Primary: "tag__primary",
+        Secondary: "tag__secondary",
         Success: "tag__success",
         Danger: "tag__danger",
         Warning: "tag__warning",
@@ -48,6 +50,15 @@ export default {
   padding: 0.4rem 0.8rem;
   border-radius: $border-radius;
 
+  &__primary {
+    background-color: map-get($color-scheme-light, "$color-brand-primary-2");
+    color: map-get($color-scheme-light, "$color-neutral-neutral-7");
+  }
+
+  &__secondary {
+    background-color: map-get($color-scheme-light, "$color-neutral-neutral-4");
+  }
+
   &__success {
     background-color: map-get($color-scheme-light, "$color-feedback-success-2");
   }
@@ -62,6 +73,16 @@ export default {
 }
 
 .dark-mode .tag {
+  &__primary {
+    background-color: map-get($color-scheme-dark, "$color-brand-primary-2");
+    color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
+  }
+
+  &__secondary {
+    background-color: map-get($color-scheme-dark, "$color-neutral-neutral-4");
+    color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
+  }
+
   &__success {
     background-color: map-get($color-scheme-dark, "$color-feedback-success-2");
   }
