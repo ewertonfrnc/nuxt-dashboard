@@ -155,5 +155,12 @@ export const useEmployeeStore = defineStore("employee", {
         return error as Error;
       }
     },
+    async sendRecoverPasswordEmail(employeeId: string) {
+      try {
+        await employeeService.sendRecoverPasswordEmail(employeeId);
+      } catch (error) {
+        return error as Error;
+      }
+    },
   },
 });

@@ -1,0 +1,22 @@
+.options {
+  width: max-content;
+  border-radius: 6px;
+  padding: 4px 2px;
+  background-color: map-get($color-scheme-light, "$color-neutral-neutral-7");
+  border: 1px solid map-get($color-scheme-light, "$color-surface-surface-4");
+
+  &__item {
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+
+    &:hover {
+      background-color: map-get($color-scheme-light, "$color-brand-primary-1");
+      color: map-get($color-scheme-light, "$color-brand-primary-0");
+    }
+  }
+}

@@ -9,7 +9,27 @@
           <h2 class="heading__secondary">Perfil</h2>
         </div>
 
-        <BaseButton class="btn__primary" label="Opções" />
+        <BaseButton
+          class="btn__primary"
+          icon="pi pi-ellipsis-v"
+          label="Opções"
+          @click="toggle"
+        />
+        <Menu
+          ref="menu"
+          :model="menuItems"
+          :popup="true"
+          :pt="{
+            menu: 'options',
+          }"
+        >
+          <template #item="{ item }">
+            <div class="options__item">
+              <i :class="item.icon" />
+              <span class="body__primary" v-text="item.label" />
+            </div>
+          </template>
+        </Menu>
       </section>
 
       <section class="info">
@@ -33,6 +53,31 @@
         <BaseTabMenu :items="items" />
       </section>
     </div>
+
+    <BaseDialog
+      confirm-dialog
+      confirm-icon="pi-envelope"
+      :is-visible="isVisible"
+      :toggle-dialog="toggleVisibility"
+      title="Alterar senha"
+    >
+      <div>
+        <p class="body__secondary">
+          Deseja enviar um e-mail de recuperação de senha para
+          ana****@gmail.com?
+        </p>
+      </div>
+
+      <template #footer>
+        <BaseDialogFooter
+          :loading="loading"
+          confirm-icon="pi pi-check"
+          confirmlabel="Confirmar"
+          message="Selecione uma ação para prosseguir"
+          @click-handler="footerActionHandler"
+        />
+      </template>
+    </BaseDialog>
   </BaseCard>
 </template>
 
@@ -47,9 +92,31 @@ import EmployeeDocuments from "~/components/employee/employee-documents.vue";
 import EmployeeSchools from "~/components/employee/employee-schools.vue";
 
 export default {
+  setup() {
+    const { getToast } = usePVToast();
+    const { isVisible, toggleVisibility } = useToggle();
+    return { getToast, isVisible, toggleVisibility };
+  },
   data() {
     return {
       loading: false,
+      showErrorMessage: false,
+      menuItems: [
+        {
+          label: "Alterar senha",
+          icon: "pi pi-lock",
+          command: () => {
+            this.toggleVisibility();
+          },
+        },
+        {
+          label: "Desativar colaborador",
+          icon: "pi pi-user-minus",
+          command: () => {
+            console.log("desativar colaborador");
+          },
+        },
+      ],
       items: [
         {
           label: "Pontos",
@@ -91,24 +158,42 @@ export default {
     await this.getEmployee();
   },
   methods: {
-    ...mapActions(useEmployeeStore, ["getEmployeeData"]),
+    ...mapActions(useEmployeeStore, [
+      "getEmployeeData",
+      "sendRecoverPasswordEmail",
+    ]),
+    footerActionHandler(btnClicked: string) {
+      if (btnClicked === "confirm") this.changePasswordHandler();
+      else this.toggleVisibility();
+    },
     async getEmployee() {
       this.loading = true;
       try {
         await this.getEmployeeData(String(this.$route.params.id));
+        this.getToast("success");
       } catch (error) {
-        this.$toast.add({
-          severity: "error",
-          summary: "Algo deu errado!",
-          detail: "Tente novamente mais tarde.",
-          life: 4000,
-        });
+        this.getToast("error");
       } finally {
         this.loading = false;
       }
     },
+    async changePasswordHandler() {
+      this.loading = true;
+      try {
+        await this.sendRecoverPasswordEmail(String(this.$route.params.id));
+        this.getToast("success");
+      } catch (error) {
+        this.getToast("error");
+      } finally {
+        this.loading = false;
+        this.toggleVisibility();
+      }
+    },
     goBack() {
       this.$router.back();
+    },
+    toggle(event: Event) {
+      this.$refs.menu.toggle(event);
     },
   },
 };
@@ -159,5 +244,9 @@ export default {
   &__name h5 {
     color: map-get($color-scheme-light, "$color-neutral-neutral-2");
   }
+}
+
+.options {
+  background-color: red;
 }
 </style>

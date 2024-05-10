@@ -48,13 +48,13 @@ class EmployeeService {
     if (MOCKED) return getResponse("updateEmployeeContact", "employee");
     return api().put(`/employee/${employeeId}`, updatedEmployeeData);
   }
-  
-   updateEmployeeWorkInfo(
+
+  updateEmployeeWorkInfo(
     employeeId: string,
     updatedEmployeeData: EmployeeWorkInfo,
   ) {
     if (MOCKED) return getResponse("updateEmployeeWorkInfo", "employee");
-     return api().put(`/employee/${employeeId}`, updatedEmployeeData);
+    return api().put(`/employee/${employeeId}`, updatedEmployeeData);
   }
 
   updateEmployeeSchool(
@@ -121,6 +121,11 @@ class EmployeeService {
   searchEmployeeAddres(cep: string) {
     if (MOCKED) return getResponse("searchEmployeeAddres", "employee");
     return api().get(`/employee/address/${cep}`);
+  }
+
+  sendRecoverPasswordEmail(employeeId: string) {
+    if (MOCKED) return getResponse("sendRecoverPasswordEmail", "employee");
+    return api().get(`/employee/recover-email/${employeeId}`);
   }
 }
 
