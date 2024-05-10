@@ -11,6 +11,7 @@ import {
   EmployeeWorkInfo,
   EmployeeSchoolInfo,
   EmployeeDocuments,
+  EmployeeDeactivationDetails,
 } from "~/interfaces/employee/employee.interface";
 
 type EmployeeResponse = {
@@ -126,6 +127,11 @@ class EmployeeService {
   sendRecoverPasswordEmail(employeeId: string) {
     if (MOCKED) return getResponse("sendRecoverPasswordEmail", "employee");
     return api().get(`/employee/recover-email/${employeeId}`);
+  }
+
+  deactivateEmployee(employeeId: string, details: EmployeeDeactivationDetails) {
+    if (MOCKED) return getResponse("deactivateEmployee", "employee");
+    return api().post(`/employee/deactivate/${employeeId}`, details);
   }
 }
 

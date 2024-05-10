@@ -123,6 +123,7 @@
           confirm-icon="pi pi-check"
           confirmlabel="Confirmar"
           message="Selecione uma ação para prosseguir"
+          @click-handler="deactivateFooterActionHandler"
         />
       </template>
     </BaseDialog>
@@ -152,21 +153,18 @@ export default {
       loadingDeactivateDialog: false,
       showDeactivateDialog: false,
       deativateMotive: "",
+      deativateDate: "",
       showErrorMessage: false,
       menuItems: [
         {
           label: "Alterar senha",
           icon: "pi pi-lock",
-          command: () => {
-            this.toggleVisibility();
-          },
+          command: () => this.toggleVisibility(),
         },
         {
           label: "Desativar colaborador",
           icon: "pi pi-user-minus",
-          command: () => {
-            this.showDeactivateDialog = true;
-          },
+          command: () => this.toggleReactivationDialog(),
         },
       ],
       items: [
@@ -213,14 +211,26 @@ export default {
     ...mapActions(useEmployeeStore, [
       "getEmployeeData",
       "sendRecoverPasswordEmail",
+      "deactivateEmployee",
     ]),
     datePickerHandler(date: Date) {
-      const formattedDate = dateFormatters.formatDate(date);
-      console.log({ formattedDate });
+      this.deativateDate = dateFormatters.formatDate(date);
     },
     footerActionHandler(btnClicked: string) {
       if (btnClicked === "confirm") this.changePasswordHandler();
       else this.toggleVisibility();
+    },
+    toggleReactivationDialog() {
+      this.showDeactivateDialog = !this.showDeactivateDialog;
+    },
+    resetReactivation() {
+      this.deativateDate = "";
+      this.deativateMotive = "";
+      this.toggleReactivationDialog();
+    },
+    deactivateFooterActionHandler(btnClicked: string) {
+      if (btnClicked === "confirm") this.confirmDeactivation();
+      else this.resetReactivation();
     },
     async getEmployee() {
       this.loading = true;
@@ -242,6 +252,23 @@ export default {
       } finally {
         this.loading = false;
         this.toggleVisibility();
+      }
+    },
+    async confirmDeactivation() {
+      const details = {
+        date: this.deativateDate,
+        motive: this.deativateMotive,
+      };
+
+      this.loading = true;
+      try {
+        await this.deactivateEmployee(String(this.$route.params.id), details);
+        this.getToast("success");
+      } catch (error) {
+        this.getToast("error");
+      } finally {
+        this.loading = false;
+        this.resetReactivation();
       }
     },
     goBack() {

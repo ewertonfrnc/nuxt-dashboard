@@ -1343,4 +1343,5 @@ export const employeeMock = {
     },
   },
   sendRecoverPasswordEmail: { message: "success" },
+  deactivateEmployee: { date: "10/05/2024", motive: "Zueiro" },
 };

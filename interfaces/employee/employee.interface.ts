@@ -140,3 +140,8 @@ export type EmployeeAdjusts = {
   status: string;
   requests: WorkLog[];
 };
+
+export type EmployeeDeactivationDetails = {
+  date: string;
+  motive: string;
+};

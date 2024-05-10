@@ -6,6 +6,7 @@ import {
   EmployeeAdjusts,
   EmployeeClocks,
   EmployeeContact,
+  EmployeeDeactivationDetails,
   EmployeeDocuments,
   EmployeePersonalData,
   EmployeeQueryParams,
@@ -158,6 +159,16 @@ export const useEmployeeStore = defineStore("employee", {
     async sendRecoverPasswordEmail(employeeId: string) {
       try {
         await employeeService.sendRecoverPasswordEmail(employeeId);
+      } catch (error) {
+        return error as Error;
+      }
+    },
+    async deactivateEmployee(
+      employeeId: string,
+      details: EmployeeDeactivationDetails,
+    ) {
+      try {
+        await employeeService.deactivateEmployee(employeeId, details);
       } catch (error) {
         return error as Error;
       }
