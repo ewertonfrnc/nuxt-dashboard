@@ -2,12 +2,12 @@
   <VeeForm
     v-slot="{ values }"
     :initial-values="userDocs"
-    class="container fadein animation-duration-500"
+    class="form-container fadein animation-duration-500"
     as="section"
   >
-    <div class="container__header">
+    <div class="form-container__header">
       <h2 class="heading__secondary">Dados principais</h2>
-      <div class="container__header--btns">
+      <div class="form-container__header--btns">
         <BaseButton
           v-if="!isEditing"
           class="btn__primary"
@@ -255,24 +255,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.container {
-  &__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 24px;
-
-    &--btns {
-      display: flex;
-      gap: 8px;
-
-      button {
-        width: max-content;
-      }
-    }
-  }
-}
-
 .form {
   display: flex;
   flex-direction: column;
