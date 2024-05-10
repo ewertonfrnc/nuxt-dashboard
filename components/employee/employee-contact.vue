@@ -6,6 +6,7 @@
     class="form-container fadein animation-duration-500"
     as="section"
   >
+    <pre>errors: {{ errors }}</pre>
     <div class="form-container__header">
       <h2 class="heading__secondary">Contatos</h2>
       <div class="form-container__header--btns">
@@ -194,21 +195,12 @@
               <BaseInputMask
                 name="cep"
                 mask="99999-999"
-                :right-icon="isSearchable ? 'pi pi-search' : 'pi pi-pencil'"
+                right-icon="pi pi-search"
                 :disabled="isEditing && !isSearchable"
                 :readonly="!isEditing"
                 @right-icon-click="toggleSearch"
               />
             </label>
-          </div>
-
-          <div v-if="isEditing" class="form__search--btn">
-            <BaseButton
-              label="Buscar"
-              class="btn__primary"
-              :disabled="!isSearchable"
-              @click="searchAddres(values)"
-            />
           </div>
         </div>
 
@@ -400,6 +392,10 @@ export default {
       }
     },
     handleChange(values: EmployeeContact, errors: Object) {
+      if (values.cep !== this.contactInfo.cep) {
+        this.searchAddres(values);
+      }
+
       this.hasChanges = !checkEqualObjs(values, this.employee.personalData);
       this.validForm = checkForErrors(errors);
     },
