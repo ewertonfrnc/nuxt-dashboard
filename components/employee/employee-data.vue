@@ -3,12 +3,12 @@
     v-slot="{ values, errors }"
     :initial-values="userInfo"
     :validation-schema="formSchema"
-    class="container fadein animation-duration-500"
+    class="form-container fadein animation-duration-500"
     as="section"
   >
-    <div class="container__header">
+    <div class="form-container__header">
       <h2 class="heading__secondary">Dados principais</h2>
-      <div class="container__header--btns">
+      <div class="form-container__header--btns">
         <BaseButton
           v-if="!isEditing"
           class="btn__primary"
@@ -232,48 +232,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.container {
-  position: relative;
-
-  &__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 24px;
-
-    @include respond(phone) {
-      align-items: flex-start;
-      flex-direction: column;
-      padding-bottom: 10px;
-      width: 100%;
-      position: sticky;
-      top: -20px;
-      background-color: map-get(
-        $color-scheme-light,
-        "$color-neutral-neutral-7"
-      );
-    }
-
-    &--btns {
-      display: flex;
-      gap: 8px;
-
-      button {
-        width: max-content;
-      }
-
-      @include respond(phone) {
-        width: 100%;
-        flex-direction: column;
-
-        button {
-          width: 100%;
-        }
-      }
-    }
-  }
-}
-
 .form {
   &__container {
     display: grid;

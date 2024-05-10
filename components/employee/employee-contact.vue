@@ -3,12 +3,12 @@
     v-slot="{ values, errors }"
     :initial-values="contactInfo"
     :validation-schema="formSchema"
-    class="container fadein animation-duration-500"
+    class="form-container fadein animation-duration-500"
     as="section"
   >
-    <div class="container__header">
+    <div class="form-container__header">
       <h2 class="heading__secondary">Contatos</h2>
-      <div class="container__header--btns">
+      <div class="form-container__header--btns">
         <BaseButton
           v-if="!isEditing"
           class="btn__primary"
@@ -408,24 +408,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.container {
-  &__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 24px;
-
-    &--btns {
-      display: flex;
-      gap: 8px;
-
-      button {
-        width: max-content;
-      }
-    }
-  }
-}
-
 .form {
   &__view {
     display: grid;
@@ -444,6 +426,11 @@ export default {
     width: 343px;
     height: 100%;
     margin-top: 24px;
+
+    @include respond(phone) {
+      width: 100%;
+      margin-top: 12px;
+    }
   }
 
   &__email-phone,
@@ -454,6 +441,11 @@ export default {
     display: flex;
     flex-wrap: wrap;
     gap: 24px;
+
+    @include respond(phone) {
+      width: 100%;
+      gap: 12px;
+    }
   }
 
   &__search {
@@ -468,6 +460,22 @@ export default {
 
     button {
       width: max-content;
+    }
+
+    @include respond(phone) {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+
+      &--btn {
+        width: 100%;
+        padding: 0;
+      }
+
+      button {
+        width: 100%;
+      }
     }
   }
 }
