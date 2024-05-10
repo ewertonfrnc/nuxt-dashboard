@@ -6,7 +6,6 @@
     class="form-container fadein animation-duration-500"
     as="section"
   >
-    <pre>errors: {{ errors }}</pre>
     <div class="form-container__header">
       <h2 class="heading__secondary">Contatos</h2>
       <div class="form-container__header--btns">
