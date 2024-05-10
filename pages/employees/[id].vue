@@ -78,6 +78,54 @@
         />
       </template>
     </BaseDialog>
+
+    <BaseDialog
+      confirm-icon="pi-envelope"
+      :is-visible="showDeactivateDialog"
+      :toggle-dialog="toggleVisibility"
+      title="Desativar colaborador"
+    >
+      <div class="reactivate">
+        <div>
+          <p class="body__primary">
+            Tem certeza que deseja Desativar o colaborador
+            <strong class="highlight">Nathalia Silva e Rocha</strong>?
+          </p>
+        </div>
+
+        <div>
+          <label>
+            <span>Data do desligamento</span>
+            <BaseDatePicker
+              inline-icon
+              placeholder="Selecione a data do desligamento"
+              @date-handler="datePickerHandler"
+            />
+          </label>
+        </div>
+
+        <div>
+          <label>
+            <span>Motivo</span>
+            <input
+              v-model="deativateMotive"
+              class="input__field"
+              type="text"
+              placeholder="Insira o motivo"
+            />
+          </label>
+        </div>
+      </div>
+
+      <template #footer>
+        <BaseDialogFooter
+          :loading="loadingDeactivateDialog"
+          confirm-icon="pi pi-check"
+          confirmlabel="Confirmar"
+          message="Selecione uma ação para prosseguir"
+        />
+      </template>
+    </BaseDialog>
   </BaseCard>
 </template>
 
@@ -90,6 +138,7 @@ import EmployeeContacts from "~/components/employee/employee-contact.vue";
 import EmployeeWorkInfo from "~/components/employee/employee-work-info.vue";
 import EmployeeDocuments from "~/components/employee/employee-documents.vue";
 import EmployeeSchools from "~/components/employee/employee-schools.vue";
+import { dateFormatters } from "~/utils/formatters";
 
 export default {
   setup() {
@@ -100,6 +149,9 @@ export default {
   data() {
     return {
       loading: false,
+      loadingDeactivateDialog: false,
+      showDeactivateDialog: false,
+      deativateMotive: "",
       showErrorMessage: false,
       menuItems: [
         {
@@ -113,7 +165,7 @@ export default {
           label: "Desativar colaborador",
           icon: "pi pi-user-minus",
           command: () => {
-            console.log("desativar colaborador");
+            this.showDeactivateDialog = true;
           },
         },
       ],
@@ -162,6 +214,10 @@ export default {
       "getEmployeeData",
       "sendRecoverPasswordEmail",
     ]),
+    datePickerHandler(date: Date) {
+      const formattedDate = dateFormatters.formatDate(date);
+      console.log({ formattedDate });
+    },
     footerActionHandler(btnClicked: string) {
       if (btnClicked === "confirm") this.changePasswordHandler();
       else this.toggleVisibility();
@@ -170,7 +226,6 @@ export default {
       this.loading = true;
       try {
         await this.getEmployeeData(String(this.$route.params.id));
-        this.getToast("success");
       } catch (error) {
         this.getToast("error");
       } finally {
@@ -246,7 +301,14 @@ export default {
   }
 }
 
-.options {
-  background-color: red;
+.reactivate {
+  width: 405px;
+  display: grid;
+  gap: 24px;
+  padding: 0 5px;
+
+  label {
+    margin-left: 7px;
+  }
 }
 </style>
