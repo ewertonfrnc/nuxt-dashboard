@@ -3,12 +3,12 @@
     v-slot="{ values, errors }"
     :initial-values="workInfo"
     :validation-schema="formSchema"
-    class="container fadein animation-duration-500"
+    class="form-container fadein animation-duration-500"
     as="section"
   >
-    <div class="container__header">
+    <div class="form-container__header">
       <h2 class="heading__secondary">Dados profissionais</h2>
-      <div class="container__header--btns">
+      <div class="form-container__header--btns">
         <BaseButton
           v-if="!isEditing"
           class="btn__primary"
@@ -228,24 +228,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.container {
-  &__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 24px;
-
-    &--btns {
-      display: flex;
-      gap: 8px;
-
-      button {
-        width: max-content;
-      }
-    }
-  }
-}
-
 .form {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
