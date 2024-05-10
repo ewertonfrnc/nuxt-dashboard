@@ -233,11 +233,26 @@ export default {
 
 <style lang="scss" scoped>
 .container {
+  position: relative;
+
   &__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 24px;
+
+    @include respond(phone) {
+      align-items: flex-start;
+      flex-direction: column;
+      padding-bottom: 10px;
+      width: 100%;
+      position: sticky;
+      top: -20px;
+      background-color: map-get(
+        $color-scheme-light,
+        "$color-neutral-neutral-7"
+      );
+    }
 
     &--btns {
       display: flex;
@@ -245,6 +260,15 @@ export default {
 
       button {
         width: max-content;
+      }
+
+      @include respond(phone) {
+        width: 100%;
+        flex-direction: column;
+
+        button {
+          width: 100%;
+        }
       }
     }
   }
@@ -255,6 +279,12 @@ export default {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 24px;
+
+    @include respond(phone) {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
   }
 
   &__label {
@@ -273,6 +303,13 @@ export default {
     margin-top: 24px;
     display: grid;
     gap: 24px;
+
+    @include respond(phone) {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
   }
 
   &__figure {
@@ -312,6 +349,10 @@ export default {
       padding: 10px;
       border: 1px solid #6e57f5;
       border-radius: 8px;
+
+      @include respond(phone) {
+        width: 100%;
+      }
     }
   }
 }
