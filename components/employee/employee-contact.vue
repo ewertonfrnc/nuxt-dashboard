@@ -449,10 +449,10 @@ export default {
   }
 
   &__search {
-    display: grid;
-    grid-template-columns: 1fr 1.3fr 1fr;
-    grid-auto-rows: 90px;
+    height: 90px;
+    display: flex;
     align-items: center;
+    gap: 24px;
 
     &--btn {
       padding-top: 10px;
@@ -467,6 +467,7 @@ export default {
       display: flex;
       flex-direction: column;
       gap: 12px;
+      height: 100%;
 
       &--btn {
         width: 100%;
