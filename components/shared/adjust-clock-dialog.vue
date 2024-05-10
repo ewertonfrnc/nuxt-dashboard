@@ -79,8 +79,11 @@
                 <div class="adjusts__diff">
                   <div>
                     <div class="adjusts__overview adjusts__overview--negative">
-                      <span class="heading__quinary">Antes</span>
+                      <span v-if="!matchScreenSize" class="heading__quinary"
+                        >Antes</span
+                      >
                       <i
+                        v-if="!matchScreenSize"
                         :class="[
                           'caption__primary pi',
                           request.beforeTotal.negative
@@ -116,8 +119,11 @@
 
                   <div>
                     <div class="adjusts__overview adjusts__overview--positive">
-                      <span class="heading__quinary">Depois</span>
+                      <span v-if="!matchScreenSize" class="heading__quinary"
+                        >Depois</span
+                      >
                       <i
+                        v-if="!matchScreenSize"
                         :class="[
                           'caption__primary pi',
                           request.afterTotal.negative
@@ -188,6 +194,10 @@ export default {
     confirmHandler: { type: Function, required: true },
   },
   emits: ["button-handler", "approved-all"],
+  setup() {
+    const { matchScreenSize } = useWindow("phone");
+    return { matchScreenSize };
+  },
   data() {
     return {
       selectedAll: this.approveAll,
@@ -280,6 +290,17 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-right: auto;
+
+    @include respond(phone) {
+      max-width: 100px;
+
+      h6 {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+    }
   }
 
   &__button-group {
@@ -379,6 +400,10 @@ export default {
     margin: 0 auto;
     display: grid;
     gap: 16px;
+
+    @include respond(phone) {
+      width: 100%;
+    }
   }
 
   &__overview {
@@ -427,6 +452,10 @@ export default {
       display: flex;
       flex-direction: column;
       gap: 24px;
+
+      @include respond(phone) {
+        gap: 12px;
+      }
     }
 
     & > div:first-child {
@@ -439,10 +468,18 @@ export default {
         content: "";
         height: 100%;
       }
+
+      @include respond(phone) {
+        padding: 10px;
+      }
     }
 
     & > div:nth-child(2) {
       padding: 10px 0 10px 20px;
+
+      @include respond(phone) {
+        padding: 10px;
+      }
     }
   }
 
@@ -450,6 +487,11 @@ export default {
     width: 100%;
     display: flex;
     justify-content: space-between;
+
+    @include respond(phone) {
+      align-items: flex-start;
+      flex-direction: column;
+    }
   }
 
   &__item {
