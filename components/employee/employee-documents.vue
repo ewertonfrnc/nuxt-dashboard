@@ -1,1 +1,3 @@
-<template><h1>opa</h1></template>
+<template>
+  <h2 class="heading__secondary">Documentos</h2>
+</template>
