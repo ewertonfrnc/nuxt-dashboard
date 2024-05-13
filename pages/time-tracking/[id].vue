@@ -48,6 +48,7 @@
         :total-pages="totalPages"
         has-action
         header-shown
+        download
         @update-filter-handler="getTableValues"
         @change-page="changePageHandler"
       >
