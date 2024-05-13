@@ -64,7 +64,6 @@ export default {
   data() {
     return {
       date: null,
-      dates: null,
     };
   },
   computed: {
@@ -77,13 +76,7 @@ export default {
   },
   methods: {
     handleDateChange() {
-      console.log({ date: this.date, dates: this.dates });
       this.$emit("date-handler", this.date);
-
-      // this.$emit(
-      //   "date-handler",
-      //   this.selectionMode === "single" ? this.date : this.dates,
-      // );
     },
   },
 };
