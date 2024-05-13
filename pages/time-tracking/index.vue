@@ -18,7 +18,7 @@
       <BaseTable
         :columns="columns"
         :custom-filters="filters"
-        :loading="tableLoading"
+        :loading="loading"
         :nodes="nodes"
         :total-pages="totalPages"
         has-action
@@ -55,7 +55,7 @@
             :data="{ slotData }"
             :icon="'pi-search'"
             tooltip-text="Ver detalhes do dia"
-            @action-handler="() => {}"
+            @action-handler="goToClockClosingDetails"
           /> </template
       ></BaseTable>
     </section>
@@ -67,11 +67,12 @@ import { mapActions, mapState } from "pinia";
 import { FilterMatchMode } from "primevue/api";
 import { PageState } from "primevue/paginator";
 import { QueryOpenClockClosings } from "~/interfaces/time-tracking/time-tracking.interface";
+import { useTimeTrackingStore } from "~/stores/time-tracking.store";
 
 export default {
   data() {
     return {
-      tableLoading: false,
+      loading: false,
       totalPages: 0,
       currentPage: 1,
       columns: [
@@ -140,12 +141,15 @@ export default {
   },
   methods: {
     ...mapActions(useTimeTrackingStore, ["getOpenClockClosing"]),
+    goToClockClosingDetails(data) {
+      this.$router.push(`/time-tracking/${data.id}`);
+    },
     async changePageHandler(currentPage: PageState) {
       this.queries.page = currentPage.page + 1;
       await this.getTableValues(this.queries);
     },
     async getTableValues(queryParams: QueryOpenClockClosings) {
-      this.tableLoading = true;
+      this.loading = true;
       try {
         await this.getOpenClockClosing(queryParams);
 
@@ -159,7 +163,7 @@ export default {
           life: 4000,
         });
       } finally {
-        this.tableLoading = false;
+        this.loading = false;
       }
     },
   },
