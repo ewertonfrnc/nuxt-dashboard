@@ -3,6 +3,7 @@ import { homeMock } from "./home.mock";
 import { timeSheet } from "./time-sheet.mock";
 import { employeesMock } from "./employees.mock";
 import { employeeMock } from "./employee.mock";
+import { timeTrackingMock } from "./time-tracking.mock";
 
 const mockTypes = {
   auth: authMock,
@@ -10,6 +11,7 @@ const mockTypes = {
   timeSheet,
   employees: employeesMock,
   employee: employeeMock,
+  timeTracking: timeTrackingMock,
 };
 
 export const getResponse = (
