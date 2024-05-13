@@ -42,7 +42,12 @@ class TimeTrackingService {
 
   requestSignature(clock: ClockClosing) {
     if (MOCKED) return getResponse("requestSignature", "timeTracking");
-    return api().post(`/time-tracking/signature/${clock.id}`);
+    return api().post(`/time-tracking/signa${clock.id}`, clock);
+  }
+
+  requestSignatureBatch(clockId: string, clocks: ClockClosing[]) {
+    if (MOCKED) return getResponse("requestSignatureBatch", "timeTracking");
+    return api().post(`/time-tracking/signa${clockId}`, clocks);
   }
 }
 

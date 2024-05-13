@@ -88,6 +88,21 @@
           />
         </template>
       </BaseTable>
+
+      <div class="container__footer">
+        <span class="subtitle__primary highlight">
+          {{ pendingCount }} colaboradores não assinaram
+        </span>
+
+        <div>
+          <BaseButton
+            class="btn__primary"
+            icon="pi pi-send"
+            label="Reenviar para assinar"
+            @click="sendBatch"
+          />
+        </div>
+      </div>
     </div>
   </BaseCard>
 </template>
@@ -131,7 +146,7 @@ export default {
           hasFilter: true,
         },
       ],
-      nodes: [],
+      nodes: [] as ClockClosing[],
       queries: {
         page: 1,
         limit: 2,
@@ -158,10 +173,16 @@ export default {
         },
       },
       actionLoading: false,
+      pendingSignatures: [] as ClockClosing[],
+      pendingCount: 0,
     };
   },
   computed: {
-    ...mapState(useTimeTrackingStore, ["total", "employees"]),
+    ...mapState(useTimeTrackingStore, [
+      "total",
+      "employees",
+      "pendingSignatureCount",
+    ]),
   },
   async mounted() {
     await this.getTableValues(this.queries);
@@ -169,8 +190,25 @@ export default {
   methods: {
     ...mapActions(useTimeTrackingStore, [
       "getClockClosingDetails",
+      "requestSignatureBatch",
       "requestSignature",
     ]),
+    async sendBatch() {
+      this.pendingSignatures = this.employees.filter(
+        (employee) => employee.pendingSignature,
+      );
+      try {
+        await this.requestSignatureBatch(
+          String(this.$route.params.id),
+          this.pendingSignatures,
+        );
+        this.getToast("success");
+      } catch (err) {
+        this.getToast("error");
+      } finally {
+        this.actionLoading = false;
+      }
+    },
     async sendToSignature(data: ClockClosing) {
       this.actionLoading = true;
       try {
@@ -194,6 +232,7 @@ export default {
           queryParams,
         );
 
+        this.pendingCount = this.pendingSignatureCount;
         this.nodes = this.employees;
         this.totalPages = this.total;
       } catch (error) {
@@ -208,6 +247,9 @@ export default {
 
 <style lang="scss">
 .container {
+  display: grid;
+  gap: 24px;
+
   &__filter {
     display: flex;
     align-items: center;
@@ -216,6 +258,13 @@ export default {
     &--label {
       width: 343px;
     }
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 24px;
   }
 }
 </style>
