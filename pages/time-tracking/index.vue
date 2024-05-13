@@ -66,10 +66,17 @@
 import { mapActions, mapState } from "pinia";
 import { FilterMatchMode } from "primevue/api";
 import { PageState } from "primevue/paginator";
-import { QueryOpenClockClosings } from "~/interfaces/time-tracking/time-tracking.interface";
+import {
+  QueryOpenClockClosings,
+  ClockClosing,
+} from "~/interfaces/time-tracking/time-tracking.interface";
 import { useTimeTrackingStore } from "~/stores/time-tracking.store";
 
 export default {
+  setup() {
+    const { getToast } = usePVToast();
+    return { getToast };
+  },
   data() {
     return {
       loading: false,
@@ -141,7 +148,7 @@ export default {
   },
   methods: {
     ...mapActions(useTimeTrackingStore, ["getOpenClockClosing"]),
-    goToClockClosingDetails(data) {
+    goToClockClosingDetails(data: ClockClosing) {
       this.$router.push(`/time-tracking/${data.id}`);
     },
     async changePageHandler(currentPage: PageState) {
@@ -156,12 +163,7 @@ export default {
         this.nodes = this.clocks;
         this.totalPages = this.total;
       } catch (error) {
-        this.$toast.add({
-          severity: "error",
-          summary: "Algo deu errado!",
-          detail: "Tente novamente mais tarde.",
-          life: 4000,
-        });
+        this.getToast("error");
       } finally {
         this.loading = false;
       }

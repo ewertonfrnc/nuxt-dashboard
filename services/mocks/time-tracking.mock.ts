@@ -46,4 +46,27 @@ export const timeTrackingMock = {
       },
     ],
   },
+  getClockClosingDetails: {
+    total: 4,
+    pendingSignatureCount: 2,
+    employees: [
+      {
+        id: 1,
+        name: "Ana Maria Carla",
+        role: "Analista de SEO",
+        status: "Aguardando assinatura",
+        pendingSignature: true,
+        pdfUrl: "https://www.clickdimensions.com/links/TestPDFfile.pdf",
+      },
+      {
+        id: 2,
+        name: "João Felipe Cardoso",
+        role: "Analista de SEO",
+        status: "Assinado",
+        pendingSignature: false,
+        pdfUrl: "https://www.clickdimensions.com/links/TestPDFfile.pdf",
+      },
+    ],
+  },
+  requestSignature: { message: "success" },
 };
