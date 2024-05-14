@@ -1,7 +1,5 @@
 import yup from "~/utils/validator";
-
-const onlyNumRegex = /^[0-9]+$/;
-const onlyNumMsg = "Insira um número válido";
+import { onlyNumRegex, onlyNumMsg } from "~/utils/schemas/regex";
 
 export const clocksSettingsSchema = yup.object({
   extra1: yup

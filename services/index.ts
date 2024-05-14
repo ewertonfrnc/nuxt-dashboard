@@ -5,6 +5,7 @@ import employeesService from "./employees.service";
 import employeeService from "./employee.service";
 import timeTrackingService from "./time-tracking.service";
 import clockConfigService from "./settings/clock-config.service";
+import companyService from "./settings/company.service";
 
 export {
   authService,
@@ -14,4 +15,5 @@ export {
   employeeService,
   timeTrackingService,
   clockConfigService,
+  companyService,
 };

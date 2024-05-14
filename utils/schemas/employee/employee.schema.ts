@@ -1,11 +1,12 @@
+import {
+  dateRegex,
+  phoneRegex,
+  cepRegex,
+  PISRegex,
+  CTPSRegex,
+  noNumRegex,
+} from "../regex";
 import yup from "~/utils/validator";
-
-const dateRegex = /^(?!([0-9])\1\/([0-9])\2\/([0-9])\3)\d{2}\/\d{2}\/\d{4}$/;
-const phoneRegex = /^(?!.*_).*$/;
-const cepRegex = /^(?!(\d)\1{4}-?(\d)\2{2})\d{5}-?\d{3}$/;
-const PISRegex = /^(?!(\d)\1{2}\.\1{5}\.\1{2}-\1)\d{3}\.\d{5}\.\d{2}-\d$/;
-const CTPSRegex = /^(?!(\d)\1{4}-\1{4}-\1{2}$)\d{5}-\d{4}-[A-Z]{2}$/;
-const noNumRegex = /^[^\d]*$/;
 
 export const clockSchema = yup.object({
   checkin: yup.string().required().min(3).trim(),
