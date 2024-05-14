@@ -18,6 +18,7 @@
             class="btn__danger"
             icon="pi pi-times"
             label="Cancelar fechamento"
+            @click="$router.push('/time-tracking')"
           />
         </div>
       </div>
@@ -29,7 +30,7 @@
             <BaseDatePicker
               inline-icon
               :selection-mode="'range'"
-              @date-handler="() => {}"
+              @date-handler="datePickerHandler"
             />
           </div>
         </label>
@@ -46,6 +47,7 @@
         :loading="loading"
         :nodes="nodes"
         :total-pages="totalPages"
+        :download-disabled="!!pendingCount"
         has-action
         header-shown
         download
@@ -55,9 +57,7 @@
         <template #body-cell="{ data, field }">
           <BaseTag
             v-if="field === 'status'"
-            :severity="
-              data[field] === 'Aguardando assinatura' ? 'Warning' : 'Success'
-            "
+            :severity="data[field] === 'Assinado' ? 'Success' : 'Warning'"
             :value="data[field]"
           />
 
@@ -90,7 +90,7 @@
         </template>
       </BaseTable>
 
-      <div class="container__footer">
+      <div v-if="pendingCount" class="container__footer">
         <span class="subtitle__primary highlight">
           {{ pendingCount }} colaboradores não assinaram
         </span>
@@ -116,6 +116,7 @@ import {
   QueryClockClosingDetails,
   ClockClosing,
 } from "~/interfaces/time-tracking/time-tracking.interface";
+import { dateFormatters } from "~/utils/formatters";
 
 export default {
   setup() {
@@ -221,6 +222,10 @@ export default {
         this.actionLoading = false;
       }
     },
+    datePickerHandler(date: Date) {
+      const formattedDate = dateFormatters.formatDate(date);
+      console.log(formattedDate);
+    },
     async changePageHandler(currentPage: PageState) {
       this.queries.page = currentPage.page + 1;
       await this.getTableValues(this.queries);
@@ -246,11 +251,8 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .container {
-  display: grid;
-  gap: 24px;
-
   &__filter {
     display: flex;
     align-items: center;
@@ -259,13 +261,6 @@ export default {
     &--label {
       width: 343px;
     }
-  }
-
-  &__footer {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 24px;
   }
 }
 </style>

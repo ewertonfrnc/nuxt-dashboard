@@ -11,6 +11,7 @@
             class="btn__primary"
             icon="pi pi-plus"
             label="Novo fechamento"
+            @click="$router.push('time-tracking/new')"
           />
         </div>
       </div>

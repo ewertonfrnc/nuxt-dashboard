@@ -4,6 +4,7 @@ import {
   ClockClosing,
   QueryClockClosingDetails,
   QueryOpenClockClosings,
+  TimeTrackingPeriod,
 } from "~/interfaces/time-tracking/time-tracking.interface";
 
 class TimeTrackingService {
@@ -48,6 +49,11 @@ class TimeTrackingService {
   requestSignatureBatch(clockId: string, clocks: ClockClosing[]) {
     if (MOCKED) return getResponse("requestSignatureBatch", "timeTracking");
     return api().post(`/time-tracking/signa${clockId}`, clocks);
+  }
+
+  generateDocumentAndSend(period: TimeTrackingPeriod) {
+    if (MOCKED) return getResponse("generateDocumentAndSend", "timeTracking");
+    return api().post("/time-tracking", period);
   }
 }
 

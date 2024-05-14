@@ -48,22 +48,22 @@ export const timeTrackingMock = {
   },
   getClockClosingDetails: {
     total: 4,
-    pendingSignatureCount: 1,
+    pendingSignatureCount: 0,
     employees: [
       {
         id: 1,
         name: "Ana Maria Carla",
         role: "Analista de SEO",
-        status: "Aguardando assinatura",
-        pendingSignature: true,
+        status: "Assinado",
+        pendingSignature: false,
         pdfUrl: "https://www.clickdimensions.com/links/TestPDFfile.pdf",
       },
       {
         id: 3,
         name: "Carla Santos Pereira",
         role: "Analista de SEO",
-        status: "Aguardando assinatura",
-        pendingSignature: true,
+        status: "Assinado",
+        pendingSignature: false,
         pdfUrl: "https://www.clickdimensions.com/links/TestPDFfile.pdf",
       },
       {
@@ -78,4 +78,5 @@ export const timeTrackingMock = {
   },
   requestSignature: { message: "success" },
   requestSignatureBatch: { message: "success" },
+  generateDocumentAndSend: { closingId: "ITERA5809" },
 };

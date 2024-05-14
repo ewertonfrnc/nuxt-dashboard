@@ -27,3 +27,8 @@ export type ClockClosing = {
   pendingSignature: boolean;
   pdfUrl: string;
 };
+
+export type TimeTrackingPeriod = {
+  start: string;
+  final: string;
+};

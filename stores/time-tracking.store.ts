@@ -3,6 +3,7 @@ import {
   ClockClosing,
   QueryClockClosingDetails,
   QueryOpenClockClosings,
+  TimeTrackingPeriod,
 } from "~/interfaces/time-tracking/time-tracking.interface";
 import { timeTrackingService } from "~/services";
 
@@ -60,6 +61,17 @@ export const useTimeTrackingStore = defineStore("time-tracking", {
     async requestSignatureBatch(clockId: string, clocks: ClockClosing[]) {
       try {
         await timeTrackingService.requestSignatureBatch(clockId, clocks);
+      } catch (error) {
+        return error;
+      }
+    },
+    async generateDocumentAndSend(period: TimeTrackingPeriod) {
+      try {
+        const { closingId } =
+          await timeTrackingService.generateDocumentAndSend(period);
+        console.log(closingId);
+
+        return closingId;
       } catch (error) {
         return error;
       }

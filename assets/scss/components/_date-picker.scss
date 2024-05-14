@@ -148,6 +148,18 @@
     border: none;
   }
 
+  &__transparent {
+    input {
+      border-right-color: transparent;
+    }
+    button {
+      background-color: transparent;
+      color: map-get($color-scheme-dark, "$color-neutral-neutral-1");
+      border: $border-dark;
+      border-left-color: transparent;
+    }
+  }
+
   &__panel {
     background-color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
     box-shadow: $box-shadow-calendar-panel-light;
