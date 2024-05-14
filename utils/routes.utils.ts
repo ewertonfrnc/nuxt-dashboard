@@ -61,7 +61,7 @@ export const routes: RouteItem[] = [
       {
         label: "Parâmetros de ponto",
         icon: "pi pi-clock",
-        route: "/clock-config",
+        route: "/settings/clock-config",
       },
     ],
   },

@@ -58,9 +58,6 @@ export default {
       home: { icon: "pi pi-home", route: "/" },
     };
   },
-  mounted() {
-    this.handleNavButton();
-  },
   computed: {
     ...mapState(useAuthStore, ["user"]),
     items() {

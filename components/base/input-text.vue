@@ -20,7 +20,7 @@
   }}</small>
 </template>
 
-<script>
+<script lang="ts">
 import { useField } from "vee-validate";
 
 export default {

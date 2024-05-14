@@ -4,6 +4,7 @@ import { timeSheet } from "./time-sheet.mock";
 import { employeesMock } from "./employees.mock";
 import { employeeMock } from "./employee.mock";
 import { timeTrackingMock } from "./time-tracking.mock";
+import { clockConfigMock } from "./clock-config.mock";
 
 const mockTypes = {
   auth: authMock,
@@ -12,6 +13,7 @@ const mockTypes = {
   employees: employeesMock,
   employee: employeeMock,
   timeTracking: timeTrackingMock,
+  clockConfig: clockConfigMock,
 };
 
 export const getResponse = (
