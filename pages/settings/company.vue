@@ -7,9 +7,6 @@
       as="div"
       class="form-container"
     >
-      <!--      <pre>values: {{ values }}</pre>-->
-      <!--      <pre>meta: {{ meta }}</pre>-->
-
       <div class="form-container__header">
         <h2 class="heading__secondary">Empresa</h2>
 
@@ -44,7 +41,7 @@
 
       <form class="form" @change="handleChange(values, errors)">
         <div class="'form__editing fadein animation-duration-500'">
-          <div class="form__email-phone">
+          <div class="form__company-name">
             <div class="form__control">
               <label class="form__label caption__primary">
                 Nome da empresa
@@ -304,7 +301,7 @@ export default {
     },
     handleChange(values: CompanyInfo, errors: Object) {
       if (values.cep !== this.company.cep) this.searchAddres(values);
-      this.validForm = !!checkForErrors(errors);
+      this.validForm = checkForErrors(errors);
     },
   },
 };
@@ -340,7 +337,7 @@ export default {
     margin-top: 24px;
   }
 
-  &__email-phone,
+  &__company-name,
   &__state-city,
   &__address,
   &__additional {
