@@ -44,17 +44,17 @@ export const routes: RouteItem[] = [
           {
             label: "Colaboradores",
             icon: "pi pi-users",
-            route: "/register-employees",
+            route: "/settings/register-employees",
           },
           {
             label: "Cargos",
             icon: "pi pi-id-card",
-            route: "/job-positions",
+            route: "/settings/job-positions",
           },
           {
             label: "Departamentos",
             icon: "pi pi-sitemap",
-            route: "/departments",
+            route: "/settings/departments",
           },
         ],
       },
