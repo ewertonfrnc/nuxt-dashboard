@@ -3,6 +3,8 @@ export type FilterOption = {
   code: string;
 };
 
+export type FilterQueries = { value: string; matchMode: string };
+
 export type Filter = {
   field: string;
   value: null;
@@ -21,5 +23,4 @@ export type TableColumn = {
   header: string;
   sortable: boolean;
   hasFilter: boolean;
-  frozen: boolean;
 };

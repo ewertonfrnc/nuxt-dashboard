@@ -5,7 +5,9 @@
     <section>
       <label class="caption__primary filter__label">
         <span>Data de exibição</span>
-        <BaseDatePicker @date-handler="datePickerHandler" />
+        <div class="filter__calendar">
+          <BaseDatePicker @date-handler="datePickerHandler" />
+        </div>
       </label>
 
       <BaseTable
@@ -185,6 +187,10 @@ section {
     flex-direction: column;
     gap: 0.5rem;
     margin-bottom: 2rem;
+  }
+
+  &__calendar {
+    width: 300px;
   }
 }
 </style>

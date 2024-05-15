@@ -1,10 +1,35 @@
+.calendar-wrapper {
+  width: 100%;
+  position: relative;
+}
+
 .date-picker {
-  width: 30rem;
+  width: 100%;
+  border-radius: $input-border-radius;
+
+  &__placeholder {
+    color: map-get($color-scheme-light, "$color-neutral-neutral-2");
+    font-size: $font-size-body-primary;
+    font-family: inherit;
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translate(0, -50%);
+  }
+
+  &:has(input:focus) {
+    outline: 2px solid map-get($color-scheme-light, "$color-brand-primary-0");
+
+    .date-picker__placeholder {
+      display: none;
+    }
+  }
 
   &__input {
     @extend .input__field;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
+    outline: none;
   }
 
   button {
@@ -15,6 +40,18 @@
     background-color: map-get($color-scheme-light, "$color-brand-primary-0");
     color: map-get($color-scheme-light, "$color-neutral-neutral-7");
     border: none;
+  }
+
+  &__transparent {
+    input {
+      border-right-color: transparent;
+    }
+    button {
+      background-color: transparent;
+      color: map-get($color-scheme-light, "$color-neutral-neutral-1");
+      border: $border-light;
+      border-left-color: transparent;
+    }
   }
 
   &__panel {
