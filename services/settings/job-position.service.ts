@@ -1,6 +1,9 @@
 import { getResponse } from "../mocks";
 import api, { MOCKED } from "~/services/api.service";
-import { QueryJobPositions } from "~/interfaces/settings/job-position.interface";
+import {
+  JobRole,
+  QueryJobPositions,
+} from "~/interfaces/settings/job-position.interface";
 
 class CompanyService {
   getJobPositions(queries: QueryJobPositions) {
@@ -19,9 +22,9 @@ class CompanyService {
     });
   }
 
-  saveJobPositions() {
+  saveJobPositions(role: JobRole) {
     if (MOCKED) return getResponse("saveJobPositions", "jobs");
-    return api().post("/settings/job-positions");
+    return api().post("/settings/job-positions", role);
   }
 }
 

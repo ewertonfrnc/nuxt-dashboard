@@ -14,3 +14,8 @@ export type QueryJobPositions = {
   employeesCount: FilterQueries;
   cbo: FilterQueries;
 };
+
+export type JobRole = {
+  roleName: string;
+  cbo: string;
+};

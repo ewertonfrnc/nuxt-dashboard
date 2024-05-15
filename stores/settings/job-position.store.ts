@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { jobPositionService } from "~/services";
 import {
   JobPosition,
+  JobRole,
   QueryJobPositions,
 } from "~/interfaces/settings/job-position.interface";
 
@@ -19,7 +20,7 @@ export const useJobPositionStore = defineStore("job-position", {
     };
   },
   actions: {
-    async getCompanyInfo(queries: QueryJobPositions) {
+    async getJobPositions(queries: QueryJobPositions) {
       try {
         const { roles, total } =
           await jobPositionService.getJobPositions(queries);
@@ -29,10 +30,12 @@ export const useJobPositionStore = defineStore("job-position", {
         return error as Error;
       }
     },
-    async saveCompanyInfo() {
+    async saveJobPositions(role: JobRole) {
       try {
-        const { roles } = await jobPositionService.saveJobPositions();
+        const { roles, total } =
+          await jobPositionService.saveJobPositions(role);
         this.roles = roles;
+        this.total = total;
       } catch (error) {
         return error as Error;
       }

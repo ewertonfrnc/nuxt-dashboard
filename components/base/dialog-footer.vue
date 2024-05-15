@@ -5,16 +5,22 @@
   <div class="btn-group mt-4">
     <BaseButton
       :disabled="loading"
-      class="btn__danger--outlined fadein animation-duration-500"
-      icon="pi pi-times"
+      :class="[
+        'fadein animation-duration-500',
+        primaryColors ? 'btn__primary--outlined' : 'btn__danger--outlined',
+      ]"
+      :icon="showIcons ? 'pi pi-times' : ''"
       label="Cancelar"
       @click="buttonHandler('left')"
     />
     <BaseButton
       :loading="loading"
-      :disabled="loading"
-      class="btn__secondary fadein animation-duration-500"
-      :icon="confirmIcon"
+      :disabled="loading || disabled"
+      :class="[
+        'fadein animation-duration-500',
+        primaryColors ? 'btn__primary' : 'btn__secondary',
+      ]"
+      :icon="showIcons ? confirmIcon : ''"
       :label="confirmlabel"
       @click="buttonHandler('right')"
     />
@@ -24,6 +30,9 @@
 <script lang="ts">
 export default {
   props: {
+    primaryColors: { type: Boolean, default: false, required: false },
+    showIcons: { type: Boolean, default: true, required: false },
+    disabled: { type: Boolean, default: false, required: false },
     loading: { type: Boolean, default: false, required: true },
     showErrorMessage: { type: Boolean, default: false, required: false },
     message: { type: String, default: "", required: true },
