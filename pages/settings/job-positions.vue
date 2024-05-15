@@ -117,9 +117,11 @@
       :toggle-dialog="toggleDeleteDialogVisibility"
     >
       <div class="delete-dialog">
-        <p class="body__secondary">Insira o nome do cargo a ser criado</p>
+        <p class="body__secondary">
+          Um cargo só pode ser excluído se não houverem colaboradores vinculados
+          a ele. Você pode editá-lo caso seja necessário alterar o nome.
+        </p>
 
-        <pre>{{ selectedItem }}</pre>
         <div class="group-btn">
           <template v-if="selectedItem.employeesCount">
             <BaseButton
@@ -143,7 +145,7 @@
             <BaseButton
               class="btn__primary"
               label="Excluir"
-              @click="toggleDeleteDialogVisibility"
+              @click="deleteJobRole"
             />
           </template>
         </div>
@@ -362,5 +364,8 @@ export default {
 
 .delete-dialog {
   width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 </style>
