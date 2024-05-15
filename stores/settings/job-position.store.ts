@@ -40,5 +40,12 @@ export const useJobPositionStore = defineStore("job-position", {
         return error as Error;
       }
     },
+    async deleteJobPosition(role: JobPosition) {
+      try {
+        await jobPositionService.deleteJobPosition(role);
+      } catch (err) {
+        return err as Error;
+      }
+    },
   },
 });

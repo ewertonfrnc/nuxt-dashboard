@@ -26,6 +26,11 @@ class CompanyService {
     if (MOCKED) return getResponse("saveJobPositions", "jobs");
     return api().post("/settings/job-positions", role);
   }
+
+  deleteJobPosition(role: JobRole) {
+    if (MOCKED) return getResponse("deleteJobPosition", "jobs");
+    return api().post("/settings/job-positions", role);
+  }
 }
 
 export default new CompanyService();

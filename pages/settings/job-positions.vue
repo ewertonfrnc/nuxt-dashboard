@@ -45,10 +45,10 @@
           />
 
           <BaseTableAction
-            icon="pi-trash"
+            icon="pi-trash danger"
             tooltip-text="Excluir"
             :data="{ slotData }"
-            @action-handler="logSelectedItem"
+            @action-handler="handleDeleteDialog"
           />
         </template>
       </BaseTable>
@@ -68,14 +68,10 @@
           :initial-values="newRole"
           :validation-schema="formSchema"
         >
-          <pre>{{ values }}</pre>
-          <!--          <pre>{{ meta }}</pre>-->
-
           <form
             class="add-dialog__form-container"
             @change="handleChange(values, meta)"
           >
-            <pre>meta: {{ meta }}</pre>
             <div class="add-dialog__form">
               <label>
                 <span class="caption__primary">Nome do cargo</span>
@@ -99,19 +95,58 @@
               <BaseButton
                 class="btn__primary--outlined"
                 label="Cancelar"
-                :disabled="addRoleLoadingDialog"
-                @click="toggleDialog"
+                :disabled="dialogLoading"
+                @click="toggleAddDialog"
               />
               <BaseButton
                 class="btn__primary"
                 label="Cadastrar"
-                :loading="addRoleLoadingDialog"
-                :disabled="(!meta.valid && meta.dirty) || addRoleLoadingDialog"
+                :loading="dialogLoading"
+                :disabled="(!meta.valid && meta.dirty) || dialogLoading"
                 @click="saveJobRole"
               />
             </div>
           </form>
         </VeeForm>
+      </div>
+    </BaseDialog>
+
+    <BaseDialog
+      :is-visible="isDeleteDialogVisible"
+      title="Excluir cargo"
+      :toggle-dialog="toggleDeleteDialogVisibility"
+    >
+      <div class="delete-dialog">
+        <p class="body__secondary">Insira o nome do cargo a ser criado</p>
+
+        <pre>{{ selectedItem }}</pre>
+        <div class="group-btn">
+          <template v-if="selectedItem.employeesCount">
+            <BaseButton
+              class="btn__primary--outlined"
+              label="Editar cargo"
+              @click="handleEditing(selectedItem)"
+            />
+            <BaseButton
+              class="btn__primary"
+              label="Entendi"
+              @click="toggleDeleteDialogVisibility"
+            />
+          </template>
+
+          <template v-else>
+            <BaseButton
+              class="btn__primary--outlined"
+              label="Cancelar"
+              @click="toggleDeleteDialogVisibility"
+            />
+            <BaseButton
+              class="btn__primary"
+              label="Excluir"
+              @click="toggleDeleteDialogVisibility"
+            />
+          </template>
+        </div>
       </div>
     </BaseDialog>
   </BaseCard>
@@ -138,10 +173,17 @@ export default {
       toggleVisibility: toggleAddDialogVisibility,
     } = useToggle();
 
+    const {
+      isVisible: isDeleteDialogVisible,
+      toggleVisibility: toggleDeleteDialogVisibility,
+    } = useToggle();
+
     return {
       getToast,
       isAddDialogVisible,
       toggleAddDialogVisibility,
+      isDeleteDialogVisible,
+      toggleDeleteDialogVisibility,
     };
   },
   data() {
@@ -196,12 +238,10 @@ export default {
         },
       },
 
-      addRoleLoadingDialog: false,
+      dialogLoading: false,
       validForm: false,
-      newRole: {
-        roleName: "",
-        cbo: "",
-      },
+      newRole: { roleName: "", cbo: "" },
+      selectedItem: {} as JobPosition,
     };
   },
   computed: {
@@ -214,9 +254,13 @@ export default {
     this.getTableValues(this.queries);
   },
   methods: {
-    ...mapActions(useJobPositionStore, ["getJobPositions", "saveJobPositions"]),
+    ...mapActions(useJobPositionStore, [
+      "getJobPositions",
+      "saveJobPositions",
+      "deleteJobPosition",
+    ]),
     // Add new role dialog
-    toggleDialog() {
+    toggleAddDialog() {
       this.toggleAddDialogVisibility();
       this.newRole = { roleName: "", cbo: "" };
     },
@@ -227,7 +271,7 @@ export default {
     saveJobRole() {
       if (!this.newRole.roleName) return;
 
-      this.addRoleLoadingDialog = true;
+      this.dialogLoading = true;
 
       setTimeout(() => {
         this.saveJobPositions(this.newRole)
@@ -237,10 +281,29 @@ export default {
             this.getToast("success");
           })
           .catch(() => this.getToast("error"))
-          .finally(() => this.toggleDialog());
+          .finally(() => this.toggleAddDialog());
 
-        this.addRoleLoadingDialog = false;
+        this.dialogLoading = false;
       }, 1000);
+    },
+    // Delete dialog
+    handleEditing(itemToEdit: JobPosition) {
+      this.toggleDeleteDialogVisibility();
+      this.logSelectedItem(itemToEdit);
+    },
+    handleDeleteDialog(itemToDelete: JobPosition) {
+      this.toggleDeleteDialogVisibility();
+      this.selectedItem = itemToDelete;
+    },
+    deleteJobRole() {
+      this.dialogLoading = true;
+
+      this.deleteJobPosition(this.selectedItem)
+        .then(() => this.getToast("success"))
+        .catch(() => this.getToast("error"))
+        .finally(() => this.toggleDeleteDialogVisibility());
+
+      this.dialogLoading = false;
     },
     // Table
     logSelectedItem(data: JobPosition) {
@@ -295,5 +358,9 @@ export default {
       gap: 16px;
     }
   }
+}
+
+.delete-dialog {
+  width: 400px;
 }
 </style>

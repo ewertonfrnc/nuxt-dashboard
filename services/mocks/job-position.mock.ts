@@ -4,7 +4,7 @@ export const jobPositionMock = {
     roles: [
       {
         role: "Não definido",
-        employeesCount: 3,
+        employeesCount: 0,
         cbo: "7122-05",
       },
       {
@@ -24,7 +24,7 @@ export const jobPositionMock = {
     roles: [
       {
         role: "Não definido",
-        employeesCount: 3,
+        employeesCount: 0,
         cbo: "7122-05",
       },
       {
@@ -44,4 +44,5 @@ export const jobPositionMock = {
       },
     ],
   },
+  deleteJobPosition: { message: "success" },
 };
