@@ -56,6 +56,11 @@ export const routes: RouteItem[] = [
             icon: "pi pi-sitemap",
             route: "/settings/departments",
           },
+          {
+            label: "Turnos",
+            icon: "pi pi-calendar",
+            route: "/settings/shifts",
+          },
         ],
       },
       {
