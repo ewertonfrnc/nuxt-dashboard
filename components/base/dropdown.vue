@@ -23,7 +23,9 @@
       <i class="pi pi-chevron-down caption__primary" />
     </template>
 
-    <template #option="{ option }">{{ option }}</template>
+    <template #option="{ option }">
+      <span class="body__primary">{{ option }}</span>
+    </template>
   </Dropdown>
 
   <small class="dropdown__error caption__primary">{{
