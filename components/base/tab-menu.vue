@@ -1,17 +1,22 @@
 <template>
   <TabMenu
     :model="items"
+    :active-index="currentTab"
     :pt="{
       root: 'tab-list',
-      inkbar: 'tab-list__inkbar',
+      menu: 'tab-list__menu',
+      menuitem(options) {
+        return `tab-list__item ${
+          options.context.index === options.state.d_activeIndex &&
+          'tab-list__item--active'
+        }`;
+      },
     }"
     @tab-change="handleTabChange"
   >
     <template #item="{ item }">
-      <div class="tab-list__item">
-        <i :class="item.icon"></i>
-        <p class="subtitle__primary">{{ item.label }}</p>
-      </div>
+      <i :class="item.icon"></i>
+      <p class="subtitle__primary">{{ item.label }}</p>
     </template>
   </TabMenu>
 
@@ -33,9 +38,16 @@ export default {
       currentTab: 0,
     };
   },
+  mounted() {
+    this.currentTab = Number(sessionStorage.getItem("current-tab"));
+  },
+  beforeUnmount() {
+    sessionStorage.removeItem("current-tab");
+  },
   methods: {
     handleTabChange(event: TabMenuChangeEvent) {
       this.currentTab = event.index;
+      sessionStorage.setItem("current-tab", String(this.currentTab));
     },
   },
 };

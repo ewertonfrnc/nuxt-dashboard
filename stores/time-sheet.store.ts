@@ -5,6 +5,7 @@ import {
   Request,
   AllClocksParams,
 } from "~/interfaces/time-sheet/time-sheet.interface";
+import { WorkLog } from "~/interfaces/employee/employee.interface";
 
 type TimeSheetstate = {
   userPendingRequests: User | null;
@@ -39,7 +40,7 @@ export const useTimeSheetStore = defineStore("time-sheet", {
         return err as Error;
       }
     },
-    async updateRequestsApproval(userId: number, updatedRequests: Request[]) {
+    async updateRequestsApproval(userId: number, updatedRequests: WorkLog[]) {
       try {
         await timeSheetService.updatePendingAdjustments(
           userId,

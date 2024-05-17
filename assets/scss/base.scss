@@ -84,3 +84,13 @@ hr {
   background: map-get($color-scheme-dark, "$color-neutral-neutral-1");
   color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
 }
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}

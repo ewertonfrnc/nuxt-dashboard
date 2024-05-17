@@ -8,3 +8,46 @@
 .dark-mode .highlight {
   color: map-get($color-scheme-dark, "$color-feedback-warning-4");
 }
+
+.form-container {
+  position: relative;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+
+    @include respond(phone) {
+      align-items: flex-start;
+      flex-direction: column;
+      padding-bottom: 10px;
+      width: 100%;
+      z-index: 2;
+      position: sticky;
+      top: -20px;
+      background-color: map-get(
+        $color-scheme-light,
+        "$color-neutral-neutral-7"
+      );
+    }
+
+    &--btns {
+      display: flex;
+      gap: 8px;
+
+      button {
+        width: max-content;
+      }
+
+      @include respond(phone) {
+        width: 100%;
+        flex-direction: column;
+
+        button {
+          width: 100%;
+        }
+      }
+    }
+  }
+}

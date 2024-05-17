@@ -1,6 +1,10 @@
 .toast-root {
   width: 40rem;
   top: 7rem !important;
+
+  @include respond(phone) {
+    width: 30rem;
+  }
 }
 
 .toast {
@@ -13,6 +17,10 @@
 
   display: flex;
   gap: 1rem;
+
+  @include respond(phone) {
+    width: 30rem;
+  }
 
   &:not(:last-child) {
     margin-bottom: 1rem;

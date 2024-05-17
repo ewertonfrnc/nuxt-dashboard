@@ -5,6 +5,7 @@ import {
   AllClocksParams,
   Request,
 } from "~/interfaces/time-sheet/time-sheet.interface";
+import { WorkLog } from "~/interfaces/employee/employee.interface";
 
 class TimeSheetService {
   fetchPendingAdjustments(params: QueryParams) {
@@ -28,7 +29,7 @@ class TimeSheetService {
     return api().get(`/time-sheet/pending/${userId}`);
   }
 
-  updatePendingAdjustments(userId: number, payload: Request[]) {
+  updatePendingAdjustments(userId: number, payload: WorkLog[]) {
     userId = 1000;
     if (MOCKED) return getResponse("updatePendingAdjustments", "timeSheet");
     return api().put(`/time-sheet/pending/${userId}`, payload);

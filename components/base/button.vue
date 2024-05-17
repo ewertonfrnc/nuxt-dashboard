@@ -1,12 +1,12 @@
 <template>
   <Button
-    :icon="`${icon}`"
     :label="label"
+    :icon="`${icon}`"
     :loading="loading"
+    :type="type"
     :pt="{
       root: 'btn',
     }"
-    :type="type"
   >
     <template #default>
       <i v-if="loading" class="pi pi-spinner btn__icon btn__icon--loading" />

@@ -8,7 +8,7 @@
       :disabled="disabled"
       :readonly="readonly"
       :class="[
-        'input__field',
+        'input__field body__primary',
         (errorMessage || wrongCrendentialsMessage) && 'error',
       ]"
       :placeholder="placeholder"
