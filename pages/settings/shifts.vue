@@ -27,6 +27,7 @@
           icon="pi pi-save"
           label="Salvar alterações"
           :loading="loading"
+          :disabled="!validForm"
           @click.prevent="handleSubmit"
         />
       </div>
@@ -64,6 +65,7 @@ export default {
     return {
       loading: false,
       isEditing: false,
+      validForm: true,
       dayNames: [
         "monday",
         "tuesday",
@@ -91,10 +93,23 @@ export default {
     handleChange(dayObj: SimpleShift) {
       const { day, intervals } = dayObj;
       this.shifts[day].intervals = intervals;
+      this.validForm = true;
     },
 
     handleSubmit() {
-      console.log("submit", this.shifts);
+      console.log("submit");
+      this.dayNames.forEach((day) =>
+        this.shifts[day].intervals.forEach((interval) => {
+          if (!interval.start || !interval.end) this.validForm = false;
+        }),
+      );
+
+      // Object.values(this.shifts).forEach((shift) =>
+      //   console.log(shift.intervals),
+      // );
+
+      if (!this.validForm) return;
+
       this.loading = true;
       setTimeout(() => {
         this.saveShifts(this.shifts)

@@ -40,11 +40,12 @@
                 v-bind="field"
                 class="input__field body__primary"
                 :readonly="!isEditing"
-                @input="handleChange(values, idx)"
+                @input="handleChange(values, idx, errors)"
               />
 
               <small
                 v-for="error in errors"
+                v-if="isEditing"
                 class="caption__secondary input__error"
                 >{{ error }}</small
               >
@@ -57,11 +58,12 @@
                 v-bind="field"
                 class="input__field body__primary"
                 :readonly="!isEditing"
-                @input="handleChange(values, idx)"
+                @input="handleChange(values, idx, errors)"
               />
 
               <small
                 v-for="error in errors"
+                v-if="isEditing"
                 class="caption__secondary input__error"
                 >{{ error }}</small
               >
@@ -99,8 +101,8 @@
 
 <script lang="ts">
 import { shiftSchema } from "~/utils/schemas/settings/shifts.schema";
+import { Interval } from "~/interfaces/settings/shifts.interface";
 
-type Interval = { start: string; end: string };
 export default {
   props: {
     dayOfWeek: { type: String, default: "", required: true },
@@ -112,7 +114,6 @@ export default {
     return {
       day: this.shifts[this.dayOfWeek],
       intervals: this.shifts[this.dayOfWeek].intervals,
-      formFields: {},
       checkinOptions: ["08:00", "09:00", "10:00", "11:00", "12:00"],
       checkoutOptions: ["13:00", "14:00", "15:00", "16:00", "17:00"],
     };
@@ -129,13 +130,11 @@ export default {
     },
     removeField(index: number) {
       this.intervals.splice(index, 1);
-      console.log(this.intervals);
     },
-    handleChange(values, intervalIdx: number) {
+    handleChange(values: Interval, intervalIdx: number) {
       if (intervalIdx < this.intervals.length) {
         this.intervals[intervalIdx] = { ...values };
       } else {
-        // this.intervals.push({ ...values });
         this.intervals.splice(intervalIdx, 0, { ...values });
       }
 
