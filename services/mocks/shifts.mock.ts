@@ -53,4 +53,5 @@ export const shiftsMock = {
       },
     },
   },
+  saveShifts: { message: "succes" },
 };

@@ -17,6 +17,7 @@
           class="btn__danger--outlined"
           icon="pi pi-times"
           label="Cancelar"
+          :disabled="loading"
           @click="cancelEditing"
         />
         <BaseButton
@@ -25,6 +26,7 @@
           class="btn__secondary"
           icon="pi pi-save"
           label="Salvar alterações"
+          :loading="loading"
           @click.prevent="handleSubmit"
         />
       </div>
@@ -53,6 +55,10 @@ import { mapActions, mapState } from "pinia";
 import { useShiftStore } from "~/stores/settings/shifts.store";
 
 export default {
+  setup() {
+    const { getToast } = usePVToast();
+    return { getToast };
+  },
   data() {
     return {
       loading: false,
@@ -77,20 +83,27 @@ export default {
     this.getShifts();
   },
   methods: {
-    ...mapActions(useShiftStore, ["getShifts"]),
+    ...mapActions(useShiftStore, ["getShifts", "saveShifts"]),
     cancelEditing() {
       this.isEditing = false;
     },
     handleChange(dayObj) {
       const { day, intervals } = dayObj;
-      console.log("dayObj", { ...dayObj });
       this.shifts[day].intervals = intervals;
-
-      console.log(`shift`, this.shifts[day]);
     },
 
     handleSubmit() {
-      console.log("submit");
+      console.log("submit", this.shifts);
+      this.loading = true;
+      setTimeout(() => {
+        this.saveShifts(this.shifts)
+          .then(() => this.getToast("success"))
+          .catch(() => this.getToast("error"))
+          .finally(() => {
+            this.loading = false;
+            this.isEditing = false;
+          });
+      }, 1000);
     },
   },
 };
