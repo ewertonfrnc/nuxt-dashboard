@@ -10,6 +10,7 @@ import companyService from "./settings/company.service";
 import clockConfigService from "./settings/clock-config.service";
 import jobPositionService from "~/services/settings/job-position.service";
 import departmentsService from "~/services/settings/departments.service";
+import shiftsService from "~/services/settings/shifts.service";
 
 export {
   authService,
@@ -22,4 +23,5 @@ export {
   companyService,
   jobPositionService,
   departmentsService,
+  shiftsService,
 };
