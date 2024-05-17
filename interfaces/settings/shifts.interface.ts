@@ -9,6 +9,11 @@ export type Shift = {
   intervals: Interval[];
 };
 
+export type SimpleShift = {
+  day: string;
+  intervals: Interval[];
+};
+
 export type WeeklySchedule = {
   monday: Shift;
   tuesday: Shift;

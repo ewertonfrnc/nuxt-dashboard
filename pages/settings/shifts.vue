@@ -53,6 +53,7 @@
 <script lang="ts">
 import { mapActions, mapState } from "pinia";
 import { useShiftStore } from "~/stores/settings/shifts.store";
+import { SimpleShift } from "~/interfaces/settings/shifts.interface";
 
 export default {
   setup() {
@@ -87,7 +88,7 @@ export default {
     cancelEditing() {
       this.isEditing = false;
     },
-    handleChange(dayObj) {
+    handleChange(dayObj: SimpleShift) {
       const { day, intervals } = dayObj;
       this.shifts[day].intervals = intervals;
     },
