@@ -3,7 +3,7 @@ export default {};
 </script>
 
 <template>
-  <div class="card">
+  <div class="card fadein animation-duration-500">
     <slot />
   </div>
 </template>

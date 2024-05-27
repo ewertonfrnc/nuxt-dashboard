@@ -2,7 +2,9 @@
   <Dialog
     :draggable="false"
     :pt="{
-      root: `dialog ${confirmDialog && 'dialog__confirm'}`,
+      root: `dialog ${confirmDialog && 'dialog__confirm'} ${
+        matchScreenSize && 'p-dialog-maximized'
+      }`,
       content: 'overflow-x-hidden',
       mask: 'dialog__mask fadein',
       closeButton: 'dialog__close-btn',
@@ -64,6 +66,10 @@ export default {
     title: { type: String, default: "", required: true },
   },
   emits: ["save"],
+  setup() {
+    const { matchScreenSize } = useWindow("modal");
+    return { matchScreenSize };
+  },
   methods: {
     onSave() {
       this.$emit("save");

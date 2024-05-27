@@ -1,3 +1,5 @@
+import { WorkLog } from "~/interfaces/employee/employee.interface";
+
 type Filter = { value: string; matchMode: string };
 
 export type QueryParams = {
@@ -55,5 +57,5 @@ export type User = {
   role: string;
   currentBalance: string;
   totalRequests: number;
-  requests: Request[];
+  requests: WorkLog[];
 };

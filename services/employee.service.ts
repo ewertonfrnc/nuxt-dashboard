@@ -34,6 +34,46 @@ class EmployeeService {
     return api().get<EmployeeResponse>(`/employee/${employeeId}`);
   }
 
+  updateEmployeeData(
+    employeeId: string,
+    updatedEmployeeData: EmployeePersonalData,
+  ) {
+    if (MOCKED) return getResponse("updateEmployeeData", "employee");
+    return api().put(`/employee/${employeeId}`, updatedEmployeeData);
+  }
+
+  updateEmployeeContact(
+    employeeId: string,
+    updatedEmployeeData: EmployeeContact,
+  ) {
+    if (MOCKED) return getResponse("updateEmployeeContact", "employee");
+    return api().put(`/employee/${employeeId}`, updatedEmployeeData);
+  }
+
+  updateEmployeeWorkInfo(
+    employeeId: string,
+    updatedEmployeeData: EmployeeWorkInfo,
+  ) {
+    if (MOCKED) return getResponse("updateEmployeeWorkInfo", "employee");
+    return api().put(`/employee/${employeeId}`, updatedEmployeeData);
+  }
+
+  updateEmployeeSchool(
+    employeeId: string,
+    updatedEmployeeData: EmployeeSchoolInfo,
+  ) {
+    if (MOCKED) return getResponse("updateEmployeeSchool", "employee");
+    return api().put(`/employee/${employeeId}`, updatedEmployeeData);
+  }
+
+  updateEmployeeDocs(
+    employeeId: string,
+    updatedEmployeeData: EmployeeDocuments,
+  ) {
+    if (MOCKED) return getResponse("updateEmployeeDocs", "employee");
+    return api().put(`/employee/${employeeId}`, updatedEmployeeData);
+  }
+
   getRegisteredClocks(employeeId: string, queryParams: EmployeeQueryParams) {
     const {
       page,
@@ -77,6 +117,11 @@ class EmployeeService {
         status: status?.value || "",
       },
     });
+  }
+
+  searchEmployeeAddres(cep: string) {
+    if (MOCKED) return getResponse("searchEmployeeAddres", "employee");
+    return api().get(`/employee/address/${cep}`);
   }
 
   sendRecoverPasswordEmail(employeeId: string) {

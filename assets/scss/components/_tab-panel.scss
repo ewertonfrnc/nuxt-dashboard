@@ -19,6 +19,13 @@
     border-bottom: 2px solid
       map-get($color-scheme-light, "$color-neutral-neutral-5");
 
+    &--active {
+      border-bottom-color: map-get(
+        $color-scheme-light,
+        "$color-brand-primary-0"
+      );
+    }
+
     @include respond(phone) {
       .pi {
         display: none;
@@ -53,6 +60,13 @@
   &__item {
     border-bottom: 2px solid
       map-get($color-scheme-dark, "$color-neutral-neutral-5");
+
+    &--active {
+      border-bottom-color: map-get(
+        $color-scheme-dark,
+        "$color-brand-primary-0"
+      );
+    }
   }
 
   &__inkbar {

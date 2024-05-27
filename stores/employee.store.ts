@@ -7,6 +7,13 @@ import {
   EmployeeClocks,
   EmployeeDeactivationDetails,
   EmployeeQueryParams,
+  EmployeeContact,
+  EmployeeDeactivationDetails,
+  EmployeeDocuments,
+  EmployeePersonalData,
+  EmployeeQueryParams,
+  EmployeeSchoolInfo,
+  EmployeeWorkInfo,
 } from "~/interfaces/employee/employee.interface";
 
 type EmployeeStore = {
@@ -31,6 +38,76 @@ export const useEmployeeStore = defineStore("employee", {
       try {
         const { employee } = await employeeService.getEmployeeData(employeeId);
 
+        this.employee = employee;
+      } catch (error) {
+        return error as Error;
+      }
+    },
+    async updateEmployeeData(
+      employeeId: string,
+      updatedEmployeeData: EmployeePersonalData,
+    ) {
+      try {
+        const { employee } = await employeeService.updateEmployeeData(
+          employeeId,
+          updatedEmployeeData,
+        );
+        this.employee = employee;
+      } catch (error) {
+        return error as Error;
+      }
+    },
+    async updateEmployeeContact(
+      employeeId: string,
+      updatedEmployeeData: EmployeeContact,
+    ) {
+      try {
+        const { employee } = await employeeService.updateEmployeeContact(
+          employeeId,
+          updatedEmployeeData,
+        );
+        this.employee = employee;
+      } catch (error) {
+        return error as Error;
+      }
+    },
+    async updateEmployeeWorkInfo(
+      employeeId: string,
+      updatedEmployeeData: EmployeeWorkInfo,
+    ) {
+      try {
+        const { employee } = await employeeService.updateEmployeeWorkInfo(
+          employeeId,
+          updatedEmployeeData,
+        );
+        this.employee = employee;
+      } catch (error) {
+        return error as Error;
+      }
+    },
+    async updateEmployeeSchool(
+      employeeId: string,
+      updatedEmployeeData: EmployeeSchoolInfo,
+    ) {
+      try {
+        const { employee } = await employeeService.updateEmployeeSchool(
+          employeeId,
+          updatedEmployeeData,
+        );
+        this.employee = employee;
+      } catch (error) {
+        return error as Error;
+      }
+    },
+    async updateEmployeeDocs(
+      employeeId: string,
+      updatedEmployeeData: EmployeeDocuments,
+    ) {
+      try {
+        const { employee } = await employeeService.updateEmployeeDocs(
+          employeeId,
+          updatedEmployeeData,
+        );
         this.employee = employee;
       } catch (error) {
         return error as Error;
@@ -69,6 +146,14 @@ export const useEmployeeStore = defineStore("employee", {
 
         this.adjusts = adjusts;
         this.total = total;
+      } catch (error) {
+        return error as Error;
+      }
+    },
+    async searchEmployeeAddres(cep: string) {
+      try {
+        const { address } = await employeeService.searchEmployeeAddres(cep);
+        return address;
       } catch (error) {
         return error as Error;
       }
