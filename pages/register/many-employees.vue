@@ -28,13 +28,13 @@
       </div>
     </div>
 
-    <section>
-      <p>
+    <section class="information">
+      <p class="body__primary">
         De acordo com o seu arquivo, serão cadastrados
         <strong>330 colaboradores</strong>.
       </p>
 
-      <p>
+      <p class="body__primary">
         Após a confirmação, caso deseje, você poderá enviar o restante do
         cadastro para que os colaboradores completem as demais informações
         opcionais.
@@ -81,11 +81,34 @@
             icon="pi-trash danger"
             tooltip-text="Excluir"
             :data="{ slotData }"
-            @action-handler="() => {}"
+            @action-handler="selectToDelete"
           />
         </template>
       </BaseTable>
     </section>
+
+    <BaseDialog
+      :is-visible="isDeleteDialogVisible"
+      :toggle-dialog="toggleDeleteDialog"
+      confirm-warn
+      confirm-dialog
+      confirm-icon="pi-exclamation-circle"
+      title="Cadastrar por arquivo"
+    >
+      <p class="body__secondary">
+        Tem certeza que deseja excluir este colaborador do cadastro?
+      </p>
+
+      <template #footer>
+        <BaseDialogFooter
+          :loading="false"
+          confirm-icon="pi pi-check"
+          confirmlabel="Confirmar"
+          message="Selecione uma ação para prosseguir"
+          @click-handler="footerActionHandler"
+        />
+      </template>
+    </BaseDialog>
   </BaseCard>
 </template>
 
@@ -96,6 +119,14 @@ import { PageState } from "primevue/paginator";
 import { useRegisterEmployeesStore } from "~/stores/settings/register-employees";
 
 export default {
+  setup() {
+    const {
+      isVisible: isDeleteDialogVisible,
+      toggleVisibility: toggleDeleteDialog,
+    } = useToggle();
+
+    return { isDeleteDialogVisible, toggleDeleteDialog };
+  },
   data() {
     return {
       loading: false,
@@ -165,6 +196,7 @@ export default {
           matchMode: FilterMatchMode.CONTAINS,
         },
       },
+      selectedRow: {},
     };
   },
   computed: {
@@ -175,6 +207,18 @@ export default {
     this.nodes = this.csvData;
   },
   methods: {
+    selectToDelete(selected) {
+      this.selectedRow = selected;
+      this.toggleDeleteDialog();
+    },
+    deleteRow() {
+      this.nodes = this.nodes.filter((node) => node.id !== this.selectedRow.id);
+      this.toggleDeleteDialog();
+    },
+    footerActionHandler(btnClicked: string) {
+      if (btnClicked === "confirm") this.deleteRow();
+      else this.toggleDeleteDialog();
+    },
     changePageHandler(currentPage: PageState) {
       this.queries.page = currentPage.page + 1;
       this.getTableValues(this.queries);
@@ -210,5 +254,12 @@ export default {
       width: max-content;
     }
   }
+}
+
+.information {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin: 24px 0;
 }
 </style>

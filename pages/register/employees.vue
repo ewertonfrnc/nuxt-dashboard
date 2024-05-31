@@ -99,16 +99,19 @@ export default {
       if (file && file.type === "text/csv") {
         Papa.parse(file, {
           complete: (results: ParseResult<string[]>) => {
-            const nodes = results.data.splice(1).map((result: string[]) => ({
-              name: result[0] || "",
-              email: result[1] || "",
-              cpf: result[2] || "",
-              phone: result[3] || "",
-              department: result[4] || "",
-              role: result[5] || "",
-              workType: result[6] || "",
-              workRegime: result[7] || "",
-            }));
+            const nodes = results.data
+              .splice(1)
+              .map((result: string[], index: number) => ({
+                id: index,
+                name: result[0] || "",
+                email: result[1] || "",
+                cpf: result[2] || "",
+                phone: result[3] || "",
+                department: result[4] || "",
+                role: result[5] || "",
+                workType: result[6] || "",
+                workRegime: result[7] || "",
+              }));
 
             this.updateCsvData(nodes);
           },
