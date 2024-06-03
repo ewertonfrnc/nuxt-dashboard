@@ -44,7 +44,7 @@ export const routes: RouteItem[] = [
           {
             label: "Colaboradores",
             icon: "pi pi-users",
-            route: "/settings/register-employees",
+            route: "/register/employees",
           },
           {
             label: "Cargos",

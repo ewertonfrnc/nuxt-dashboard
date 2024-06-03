@@ -31,7 +31,7 @@
     <section class="information">
       <p class="body__primary">
         De acordo com o seu arquivo, serão cadastrados
-        <strong>330 colaboradores</strong>.
+        <strong class="highlight">{{ nodes.length }} colaboradores</strong>.
       </p>
 
       <p class="body__primary">
@@ -48,18 +48,18 @@
 
     <section>
       <BaseTable
+        has-action
+        header-shown
         :columns="columns"
         :custom-filters="filters"
         :loading="loading"
         :nodes="nodes"
         :total-pages="totalPages"
-        has-action
-        header-shown
         @update-filter-handler="getTableValues"
         @change-page="changePageHandler"
       >
         <template #body-cell="{ data, field }">
-          <span class="body__primary">
+          <span :class="['body__primary', data.missingField && 'row_error']">
             {{ data[field] }}
           </span>
         </template>
@@ -120,12 +120,14 @@ import { useRegisterEmployeesStore } from "~/stores/settings/register-employees"
 
 export default {
   setup() {
+    const { getToast } = usePVToast();
+
     const {
       isVisible: isDeleteDialogVisible,
       toggleVisibility: toggleDeleteDialog,
     } = useToggle();
 
-    return { isDeleteDialogVisible, toggleDeleteDialog };
+    return { isDeleteDialogVisible, toggleDeleteDialog, getToast };
   },
   data() {
     return {
@@ -203,10 +205,20 @@ export default {
     ...mapState(useRegisterEmployeesStore, ["csvData"]),
   },
   created() {
-    console.log([...this.csvData]);
+    this.csvData.forEach((row) => {
+      Object.values(row).forEach((value) => {
+        if (value === "") row.missingField = true;
+      });
+    });
+
     this.nodes = this.csvData;
+    this.totalPages = this.calculateTotalPages();
   },
   methods: {
+    calculateTotalPages() {
+      const length = Number(this.nodes.length);
+      return parseInt(length / 10) < 1 ? 1 : parseInt(length / 10);
+    },
     selectToDelete(selected) {
       this.selectedRow = selected;
       this.toggleDeleteDialog();
@@ -261,5 +273,9 @@ export default {
   flex-direction: column;
   gap: 24px;
   margin: 24px 0;
+}
+
+.row_error {
+  color: map-get($color-scheme-light, "$color-feedback-danger-0");
 }
 </style>

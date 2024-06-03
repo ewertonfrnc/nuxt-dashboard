@@ -111,6 +111,7 @@ export default {
                 role: result[5] || "",
                 workType: result[6] || "",
                 workRegime: result[7] || "",
+                missingField: false,
               }));
 
             this.updateCsvData(nodes);
