@@ -24,6 +24,13 @@ export const useRegisterEmployeesStore = defineStore("register-employees", {
         return error as Error;
       }
     },
+    async saveEmployeesBatch(batch: RegisterEmployee[]) {
+      try {
+        await registerService.saveEmployeesBatch(batch);
+      } catch (error) {
+        return error as Error;
+      }
+    },
     updateCsvData(csvData: RegisterEmployee[]) {
       this.csvData = csvData;
       this.total = this.csvData.length;

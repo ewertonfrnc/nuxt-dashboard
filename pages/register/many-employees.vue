@@ -26,6 +26,7 @@
           label="Confirmar e cadastrar"
           class="btn__primary"
           :disabled="!canProceed"
+          @click="saveBatch"
         />
       </div>
     </div>
@@ -57,7 +58,6 @@
         :loading="loading"
         :nodes="nodes"
         :total-pages="totalPages"
-        @change-page="changePageHandler"
       >
         <template #body-cell="{ data, field }">
           <span :class="['body__primary', data.missingField && 'row_error']">
@@ -75,7 +75,7 @@
             icon="pi-pencil"
             tooltip-text="Editar"
             :data="{ slotData }"
-            @action-handler="selectToEdit(slotData)"
+            @action-handler="selectToEdit(slotData.data)"
           />
 
           <BaseTableAction
@@ -256,7 +256,6 @@
 
 <script lang="ts">
 import { mapActions, mapState } from "pinia";
-import { PageState } from "primevue/paginator";
 import { FormMeta, GenericObject } from "vee-validate";
 import { RegisterEmployee } from "~/interfaces/register/register.interface";
 import { useRegisterEmployeesStore } from "~/stores/settings/register-employees";
@@ -371,6 +370,7 @@ export default {
     ...mapActions(useRegisterEmployeesStore, [
       "updateCsvData",
       "fetchWorkOptions",
+      "saveEmployeesBatch",
     ]),
     getFormOptions() {
       this.fetchWorkOptions()
@@ -380,6 +380,11 @@ export default {
           this.workRegimeOptions = options.workRegimeOptions;
           this.workTypeOptions = options.workTypeOptions;
         })
+        .catch(() => this.getToast("error"));
+    },
+    saveBatch() {
+      this.saveEmployeesBatch(this.nodes)
+        .then(() => this.getToast("success"))
         .catch(() => this.getToast("error"));
     },
     checkForMissingFields(array: RegisterEmployee[]): void {
@@ -407,7 +412,7 @@ export default {
       this.toggleDeleteDialog();
     },
     selectToEdit(selected: RegisterEmployee) {
-      this.selectedEmployee = selected.data;
+      this.selectedEmployee = selected;
       this.toggleAddEditDialog();
     },
     resetAddEditForm() {
@@ -417,9 +422,10 @@ export default {
     deleteRow(): void {
       this.nodes = this.nodes.filter((node) => node.id !== this.selectedRow.id);
       this.toggleDeleteDialog();
+      this.getToast("success");
     },
     addEditRowHandler(
-      values: GenericObject,
+      values: RegisterEmployee,
       meta: FormMeta<GenericObject>,
     ): void {
       if (values.id) {
@@ -429,28 +435,22 @@ export default {
         );
 
         this.nodes.splice(index, 1, { ...values });
+        this.resetAddEditForm();
       } else if (meta && meta.valid && meta.dirty) {
         const newEmployee = {
           ...values,
           id: this.nodes.length + 1,
-          email: "",
-          workType: "",
-          workRegime: "",
-          missingField: true,
         } as RegisterEmployee;
 
         this.nodes.unshift(newEmployee);
+        this.toggleAddEditDialog();
       }
 
       this.checkForMissingFields(this.nodes);
-      this.resetAddEditForm();
     },
     footerDeleteHandler(btnClicked: string): void {
       if (btnClicked === "confirm") this.deleteRow();
       else this.toggleDeleteDialog();
-    },
-    changePageHandler(currentPage: PageState): void {
-      this.queries.page = currentPage.page + 1;
     },
   },
 };
@@ -465,7 +465,16 @@ export default {
 
   &__navigation {
     display: flex;
+    align-items: center;
     gap: 8px;
+
+    button {
+      width: 44px;
+      height: 44px;
+      border-radius: 100%;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
   }
 
   &__btns {
