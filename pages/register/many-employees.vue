@@ -18,6 +18,7 @@
           icon="pi pi-table"
           label="Adicionar linha"
           class="btn__primary--outlined"
+          @click="toggleAddEditDialog"
         />
 
         <BaseButton
@@ -105,9 +106,116 @@
           confirm-icon="pi pi-check"
           confirmlabel="Confirmar"
           message="Selecione uma ação para prosseguir"
-          @click-handler="footerActionHandler"
+          @click-handler="footerDeleteHandler"
         />
       </template>
+    </BaseDialog>
+
+    <BaseDialog
+      :is-visible="isAddEditDialogVisible"
+      :toggle-dialog="toggleAddEditDialog"
+      title="Adicionar colaborador no cadastro"
+    >
+      <VeeForm
+        v-slot="{ values, errors, meta }"
+        class="form"
+        :validation-schema="formSchema"
+      >
+        <p class="body__secondary">
+          Insira os dados do colaborador para que seja adicionado no cadastro em
+          lote.
+        </p>
+
+        <h4 class="subtitle__primary">Dados principais</h4>
+
+        <div class="form__personal">
+          <div class="form__control">
+            <label class="caption__primary">
+              Nome completo ou Social
+              <BaseInputText name="name" placeholder="Insira o nome completo" />
+            </label>
+          </div>
+
+          <div class="form__control">
+            <label class="caption__primary">
+              RG
+              <BaseInputMask
+                name="rg"
+                mask="999.999.999"
+                placeholder="Insira o RG"
+              />
+            </label>
+          </div>
+
+          <div class="form__control">
+            <label class="caption__primary">
+              CPF
+              <BaseInputMask
+                name="cpf"
+                mask="999.999.999-99"
+                placeholder="Insira o CPF"
+              />
+            </label>
+          </div>
+
+          <div class="form__control">
+            <label class="caption__primary">
+              Telefone
+              <BaseInputMask
+                name="phone"
+                mask="(99) 99999-9999"
+                placeholder="Insira o telefone"
+              />
+            </label>
+          </div>
+        </div>
+
+        <h4 class="subtitle__primary">Dados profissionais</h4>
+
+        <div class="form__profissional">
+          <div class="form__control">
+            <label class="caption__primary">
+              Cargo
+
+              <BaseDropdown
+                name="role"
+                :options="roleOptions"
+                placeholder="Insira o cargo"
+              />
+            </label>
+          </div>
+
+          <div class="form__control">
+            <label class="caption__primary">
+              Departamento
+
+              <BaseDropdown
+                name="department"
+                :options="departmentOptions"
+                placeholder="Insira o cargo"
+              />
+            </label>
+          </div>
+        </div>
+
+        <div class="form__btn-group">
+          <BaseButton
+            class="btn__primary--outlined"
+            icon="pi pi-times"
+            label="Cancelar"
+            @click="toggleAddEditDialog"
+          />
+
+          <BaseButton
+            type="submit"
+            class="btn__primary"
+            icon="pi pi-plus"
+            label="Adicionar"
+            :disabled="!validForm"
+            @click="addEditRowHandler(values, errors, meta)"
+          />
+        </div>
+      </VeeForm>
     </BaseDialog>
   </BaseCard>
 </template>
@@ -117,6 +225,8 @@ import { mapState } from "pinia";
 import { FilterMatchMode } from "primevue/api";
 import { PageState } from "primevue/paginator";
 import { useRegisterEmployeesStore } from "~/stores/settings/register-employees";
+import { checkForErrors } from "~/utils/forms";
+import { registerEmpSchema } from "~/utils/schemas/register/employees.schema";
 
 export default {
   setup() {
@@ -127,7 +237,18 @@ export default {
       toggleVisibility: toggleDeleteDialog,
     } = useToggle();
 
-    return { isDeleteDialogVisible, toggleDeleteDialog, getToast };
+    const {
+      isVisible: isAddEditDialogVisible,
+      toggleVisibility: toggleAddEditDialog,
+    } = useToggle();
+
+    return {
+      isDeleteDialogVisible,
+      toggleDeleteDialog,
+      isAddEditDialogVisible,
+      toggleAddEditDialog,
+      getToast,
+    };
   },
   data() {
     return {
@@ -199,24 +320,37 @@ export default {
         },
       },
       selectedRow: {},
+      roleOptions: ["Design", "Front-end", "Back-end"],
+      departmentOptions: ["Hub", "Fábrica"],
+      validForm: true,
     };
   },
   computed: {
     ...mapState(useRegisterEmployeesStore, ["csvData"]),
+    formSchema() {
+      return registerEmpSchema;
+    },
   },
   created() {
-    this.csvData.forEach((row) => {
-      Object.values(row).forEach((value) => {
-        if (value === "") row.missingField = true;
-      });
-    });
-
-    this.nodes = this.csvData;
+    this.nodes = [...this.csvData];
     this.totalPages = this.calculateTotalPages();
+    this.checkForMissingFields(this.nodes);
   },
   methods: {
+    checkForMissingFields(array) {
+      array.forEach((obj) => {
+        const missingFields = Object.keys(obj).reduce((acc, key) => {
+          if (obj[key] === "") acc.push(key);
+          return acc;
+        }, []);
+
+        obj.missingField = !!missingFields.length;
+      });
+
+      console.log(array);
+    },
     calculateTotalPages() {
-      const length = Number(this.nodes.length);
+      const length = this.nodes.length;
       return parseInt(length / 10) < 1 ? 1 : parseInt(length / 10);
     },
     selectToDelete(selected) {
@@ -227,7 +361,21 @@ export default {
       this.nodes = this.nodes.filter((node) => node.id !== this.selectedRow.id);
       this.toggleDeleteDialog();
     },
-    footerActionHandler(btnClicked: string) {
+    addEditRowHandler(values, errors, meta) {
+      if (meta && meta.valid && meta.dirty) {
+        this.nodes.unshift({
+          ...values,
+          id: this.nodes.length + 1,
+          email: "",
+          workType: "",
+          workRegime: "",
+          missingField: true,
+        });
+        this.checkForMissingFields(this.nodes);
+        this.toggleAddEditDialog();
+      }
+    },
+    footerDeleteHandler(btnClicked: string) {
       if (btnClicked === "confirm") this.deleteRow();
       else this.toggleDeleteDialog();
     },
@@ -277,5 +425,40 @@ export default {
 
 .row_error {
   color: map-get($color-scheme-light, "$color-feedback-danger-0");
+}
+
+.form {
+  width: 90vw;
+  display: grid;
+  gap: 24px;
+
+  &__personal {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+
+  &__profissional {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 70px;
+  }
+
+  &__control {
+    width: 343px;
+  }
+
+  &__btn-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+
+    button {
+      width: max-content;
+    }
+  }
 }
 </style>

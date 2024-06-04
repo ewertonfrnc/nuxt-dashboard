@@ -5,7 +5,7 @@
     :disabled="disabled"
     :options="options"
     option-label="name"
-    placeholder="Selecione uma opção"
+    :placeholder="placeholder"
     :pt="{
       root: `dropdown`,
       wrapper: 'dropdown__options',
@@ -43,6 +43,11 @@ export default {
     disabled: { type: Boolean, default: false, required: false },
     readonly: { type: Boolean, default: false, required: false },
     wrongCrendentialsMessage: { type: String, default: "", required: false },
+    placeholder: {
+      type: String,
+      default: "Selecione uma opção",
+      required: false,
+    },
   },
   emits: ["on-change"],
   setup(props) {

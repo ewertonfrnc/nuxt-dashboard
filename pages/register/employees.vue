@@ -102,7 +102,7 @@ export default {
             const nodes = results.data
               .splice(1)
               .map((result: string[], index: number) => ({
-                id: index,
+                id: index + 1,
                 name: result[0] || "",
                 email: result[1] || "",
                 cpf: result[2] || "",
