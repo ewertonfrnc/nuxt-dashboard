@@ -25,13 +25,14 @@
           icon="pi pi-check"
           label="Confirmar e cadastrar"
           class="btn__primary"
+          :disabled="!canProceed"
         />
       </div>
     </div>
 
     <section class="information">
       <p class="body__primary">
-        De acordo com o seu arquivo, serão cadastrados
+        Serão cadastrados
         <strong class="highlight">{{ nodes.length }} colaboradores</strong>.
       </p>
 
@@ -56,7 +57,6 @@
         :loading="loading"
         :nodes="nodes"
         :total-pages="totalPages"
-        @update-filter-handler="getTableValues"
         @change-page="changePageHandler"
       >
         <template #body-cell="{ data, field }">
@@ -75,7 +75,7 @@
             icon="pi-pencil"
             tooltip-text="Editar"
             :data="{ slotData }"
-            @action-handler="() => {}"
+            @action-handler="selectToEdit(slotData)"
           />
 
           <BaseTableAction
@@ -117,9 +117,10 @@
       title="Adicionar colaborador no cadastro"
     >
       <VeeForm
-        v-slot="{ values, errors, meta }"
+        v-slot="{ values, meta }"
         class="form"
         :validation-schema="formSchema"
+        :initial-values="selectedEmployee"
       >
         <p class="body__secondary">
           Insira os dados do colaborador para que seja adicionado no cadastro em
@@ -143,6 +144,16 @@
                 name="rg"
                 mask="999.999.999"
                 placeholder="Insira o RG"
+              />
+            </label>
+          </div>
+
+          <div class="form__control">
+            <label class="caption__primary">
+              E-mail
+              <BaseInputText
+                name="email"
+                placeholder="Insira o nome completo"
               />
             </label>
           </div>
@@ -175,6 +186,30 @@
         <div class="form__profissional">
           <div class="form__control">
             <label class="caption__primary">
+              Modelo de contratação
+
+              <BaseDropdown
+                name="workRegime"
+                :options="workRegimeOptions"
+                placeholder="Insira o cargo"
+              />
+            </label>
+          </div>
+
+          <div class="form__control">
+            <label class="caption__primary">
+              Modelo de trabalho
+
+              <BaseDropdown
+                name="workType"
+                :options="workTypeOptions"
+                placeholder="Insira o cargo"
+              />
+            </label>
+          </div>
+
+          <div class="form__control">
+            <label class="caption__primary">
               Cargo
 
               <BaseDropdown
@@ -203,7 +238,7 @@
             class="btn__primary--outlined"
             icon="pi pi-times"
             label="Cancelar"
-            @click="toggleAddEditDialog"
+            @click="resetAddEditForm"
           />
 
           <BaseButton
@@ -211,8 +246,7 @@
             class="btn__primary"
             icon="pi pi-plus"
             label="Adicionar"
-            :disabled="!validForm"
-            @click="addEditRowHandler(values, errors, meta)"
+            @click.prevent="addEditRowHandler(values, meta)"
           />
         </div>
       </VeeForm>
@@ -221,11 +255,11 @@
 </template>
 
 <script lang="ts">
-import { mapState } from "pinia";
-import { FilterMatchMode } from "primevue/api";
+import { mapActions, mapState } from "pinia";
 import { PageState } from "primevue/paginator";
+import { FormMeta, GenericObject } from "vee-validate";
+import { RegisterEmployee } from "~/interfaces/register/register.interface";
 import { useRegisterEmployeesStore } from "~/stores/settings/register-employees";
-import { checkForErrors } from "~/utils/forms";
 import { registerEmpSchema } from "~/utils/schemas/register/employees.schema";
 
 export default {
@@ -255,7 +289,7 @@ export default {
       loading: false,
       currentPage: 1,
       totalPages: 0,
-      nodes: [],
+      nodes: [] as RegisterEmployee[],
       columns: [
         {
           field: "name",
@@ -307,86 +341,116 @@ export default {
         },
       ],
       queries: {
-        page: 1,
-        limit: 10,
         global: { value: "", matchMode: "" },
-        name: { value: "", matchMode: "" },
       },
-      filters: {
-        role: {
-          field: "name",
-          value: null,
-          matchMode: FilterMatchMode.CONTAINS,
-        },
-      },
+      filters: {},
       selectedRow: {},
-      roleOptions: ["Design", "Front-end", "Back-end"],
-      departmentOptions: ["Hub", "Fábrica"],
-      validForm: true,
+      roleOptions: [],
+      departmentOptions: [],
+      workRegimeOptions: [],
+      workTypeOptions: [],
+      canProceed: true,
+      selectedEmployee: {},
     };
   },
   computed: {
-    ...mapState(useRegisterEmployeesStore, ["csvData"]),
+    ...mapState(useRegisterEmployeesStore, ["csvData", "total"]),
     formSchema() {
       return registerEmpSchema;
     },
   },
   created() {
-    this.nodes = [...this.csvData];
+    this.nodes = this.csvData;
+    this.totalPages = this.total;
+
     this.totalPages = this.calculateTotalPages();
     this.checkForMissingFields(this.nodes);
+    this.getFormOptions();
   },
   methods: {
-    checkForMissingFields(array) {
+    ...mapActions(useRegisterEmployeesStore, [
+      "updateCsvData",
+      "fetchWorkOptions",
+    ]),
+    getFormOptions() {
+      this.fetchWorkOptions()
+        .then((options) => {
+          this.roleOptions = options.roleOptions;
+          this.departmentOptions = options.departmentOptions;
+          this.workRegimeOptions = options.workRegimeOptions;
+          this.workTypeOptions = options.workTypeOptions;
+        })
+        .catch(() => this.getToast("error"));
+    },
+    checkForMissingFields(array: RegisterEmployee[]): void {
       array.forEach((obj) => {
-        const missingFields = Object.keys(obj).reduce((acc, key) => {
-          if (obj[key] === "") acc.push(key);
-          return acc;
-        }, []);
+        const missingFields: string[] = Object.keys(obj).reduce(
+          (acc: string[], key: string) => {
+            const value: string = obj[key];
+            if (value === "") acc.push(key);
+
+            return acc;
+          },
+          [],
+        );
 
         obj.missingField = !!missingFields.length;
+        this.canProceed = !this.nodes.some((item) => item.missingField);
       });
-
-      console.log(array);
     },
-    calculateTotalPages() {
+    calculateTotalPages(): number {
       const length = this.nodes.length;
-      return parseInt(length / 10) < 1 ? 1 : parseInt(length / 10);
+      return Math.ceil(length / 10) < 1 ? 1 : Math.ceil(length / 10);
     },
-    selectToDelete(selected) {
+    selectToDelete(selected: RegisterEmployee): void {
       this.selectedRow = selected;
       this.toggleDeleteDialog();
     },
-    deleteRow() {
+    selectToEdit(selected: RegisterEmployee) {
+      this.selectedEmployee = selected.data;
+      this.toggleAddEditDialog();
+    },
+    resetAddEditForm() {
+      this.selectedEmployee = {};
+      this.toggleAddEditDialog();
+    },
+    deleteRow(): void {
       this.nodes = this.nodes.filter((node) => node.id !== this.selectedRow.id);
       this.toggleDeleteDialog();
     },
-    addEditRowHandler(values, errors, meta) {
-      if (meta && meta.valid && meta.dirty) {
-        this.nodes.unshift({
+    addEditRowHandler(
+      values: GenericObject,
+      meta: FormMeta<GenericObject>,
+    ): void {
+      if (values.id) {
+        const itemToEdit = this.nodes.find((item) => item.id === values.id);
+        const index = this.nodes.findIndex(
+          (item) => item.id === itemToEdit?.id,
+        );
+
+        this.nodes.splice(index, 1, { ...values });
+      } else if (meta && meta.valid && meta.dirty) {
+        const newEmployee = {
           ...values,
           id: this.nodes.length + 1,
           email: "",
           workType: "",
           workRegime: "",
           missingField: true,
-        });
-        this.checkForMissingFields(this.nodes);
-        this.toggleAddEditDialog();
+        } as RegisterEmployee;
+
+        this.nodes.unshift(newEmployee);
       }
+
+      this.checkForMissingFields(this.nodes);
+      this.resetAddEditForm();
     },
-    footerDeleteHandler(btnClicked: string) {
+    footerDeleteHandler(btnClicked: string): void {
       if (btnClicked === "confirm") this.deleteRow();
       else this.toggleDeleteDialog();
     },
-    changePageHandler(currentPage: PageState) {
+    changePageHandler(currentPage: PageState): void {
       this.queries.page = currentPage.page + 1;
-      this.getTableValues(this.queries);
-    },
-    getTableValues(queryParams) {
-      this.loading = true;
-
-      this.loading = false;
     },
   },
 };
@@ -428,23 +492,20 @@ export default {
 }
 
 .form {
-  width: 90vw;
+  width: 80vw;
   display: grid;
   gap: 24px;
 
   &__personal {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(343px, 1fr));
     gap: 24px;
   }
 
   &__profissional {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 70px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(343px, 1fr));
+    gap: 24px;
   }
 
   &__control {

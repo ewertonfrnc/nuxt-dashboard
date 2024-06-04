@@ -79,12 +79,17 @@
 import Papa, { ParseResult } from "papaparse";
 import { mapActions, mapState } from "pinia";
 import { FileUploadSelectEvent } from "primevue/fileupload";
+import { RegisterEmployee } from "~/interfaces/register/register.interface";
 import { useRegisterEmployeesStore } from "~/stores/settings/register-employees";
 
 export default {
   setup() {
+    const { getToast } = usePVToast();
     const { isVisible, toggleVisibility } = useToggle();
-    return { isVisible, toggleVisibility };
+    return { isVisible, toggleVisibility, getToast };
+  },
+  data() {
+    return { parsedCsv: [] as RegisterEmployee[] };
   },
   computed: { ...mapState(useRegisterEmployeesStore, ["csvData"]) },
   methods: {
@@ -99,7 +104,7 @@ export default {
       if (file && file.type === "text/csv") {
         Papa.parse(file, {
           complete: (results: ParseResult<string[]>) => {
-            const nodes = results.data
+            this.parsedCsv = results.data
               .splice(1)
               .map((result: string[], index: number) => ({
                 id: index + 1,
@@ -114,11 +119,10 @@ export default {
                 missingField: false,
               }));
 
-            this.updateCsvData(nodes);
+            this.updateCsvData(this.parsedCsv);
+            this.$router.push("/register/many-employees");
           },
         });
-
-        this.$router.push("/register/many-employees");
       }
     },
   },
