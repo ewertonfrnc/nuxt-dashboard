@@ -365,13 +365,19 @@ export default {
       this.wrongCrendentialsMessage = "";
     },
     async searchAddres(values: EmployeeContact) {
+      this.loading = true;
+
       try {
         const newCep = await this.searchEmployeeAddres(values.cep);
         Object.keys(this.employee.contact).forEach((item) => {
           if (!newCep[item]) return;
           this.employee.contact[item] = newCep[item];
         });
-      } catch (error) {}
+      } catch (error) {
+        this.getToast("error");
+      } finally {
+        this.loading = false;
+      }
     },
     async handleSubmit(values: EmployeeContact) {
       if (!this.hasChanges) return this.cancelEditing();
