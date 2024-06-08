@@ -8,6 +8,7 @@ export const RegisterMock = {
     },
   },
   saveEmployeesBatch: {
-    status: "success",
+    registedEmployees: 334,
+    needReview: 36,
   },
 };

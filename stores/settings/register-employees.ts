@@ -26,7 +26,10 @@ export const useRegisterEmployeesStore = defineStore("register-employees", {
     },
     async saveEmployeesBatch(batch: RegisterEmployee[]) {
       try {
-        await registerService.saveEmployeesBatch(batch);
+        const { registedEmployees, needReview } =
+          await registerService.saveEmployeesBatch(batch);
+
+        return { registedEmployees, needReview };
       } catch (error) {
         return error as Error;
       }

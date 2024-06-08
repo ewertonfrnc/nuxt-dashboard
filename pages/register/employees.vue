@@ -55,30 +55,37 @@
       </p>
 
       <template #footer>
-        <BaseDialogFooter
-          :loading="false"
-          primary-colors
-          confirm-icon="pi pi-upload"
-          confirmlabel="Carregar arquivo .csv"
-          message="Selecione uma ação para prosseguir"
-          @click-handler="footerActionHandler"
-        />
-        <FileUpload
-          mode="basic"
-          name="file"
-          accept=".csv"
-          :max-file-size="1000000"
-          @select="onSelect"
-        />
+        <div class="footer-buttons">
+          <BaseButton
+            icon="pi pi-times"
+            label="Cancelar"
+            class="btn__primary--outlined"
+            @click="toggleVisibility"
+          />
+
+          <BaseButton
+            icon="pi pi-upload"
+            label="Carregar arquivo .csv"
+            class="btn__primary"
+            @click="($refs.input as HTMLInputElement).click()"
+          />
+          <input
+            ref="input"
+            type="file"
+            name="file"
+            accept=".csv"
+            hidden
+            @change="onSelect"
+          />
+        </div>
       </template>
     </BaseDialog>
   </BaseCard>
 </template>
 
 <script lang="ts">
-import Papa, { ParseResult } from "papaparse";
+import { ParseResult, parse } from "papaparse";
 import { mapActions, mapState } from "pinia";
-import { FileUploadSelectEvent } from "primevue/fileupload";
 import { RegisterEmployee } from "~/interfaces/register/register.interface";
 import { useRegisterEmployeesStore } from "~/stores/settings/register-employees";
 
@@ -94,15 +101,12 @@ export default {
   computed: { ...mapState(useRegisterEmployeesStore, ["csvData"]) },
   methods: {
     ...mapActions(useRegisterEmployeesStore, ["updateCsvData"]),
-    footerActionHandler(btnClicked: string) {
-      if (btnClicked === "confirm") () => {};
-      else this.toggleVisibility();
-    },
-    onSelect(event: FileUploadSelectEvent) {
-      const file = event.files[0];
+    onSelect(event: Event) {
+      const input = event.target as HTMLInputElement;
+      const file = input.files?.[0];
 
       if (file && file.type === "text/csv") {
-        Papa.parse(file, {
+        parse(file, {
           complete: (results: ParseResult<string[]>) => {
             this.parsedCsv = results.data
               .splice(1)
@@ -167,6 +171,18 @@ export default {
         padding-left: 0;
       }
     }
+  }
+}
+
+.footer-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 24px;
+
+  button {
+    width: max-content;
   }
 }
 </style>

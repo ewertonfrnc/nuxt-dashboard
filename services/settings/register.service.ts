@@ -1,5 +1,5 @@
-import { RegisterEmployee } from "~/interfaces/register/register.interface";
 import { getResponse } from "../mocks";
+import { RegisterEmployee } from "~/interfaces/register/register.interface";
 import api, { MOCKED } from "~/services/api.service";
 
 class RegisterService {
