@@ -453,6 +453,22 @@ export default {
 
       this.checkForMissingFields(this.nodes);
     },
+    checkForMissingFields(array: RegisterEmployee[]): void {
+      array.forEach((obj) => {
+        const missingFields: string[] = Object.keys(obj).reduce(
+          (acc: string[], key: string) => {
+            const value: string = obj[key];
+            if (value === "") acc.push(key);
+
+            return acc;
+          },
+          [],
+        );
+
+        obj.missingField = !!missingFields.length;
+        this.canProceed = !this.nodes.some((item) => item.missingField);
+      });
+    },
     footerDeleteHandler(btnClicked: string): void {
       if (btnClicked === "confirm") this.deleteRow();
       else this.toggleDeleteDialog();
