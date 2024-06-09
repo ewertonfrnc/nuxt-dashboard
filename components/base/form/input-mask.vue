@@ -6,7 +6,7 @@
       <InputMask
         v-bind="field"
         v-model="field.value"
-        mask="999.999.999-99"
+        :mask="mask"
         :class="['input__field body__primary', errorMessage && 'error']"
         :disabled="disabled"
         :placeholder="placeholder"
