@@ -7,16 +7,19 @@
       </div>
 
       <div class="change-password__body">
-        <form class="form">
+        <VeeForm
+          v-slot="{ values, meta }"
+          class="form"
+          :validation-schema="formSchema"
+          @submit="changePasswordHandler"
+        >
           <div class="form__control">
-            <label class="caption__primary">
-              Nova senha
-              <BaseInputPassword
-                name="password"
-                placeholder="Insira a nova senha"
-                @updated-value="validatePassword"
-              />
-            </label>
+            <BaseFormInputPassword
+              label="Nova senha"
+              name="password"
+              placeholder="Insira a nova senha"
+              @updated-value="validatePassword"
+            />
           </div>
 
           <BaseInlineMessage
@@ -31,31 +34,29 @@
           />
 
           <div class="form__control">
-            <label class="caption__primary">
-              Repita a senha
-              <BaseInputPassword
-                name="passwordConfirm"
-                placeholder="Repita a nova senha"
-                @invalid-field="checkInvalidFields"
-              />
-            </label>
+            <BaseFormInputPassword
+              label="Repita a senha"
+              name="passwordConfirm"
+              placeholder="Repita a nova senha"
+            />
           </div>
-        </form>
-      </div>
 
-      <div class="change-password__footer">
-        <BaseButton
-          label="Voltar"
-          class="btn__primary--outlined"
-          @click.prevent="goToLogin"
-        />
-        <BaseButton
-          :loading="loading"
-          :disabled="anyInvalidField"
-          label="Salvar"
-          class="btn__primary"
-          @click.prevent="changePasswordHandler"
-        />
+          <div class="form__btn-group">
+            <BaseButton
+              label="Voltar"
+              class="btn__primary--outlined"
+              @click.prevent="goToLogin"
+            />
+
+            <BaseButton
+              type="submit"
+              label="Salvar"
+              class="btn__primary"
+              :loading="loading"
+              :disabled="meta.dirty && !meta.valid"
+            />
+          </div>
+        </VeeForm>
       </div>
     </div>
   </UiModal>
@@ -63,34 +64,28 @@
 
 <script lang="ts">
 import { mapActions } from "pinia";
-import { useForm } from "vee-validate";
+import { GenericObject } from "vee-validate";
 import { ChangePassword } from "~/interfaces/auth/auth.interface";
-import { changePassword } from "~/utils/schemas";
 
 export default {
   emits: ["changeStep"],
   setup() {
-    const { handleSubmit, resetForm, values } = useForm({
-      initialValues: { password: "", passwordConfirm: "" },
-      validationSchema: changePassword,
-    });
-    const onSubmit = handleSubmit((formValues) => formValues);
-
-    return { onSubmit, resetForm, values };
+    const { getToast } = usePVToast();
+    return { getToast };
   },
   data() {
     return {
       loading: false,
       isValidPassword: true,
-      anyInvalidField: false,
-      formData: { password: "", passwordConfirm: "" } as ChangePassword,
+
+      formSchema: {
+        password: "required|min:6",
+        passwordConfirm: "required|min:6|passwords_mismatch:@password",
+      },
     };
   },
   methods: {
     ...mapActions(useAuthStore, ["changePassword"]),
-    checkInvalidFields(value: boolean) {
-      this.anyInvalidField = value;
-    },
     goToLogin() {
       this.$emit("changeStep", "login");
     },
@@ -98,35 +93,27 @@ export default {
       if (!password) return;
       this.isValidPassword = password.length >= 6;
     },
-    async changePasswordHandler() {
-      try {
-        this.formData = await this.onSubmit();
-        if (!this.formData) return;
+    changePasswordHandler(values: GenericObject) {
+      const formData = { ...values } as ChangePassword;
 
-        this.loading = true;
-        await this.changePassword(this.formData);
+      this.loading = true;
 
-        this.$emit("changeStep", "login");
-        this.$toast.add({
-          severity: "success",
-          summary: "Senha alterada",
-          detail: "Faça login utilizando sua nova senha.",
-          life: 4000,
-        });
-      } catch (error) {
-        this.$toast.add({
-          severity: "error",
-          summary: "Algo deu errado",
-          detail: "Tente novamente mais tarde.",
-          life: 4000,
-        });
+      setTimeout(() => {
+        this.changePassword(formData)
+          .then(() => {
+            this.$emit("changeStep", "login");
 
-        this.resetForm({
-          values: { password: "", passwordConfirm: "" },
-        });
-      } finally {
+            this.$toast.add({
+              severity: "success",
+              summary: "Senha alterada",
+              detail: "Faça login utilizando sua nova senha.",
+              life: 4000,
+            });
+          })
+          .catch(() => this.getToast("error"));
+
         this.loading = false;
-      }
+      }, 1000);
     },
   },
 };
@@ -151,6 +138,11 @@ export default {
 
 .form {
   display: grid;
-  gap: $spacing-md;
+  gap: 16px;
+
+  &__btn-group {
+    display: flex;
+    gap: 13px;
+  }
 }
 </style>

@@ -18,6 +18,7 @@
             readonly,
           },
         }"
+        @update:model-value="handleInputChange"
       >
         <template #hideicon="{ onClick }">
           <div class="input__icon--password" @click="onClick">
@@ -32,7 +33,9 @@
       </Password>
     </VeeField>
 
-    <ErrorMessage :name="name" class="caption__secondary input__error" />
+    <Transition>
+      <ErrorMessage :name="name" class="caption__secondary input__error" />
+    </Transition>
   </label>
 </template>
 
@@ -44,6 +47,12 @@ export default {
     placeholder: { type: String, default: "", required: false },
     readonly: { type: Boolean, default: false, required: false },
     disabled: { type: Boolean, default: false, required: false },
+  },
+  emits: ["updated-value"],
+  methods: {
+    handleInputChange(value: string) {
+      this.$emit("updated-value", value);
+    },
   },
 };
 </script>
