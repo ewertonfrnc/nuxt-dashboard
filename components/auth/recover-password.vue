@@ -7,61 +7,58 @@
       </div>
 
       <div class="recover__body">
-        <form class="form">
+        <VeeForm
+          class="form"
+          :validation-schema="formSchema"
+          @submit="recoverHandler"
+        >
           <div class="form__control">
-            <label class="caption__primary">
-              Usuário
-              <BaseInputMask
-                :wrong-crendentials-message="wrongCpfMessage"
-                mask="999.999.999-99"
-                name="username"
-                placeholder="Insira seu CPF"
-                @handle-change="cpfValidate"
-              />
-            </label>
+            <BaseFormInputMask
+              label="Usuário"
+              name="username"
+              mask="999.999.999-99"
+              placeholder="Insira seu CPF"
+            />
           </div>
-        </form>
-      </div>
 
-      <div class="recover__footer">
-        <BaseButton
-          class="btn__primary--outlined"
-          label="Cancelar"
-          @click.prevent="goToLogin"
-        />
-        <BaseButton
-          :loading="loading"
-          :disabled="wrongCpfMessage.length"
-          class="btn__primary"
-          label="Próximo"
-          @click.prevent="recoverHandler"
-        />
+          <div class="form__control form__btn-group">
+            <BaseButton
+              class="btn__primary--outlined"
+              label="Cancelar"
+              @click.prevent="goToLogin"
+            />
+
+            <BaseButton
+              type="submit"
+              class="btn__primary"
+              label="Próximo"
+              :loading="loading"
+            />
+          </div>
+        </VeeForm>
       </div>
     </div>
   </UiModal>
 </template>
 
 <script lang="ts">
-import { useForm } from "vee-validate";
+import { GenericObject } from "vee-validate";
 import { mapActions } from "pinia";
 import { RecoverPassword } from "~/interfaces/auth/auth.interface";
 
 export default {
   emits: ["changeStep", "recoverEmail"],
   setup() {
-    const { handleSubmit, resetForm } = useForm({
-      initialValues: { username: "" },
-      validationSchema: recoverPassword,
-    });
-    const onSubmit = handleSubmit((formValues) => formValues);
-
-    return { onSubmit, resetForm };
+    const { getToast } = usePVToast();
+    return { getToast };
   },
   data() {
     return {
       loading: false,
-      formData: {} as RecoverPassword | undefined,
-      wrongCpfMessage: "",
+
+      formSchema: {
+        username: "required|min:3|max:255|cpf",
+      },
     };
   },
   methods: {
@@ -72,40 +69,28 @@ export default {
     goToChangePassword() {
       this.$emit("changeStep", "code");
     },
-    cpfValidate(value: string) {
-      this.wrongCpfMessage = value;
-    },
-    async recoverHandler() {
-      try {
-        this.formData = await this.onSubmit();
-        if (!this.formData) return;
+    recoverHandler(values: GenericObject) {
+      const formData = { ...values } as RecoverPassword;
 
-        this.loading = true;
+      this.loading = true;
 
-        const userEmail = await this.recoverPassword(this.formData);
-        this.goToChangePassword();
-        this.$emit("recoverEmail", userEmail);
+      setTimeout(() => {
+        this.recoverPassword(formData)
+          .then((userEmail) => {
+            this.goToChangePassword();
+            this.$emit("recoverEmail", userEmail);
+            this.$toast.add({
+              severity: "success",
+              summary: "E-mail enviado",
+              detail:
+                "Verifique seu e-mail para copiar o código de recuperação.",
+              life: 4000,
+            });
+          })
+          .catch(() => this.getToast("error"));
 
-        this.$toast.add({
-          severity: "success",
-          summary: "E-mail enviado",
-          detail: "Verifique seu e-mail para copiar o código de recuperação.",
-          life: 4000,
-        });
-      } catch (error) {
-        this.$toast.add({
-          severity: "error",
-          summary: "Algo deu errado",
-          detail: "Tente novamente mais tarde.",
-          life: 4000,
-        });
-
-        this.resetForm({
-          values: { username: "" },
-        });
-      } finally {
         this.loading = false;
-      }
+      }, 1000);
     },
   },
 };
@@ -125,6 +110,16 @@ export default {
     display: flex;
     align-items: center;
     gap: 1rem;
+  }
+}
+
+.form {
+  display: grid;
+  gap: 16px;
+
+  &__btn-group {
+    display: flex;
+    gap: 13px;
   }
 }
 </style>
