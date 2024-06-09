@@ -75,6 +75,10 @@ export default {
   &__warn {
     color: map-get($color-scheme-dark, "$color-feedback-warning-0");
   }
+
+  &__cta {
+    background-color: map-get($color-scheme-dark, "$color-neutral-neutral-6");
+  }
 }
 
 .header {

@@ -2,7 +2,7 @@
   <VeeForm
     class="form"
     :validation-schema="schema"
-    :initial-values="selectedRow"
+    :initial-values="initialValues"
     @submit="onSubmit"
   >
     <p class="body__secondary">
@@ -150,7 +150,7 @@ export default {
       required: false,
     },
     selectedEmployee: {
-      type: Object as PropType<RegisterEmployee>,
+      type: Object as PropType<RegisterEmployee | {}>,
       default: () => ({}),
       required: false,
     },
@@ -166,7 +166,7 @@ export default {
       departmentOptions: [],
       workRegimeOptions: [],
       workTypeOptions: [],
-      selectedRow: {} as RegisterEmployee | {},
+      initialValues: {} as RegisterEmployee | {},
       nodes: [] as RegisterEmployee[],
 
       schema: {
@@ -183,8 +183,11 @@ export default {
   },
   created() {
     this.nodes = this.csvArray;
-    this.selectedRow = this.selectedEmployee;
+    this.initialValues = this.selectedEmployee;
     this.getFormOptions();
+  },
+  unmounted() {
+    this.initialValues = {};
   },
   methods: {
     ...mapActions(useRegisterEmployeesStore, ["fetchWorkOptions"]),
@@ -199,7 +202,7 @@ export default {
         .catch(() => this.getToast("error"));
     },
     resetAddEditForm(): void {
-      this.selectedRow = {};
+      this.initialValues = {};
       this.toggleDialog();
     },
     onSubmit(values: GenericObject) {

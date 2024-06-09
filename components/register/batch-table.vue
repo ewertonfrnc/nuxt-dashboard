@@ -18,6 +18,7 @@
           icon="pi pi-table"
           label="Adicionar linha"
           class="btn__primary--outlined"
+          :disabled="loading"
           @click="toggleAddEditDialog"
         />
 
@@ -25,7 +26,8 @@
           icon="pi pi-check"
           label="Confirmar e cadastrar"
           class="btn__primary"
-          :disabled="!canProceed"
+          :disabled="!canProceed || loading"
+          :loading="loading"
           @click="saveBatch"
         />
       </div>
@@ -61,7 +63,6 @@
         header-shown
         :columns="columns"
         :custom-filters="filters"
-        :loading="loading"
         :nodes="nodes"
         :total-pages="totalPages"
       >
@@ -122,140 +123,12 @@
       :toggle-dialog="toggleAddEditDialog"
       title="Adicionar colaborador no cadastro"
     >
-      <!-- <VeeForm
-        v-slot="{ values, meta }"
-        class="form"
-        :validation-schema="formSchema"
-        :initial-values="selectedEmployee"
-      >
-        <p class="body__secondary">
-          Insira os dados do colaborador para que seja adicionado no cadastro em
-          lote.
-        </p>
-
-        <h4 class="subtitle__primary">Dados principais</h4>
-
-        <div class="form__personal">
-          <div class="form__control">
-            <label class="caption__primary">
-              Nome completo ou Social
-              <BaseInputText name="name" placeholder="Insira o nome completo" />
-            </label>
-          </div>
-
-          <div class="form__control">
-            <label class="caption__primary">
-              RG
-              <BaseInputMask
-                name="rg"
-                mask="999.999.999"
-                placeholder="Insira o RG"
-              />
-            </label>
-          </div>
-
-          <div class="form__control">
-            <label class="caption__primary">
-              E-mail
-              <BaseInputText
-                name="email"
-                placeholder="Insira o nome completo"
-              />
-            </label>
-          </div>
-
-          <div class="form__control">
-            <label class="caption__primary">
-              CPF
-              <BaseInputMask
-                name="cpf"
-                mask="999.999.999-99"
-                placeholder="Insira o CPF"
-              />
-            </label>
-          </div>
-
-          <div class="form__control">
-            <label class="caption__primary">
-              Telefone
-              <BaseInputMask
-                name="phone"
-                mask="(99) 99999-9999"
-                placeholder="Insira o telefone"
-              />
-            </label>
-          </div>
-        </div>
-
-        <h4 class="subtitle__primary">Dados profissionais</h4>
-
-        <div class="form__profissional">
-          <div class="form__control">
-            <label class="caption__primary">
-              Modelo de contratação
-
-              <BaseDropdown
-                name="workRegime"
-                :options="workRegimeOptions"
-                placeholder="Insira o cargo"
-              />
-            </label>
-          </div>
-
-          <div class="form__control">
-            <label class="caption__primary">
-              Modelo de trabalho
-
-              <BaseDropdown
-                name="workType"
-                :options="workTypeOptions"
-                placeholder="Insira o cargo"
-              />
-            </label>
-          </div>
-
-          <div class="form__control">
-            <label class="caption__primary">
-              Cargo
-
-              <BaseDropdown
-                name="role"
-                :options="roleOptions"
-                placeholder="Insira o cargo"
-              />
-            </label>
-          </div>
-
-          <div class="form__control">
-            <label class="caption__primary">
-              Departamento
-
-              <BaseDropdown
-                name="department"
-                :options="departmentOptions"
-                placeholder="Insira o cargo"
-              />
-            </label>
-          </div>
-        </div>
-
-        <div class="form__btn-group">
-          <BaseButton
-            class="btn__primary--outlined"
-            icon="pi pi-times"
-            label="Cancelar"
-            @click="resetAddEditForm"
-          />
-
-          <BaseButton
-            type="submit"
-            class="btn__primary"
-            icon="pi pi-plus"
-            label="Adicionar"
-            @click.prevent="addEditRowHandler(values, meta)"
-          />
-        </div>
-      </VeeForm> -->
+      <RegisterAddEditForm
+        :loading="loading"
+        :toggle-dialog="resetAddEditForm"
+        :selected-employee="selectedEmployee"
+        @submit="addEditRowHandler"
+      />
     </BaseDialog>
   </BaseCard>
 </template>
@@ -351,10 +224,6 @@ export default {
       },
       filters: {},
       selectedRow: {} as RegisterEmployee,
-      roleOptions: [],
-      departmentOptions: [],
-      workRegimeOptions: [],
-      workTypeOptions: [],
       canProceed: true,
       selectedEmployee: {} as RegisterEmployee | {},
       rowsWithMissingField: 0,
@@ -372,7 +241,6 @@ export default {
 
     this.totalPages = this.calculateTotalPages();
     this.checkForMissingFields(this.nodes);
-    this.getFormOptions();
   },
   methods: {
     ...mapActions(useRegisterEmployeesStore, [
@@ -380,26 +248,22 @@ export default {
       "fetchWorkOptions",
       "saveEmployeesBatch",
     ]),
-    getFormOptions() {
-      this.fetchWorkOptions()
-        .then((options) => {
-          this.roleOptions = options.roleOptions;
-          this.departmentOptions = options.departmentOptions;
-          this.workRegimeOptions = options.workRegimeOptions;
-          this.workTypeOptions = options.workTypeOptions;
-        })
-        .catch(() => this.getToast("error"));
-    },
     saveBatch() {
-      this.saveEmployeesBatch(this.nodes)
-        .then(({ registedEmployees, needReview }) => {
-          this.getToast("success");
-          this.$emit("change-page", {
-            page: "success",
-            params: { registedEmployees, needReview },
-          });
-        })
-        .catch(() => this.getToast("error"));
+      this.loading = true;
+
+      setTimeout(() => {
+        this.saveEmployeesBatch(this.nodes)
+          .then(({ registedEmployees, needReview }) => {
+            this.getToast("success");
+            this.$emit("change-page", {
+              page: "success",
+              params: { registedEmployees, needReview },
+            });
+          })
+          .catch(() => this.getToast("error"));
+
+        this.loading = false;
+      }, 2000);
     },
     calculateNumOfReviews(tableNodes: RegisterEmployee[]) {
       this.rowsWithMissingField = tableNodes.reduce(
@@ -467,6 +331,7 @@ export default {
 
         obj.missingField = !!missingFields.length;
         this.canProceed = !this.nodes.some((item) => item.missingField);
+        this.calculateNumOfReviews(this.nodes);
       });
     },
     footerDeleteHandler(btnClicked: string): void {

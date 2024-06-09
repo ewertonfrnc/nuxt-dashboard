@@ -28,7 +28,7 @@
 
         <div>
           <BaseButton
-            icon="pi pi-user"
+            icon="pi pi-users"
             label="Cadastrar"
             class="btn__primary"
             @click="toggleAddBatchVisibility"
@@ -143,6 +143,7 @@ export default {
       const file = input.files?.[0];
 
       if (file && file.type === "text/csv") {
+        this.loading = true;
         parse(file, {
           complete: (results: ParseResult<string[]>) => {
             this.parsedCsv = results.data
@@ -160,6 +161,7 @@ export default {
                 missingField: false,
               }));
 
+            this.loading = true;
             this.updateCsvData(this.parsedCsv);
             this.$router.push("/register/many-employees");
           },
