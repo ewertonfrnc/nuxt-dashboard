@@ -44,6 +44,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       baseUrl: process.env.NUXT_BASE_URL,
+      supabaseKey: process.env.SUPABASE_KEY,
     },
   },
 });

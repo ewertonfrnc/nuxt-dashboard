@@ -8,29 +8,22 @@
         <p class="body__primary">Insira suas credenciais de acesso:</p>
       </div>
 
-      <form class="form">
+      <VeeForm class="form" :validation-schema="formSchema" @submit="login">
         <div class="form__control">
-          <label class="caption__primary">
-            Usuário
-            <BaseInputMask
-              :wrong-crendentials-message="wrongCpfMessage"
-              mask="999.999.999-99"
-              name="username"
-              placeholder="Insira seu CPF"
-              @handle-change="cpfValidate"
-            />
-          </label>
+          <BaseFormInputMask
+            name="username"
+            mask="999.999.999-99"
+            label="Usuário"
+            placeholder="Insira seu CPF"
+          />
         </div>
 
         <div class="form__control">
-          <label class="caption__primary">
-            Senha
-            <BaseInputPassword
-              :wrong-crendentials-message="wrongCredentialsMessage"
-              name="password"
-              placeholder="Insira sua senha"
-            />
-          </label>
+          <BaseFormInputPassword
+            label="Senha"
+            name="password"
+            placeholder="Insira sua senha"
+          />
         </div>
 
         <div class="form__reminder">
@@ -56,14 +49,13 @@
 
         <div class="form__submit">
           <BaseButton
-            :loading="isLoading"
-            :disabled="wrongCpfMessage.length || isLoading"
-            class="btn__primary"
+            type="submit"
             label="Entrar"
-            @click.prevent="login"
+            class="btn__primary"
+            :loading="loading"
           />
         </div>
-      </form>
+      </VeeForm>
 
       <div class="register">
         <span>Não tem cadastro?</span>
@@ -76,30 +68,25 @@
 </template>
 
 <script lang="ts">
-import { useForm } from "vee-validate";
+import { GenericObject } from "vee-validate";
 import { mapActions, mapState } from "pinia";
 import { UserCredentials } from "@/interfaces/auth/auth.interface";
 
 export default {
   emits: ["changeStep"],
   setup() {
-    const router = useRouter();
-
-    const { handleSubmit, resetForm } = useForm({
-      initialValues: { username: "", password: "" },
-      validationSchema: loginSchema,
-    });
-    const onSubmit = handleSubmit((formValues) => formValues);
-
-    return { router, onSubmit, resetForm };
+    const { getToast } = usePVToast();
+    return { getToast };
   },
   data() {
     return {
-      isLoading: false,
-      formData: {} as UserCredentials,
+      loading: false,
       remindUser: false,
-      wrongCredentialsMessage: "",
-      wrongCpfMessage: "",
+
+      formSchema: {
+        username: "required|min:3|max:255|cpf",
+        password: "required|min:6",
+      },
     };
   },
   computed: {
@@ -110,40 +97,29 @@ export default {
     goToRecoverPassword() {
       this.$emit("changeStep", "recover");
     },
-    cpfValidate(value: string) {
-      this.wrongCpfMessage = value;
-    },
-    async login() {
-      this.isLoading = true;
+    login(values: GenericObject) {
+      const formData = { ...values } as UserCredentials;
 
-      try {
-        this.formData = await this.onSubmit();
-        if (!this.formData) return;
+      this.loading = true;
 
-        await this.authenticateUser(this.formData);
+      setTimeout(() => {
+        this.authenticateUser(formData)
+          .then(() => {
+            if (this.user && !this.remindUser) {
+              sessionStorage.setItem("token", this.user?.token);
+            }
 
-        if (this.user && !this.remindUser) {
-          sessionStorage.setItem("token", this.user?.token);
-        }
+            if (this.user && this.remindUser) {
+              const token = useCookie("token");
+              token.value = this.user?.token;
+            }
 
-        if (this.user && this.remindUser) {
-          const token = useCookie("token");
-          token.value = this.user?.token;
-        }
+            if (this.authenticated) this.$router.push("/");
+          })
+          .catch(() => this.getToast("error"));
 
-        if (this.authenticated) await this.router.push("/");
-      } catch (error) {
-        this.wrongCredentialsMessage = error.response.data.message;
-
-        this.resetForm({
-          values: {
-            username: "",
-            password: "",
-          },
-        });
-      } finally {
-        this.isLoading = false;
-      }
+        this.loading = false;
+      }, 1000);
     },
   },
 };
@@ -184,12 +160,9 @@ export default {
   }
 
   &__submit {
+    width: 200px;
     display: flex;
-    justify-content: center;
-
-    & > button {
-      max-width: 20rem;
-    }
+    justify-self: center;
   }
 }
 
