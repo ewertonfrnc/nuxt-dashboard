@@ -122,7 +122,7 @@
       :toggle-dialog="toggleAddEditDialog"
       title="Adicionar colaborador no cadastro"
     >
-      <VeeForm
+      <!-- <VeeForm
         v-slot="{ values, meta }"
         class="form"
         :validation-schema="formSchema"
@@ -255,7 +255,7 @@
             @click.prevent="addEditRowHandler(values, meta)"
           />
         </div>
-      </VeeForm>
+      </VeeForm> -->
     </BaseDialog>
   </BaseCard>
 </template>
@@ -401,23 +401,6 @@ export default {
         })
         .catch(() => this.getToast("error"));
     },
-    checkForMissingFields(array: RegisterEmployee[]): void {
-      array.forEach((obj) => {
-        const missingFields: string[] = Object.keys(obj).reduce(
-          (acc: string[], key: string) => {
-            const value: string = obj[key];
-            if (value === "") acc.push(key);
-
-            return acc;
-          },
-          [],
-        );
-
-        obj.missingField = !!missingFields.length;
-        this.canProceed = !this.nodes.some((item) => item.missingField);
-        this.calculateNumOfReviews(this.nodes);
-      });
-    },
     calculateNumOfReviews(tableNodes: RegisterEmployee[]) {
       this.rowsWithMissingField = tableNodes.reduce(
         (accumulator, currentValue) =>
@@ -520,37 +503,5 @@ export default {
 
 .row_error {
   color: map-get($color-scheme-light, "$color-feedback-danger-0");
-}
-
-.form {
-  width: 80vw;
-  display: grid;
-  gap: 24px;
-
-  &__personal {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(343px, 1fr));
-    gap: 24px;
-  }
-
-  &__profissional {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(343px, 1fr));
-    gap: 24px;
-  }
-
-  &__control {
-    width: 343px;
-  }
-
-  &__btn-group {
-    display: flex;
-    justify-content: flex-end;
-    gap: 16px;
-
-    button {
-      width: max-content;
-    }
-  }
 }
 </style>

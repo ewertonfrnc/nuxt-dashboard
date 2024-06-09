@@ -14,6 +14,7 @@
             icon="pi pi-user"
             label="Cadastrar"
             class="btn__primary"
+            @click="toggleAddOneDialog"
           />
         </div>
       </div>
@@ -30,7 +31,7 @@
             icon="pi pi-user"
             label="Cadastrar"
             class="btn__primary"
-            @click="toggleVisibility"
+            @click="toggleAddBatchVisibility"
           />
 
           <BaseButton
@@ -43,8 +44,8 @@
     </div>
 
     <BaseDialog
-      :is-visible="isVisible"
-      :toggle-dialog="toggleVisibility"
+      :is-visible="isAddbatchVisible"
+      :toggle-dialog="toggleAddBatchVisibility"
       confirm-dialog
       confirm-icon="pi-users"
       title="Cadastrar por arquivo"
@@ -60,7 +61,7 @@
             icon="pi pi-times"
             label="Cancelar"
             class="btn__primary--outlined"
-            @click="toggleVisibility"
+            @click="toggleAddBatchVisibility"
           />
 
           <BaseButton
@@ -80,6 +81,18 @@
         </div>
       </template>
     </BaseDialog>
+
+    <BaseDialog
+      :is-visible="isAddOneDialogVisible"
+      :toggle-dialog="toggleAddOneDialog"
+      title="Adicionar colaborador no cadastro"
+    >
+      <RegisterAddEditForm
+        :loading="loading"
+        :toggle-dialog="toggleAddOneDialog"
+        @submit="onSubmit"
+      />
+    </BaseDialog>
   </BaseCard>
 </template>
 
@@ -92,15 +105,39 @@ import { useRegisterEmployeesStore } from "~/stores/settings/register-employees"
 export default {
   setup() {
     const { getToast } = usePVToast();
-    const { isVisible, toggleVisibility } = useToggle();
-    return { isVisible, toggleVisibility, getToast };
+
+    const {
+      isVisible: isAddOneDialogVisible,
+      toggleVisibility: toggleAddOneDialog,
+    } = useToggle();
+
+    const {
+      isVisible: isAddbatchVisible,
+      toggleVisibility: toggleAddBatchVisibility,
+    } = useToggle();
+
+    return {
+      isAddbatchVisible,
+      toggleAddBatchVisibility,
+      isAddOneDialogVisible,
+      toggleAddOneDialog,
+      getToast,
+    };
   },
   data() {
-    return { parsedCsv: [] as RegisterEmployee[] };
+    return {
+      loading: false,
+      parsedCsv: [] as RegisterEmployee[],
+    };
   },
-  computed: { ...mapState(useRegisterEmployeesStore, ["csvData"]) },
+  computed: {
+    ...mapState(useRegisterEmployeesStore, ["csvData"]),
+  },
   methods: {
-    ...mapActions(useRegisterEmployeesStore, ["updateCsvData"]),
+    ...mapActions(useRegisterEmployeesStore, [
+      "updateCsvData",
+      "saveEmployeesBatch",
+    ]),
     onSelect(event: Event) {
       const input = event.target as HTMLInputElement;
       const file = input.files?.[0];
@@ -128,6 +165,19 @@ export default {
           },
         });
       }
+    },
+    onSubmit(values: RegisterEmployee) {
+      const batch: RegisterEmployee[] = [values];
+
+      this.loading = true;
+      setTimeout(() => {
+        this.saveEmployeesBatch(batch)
+          .then(() => this.getToast("success"))
+          .catch(() => this.getToast("error"));
+
+        this.loading = false;
+        this.toggleAddOneDialog();
+      }, 2000);
     },
   },
 };
