@@ -16,7 +16,13 @@ import {
   url,
 } from "@vee-validate/rules";
 import { validateCPF } from "~/utils/validators";
-import { cepRegex, dateRegex, phoneRegex } from "~/utils/schemas/regex";
+import {
+  CTPSRegex,
+  PISRegex,
+  cepRegex,
+  dateRegex,
+  phoneRegex,
+} from "~/utils/schemas/regex";
 
 export type ErrorMessages = { [key: string]: string };
 
@@ -34,31 +40,37 @@ export default defineNuxtPlugin(() => {
     !validateCPF(value) ? "CPF inválido" : true,
   );
   defineRule("phone", (value: string) =>
-    !phoneRegex.test(value) ? "Número inválido." : true,
+    !phoneRegex.test(value) ? "Número inválido" : true,
   );
   defineRule("date", (value: string) =>
     !dateRegex.test(value) ? "Data inválida." : true,
   );
   defineRule("cep", (value: string) =>
-    !cepRegex.test(value) ? "CEP inválido." : true,
+    !cepRegex.test(value) ? "CEP inválido" : true,
+  );
+  defineRule("ctps", (value: string) =>
+    !CTPSRegex.test(value) ? "Número da CTPS inválido" : true,
+  );
+  defineRule("pis", (value: string) =>
+    !PISRegex.test(value) ? "Número do PIS inválido" : true,
   );
 
   configure({
     generateMessage: (context): string => {
       const messages: ErrorMessages = {
-        min: `O valor inserido é muito curto.`,
-        max: `O valor inserido é muito longo.`,
-        email: `Este campo precisa de um email válido.`,
-        required: `Este campo é obrigatório.`,
-        min_value: `O valor está abaixo do permitido.`,
-        maxValue: `O valor está acima do permitido.`,
-        alpha_spaces: `Este campo permite apenas caracteres alfabéticos.`,
-        passwords_mismatch: "As senhas não são iguais.",
+        min: `O valor inserido é muito curto`,
+        max: `O valor inserido é muito longo`,
+        email: `Este campo precisa de um email válido`,
+        required: `Este campo é obrigatório`,
+        min_value: `O valor está abaixo do permitido`,
+        maxValue: `O valor está acima do permitido`,
+        alpha_spaces: `Este campo permite apenas caracteres alfabéticos`,
+        passwords_mismatch: "As senhas não são iguais",
       };
 
       return context.rule?.name && messages[context.rule.name]
         ? messages[context.rule.name]
-        : `O campo ${context.field} é inválido.`;
+        : `O campo ${context.field} é inválido`;
     },
     validateOnBlur: true,
     validateOnChange: true,
