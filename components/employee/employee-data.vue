@@ -148,8 +148,8 @@ export default {
 
       initialValues: {} as EmployeePersonalData,
       formSchema: {
-        ethnicity: "required",
-        role: "required",
+        fullname: "required|min:3",
+        birthDate: "required|date",
       },
     };
   },

@@ -13,15 +13,17 @@ import {
   min,
   min_value as minValue,
   required,
+  url,
 } from "@vee-validate/rules";
 import { validateCPF } from "~/utils/validators";
-import { phoneRegex } from "~/utils/schemas/regex";
+import { cepRegex, dateRegex, phoneRegex } from "~/utils/schemas/regex";
 
 export type ErrorMessages = { [key: string]: string };
 
 export default defineNuxtPlugin(() => {
   defineRule("min", min);
   defineRule("max", max);
+  defineRule("url", url);
   defineRule("email", email);
   defineRule("required", required);
   defineRule("min_value", minValue);
@@ -33,6 +35,12 @@ export default defineNuxtPlugin(() => {
   );
   defineRule("phone", (value: string) =>
     !phoneRegex.test(value) ? "Número inválido." : true,
+  );
+  defineRule("date", (value: string) =>
+    !dateRegex.test(value) ? "Data inválida." : true,
+  );
+  defineRule("cep", (value: string) =>
+    !cepRegex.test(value) ? "CEP inválido." : true,
   );
 
   configure({
