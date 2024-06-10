@@ -12,6 +12,10 @@
     border-radius: $input-border-radius;
     transition: all 0.3s;
 
+    &::placeholder {
+      color: map-get($color-scheme-light, "$color-neutral-neutral-2");
+    }
+
     &:read-only {
       border: 1px solid transparent;
       padding: 10px 0;
@@ -63,6 +67,10 @@
   color: $input-color-dark;
   border: 1px solid map-get($color-scheme-dark, "$color-neutral-neutral-4");
   background-color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
+
+  &::placeholder {
+    color: map-get($color-scheme-dark, "$color-neutral-neutral-2");
+  }
 
   &:read-only {
     border: 1px solid transparent;

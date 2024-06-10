@@ -19,6 +19,10 @@
     }
   }
 
+  &__placeholder {
+    color: map-get($color-scheme-light, "$color-neutral-neutral-2");
+  }
+
   &__wrapper {
     background-color: map-get($color-scheme-light, "$color-neutral-neutral-7");
     box-shadow: $box-shadow-light;
@@ -54,6 +58,10 @@
 
   &[readonly] {
     border: 1px solid transparent;
+  }
+
+  &__placeholder {
+    color: map-get($color-scheme-dark, "$color-neutral-neutral-2");
   }
 
   &__wrapper {
