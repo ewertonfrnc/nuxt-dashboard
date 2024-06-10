@@ -1,10 +1,9 @@
 <template>
   <VeeForm
-    v-slot="{ values, errors }"
-    :initial-values="schoolInfo"
-    :validation-schema="formSchema"
     class="form-container fadein animation-duration-500"
-    as="section"
+    :initial-values="initialValues"
+    :validation-schema="formSchema"
+    @submit="handleSubmit"
   >
     <div class="form-container__header">
       <h2 class="heading__secondary">Formação acadêmica</h2>
@@ -22,6 +21,7 @@
           class="btn__danger--outlined"
           icon="pi pi-times"
           label="Cancelar"
+          :disabled="loading"
           @click="cancelEditing"
         />
         <BaseButton
@@ -30,98 +30,71 @@
           class="btn__secondary"
           icon="pi pi-save"
           label="Salvar alterações"
-          @click.prevent="handleSubmit(values)"
+          :loading="loading"
         />
       </div>
     </div>
 
-    <form class="form" @change="handleChange(values, errors)">
+    <div class="form">
       <div class="form__container">
         <div class="form__control">
-          <label class="form__label caption__primary">
-            Curso
-
-            <BaseInputText
-              name="course"
-              :readonly="!isEditing"
-              :wrong-crendentials-message="wrongCrendentialsMessage"
-            />
-          </label>
+          <BaseFormInputText
+            label="Curso"
+            name="course"
+            :readonly="!isEditing"
+          />
         </div>
 
         <div class="form__control">
-          <label class="form__label caption__primary">
-            Instituição de ensino
-
-            <BaseInputText
-              name="educationalInstitution"
-              :readonly="!isEditing"
-              :wrong-crendentials-message="wrongCrendentialsMessage"
-            />
-          </label>
+          <BaseFormInputText
+            label="Instituição de ensino"
+            name="educationalInstitution"
+            :readonly="!isEditing"
+          />
         </div>
 
         <div class="form__control">
-          <label class="form__label caption__primary">
-            Status
-            <BaseDropdown
-              name="status"
-              :readonly="!isEditing"
-              :options="statusOptions"
-              :wrong-crendentials-message="wrongCrendentialsMessage"
-              @on-change="handleChange(values, errors)"
-            />
-          </label>
+          <BaseFormDropdown
+            label="Status"
+            name="status"
+            :readonly="!isEditing"
+            :options="statusOptions"
+          />
         </div>
 
         <div class="form__control">
-          <label class="form__label caption__primary">
-            Ano de ingresso
-
-            <BaseInputText
-              name="entryYear"
-              :readonly="!isEditing"
-              :wrong-crendentials-message="wrongCrendentialsMessage"
-            />
-          </label>
+          <BaseFormInputText
+            label="Ano de ingresso"
+            name="entryYear"
+            :readonly="!isEditing"
+          />
         </div>
 
         <div class="form__control">
-          <label class="form__label caption__primary">
-            Semestre de ingresso
-
-            <BaseDropdown
-              name="entrySemester"
-              :readonly="!isEditing"
-              :options="semesterOptions"
-              :wrong-crendentials-message="wrongCrendentialsMessage"
-              @on-change="handleChange(values, errors)"
-            />
-          </label>
+          <BaseFormDropdown
+            label="Semestre de ingresso"
+            name="entrySemester"
+            :readonly="!isEditing"
+            :options="semesterOptions"
+          />
         </div>
 
         <div class="form__control">
-          <label class="form__label caption__primary">
-            Ano de conclusão
-
-            <BaseInputText
-              name="conclusionYear"
-              :readonly="!isEditing"
-              :wrong-crendentials-message="wrongCrendentialsMessage"
-            />
-          </label>
+          <BaseFormInputText
+            label="Ano de conclusão"
+            name="conclusionYear"
+            :readonly="!isEditing"
+          />
         </div>
       </div>
-    </form>
+    </div>
   </VeeForm>
 </template>
 
 <script lang="ts">
 import { mapState, mapActions } from "pinia";
-import { schoolFormSchema } from "~/utils/schemas/employee/employee.schema";
-import { checkEqualObjs } from "~/utils/validators";
+import { GenericObject } from "vee-validate";
 import { EmployeeSchoolInfo } from "~/interfaces/employee/employee.interface";
-import { checkForErrors } from "~/utils/forms";
 
 export default {
   setup() {
@@ -132,57 +105,42 @@ export default {
     return {
       loading: false,
       isEditing: false,
-      hasChanges: false,
-      validForm: true,
-      usePreferredName: false,
-      wrongCrendentialsMessage: "",
-      statusOptions: ["Em curso", "Concluído", "Incompleto"],
       semesterOptions: ["1", "2"],
+      statusOptions: ["Em curso", "Concluído", "Incompleto"],
+
+      initialValues: {} as EmployeeSchoolInfo,
+      formSchema: {
+        course: "required|alpha_spaces",
+        educationalInstitution: "required|alpha_spaces",
+      },
     };
   },
   computed: {
     ...mapState(useEmployeeStore, ["employee"]),
-    schoolInfo() {
-      return this.employee.schoolInfo;
-    },
-    formSchema() {
-      return schoolFormSchema;
-    },
+  },
+  created() {
+    this.initialValues = this.employee.schoolInfo;
   },
   methods: {
     ...mapActions(useEmployeeStore, ["updateEmployeeSchool"]),
-    handleCheckbox(value: boolean) {
-      this.usePreferredName = value;
-    },
-    handleUpload() {
-      this.employee.personalData.profileImg =
-        "https://images.unsplash.com/photo-1487573884658-a5d3c667584e?q=80&w=2206&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
-    },
     cancelEditing() {
       this.isEditing = false;
-      this.wrongCrendentialsMessage = "";
     },
-    async handleSubmit(values: EmployeeSchoolInfo) {
-      if (!this.hasChanges) return this.cancelEditing();
-      if (!this.validForm) return;
+    handleSubmit(values: GenericObject) {
+      const formData = { ...values } as EmployeeSchoolInfo;
 
       this.loading = true;
-      this.wrongCrendentialsMessage = "";
 
-      try {
-        await this.updateEmployeeSchool(String(this.employee.id), values);
-        this.isEditing = false;
+      setTimeout(() => {
+        this.updateEmployeeSchool(String(this.employee.id), formData)
+          .then(() => {
+            this.isEditing = false;
+            this.getToast("success");
+          })
+          .catch(() => this.getToast("error"));
 
-        this.getToast("success");
-      } catch (error) {
-        this.getToast("error");
-      } finally {
         this.loading = false;
-      }
-    },
-    handleChange(values: EmployeeSchoolInfo, errors: Object) {
-      this.hasChanges = !checkEqualObjs(values, this.employee.personalData);
-      this.validForm = checkForErrors(errors);
+      }, 1000);
     },
   },
 };
@@ -194,52 +152,6 @@ export default {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 24px;
-  }
-
-  &__additional {
-    margin-top: 24px;
-    display: grid;
-    gap: 24px;
-  }
-
-  &__figure {
-    width: 100%;
-    display: flex;
-    gap: 24px;
-
-    img {
-      border-radius: 8px;
-      overflow: hidden;
-      width: 130px;
-      height: 92px;
-    }
-
-    figcaption {
-      align-self: center;
-    }
-  }
-
-  &__control {
-    &--checkbox {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-
-      label {
-        color: map-get($color-scheme-light, "$color-neutral-neutral-2");
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-    }
-
-    &--highlight {
-      width: 359px;
-      padding: 10px;
-      border: 1px solid #6e57f5;
-      border-radius: 8px;
-    }
   }
 }
 </style>
