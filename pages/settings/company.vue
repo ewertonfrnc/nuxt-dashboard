@@ -10,29 +10,35 @@
         <h2 class="heading__secondary">Empresa</h2>
 
         <div class="form-container__header--btns">
-          <BaseButton
-            v-if="!isEditing"
-            class="btn__primary"
-            icon="pi pi-pencil"
-            label="Editar"
-            @click="isEditing = true"
-          />
+          <template v-if="!isEditing">
+            <BaseButton
+              class="btn__primary--outlined"
+              icon="pi pi-building"
+              label="Criar nova empresa"
+            />
+            <BaseButton
+              class="btn__primary"
+              icon="pi pi-pencil"
+              label="Editar"
+              @click="isEditing = true"
+            />
+          </template>
 
-          <BaseButton
-            v-if="isEditing"
-            class="btn__danger--outlined"
-            icon="pi pi-times"
-            label="Cancelar"
-            @click="cancelEditing"
-          />
-          <BaseButton
-            v-if="isEditing"
-            type="submit"
-            class="btn__secondary"
-            icon="pi pi-save"
-            label="Salvar alterações"
-            :loading="loading"
-          />
+          <template v-else>
+            <BaseButton
+              class="btn__danger--outlined"
+              icon="pi pi-times"
+              label="Cancelar"
+              @click="cancelEditing"
+            />
+            <BaseButton
+              type="submit"
+              class="btn__secondary"
+              icon="pi pi-save"
+              label="Salvar alterações"
+              :loading="loading"
+            />
+          </template>
         </div>
       </div>
 
