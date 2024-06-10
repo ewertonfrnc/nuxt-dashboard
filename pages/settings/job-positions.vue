@@ -59,56 +59,12 @@
       title="Cadastrar cargo"
       :toggle-dialog="toggleAddDialogVisibility"
     >
-      <div class="add-dialog">
-        <p class="body__secondary">Insira o nome do cargo a ser criado</p>
-
-        <VeeForm
-          v-slot="{ values, meta }"
-          as="div"
-          :initial-values="newRole"
-          :validation-schema="formSchema"
-        >
-          <form
-            class="add-dialog__form-container"
-            @change="handleChange(values, meta)"
-          >
-            <div class="add-dialog__form">
-              <label>
-                <span class="caption__primary">Nome do cargo</span>
-                <BaseInputText
-                  name="roleName"
-                  placeholder="Insira o nome do cargo"
-                />
-              </label>
-
-              <label>
-                <span class="caption__primary">CBO (opcional)</span>
-                <BaseInputMask
-                  name="cbo"
-                  mask="9999?-99"
-                  placeholder="Pesquisar CBO"
-                />
-              </label>
-            </div>
-
-            <div class="add-dialog__form--btn-group">
-              <BaseButton
-                class="btn__primary--outlined"
-                label="Cancelar"
-                :disabled="dialogLoading"
-                @click="toggleAddDialog"
-              />
-              <BaseButton
-                class="btn__primary"
-                label="Cadastrar"
-                :loading="dialogLoading"
-                :disabled="(!meta.valid && meta.dirty) || dialogLoading"
-                @click="saveJobRole"
-              />
-            </div>
-          </form>
-        </VeeForm>
-      </div>
+      <JobPositionsAddEditForm
+        :loading="dialogLoading"
+        :selected-item="selectedItem"
+        @submit="saveJobRole"
+        @cancel-submit="cancelSubmit"
+      />
     </BaseDialog>
 
     <BaseDialog
@@ -158,7 +114,6 @@
 import { FilterMatchMode } from "primevue/api";
 import { PageState } from "primevue/paginator";
 import { mapActions, mapState } from "pinia";
-import { FormMeta, GenericObject } from "vee-validate";
 import { useJobPositionStore } from "~/stores/settings/job-position.store";
 import {
   JobPosition,
@@ -241,8 +196,6 @@ export default {
       },
 
       dialogLoading: false,
-      validForm: false,
-      newRole: { roleName: "", cbo: "" },
       selectedItem: {} as JobPosition,
     };
   },
@@ -261,34 +214,30 @@ export default {
       "saveJobPositions",
       "deleteJobPosition",
     ]),
-    // Add new role dialog
     toggleAddDialog() {
       this.toggleAddDialogVisibility();
-      this.newRole = { roleName: "", cbo: "" };
     },
-    handleChange(values: JobRole, meta: FormMeta<GenericObject>) {
-      this.newRole = values;
-      this.validForm = meta.valid;
-    },
-    saveJobRole() {
-      if (!this.newRole.roleName) return;
+    saveJobRole(values: JobRole) {
+      if (!values.roleName) return;
 
       this.dialogLoading = true;
 
       setTimeout(() => {
-        this.saveJobPositions(this.newRole)
+        this.saveJobPositions(values)
           .then(() => {
             this.nodes = this.roles;
             this.totalPages = this.total;
             this.getToast("success");
           })
-          .catch(() => this.getToast("error"))
-          .finally(() => this.toggleAddDialog());
+          .catch(() => this.getToast("error"));
 
+        this.toggleAddDialog();
         this.dialogLoading = false;
       }, 1000);
     },
-    // Delete dialog
+    cancelSubmit() {
+      this.toggleAddDialog();
+    },
     handleEditing(itemToEdit: JobPosition) {
       this.toggleDeleteDialogVisibility();
       this.logSelectedItem(itemToEdit);
@@ -302,15 +251,14 @@ export default {
 
       this.deleteJobPosition(this.selectedItem)
         .then(() => this.getToast("success"))
-        .catch(() => this.getToast("error"))
-        .finally(() => this.toggleDeleteDialogVisibility());
+        .catch(() => this.getToast("error"));
 
       this.dialogLoading = false;
+      this.toggleDeleteDialogVisibility();
     },
-    // Table
     logSelectedItem(data: JobPosition) {
+      this.selectedItem = { ...data };
       this.toggleAddDialogVisibility();
-      this.newRole = { roleName: data.role, cbo: data.cbo };
     },
     changePageHandler(currentPage: PageState) {
       this.queries.page = currentPage.page + 1;
@@ -319,14 +267,16 @@ export default {
     getTableValues(queryParams: QueryJobPositions) {
       this.loading = true;
 
-      this.getJobPositions(queryParams)
-        .then(() => {
-          this.nodes = this.roles;
-          this.totalPages = this.total;
-        })
-        .catch(() => this.getToast("error"));
+      setTimeout(() => {
+        this.getJobPositions(queryParams)
+          .then(() => {
+            this.nodes = this.roles;
+            this.totalPages = this.total;
+          })
+          .catch(() => this.getToast("error"));
 
-      this.loading = false;
+        this.loading = false;
+      }, 1000);
     },
   },
 };
@@ -334,7 +284,7 @@ export default {
 
 <style scoped lang="scss">
 .add-dialog {
-  width: 800px;
+  // width: 800px;
   display: grid;
   gap: 24px;
 
