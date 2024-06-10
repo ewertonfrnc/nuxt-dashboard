@@ -59,7 +59,7 @@
       title="Cadastrar cargo"
       :toggle-dialog="toggleAddDialogVisibility"
     >
-      <JobPositionsAddEditForm
+      <SettingsJobsAddEditForm
         :loading="dialogLoading"
         :selected-item="selectedItem"
         @submit="saveJobRole"
