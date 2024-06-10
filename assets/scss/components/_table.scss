@@ -7,6 +7,16 @@
   border: $border-light;
   border-collapse: collapse;
 
+  &__container {
+    display: grid;
+    gap: 24px;
+  }
+
+  &__download {
+    width: 285px;
+    align-self: flex-end;
+  }
+
   &__sort {
     display: grid;
     place-content: center;

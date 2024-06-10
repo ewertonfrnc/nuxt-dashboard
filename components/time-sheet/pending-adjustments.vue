@@ -115,6 +115,7 @@ export default {
       currentPage: 1,
       queries: {
         page: 1,
+        limit: 10,
         global: { value: "", matchMode: "" },
         name: { value: "2", matchMode: "" },
         currentBalance: { value: "", matchMode: "" },

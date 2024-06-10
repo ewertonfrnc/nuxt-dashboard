@@ -1,5 +1,5 @@
 <template>
-  <div ref="container" class="container fadein animation-duration-500">
+  <div ref="container" class="wrapper fadein animation-duration-500">
     <div
       v-if="sidebarExpanded && isNarrowScreen"
       class="mask fadein animation-duration-500"
@@ -101,11 +101,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.dark-mode .container {
+.dark-mode .wrapper {
   background: map-get($color-scheme-dark, "$color-surface-surface-5");
 }
 
-.container {
+.wrapper {
   position: relative;
   height: 100vh;
   transition: all 0.3s cubic-bezier(0, 0, 0.2, 1);

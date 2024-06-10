@@ -12,7 +12,7 @@ export default {};
 .card {
   background: map-get($color-scheme-light, "$color-neutral-neutral-7");
   border: map-get($color-scheme-light, $border-light);
-  box-shadow: map-get($color-scheme-light, $box-shadow-light);
+  box-shadow: $box-shadow-light;
   padding: 2.4rem;
   border-radius: 0.8rem;
   margin-bottom: 2rem;
@@ -21,6 +21,6 @@ export default {};
 .dark-mode .card {
   background: map-get($color-scheme-dark, "$color-neutral-neutral-7");
   border: map-get($color-scheme-dark, $border-dark);
-  box-shadow: map-get($color-scheme-dark, $box-shadow-dark);
+  box-shadow: $box-shadow-dark;
 }
 </style>

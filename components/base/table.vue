@@ -1,5 +1,18 @@
 <template>
+  <template v-if="download">
+    <div class="table__download">
+      <BaseButton
+        class="btn__primary"
+        icon="pi pi-download"
+        label="Baixar fechamento em .CSV"
+        :disabled="downloadDisabled"
+        @click="$refs.dt.exportCSV()"
+      />
+    </div>
+  </template>
+
   <DataTable
+    ref="dt"
     :expanded-rows="expandedRows"
     :filters="filters"
     :global-filter-fields="['name']"
@@ -279,6 +292,8 @@ export default {
     isSelectable: { type: Boolean, required: false, default: false },
     isExpandable: { type: Boolean, required: false, default: false },
     hasAction: { type: Boolean, required: false, default: false },
+    download: { type: Boolean, required: false, default: false },
+    downloadDisabled: { type: Boolean, required: false, default: false },
     totalPages: { type: Number, default: 0, required: false },
     customFilters: { type: Object, default: () => {}, required: true },
   },

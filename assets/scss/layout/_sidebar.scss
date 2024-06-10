@@ -105,6 +105,12 @@
       flex-direction: column;
       justify-content: space-between;
       padding: 0.8rem 1.6rem;
+
+      span {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
     }
 
     &--option {
@@ -113,6 +119,12 @@
       justify-content: space-between;
       padding: 0.8rem 1.6rem;
       transition: all 0.3s ease;
+
+      span {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
 
       &:hover {
         background-color: map-get(

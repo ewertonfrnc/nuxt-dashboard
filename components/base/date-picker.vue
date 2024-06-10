@@ -4,6 +4,7 @@
       v-model="date"
       show-icon
       date-format="dd/mm/yy"
+      :selection-mode="selectionMode"
       :pt="{
         root: `date-picker ${inlineIcon && 'date-picker__transparent'}`,
         input: 'date-picker__input',
@@ -14,23 +15,14 @@
         table: 'date-picker__table',
         tableHeaderRow: 'heading__senary',
         tableBodyRow: 'body__primary',
+        dayLabel(options) {
+          return `date-picker__table--day ${
+            options.context.selected && 'date-picker__selected-day'
+          }`;
+        },
       }"
       @update:model-value="handleDateChange"
-    >
-      <template #date="{ date }">
-        <span
-          :class="[
-            'date-picker__table--day',
-            !date.selectable && 'date-picker__disabled',
-            selectedDay === date.day &&
-              date.selectable &&
-              'date-picker__selected-day',
-          ]"
-        >
-          {{ date.day }}
-        </span>
-      </template>
-    </Calendar>
+    />
 
     <span v-if="!date && placeholder" class="date-picker__placeholder">{{
       placeholder
@@ -39,14 +31,21 @@
 </template>
 
 <script lang="ts">
+import { PropType } from "vue";
 import { usePrimeVue } from "primevue/config";
 import { dateFormatters } from "~/utils/formatters";
 import locale from "~/utils/primevue/locale.utils";
 
+type CalendarModes = "multiple" | "range" | "single";
 export default {
   props: {
     inlineIcon: { type: Boolean, default: false, required: false },
     placeholder: { type: String, default: "", required: false },
+    selectionMode: {
+      type: String as PropType<CalendarModes>,
+      default: "single",
+      required: false,
+    },
   },
   emits: ["date-handler"],
   setup() {
