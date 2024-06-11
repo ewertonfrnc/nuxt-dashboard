@@ -27,7 +27,7 @@
           icon="pi pi-save"
           label="Salvar alterações"
           :loading="loading"
-          :disabled="!validForm"
+          :disabled="loading || !validForm"
           @click.prevent="handleSubmit"
         />
       </div>
@@ -43,8 +43,8 @@
         v-for="(day, idx) in dayNames"
         :key="idx"
         :day-of-week="day"
-        :shifts="shifts"
-        :is-editing="true"
+        :shifts="workSchedule"
+        :is-editing="isEditing"
         @handle-day-change="handleChange"
       />
     </div>
@@ -54,7 +54,11 @@
 <script lang="ts">
 import { mapActions, mapState } from "pinia";
 import { useShiftStore } from "~/stores/settings/shifts.store";
-import { SimpleShift } from "~/interfaces/settings/shifts.interface";
+import {
+  Interval,
+  SimpleShift,
+  WeeklySchedule,
+} from "~/interfaces/settings/shifts.interface";
 import { timeFormatters } from "~/utils/formatters";
 
 export default {
@@ -78,6 +82,7 @@ export default {
       ],
       checkinOptions: ["08:00", "09:00", "10:00", "11:00", "12:00"],
       checkoutOptions: ["13:00", "14:00", "15:00", "15:00", "17:00"],
+      workSchedule: {} as WeeklySchedule,
     };
   },
   computed: {
@@ -85,6 +90,7 @@ export default {
   },
   created() {
     this.getShifts();
+    this.workSchedule = this.shifts;
   },
   methods: {
     ...mapActions(useShiftStore, ["getShifts", "saveShifts"]),
@@ -94,35 +100,30 @@ export default {
     handleChange(dayObj: SimpleShift) {
       const { day, intervals } = dayObj;
 
-      const formattedIntervals = intervals.map(({ start, end }) => {
+      this.workSchedule[day].intervals = intervals.map(({ start, end }) => {
         const startTime =
           typeof start === "object" ? timeFormatters.getOnlyTime(start) : start;
         const endTime =
           typeof end === "object" ? timeFormatters.getOnlyTime(end) : end;
 
-        console.log(startTime > endTime);
-
         return { start: startTime, end: endTime, invalid: startTime > endTime };
       });
-
-      this.shifts[day].intervals = formattedIntervals;
       this.validForm = true;
     },
-
     handleSubmit() {
       this.dayNames.forEach((day) =>
-        this.shifts[day].intervals.forEach((interval) => {
-          if (!interval.start || !interval.end) this.validForm = false;
-        }),
+        this.workSchedule[day].intervals.forEach(
+          ({ start, end, invalid }: Interval) => {
+            if (!start || !end || invalid) this.validForm = false;
+          },
+        ),
       );
 
       if (!this.validForm) return;
 
-      console.log("submit", this.shifts);
-
       this.loading = true;
       setTimeout(() => {
-        this.saveShifts(this.shifts)
+        this.saveShifts(this.workSchedule)
           .then(() => this.getToast("success"))
           .catch(() => this.getToast("error"))
           .finally(() => {
@@ -161,7 +162,7 @@ export default {
 
   &__display {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
     gap: 16px;
   }
 }
