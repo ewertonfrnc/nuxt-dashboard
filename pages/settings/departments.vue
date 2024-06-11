@@ -3,9 +3,9 @@ export default {};
 </script>
 
 <template>
-  <UiModal class="login fadein animation-duration-500">
+  <BaseCard>
     <h1 class="heading__primary">Departamentos</h1>
-  </UiModal>
+  </BaseCard>
 </template>
 
 <style scoped lang="scss"></style>

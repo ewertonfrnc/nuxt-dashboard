@@ -261,6 +261,10 @@
     .success {
       color: map-get($color-scheme-light, "$color-feedback-success-0");
     }
+
+    .danger {
+      color: map-get($color-scheme-light, "$color-feedback-danger-0");
+    }
   }
 
   &__loading,
@@ -365,6 +369,10 @@
 
       .success {
         color: map-get($color-scheme-dark, "$color-feedback-success-0");
+      }
+
+      .danger {
+        color: map-get($color-scheme-dark, "$color-feedback-danger-0");
       }
     }
   }
