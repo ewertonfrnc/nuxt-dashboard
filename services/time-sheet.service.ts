@@ -25,11 +25,13 @@ class TimeSheetService {
   }
 
   fetchUserPendingAdjustments(userId: number) {
+    if (MOCKED) return getResponse("fetchUserPendingAdjustments", "timeSheet");
     return api().get(`/time-sheet/pending/${userId}`);
   }
 
   updatePendingAdjustments(userId: number, payload: WorkLog[]) {
     userId = 1000;
+    if (MOCKED) return getResponse("updatePendingAdjustments", "timeSheet");
     return api().put(`/time-sheet/pending/${userId}`, payload);
   }
 

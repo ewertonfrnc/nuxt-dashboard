@@ -20,3 +20,15 @@
     }
   }
 }
+
+.dark-mode .options {
+  background-color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
+  border: 1px solid map-get($color-scheme-dark, "$color-surface-surface-4");
+
+  &__item {
+    &:hover {
+      background-color: map-get($color-scheme-dark, "$color-brand-primary-1");
+      color: map-get($color-scheme-dark, "$color-brand-primary-0");
+    }
+  }
+}
