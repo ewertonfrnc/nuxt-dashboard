@@ -24,9 +24,7 @@
     </template>
 
     <template #option="{ option }">
-      <span class="body__primary">
-        {{ option }}
-      </span>
+      <span class="body__primary">{{ option }}</span>
     </template>
   </Dropdown>
 
