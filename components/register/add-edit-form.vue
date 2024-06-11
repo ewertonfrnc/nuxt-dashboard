@@ -14,50 +14,46 @@
 
     <div class="form__personal">
       <div class="form__control">
-        <label class="caption__primary">
-          Nome completo ou Social
-          <BaseInputText name="name" placeholder="Insira o nome completo" />
-        </label>
+        <BaseFormInputText
+          label="Nome completo ou Social"
+          name="name"
+          placeholder="Insira o nome completo"
+        />
       </div>
 
       <div class="form__control">
-        <label class="caption__primary">
-          RG
-          <BaseInputMask
-            name="rg"
-            mask="999.999.999"
-            placeholder="Insira o RG"
-          />
-        </label>
+        <BaseFormInputMask
+          label="RG"
+          name="rg"
+          mask="999.999.999"
+          placeholder="Insira o RG"
+        />
       </div>
 
       <div class="form__control">
-        <label class="caption__primary">
-          E-mail
-          <BaseInputText name="email" placeholder="Insira o nome completo" />
-        </label>
+        <BaseFormInputText
+          label="E-mail"
+          name="email"
+          placeholder="Insira o nome completo"
+        />
       </div>
 
       <div class="form__control">
-        <label class="caption__primary">
-          CPF
-          <BaseInputMask
-            name="cpf"
-            mask="999.999.999-99"
-            placeholder="Insira o CPF"
-          />
-        </label>
+        <BaseFormInputMask
+          label="CPF"
+          name="cpf"
+          mask="999.999.999-99"
+          placeholder="Insira o CPF"
+        />
       </div>
 
       <div class="form__control">
-        <label class="caption__primary">
-          Telefone
-          <BaseInputMask
-            name="phone"
-            mask="(99) 99999-9999"
-            placeholder="Insira o telefone"
-          />
-        </label>
+        <BaseFormInputMask
+          label="Telefone"
+          name="phone"
+          mask="(99) 99999-9999"
+          placeholder="Insira o telefone"
+        />
       </div>
     </div>
 
@@ -65,51 +61,39 @@
 
     <div class="form__profissional">
       <div class="form__control">
-        <label class="caption__primary">
-          Modelo de contratação
-
-          <BaseDropdown
-            name="workRegime"
-            :options="workRegimeOptions"
-            placeholder="Insira o cargo"
-          />
-        </label>
+        <BaseFormDropdown
+          label="Modelo de contratação"
+          name="workRegime"
+          :options="workRegimeOptions"
+          placeholder="Insira o cargo"
+        />
       </div>
 
       <div class="form__control">
-        <label class="caption__primary">
-          Modelo de trabalho
-
-          <BaseDropdown
-            name="workType"
-            :options="workTypeOptions"
-            placeholder="Insira o cargo"
-          />
-        </label>
+        <BaseFormDropdown
+          label="Modelo de trabalho"
+          name="workType"
+          :options="workTypeOptions"
+          placeholder="Insira o cargo"
+        />
       </div>
 
       <div class="form__control">
-        <label class="caption__primary">
-          Cargo
-
-          <BaseDropdown
-            name="role"
-            :options="roleOptions"
-            placeholder="Insira o cargo"
-          />
-        </label>
+        <BaseFormDropdown
+          label="Cargo"
+          name="role"
+          :options="roleOptions"
+          placeholder="Insira o cargo"
+        />
       </div>
 
       <div class="form__control">
-        <label class="caption__primary">
-          Departamento
-
-          <BaseDropdown
-            name="department"
-            :options="departmentOptions"
-            placeholder="Insira o cargo"
-          />
-        </label>
+        <BaseFormDropdown
+          label="Departamento"
+          name="department"
+          :options="departmentOptions"
+          placeholder="Insira o cargo"
+        />
       </div>
     </div>
 
@@ -217,6 +201,7 @@ export default {
   width: 80vw;
   display: grid;
   gap: 24px;
+  padding-bottom: 10px;
 
   @include respond(tab-port) {
     width: 100%;
