@@ -140,6 +140,7 @@ import EmployeeWorkInfo from "~/components/employee/employee-work-info.vue";
 import EmployeeDocuments from "~/components/employee/employee-documents.vue";
 import EmployeeSchools from "~/components/employee/employee-schools.vue";
 import { dateFormatters } from "~/utils/formatters";
+import { useEmployeeStore } from "~/stores/employee.store";
 
 export default {
   setup() {

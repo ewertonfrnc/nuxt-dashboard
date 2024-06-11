@@ -5,6 +5,8 @@ import {
   Employee,
   EmployeeAdjusts,
   EmployeeClocks,
+  EmployeeDeactivationDetails,
+  EmployeeQueryParams,
   EmployeeContact,
   EmployeeDeactivationDetails,
   EmployeeDocuments,
