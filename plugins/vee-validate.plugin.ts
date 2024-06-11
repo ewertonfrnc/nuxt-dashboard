@@ -14,10 +14,12 @@ import {
   min_value as minValue,
   required,
 } from "@vee-validate/rules";
+import { validateCPF } from "~/utils/validators";
+import { phoneRegex } from "~/utils/schemas/regex";
 
 export type ErrorMessages = { [key: string]: string };
 
-export default defineNuxtPlugin((nuxtApp) => {
+export default defineNuxtPlugin(() => {
   defineRule("min", min);
   defineRule("max", max);
   defineRule("email", email);
@@ -26,10 +28,15 @@ export default defineNuxtPlugin((nuxtApp) => {
   defineRule("max_value", maxValue);
   defineRule("passwords_mismatch", confirmed);
   defineRule("alpha_spaces", alphaSpaces);
+  defineRule("cpf", (value: string) =>
+    !validateCPF(value) ? "CPF inválido" : true,
+  );
+  defineRule("phone", (value: string) =>
+    !phoneRegex.test(value) ? "Número inválido." : true,
+  );
 
   configure({
     generateMessage: (context): string => {
-      console.log(context);
       const messages: ErrorMessages = {
         min: `O valor inserido é muito curto.`,
         max: `O valor inserido é muito longo.`,

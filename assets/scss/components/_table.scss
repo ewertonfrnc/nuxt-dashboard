@@ -211,6 +211,12 @@
         "$color-neutral-neutral-7"
       );
 
+      span {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
       button {
         cursor: pointer;
         background: transparent;

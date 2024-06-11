@@ -9,6 +9,7 @@ import { companyMock } from "./company.mock";
 import { jobPositionMock } from "~/services/mocks/job-position.mock";
 import { departmentsMock } from "~/services/mocks/departments.mock";
 import { shiftsMock } from "~/services/mocks/shifts.mock";
+import { RegisterMock } from "./register.mock";
 
 const mockTypes = {
   auth: authMock,
@@ -22,6 +23,7 @@ const mockTypes = {
   jobs: jobPositionMock,
   departments: departmentsMock,
   shifts: shiftsMock,
+  register: RegisterMock,
 };
 
 export const getResponse = (

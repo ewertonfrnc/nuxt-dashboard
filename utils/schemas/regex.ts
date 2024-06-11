@@ -11,3 +11,4 @@ export const PISRegex =
 export const CTPSRegex = /^(?!(\d)\1{4}-\1{4}-\1{2}$)\d{5}-\d{4}-[A-Z]{2}$/;
 export const noNumRegex = /^[^\d]*$/;
 export const cnpjRegex = /^(?:(\d)\1{13}|(\d{3})\2{4}|(\d{4})\3{2})-\d{2}$ /;
+export const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
