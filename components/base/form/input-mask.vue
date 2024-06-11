@@ -6,17 +6,22 @@
       <InputMask
         v-bind="field"
         v-model="field.value"
-        mask="999.999.999-99"
+        :mask="mask"
         :class="['input__field body__primary', errorMessage && 'error']"
         :disabled="disabled"
         :placeholder="placeholder"
         :readonly="readonly"
+        @update:model-value="handleChange"
+      />
+
+      <i
+        v-if="!readonly && rightIcon"
+        :class="`${rightIcon} input__icon-right`"
+        @click="handleRightIcon"
       />
     </VeeField>
 
-    <Transition>
-      <ErrorMessage :name="name" class="caption__secondary input__error" />
-    </Transition>
+    <ErrorMessage :name="name" class="caption__secondary input__error" />
   </label>
 </template>
 
@@ -29,6 +34,32 @@ export default {
     placeholder: { type: String, default: "", required: false },
     readonly: { type: Boolean, default: false, required: false },
     disabled: { type: Boolean, default: false, required: false },
+    icon: { type: String, default: "", required: false },
+    rightIcon: { type: String, default: "", required: false },
+  },
+  emits: ["handle-change", "right-icon-click"],
+  methods: {
+    handleRightIcon() {
+      this.$emit("right-icon-click");
+    },
+    handleChange(value: string) {
+      this.$emit("handle-change", value);
+    },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.input__icon-right {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  right: 5%;
+  transform: translate(20%, 10%);
+  color: map-get($color-scheme-light, "$color-brand-primary-0");
+}
+
+.dark-mode .input__icon-right {
+  color: map-get($color-scheme-dark, "$color-brand-primary-0");
+}
+</style>

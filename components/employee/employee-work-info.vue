@@ -1,10 +1,9 @@
 <template>
   <VeeForm
-    v-slot="{ values, errors }"
-    :initial-values="workInfo"
-    :validation-schema="formSchema"
     class="form-container fadein animation-duration-500"
-    as="section"
+    :initial-values="initialValues"
+    :validation-schema="formSchema"
+    @submit="handleSubmit"
   >
     <div class="form-container__header">
       <h2 class="heading__secondary">Dados profissionais</h2>
@@ -22,6 +21,7 @@
           class="btn__danger--outlined"
           icon="pi pi-times"
           label="Cancelar"
+          :disabled="loading"
           @click="cancelEditing"
         />
         <BaseButton
@@ -30,140 +30,110 @@
           class="btn__secondary"
           icon="pi pi-save"
           label="Salvar alterações"
-          @click.prevent="handleSubmit(values, errors)"
+          :loading="loading"
         />
       </div>
     </div>
 
-    <form class="form" @change="handleChange(values, errors)">
+    <div class="form">
       <div class="form__control">
-        <label class="form__label caption__primary">
-          Cargo
-
-          <BaseInputText name="role" :readonly="!isEditing" />
-        </label>
+        <BaseFormInputText label="Cargo" name="role" :readonly="!isEditing" />
       </div>
 
       <div class="form__control">
-        <label class="form__label caption__primary">
-          Departamento
-
-          <BaseInputText name="department" :readonly="!isEditing" />
-        </label>
+        <BaseFormInputText
+          label="Departamento"
+          name="department"
+          :readonly="!isEditing"
+        />
       </div>
 
       <div class="form__control">
-        <label class="form__label caption__primary">
-          Data de admissão
-
-          <BaseInputMask
-            name="admissionDate"
-            mask="99/99/9999"
-            :readonly="!isEditing"
-          />
-        </label>
+        <BaseFormInputMask
+          label="Data de admissão"
+          name="admissionDate"
+          mask="99/99/9999"
+          :readonly="!isEditing"
+        />
       </div>
 
       <div class="form__control">
-        <label class="form__label caption__primary">
-          Modelo de trabalho
-
-          <BaseDropdown
-            name="workType"
-            :readonly="!isEditing"
-            :options="workTypeOptions"
-            @on-change="handleChange(values, errors)"
-          />
-        </label>
+        <BaseFormDropdown
+          label="Modelo de trabalho"
+          name="workType"
+          :readonly="!isEditing"
+          :options="workTypeOptions"
+        />
       </div>
 
       <div class="form__control">
-        <label class="form__label caption__primary">
-          Modelo de contratação
-
-          <BaseDropdown
-            name="hireType"
-            :readonly="!isEditing"
-            :options="hireTypeOptions"
-            @on-change="handleChange(values, errors)"
-          />
-        </label>
+        <BaseFormDropdown
+          label="Modelo de contratação"
+          name="hireType"
+          :readonly="!isEditing"
+          :options="hireTypeOptions"
+        />
       </div>
 
       <div class="form__control">
-        <label class="form__label caption__primary">
-          Horas semanais
-
-          <BaseDropdown
-            name="hoursPerWeek"
-            :readonly="!isEditing"
-            :options="hoursPerWeekOptions"
-            @on-change="handleChange(values, errors)"
-          />
-        </label>
+        <BaseFormDropdown
+          label="Horas semanais"
+          name="hoursPerWeek"
+          :readonly="!isEditing"
+          :options="hoursPerWeekOptions"
+        />
       </div>
 
       <div class="form__control">
-        <label class="form__label caption__primary">
-          CTPS (Carteira de Trabalho e Previdência Social)
-
-          <BaseInputMask
-            name="ctps"
-            mask="99999-9999-aa"
-            :readonly="!isEditing"
-          />
-        </label>
+        <BaseFormInputMask
+          label="CTPS (Carteira de Trabalho e Previdência Social)"
+          name="ctps"
+          mask="99999-9999-aa"
+          :readonly="!isEditing"
+        />
       </div>
 
       <div class="form__control">
-        <label class="form__label caption__primary">
-          PIS (Programa de Integração Social)
-
-          <BaseInputMask
-            name="pis"
-            mask="999.99999.99-9"
-            :readonly="!isEditing"
-          />
-        </label>
+        <BaseFormInputMask
+          label="PIS (Programa de Integração Social)"
+          name="pis"
+          mask="999.99999.99-9"
+          :readonly="!isEditing"
+        />
       </div>
 
       <div class="form__control">
-        <label class="form__label caption__primary">
-          Tempo de empresa
-
-          <BaseInputText
-            name="companyTime"
-            :readonly="!isEditing"
-            :disabled="isEditing"
-          />
-        </label>
+        <BaseFormInputText
+          label="Tempo de empresa"
+          name="companyTime"
+          :readonly="!isEditing"
+          :disabled="isEditing"
+        />
       </div>
 
       <div class="form__control">
-        <label class="form__label caption__primary">
-          Data de desligamento
-
-          <BaseInputText name="dismissalDate" :readonly="!isEditing" />
-        </label>
+        <BaseFormInputText
+          label="Data de desligamento"
+          name="dismissalDate"
+          :readonly="!isEditing"
+        />
       </div>
 
       <div class="form__control">
-        <label class="form__label caption__primary">
-          Motivo de desligamento
-
-          <BaseInputText name="dismissalReason" :readonly="!isEditing" />
-        </label>
+        <BaseFormInputText
+          label="Motivo de desligamento"
+          name="dismissalReason"
+          :readonly="!isEditing"
+        />
       </div>
-    </form>
+    </div>
   </VeeForm>
 </template>
 
 <script lang="ts">
 import { mapState, mapActions } from "pinia";
-import { checkEqualObjs } from "~/utils/validators";
-import { workInfoSchema } from "~/utils/schemas/employee/employee.schema";
+import { GenericObject } from "vee-validate";
 import { EmployeeWorkInfo } from "~/interfaces/employee/employee.interface";
-import { checkForErrors } from "~/utils/forms";
 
 export default {
   setup() {
@@ -174,54 +144,44 @@ export default {
     return {
       loading: false,
       isEditing: false,
-      hasChanges: false,
-      validForm: false,
-      usePreferredName: false,
-      workTypeOptions: ["Presencial", "Híbrido", "Remoto"],
       hireTypeOptions: ["CLT", "PJ"],
+      workTypeOptions: ["Presencial", "Híbrido", "Remoto"],
       hoursPerWeekOptions: ["40 horas", "30 horas", "20 horas"],
+
+      initialValues: {},
+      formSchema: {
+        admissionDate: "date",
+        ctps: "required|ctps",
+        pis: "required|pis",
+        companyTime: "required",
+      },
     };
   },
   computed: {
     ...mapState(useEmployeeStore, ["employee"]),
-    workInfo() {
-      return this.employee.workData;
-    },
-    formSchema() {
-      return workInfoSchema;
-    },
+  },
+  created() {
+    this.initialValues = this.employee.workData;
   },
   methods: {
     ...mapActions(useEmployeeStore, ["updateEmployeeWorkInfo"]),
-    handleCheckbox(value: boolean) {
-      this.usePreferredName = value;
-    },
-    handleUpload() {
-      this.employee.personalData.profileImg =
-        "https://images.unsplash.com/photo-1487573884658-a5d3c667584e?q=80&w=2206&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
-    },
     cancelEditing() {
       this.isEditing = false;
     },
-    async handleSubmit(values: EmployeeWorkInfo) {
-      if (!this.hasChanges) return this.cancelEditing();
-      if (!this.validForm) return;
+    handleSubmit(values: GenericObject) {
+      const formData = { ...values } as EmployeeWorkInfo;
 
       this.loading = true;
+      setTimeout(() => {
+        this.updateEmployeeWorkInfo(String(this.employee.id), formData)
+          .then(() => {
+            this.isEditing = false;
+            this.getToast("success");
+          })
+          .catch(() => this.getToast("error"));
 
-      try {
-        await this.updateEmployeeWorkInfo(String(this.employee.id), values);
-        this.isEditing = false;
-        this.getToast("success");
-      } catch (error) {
-        this.getToast("error");
-      } finally {
         this.loading = false;
-      }
-    },
-    handleChange(values: EmployeeWorkInfo, errors: Object) {
-      this.hasChanges = !checkEqualObjs(values, this.employee.workData);
-      this.validForm = checkForErrors(errors);
+      }, 1000);
     },
   },
 };

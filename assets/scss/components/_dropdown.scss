@@ -1,27 +1,11 @@
 .dropdown {
   cursor: pointer;
 
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
   padding: $input-padding;
   border-radius: $input-border-radius;
   border: $border-light;
   color: $input-color-light;
   transition: all 0.3s;
-
-  &:focus-visible {
-    outline: 2px solid black;
-  }
-
-  &:has(.dropdown__input[aria-disabled="true"]) {
-    background-color: $color-neutral-neutral-3;
-    color: $color-neutral-neutral-3;
-    border: 1px solid $color-neutral-neutral-3;
-    cursor: not-allowed;
-  }
 
   &[readonly] {
     border: 1px solid transparent;
@@ -35,19 +19,10 @@
     }
   }
 
-  &__input {
-    width: 100%;
-
-    color: inherit;
-    font-size: $input-font-size;
-    font-family: inherit;
-    outline: none;
-  }
-
-  &__options {
+  &__wrapper {
     background-color: map-get($color-scheme-light, "$color-neutral-neutral-7");
     box-shadow: $box-shadow-light;
-    border-radius: 8px;
+    border-radius: $border-radius;
   }
 
   &__list {
@@ -68,13 +43,33 @@
     }
   }
 
-  .error {
+  &__error {
     border: 1px solid map-get($color-scheme-light, "$color-feedback-danger-0");
+  }
+}
+
+.dark-mode .dropdown {
+  border: $border-dark;
+  color: $input-color-dark;
+
+  &[readonly] {
+    border: 1px solid transparent;
+  }
+
+  &__wrapper {
+    background-color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
+    box-shadow: $box-shadow-dark;
+  }
+
+  &__list {
+    li {
+      &:hover {
+        background-color: map-get($color-scheme-dark, "$color-brand-primary-1");
+      }
+    }
   }
 
   &__error {
-    display: block;
-    color: map-get($color-scheme-light, "$color-feedback-danger-0");
-    padding: 0.5rem 1rem 0;
+    border: 1px solid map-get($color-scheme-dark, "$color-feedback-danger-0");
   }
 }
