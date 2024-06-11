@@ -4,6 +4,8 @@ import timeSheetService from "./time-sheet.service";
 import employeesService from "./employees.service";
 import employeeService from "./employee.service";
 import timeTrackingService from "./time-tracking.service";
+import clockConfigService from "./settings/clock-config.service";
+import companyService from "./settings/company.service";
 
 export {
   authService,
@@ -12,4 +14,6 @@ export {
   employeesService,
   employeeService,
   timeTrackingService,
+  clockConfigService,
+  companyService,
 };
