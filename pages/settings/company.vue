@@ -1,193 +1,164 @@
 <template>
   <BaseCard>
     <VeeForm
-      v-slot="{ values, errors, meta }"
-      :initial-values="companyInfo"
-      :validation-schema="formSchema"
-      as="div"
       class="form-container"
+      :initial-values="inititalValues"
+      :validation-schema="formSchema"
+      @submit="handleSubmit"
     >
       <div class="form-container__header">
         <h2 class="heading__secondary">Empresa</h2>
 
         <div class="form-container__header--btns">
-          <BaseButton
-            v-if="!isEditing"
-            class="btn__primary"
-            icon="pi pi-pencil"
-            label="Editar"
-            @click="isEditing = true"
-          />
+          <template v-if="!isEditing">
+            <BaseButton
+              class="btn__primary--outlined"
+              icon="pi pi-building"
+              label="Criar nova empresa"
+            />
+            <BaseButton
+              class="btn__primary"
+              icon="pi pi-pencil"
+              label="Editar"
+              @click="isEditing = true"
+            />
+          </template>
 
-          <BaseButton
-            v-if="isEditing"
-            class="btn__danger--outlined"
-            icon="pi pi-times"
-            label="Cancelar"
-            @click="cancelEditing"
-          />
-          <BaseButton
-            v-if="isEditing"
-            type="submit"
-            class="btn__secondary"
-            icon="pi pi-save"
-            label="Salvar alterações"
-            :loading="loading"
-            :disabled="!validForm"
-            @click.prevent="handleSubmit(values, meta)"
-          />
+          <template v-else>
+            <BaseButton
+              class="btn__danger--outlined"
+              icon="pi pi-times"
+              label="Cancelar"
+              @click="cancelEditing"
+            />
+            <BaseButton
+              type="submit"
+              class="btn__secondary"
+              icon="pi pi-save"
+              label="Salvar alterações"
+              :loading="loading"
+            />
+          </template>
         </div>
       </div>
 
-      <form class="form" @change="handleChange(values, errors)">
+      <form class="form">
         <div class="'form__editing fadein animation-duration-500'">
           <div class="form__company-name">
             <div class="form__control">
-              <label class="form__label caption__primary">
-                Nome da empresa
-
-                <BaseInputText name="name" :readonly="!isEditing" />
-              </label>
+              <BaseFormInputText
+                label="Nome da empresa"
+                name="name"
+                :readonly="!isEditing"
+              />
             </div>
 
             <div class="form__control">
-              <label class="form__label caption__primary">
-                Razão social
-
-                <BaseInputText name="legalName" :readonly="!isEditing" />
-              </label>
+              <BaseFormInputText
+                label="Razão social"
+                name="legalName"
+                :readonly="!isEditing"
+              />
             </div>
 
-            <div class="form__control">
-              <label
-                :class="[
-                  'form__label caption__primary',
-                  isEditing && 'form__label--disabled',
-                ]"
-              >
-                CNPJ
-
-                <BaseInputMask
-                  name="cnpj"
-                  mask="99.999.999/9999-99"
-                  :disabled="isEditing"
-                  :readonly="!isEditing"
-                />
-              </label>
+            <div :class="['form__control', isEditing && 'form__disabled']">
+              <BaseFormInputMask
+                label="CNPJ"
+                name="cnpj"
+                mask="99.999.999/9999-99"
+                :disabled="isEditing"
+                :readonly="!isEditing"
+              />
             </div>
           </div>
 
           <div class="form__control">
-            <label class="form__label caption__primary">
-              Tamanho da empresa
-
-              <BaseDropdown
-                name="companySize"
-                :readonly="!isEditing"
-                :options="companySizeOptions"
-                :wrong-crendentials-message="wrongCrendentialsMessage"
-                @on-change="handleChange(values, meta.valid)"
-              />
-            </label>
+            <BaseFormDropdown
+              label="Tamanho da empresa"
+              name="companySize"
+              :readonly="!isEditing"
+              :options="companySizeOptions"
+            />
           </div>
 
           <div class="form__search">
             <div class="form__control">
-              <label
+              <div
                 :class="[
-                  'form__label caption__primary',
-                  isEditing && !isSearchable && 'form__label--disabled',
+                  'form__control',
+                  !isSearchable && isEditing && 'form__disabled',
                 ]"
               >
-                CEP
-
-                <BaseInputMask
+                <BaseFormInputMask
+                  label="CEP"
                   name="cep"
                   mask="99999-999"
                   right-icon="pi pi-search"
                   :disabled="isEditing && !isSearchable"
                   :readonly="!isEditing"
                   @right-icon-click="toggleSearch"
+                  @handle-change="searchAddres"
                 />
-              </label>
+              </div>
             </div>
           </div>
 
           <div class="form__state-city">
-            <div class="form__control">
-              <label
-                :class="[
-                  'form__label caption__primary',
-                  isEditing && 'form__label--disabled',
-                ]"
-              >
-                Estado
-
-                <BaseInputText
-                  name="state"
-                  :readonly="!isEditing"
-                  :disabled="isEditing"
-                />
-              </label>
+            <div :class="['form__control', isEditing && 'form__disabled']">
+              <BaseFormInputText
+                label="Estado"
+                name="state"
+                :readonly="!isEditing"
+                :disabled="isEditing"
+              />
             </div>
 
-            <div class="form__control">
-              <label
-                :class="[
-                  'form__label caption__primary',
-                  isEditing && 'form__label--disabled',
-                ]"
-              >
-                Cidade
-
-                <BaseInputText
-                  name="city"
-                  :readonly="!isEditing"
-                  :disabled="isEditing"
-                />
-              </label>
+            <div :class="['form__control', isEditing && 'form__disabled']">
+              <BaseFormInputText
+                label="Cidade"
+                name="city"
+                :readonly="!isEditing"
+                :disabled="isEditing"
+              />
             </div>
           </div>
 
           <div class="form__address">
             <div class="form__control">
-              <label class="form__label caption__primary">
-                Bairro
-
-                <BaseInputText name="neighborhood" :readonly="!isEditing" />
-              </label>
+              <BaseFormInputText
+                label="Bairro"
+                name="neighborhood"
+                :readonly="!isEditing"
+              />
             </div>
 
             <div class="form__control">
-              <label class="form__label caption__primary">
-                Logradouro
-
-                <BaseInputText name="street" :readonly="!isEditing" />
-              </label>
+              <BaseFormInputText
+                label="Logradouro"
+                name="street"
+                :readonly="!isEditing"
+              />
             </div>
 
-            <div class="form__control">
-              <label class="form__label caption__primary">
-                Número
-
-                <BaseInputText name="houseNumber" :readonly="!isEditing" />
-              </label>
+            <div v-if="isEditing" class="form__control">
+              <BaseFormInputText
+                label="Número"
+                name="houseNumber"
+                :readonly="!isEditing"
+              />
             </div>
           </div>
 
           <div class="form__control">
-            <label class="form__label caption__primary">
-              Complemento
-
-              <BaseInputText
-                name="additionalAddressDetails"
-                :readonly="!isEditing"
-              />
-            </label>
+            <BaseFormInputText
+              label="Complemento"
+              name="additionalAddressDetails"
+              :readonly="!isEditing"
+            />
             <Transition>
-              <small v-if="isEditing" class="caption__secondary"
-                >Opcional</small
-              >
+              <small v-if="isEditing" class="caption__secondary">
+                Opcional
+              </small>
             </Transition>
           </div>
 
@@ -196,7 +167,7 @@
               v-if="isEditing"
               class="form__upload fadein animation-duration-500"
             >
-              <span class="body__primary">Foto de perfil</span>
+              <span class="subtitle__primary">Logo da empresa</span>
               <BaseUpload @on-upload="handleUpload" />
             </div>
 
@@ -207,8 +178,8 @@
                 </figcaption>
 
                 <img
-                  :src="companyInfo.companyLogo"
-                  :alt="`Foto de perfil de ${companyInfo.name}`"
+                  :src="inititalValues.companyLogo"
+                  :alt="`Foto de perfil de ${inititalValues.name}`"
                 />
               </figure>
             </div>
@@ -221,11 +192,10 @@
 
 <script lang="ts">
 import { mapActions, mapState } from "pinia";
-import { FormMeta, GenericObject } from "vee-validate";
+import { GenericObject } from "vee-validate";
 import { CompanyInfo } from "~/interfaces/settings/company.interface";
 import { useCompanyStore } from "~/stores/settings/company.store";
-import { companyFormSchema } from "~/utils/schemas/settings/company.schema";
-import { checkForErrors } from "~/utils/forms";
+import { cepRegex } from "~/utils/schemas/regex";
 
 export default {
   setup() {
@@ -235,11 +205,8 @@ export default {
   data() {
     return {
       loading: false,
-      hasChanges: false,
       isEditing: false,
-      validForm: true,
       isSearchable: false,
-      wrongCrendentialsMessage: "",
       companySizeOptions: [
         "1 a 5 colaboradores",
         "6 a 10 colaboradores",
@@ -253,19 +220,23 @@ export default {
         "100.000+ colaboradores",
         "Não trabalho para uma empresa",
       ],
+
+      inititalValues: {} as CompanyInfo,
+      formSchema: {
+        name: "required|min:3|max:255",
+        legalName: "required|min:3|max:255",
+        street: "required|min:5|max:255",
+        houseNumber: "required|min:3|max:255",
+        additionalAddressDetails: "max:128",
+      },
     };
   },
   computed: {
     ...mapState(useCompanyStore, ["company"]),
-    companyInfo() {
-      return this.company;
-    },
-    formSchema() {
-      return companyFormSchema;
-    },
   },
   created() {
     this.getCompanyInfo();
+    this.inititalValues = { ...this.company };
   },
   methods: {
     ...mapActions(useEmployeeStore, ["searchEmployeeAddres"]),
@@ -277,31 +248,31 @@ export default {
     cancelEditing() {
       this.isEditing = false;
       this.isSearchable = false;
-      this.wrongCrendentialsMessage = "";
     },
-    searchAddres(values: CompanyInfo) {
-      this.searchEmployeeAddres(values.cep)
-        .then((result) => {
-          Object.keys(this.company).forEach((item) => {
-            if (!result[item]) return;
-            this.company[item] = result[item];
-          });
+    searchAddres(cep: string) {
+      if (!cepRegex.test(cep)) return;
+
+      this.searchEmployeeAddres(cep)
+        .then((newAddres) => {
+          this.inititalValues = newAddres;
         })
         .catch(() => this.getToast("error"));
     },
-    handleSubmit(values: CompanyInfo, meta: FormMeta<GenericObject>) {
-      if (!meta.dirty) return this.cancelEditing();
-      if (!this.validForm) return;
+    handleSubmit(values: GenericObject) {
+      const formData = { ...values } as CompanyInfo;
 
       this.loading = true;
-      this.saveCompanyInfo(values)
-        .then(() => this.getToast("success"))
-        .catch(() => this.getToast("error"))
-        .finally(() => (this.loading = false));
-    },
-    handleChange(values: CompanyInfo, errors: Object) {
-      if (values.cep !== this.company.cep) this.searchAddres(values);
-      this.validForm = checkForErrors(errors);
+
+      setTimeout(() => {
+        this.saveCompanyInfo(formData)
+          .then(() => {
+            this.cancelEditing();
+            this.getToast("success");
+          })
+          .catch(() => this.getToast("error"));
+
+        this.loading = false;
+      }, 1000);
     },
   },
 };
@@ -315,11 +286,8 @@ export default {
     column-gap: 24px;
   }
 
-  &__label {
-    transition: all 0.3s;
-    &--disabled {
-      color: map-get($color-scheme-light, "$color-neutral-neutral-4");
-    }
+  &__disabled {
+    color: map-get($color-scheme-light, "$color-neutral-neutral-4");
   }
 
   &__control {
@@ -352,6 +320,17 @@ export default {
     }
   }
 
+  &__figure {
+    display: grid;
+    gap: 24px;
+
+    img {
+      max-width: 100%;
+      border-radius: 11px;
+      border: $border-light;
+    }
+  }
+
   &__search {
     height: 90px;
     display: flex;
@@ -381,6 +360,17 @@ export default {
       button {
         width: 100%;
       }
+    }
+  }
+}
+
+.dark-mode .form {
+  &__disabled {
+    color: map-get($color-scheme-dark, "$color-neutral-neutral-4");
+  }
+  &__figure {
+    img {
+      border: $border-dark;
     }
   }
 }

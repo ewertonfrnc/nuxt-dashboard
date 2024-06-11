@@ -1,11 +1,10 @@
 <template>
   <BaseCard>
     <VeeForm
-      v-slot="{ values, meta }"
-      :initial-values="!isEditing ? formValuesView : formValues"
-      :validation-schema="formSchema"
-      as="div"
       class="form-container"
+      :initial-values="initialValues"
+      :validation-schema="formSchema"
+      @submit="handleSubmit"
     >
       <div class="form-container__header">
         <h2 class="heading__secondary">Parâmetros de ponto</h2>
@@ -16,7 +15,7 @@
             class="btn__primary"
             icon="pi pi-pencil"
             label="Editar"
-            @click="isEditing = true"
+            @click="toggleEditing"
           />
 
           <BaseButton
@@ -24,6 +23,7 @@
             class="btn__danger--outlined"
             icon="pi pi-times"
             label="Cancelar"
+            :disabled="loading"
             @click="cancelEditing"
           />
           <BaseButton
@@ -32,8 +32,7 @@
             class="btn__secondary"
             icon="pi pi-save"
             label="Salvar alterações"
-            :disabled="!validForm"
-            @click.prevent="handleSubmit(values)"
+            :loading="loading"
           />
         </div>
       </div>
@@ -42,39 +41,39 @@
         Aqui você poderá configurar os parâmetros para o fechamento de ponto.
       </p>
 
-      <form class="form" @change="handleChange(values, meta.valid)">
+      <div class="form">
         <div class="form__control">
-          <label class="form__label caption__primary">
-            Horas extras 1
-
-            <BaseInputText name="extra1" :readonly="!isEditing" />
-          </label>
+          <BaseFormInputText
+            label="Horas extras 1"
+            name="extra1"
+            :readonly="!isEditing"
+          />
         </div>
 
         <div class="form__control">
-          <label class="form__label caption__primary">
-            Horas extras 2
-
-            <BaseInputText name="extra2" :readonly="!isEditing" />
-          </label>
+          <BaseFormInputText
+            label="Horas extras 2"
+            name="extra2"
+            :readonly="!isEditing"
+          />
         </div>
 
         <div class="form__control">
-          <label class="form__label caption__primary">
-            Horas extras 3
-
-            <BaseInputText name="extra3" :readonly="!isEditing" />
-          </label>
+          <BaseFormInputText
+            label="Horas extras 3"
+            name="extra3"
+            :readonly="!isEditing"
+          />
         </div>
 
         <div class="form__control">
-          <label class="form__label caption__primary">
-            Horas extras 4
-
-            <BaseInputText name="extra4" :readonly="!isEditing" />
-          </label>
+          <BaseFormInputText
+            label="Horas extras 4"
+            name="extra4"
+            :readonly="!isEditing"
+          />
         </div>
-      </form>
+      </div>
     </VeeForm>
   </BaseCard>
 </template>
@@ -82,50 +81,65 @@
 <script lang="ts">
 import { mapActions, mapState } from "pinia";
 import { useClockConfigStore } from "~/stores/settings/clock-config.store";
-import { clocksSettingsSchema } from "~/utils/schemas/settings/settings.schema";
-import { checkEqualObjs } from "~/utils/validators";
 import { clockValues } from "~/interfaces/settings/settings.interface";
 
 export default {
+  setup() {
+    const { getToast } = usePVToast();
+    return { getToast };
+  },
   data() {
     return {
+      loading: false,
       isEditing: false,
-      hasChanges: false,
-      validForm: true,
+
+      initialValues: {},
+      formSchema: {
+        extra1: "required|min:1|max:3",
+        extra2: "required|min:1|max:3",
+        extra3: "required|min:1|max:3",
+        extra4: "required|min:1|max:3",
+      },
     };
   },
   computed: {
     ...mapState(useClockConfigStore, ["hours"]),
-    formValues() {
-      return this.hours;
-    },
-    formValuesView() {
-      return Object.values(this.hours).reduce((obj, hour, idx) => {
-        obj[`extra${idx + 1}`] = `${hour}%`;
-        return obj;
-      }, {});
-    },
-    formSchema() {
-      return clocksSettingsSchema;
-    },
   },
   created() {
     this.getExtraHours();
+    this.handleInitialValues();
   },
   methods: {
     ...mapActions(useClockConfigStore, ["getExtraHours", "saveExtraHours"]),
     cancelEditing() {
       this.isEditing = false;
+      this.handleInitialValues();
+    },
+    toggleEditing() {
+      this.isEditing = true;
+      this.handleInitialValues();
+    },
+    handleInitialValues() {
+      this.initialValues = this.isEditing
+        ? this.hours
+        : Object.values(this.hours).reduce((obj, hour, idx) => {
+            obj[`extra${idx + 1}`] = `${hour}%`;
+            return obj;
+          }, {});
     },
     handleSubmit(values: clockValues) {
-      if (!this.hasChanges) return this.cancelEditing();
-      if (!this.validForm) return;
+      this.loading = true;
 
-      this.saveExtraHours(values);
-    },
-    handleChange(values: clockValues, valid: boolean) {
-      this.hasChanges = !checkEqualObjs(values, this.hours);
-      this.validForm = valid;
+      setTimeout(() => {
+        this.saveExtraHours(values)
+          .then(() => {
+            this.cancelEditing();
+            this.getToast("success");
+          })
+          .catch(() => this.getToast("error"));
+
+        this.loading = false;
+      }, 1000);
     },
   },
 };

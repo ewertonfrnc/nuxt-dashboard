@@ -16,4 +16,21 @@ export const companyMock = {
         "https://media.glassdoor.com/sqll/2793862/usemobile-squareLogo-1643823902249.png",
     },
   },
+  saveCompanyInfo: {
+    company: {
+      name: "Usemobile",
+      legalName: "Usemobile Soluções em Tecnologia LTDA.",
+      cnpj: "25.153.072/0001-08",
+      companySize: "1 a 5 colaboradores",
+      cep: "59215-000",
+      state: "Minas Gerais",
+      city: "Ouro Preto",
+      neighborhood: "Bauxita",
+      street: "Avenida JK",
+      houseNumber: "541",
+      additionalAddressDetails: "--",
+      companyLogo:
+        "https://media.glassdoor.com/sqll/2793862/usemobile-squareLogo-1643823902249.png",
+    },
+  },
 };

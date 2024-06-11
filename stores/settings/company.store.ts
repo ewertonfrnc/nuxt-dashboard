@@ -2,9 +2,13 @@ import { defineStore } from "pinia";
 import { CompanyInfo } from "~/interfaces/settings/company.interface";
 import { companyService } from "~/services";
 
+type CompanyStoreState = {
+  company: CompanyInfo;
+};
+
 export const useCompanyStore = defineStore("company", {
   persist: true,
-  state() {
+  state(): CompanyStoreState {
     return {
       company: {},
     };
