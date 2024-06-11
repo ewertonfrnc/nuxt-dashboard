@@ -698,4 +698,5 @@ export const timeSheet = {
       },
     ],
   },
+  updatePendingAdjustments: { status: "success" },
 };
