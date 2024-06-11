@@ -12,7 +12,7 @@
       <transition-group>
         <VeeForm
           v-for="(interval, idx) in day.intervals"
-          v-slot="{ values, meta, errors }"
+          v-slot="{ values, errors }"
           :key="idx"
           :initial-values="interval"
           :validation-schema="formSchema"
@@ -33,7 +33,20 @@
           </div>
 
           <div class="shift__interval">
-            <VeeField v-slot="{ field, errors }" name="start" as="label">
+            <BaseFormTimePicker
+              label="Entrada"
+              name="start"
+              :readonly="!isEditing"
+              @time-change="handleChange(values, idx)"
+            />
+            <BaseFormTimePicker
+              label="Saída"
+              name="end"
+              :readonly="!isEditing"
+              @time-change="handleChange(values, idx)"
+            />
+
+            <!-- <VeeField v-slot="{ field, errors }" name="start" as="label">
               <span class="caption__primary">Entrada</span>
               <input
                 type="time"
@@ -49,17 +62,6 @@
                 class="caption__secondary input__error"
                 >{{ error }}</small
               >
-            </VeeField>
-
-            <VeeField v-slot="{ field, errors }" name="end" as="label">
-              <span class="caption__primary">Saída</span>
-              <input
-                type="time"
-                v-bind="field"
-                class="input__field body__primary"
-                :readonly="!isEditing"
-                @input="handleChange(values, idx, errors)"
-              />
 
               <small
                 v-for="error in errors"
@@ -67,8 +69,10 @@
                 class="caption__secondary input__error"
                 >{{ error }}</small
               >
-            </VeeField>
+            </VeeField> -->
           </div>
+
+          <small v-if="interval.invalid" v-text="'Entrada inválida'" />
         </VeeForm>
       </transition-group>
 
@@ -114,8 +118,6 @@ export default {
     return {
       day: this.shifts[this.dayOfWeek],
       intervals: this.shifts[this.dayOfWeek].intervals,
-      checkinOptions: ["08:00", "09:00", "10:00", "11:00", "12:00"],
-      checkoutOptions: ["13:00", "14:00", "15:00", "16:00", "17:00"],
     };
   },
   computed: {
@@ -188,10 +190,6 @@ export default {
   &__interval {
     display: flex;
     gap: 8px;
-
-    label {
-      width: 100%;
-    }
   }
 
   &__footer {

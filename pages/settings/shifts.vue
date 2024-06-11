@@ -44,7 +44,7 @@
         :key="idx"
         :day-of-week="day"
         :shifts="shifts"
-        :is-editing="isEditing"
+        :is-editing="true"
         @handle-day-change="handleChange"
       />
     </div>
@@ -55,6 +55,7 @@
 import { mapActions, mapState } from "pinia";
 import { useShiftStore } from "~/stores/settings/shifts.store";
 import { SimpleShift } from "~/interfaces/settings/shifts.interface";
+import { timeFormatters } from "~/utils/formatters";
 
 export default {
   setup() {
@@ -92,23 +93,32 @@ export default {
     },
     handleChange(dayObj: SimpleShift) {
       const { day, intervals } = dayObj;
-      this.shifts[day].intervals = intervals;
+
+      const formattedIntervals = intervals.map(({ start, end }) => {
+        const startTime =
+          typeof start === "object" ? timeFormatters.getOnlyTime(start) : start;
+        const endTime =
+          typeof end === "object" ? timeFormatters.getOnlyTime(end) : end;
+
+        console.log(startTime > endTime);
+
+        return { start: startTime, end: endTime, invalid: startTime > endTime };
+      });
+
+      this.shifts[day].intervals = formattedIntervals;
       this.validForm = true;
     },
 
     handleSubmit() {
-      console.log("submit");
       this.dayNames.forEach((day) =>
         this.shifts[day].intervals.forEach((interval) => {
           if (!interval.start || !interval.end) this.validForm = false;
         }),
       );
 
-      // Object.values(this.shifts).forEach((shift) =>
-      //   console.log(shift.intervals),
-      // );
-
       if (!this.validForm) return;
+
+      console.log("submit", this.shifts);
 
       this.loading = true;
       setTimeout(() => {

@@ -1,0 +1,21 @@
+.time-picker {
+  @extend .body__primary;
+
+  transition: all 0.3s;
+  padding: 10px 0;
+
+  border: $border-light;
+  color: $input-color-light;
+  border-radius: $border-radius;
+  background-color: map-get($color-scheme-light, "$color-neutral-neutral-7");
+  box-shadow: $box-shadow-light;
+}
+
+.dark-mode .time-picker {
+  transition: all 0.3s;
+  border: $border-dark;
+  color: $input-color-dark;
+  border-radius: $border-radius;
+  background-color: map-get($color-scheme-dark, "$color-neutral-neutral-7");
+  box-shadow: $box-shadow-dark;
+}
