@@ -9,71 +9,68 @@
         </p>
       </div>
 
-      <div class="recover-code__body">
-        <form class="form">
-          <div class="form__control">
-            <label class="caption__primary">
-              Código de recuperação
-              <BaseInputText
-                name="code"
-                placeholder="Insira o código de recuperação"
-                :wrong-crendentials-message="wrongCodeMessage"
-              />
-            </label>
-          </div>
-        </form>
-      </div>
-
-      <div
-        v-if="showInvalidCodeArea && !showTalkToSupportArea"
-        class="recover-code__resend fadein animation-duration-500"
+      <VeeForm
+        class="form"
+        :validation-schema="formSchema"
+        @submit="sendRecoverCode"
       >
-        <p class="caption__secondary">
-          <span>Reenviar código em</span>
-          <span
-            >00:{{
-              resendDuration < 10 ? `0${resendDuration}` : resendDuration
-            }}
-            {{ resendDuration === 1 ? "segundo" : "segundos" }}</span
-          >
-        </p>
+        <BaseFormInputText
+          name="code"
+          label="Código de recuperação"
+          placeholder="Insira o código de recuperação"
+        />
+
+        <div
+          v-if="showInvalidCodeArea && !showTalkToSupportArea"
+          class="recover-code__resend fadein animation-duration-500"
+        >
+          <p class="caption__secondary">
+            <span>Reenviar código em</span>
+            <span
+              >00:{{
+                resendDuration < 10 ? `0${resendDuration}` : resendDuration
+              }}
+              {{ resendDuration === 1 ? "segundo" : "segundos" }}</span
+            >
+          </p>
+
+          <BaseButton
+            :disabled="resendDuration !== 0"
+            label="Reenviar código"
+            class="btn__primary--text"
+            @click.prevent="resendCode"
+          />
+        </div>
 
         <BaseButton
-          :disabled="resendDuration !== 0"
-          label="Reenviar código"
-          class="btn__primary--text"
-          @click.prevent="resendCode"
+          v-if="showTalkToSupportArea"
+          class="btn__primary--text fadein animation-duration-500"
+          label="Falar com suporte"
         />
-      </div>
 
-      <BaseButton
-        v-if="showTalkToSupportArea"
-        class="btn__primary--text fadein animation-duration-500"
-        label="Falar com suporte"
-      />
+        <div class="form__btn-group">
+          <BaseButton
+            label="Voltar"
+            class="btn__primary--outlined"
+            @click.prevent="goBack"
+          />
 
-      <div class="recover-code__footer">
-        <BaseButton
-          label="Voltar"
-          class="btn__primary--outlined"
-          @click.prevent="goBack"
-        />
-        <BaseButton
-          label="Confirmar"
-          :loading="loading"
-          class="btn__primary"
-          @click.prevent="sendRecoverCode"
-        />
-      </div>
+          <BaseButton
+            type="submit"
+            label="Confirmar"
+            class="btn__primary"
+            :loading="loading"
+          />
+        </div>
+      </VeeForm>
     </div>
   </UiModal>
 </template>
 
 <script lang="ts">
 import { mapActions } from "pinia";
-import { useForm } from "vee-validate";
+import { GenericObject } from "vee-validate";
 import { RecoverCode } from "~/interfaces/auth/auth.interface";
-import { recoverCode } from "~/utils/schemas";
 
 export default {
   props: {
@@ -81,23 +78,21 @@ export default {
   },
   emits: ["changeStep"],
   setup() {
-    const { handleSubmit, resetForm } = useForm({
-      initialValues: { code: "" },
-      validationSchema: recoverCode,
-    });
-    const onSubmit = handleSubmit((formValues) => formValues);
-
-    return { onSubmit, resetForm };
+    const { getToast } = usePVToast();
+    return { getToast };
   },
   data() {
     return {
       loading: false,
-      formData: {} as RecoverCode | undefined,
       wrongCodeMessage: "",
       resendDuration: 0,
       recoverAttemps: 0,
       showInvalidCodeArea: false,
       showTalkToSupportArea: false,
+
+      formSchema: {
+        code: "required|min:3",
+      },
     };
   },
   methods: {
@@ -145,36 +140,26 @@ export default {
         });
       }
     },
-    async sendRecoverCode() {
-      try {
-        this.formData = await this.onSubmit();
-        if (!this.formData) return;
+    sendRecoverCode(values: GenericObject) {
+      const formData = { ...values } as RecoverCode;
 
-        this.loading = true;
+      this.loading = true;
 
-        const status = await this.recoverCode(this.formData);
+      setTimeout(() => {
+        this.recoverCode(formData)
+          .then((status) => {
+            if (status && status === "success")
+              return this.$emit("changeStep", "change");
 
-        if (status && status === "success")
-          return this.$emit("changeStep", "change");
+            if (status.response.status === 400) {
+              this.showInvalidCodeArea = true;
+              this.wrongCodeMessage = "código inválido";
+            }
+          })
+          .catch(() => this.getToast("error"));
 
-        if (status.response.status === 400) {
-          this.showInvalidCodeArea = true;
-          this.wrongCodeMessage = "código inválido";
-        }
-      } catch (error) {
-        this.$toast.add({
-          severity: "error",
-          summary: "Algo deu errado",
-          detail: "Tente novamente mais tarde.",
-          life: 4000,
-        });
-
-        this.resetForm({
-          values: { code: "" },
-        });
-      } finally {
         this.loading = false;
-      }
+      }, 1000);
     },
   },
 };
@@ -204,11 +189,15 @@ export default {
       width: max-content;
     }
   }
+}
 
-  &__footer {
+.form {
+  display: grid;
+  gap: 16px;
+
+  &__btn-group {
     display: flex;
-    align-items: center;
-    gap: 1rem;
+    gap: 13px;
   }
 }
 
