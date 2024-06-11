@@ -3,7 +3,7 @@ import api, { MOCKED } from "~/services/api.service";
 
 class HomeService {
   home() {
-    if (MOCKED) return getResponse("login", "home");
+    if (MOCKED) return getResponse("home", "home");
     return api().get("/home");
   }
 }
