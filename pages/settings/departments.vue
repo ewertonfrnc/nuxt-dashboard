@@ -9,7 +9,7 @@
             class="btn__primary"
             icon="pi pi-plus"
             label="Cadastrar departamento"
-            @click="toggleAddDialogVisibility"
+            @click="toggleNewDepartmentDialog"
           />
         </div>
       </div>
@@ -56,59 +56,15 @@
 
     <BaseDialog
       :is-visible="isAddDialogVisible"
-      :title="
-        newDepartment.name ? 'Editar departamento' : 'Cadastrar departamento'
-      "
+      :title="dialogTitle"
       :toggle-dialog="toggleAddDialogVisibility"
     >
-      <div class="add-dialog">
-        <p
-          class="body__secondary"
-          v-text="
-            `Insira o nome do departamento a ser ${
-              newDepartment.name ? 'editado' : 'criado'
-            }`
-          "
-        />
-
-        <VeeForm
-          v-slot="{ values, meta }"
-          as="div"
-          :initial-values="newDepartment"
-          :validation-schema="formSchema"
-        >
-          <form
-            class="add-dialog__form-container"
-            @change="handleChange(values, meta)"
-          >
-            <div class="add-dialog__form">
-              <label>
-                <span class="caption__primary">Nome do cargo</span>
-                <BaseInputText
-                  name="name"
-                  placeholder="Insira o nome do departamento"
-                />
-              </label>
-            </div>
-
-            <div class="add-dialog__form--btn-group">
-              <BaseButton
-                class="btn__primary--outlined"
-                label="Cancelar"
-                :disabled="dialogLoading"
-                @click="toggleAddDialog"
-              />
-              <BaseButton
-                class="btn__primary"
-                label="Cadastrar"
-                :loading="dialogLoading"
-                :disabled="(!meta.valid && meta.dirty) || dialogLoading"
-                @click="saveDepartment"
-              />
-            </div>
-          </form>
-        </VeeForm>
-      </div>
+      <SettingsDepartmentsAddEditForm
+        :loading="dialogLoading"
+        :selected-item="selectedItem"
+        @submit="saveDepartment"
+        @cancel-submit="cancelSubmit"
+      />
     </BaseDialog>
 
     <BaseDialog
@@ -159,7 +115,6 @@
 import { mapActions, mapState } from "pinia";
 import { FilterMatchMode } from "primevue/api";
 import { PageState } from "primevue/paginator";
-import { FormMeta, GenericObject } from "vee-validate";
 import {
   Department,
   QueryDepartments,
@@ -229,9 +184,8 @@ export default {
       },
 
       dialogLoading: false,
-      validForm: false,
-      newDepartment: { name: "" },
       selectedItem: {} as Department,
+      dialogTitle: "Cadastrar departamento",
     };
   },
   computed: {
@@ -249,22 +203,22 @@ export default {
       "saveDepartments",
       "deleteDepartments",
     ]),
+    cancelSubmit() {
+      this.toggleAddDialogVisibility();
+    },
+    toggleNewDepartmentDialog() {
+      this.dialogTitle = "Cadastrar departamento";
+      this.toggleAddDialogVisibility();
+    },
     // Add new role dialog
     toggleAddDialog() {
       this.toggleAddDialogVisibility();
-      this.newDepartment = { name: "" };
     },
-    handleChange(values: Department, meta: FormMeta<GenericObject>) {
-      this.newDepartment = values;
-      this.validForm = meta.valid;
-    },
-    saveDepartment() {
-      if (!this.newDepartment.name) return;
-
+    saveDepartment(values: Department) {
       this.dialogLoading = true;
 
       setTimeout(() => {
-        this.saveDepartments(this.newDepartment)
+        this.saveDepartments(values)
           .then(() => {
             this.nodes = this.departments;
             this.totalPages = this.total;
@@ -297,8 +251,9 @@ export default {
     },
     // Table
     logSelectedItem(data: Department) {
+      this.selectedItem = data;
+      this.dialogTitle = "Editar departamento";
       this.toggleAddDialogVisibility();
-      this.newDepartment = { name: data.department };
     },
     changePageHandler(currentPage: PageState) {
       this.queries.page = currentPage.page + 1;
