@@ -1,6 +1,5 @@
 <template>
   <div class="shift">
-    <!--    {{ shifts[dayOfWeek].intervals }}-->
     <div class="shift__header">
       <h5 class="heading__quinary">{{ day.title }}</h5>
     </div>
@@ -12,7 +11,7 @@
       <transition-group>
         <VeeForm
           v-for="(interval, idx) in day.intervals"
-          v-slot="{ values, errors }"
+          v-slot="{ values }"
           :key="idx"
           :initial-values="interval"
           :validation-schema="formSchema"
@@ -45,34 +44,13 @@
               :readonly="!isEditing"
               @time-change="handleChange(values, idx)"
             />
-
-            <!-- <VeeField v-slot="{ field, errors }" name="start" as="label">
-              <span class="caption__primary">Entrada</span>
-              <input
-                type="time"
-                v-bind="field"
-                class="input__field body__primary"
-                :readonly="!isEditing"
-                @input="handleChange(values, idx, errors)"
-              />
-
-              <small
-                v-for="error in errors"
-                v-if="isEditing"
-                class="caption__secondary input__error"
-                >{{ error }}</small
-              >
-
-              <small
-                v-for="error in errors"
-                v-if="isEditing"
-                class="caption__secondary input__error"
-                >{{ error }}</small
-              >
-            </VeeField> -->
           </div>
 
-          <small v-if="interval.invalid" v-text="'Entrada inválida'" />
+          <small
+            v-if="isEditing && interval.invalid"
+            class="shift__error caption__secondary"
+            v-text="'Entrada inválida'"
+          />
         </VeeForm>
       </transition-group>
 
@@ -104,6 +82,7 @@
 </template>
 
 <script lang="ts">
+import { GenericObject } from "vee-validate";
 import { shiftSchema } from "~/utils/schemas/settings/shifts.schema";
 import { Interval } from "~/interfaces/settings/shifts.interface";
 
@@ -133,11 +112,13 @@ export default {
     removeField(index: number) {
       this.intervals.splice(index, 1);
     },
-    handleChange(values: Interval, intervalIdx: number) {
+    handleChange(values: GenericObject, intervalIdx: number) {
+      const formValues = { ...values } as Interval;
+
       if (intervalIdx < this.intervals.length) {
-        this.intervals[intervalIdx] = { ...values };
+        this.intervals[intervalIdx] = { ...formValues };
       } else {
-        this.intervals.splice(intervalIdx, 0, { ...values });
+        this.intervals.splice(intervalIdx, 0, { ...formValues });
       }
 
       this.$emit("handle-day-change", {
@@ -157,6 +138,10 @@ export default {
   border: $border-light;
   border-radius: 8px;
   padding: 16px;
+
+  &__error {
+    color: map-get($color-scheme-light, "$color-feedback-danger-0");
+  }
 
   &__block {
     &--editing {
