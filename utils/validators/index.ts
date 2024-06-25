@@ -1,28 +1,32 @@
-export function validateCPF(cpf: string) {
-  const cleanCPF = cpf.replace(/[^\d]/g, "");
+export function validateCPF(cpf: string): boolean {
+  // Remove caracteres não numéricos
+  const cleanedCPF = cpf.replace(/[^\d]/g, '');
 
-  if (cleanCPF.length !== 11) return false;
-  if (/^(\d)\1+$/.test(cleanCPF)) return false;
-
-  let sum = 0;
-  for (let i = 0; i < 9; i++) {
-    sum += parseInt(cleanCPF.charAt(i)) * (10 - i);
-  }
-  let remainder = (sum * 10) % 11;
-  if (remainder === 10 || remainder !== parseInt(cleanCPF.charAt(9))) {
+  if (cleanedCPF.length !== 11) {
     return false;
   }
 
-  sum = 0;
-  for (let i = 0; i < 10; i++) {
-    sum += parseInt(cleanCPF.charAt(i)) * (11 - i);
-  }
-  remainder = (sum * 10) % 11;
-  if (remainder === 10 || remainder !== parseInt(cleanCPF.charAt(10))) {
+  // Verifica se todos os dígitos são iguais (ex: 111.111.111-11)
+  if (/^(\d)\1*$/.test(cleanedCPF)) {
     return false;
   }
 
-  return true;
+  function calculateDigit(base: string, factor: number): number {
+    let total = 0;
+    for (let i = 0; i < base.length; i++) {
+      total += parseInt(base.charAt(i), 10) * factor--;
+    }
+    const remainder = total % 11;
+    return remainder < 2 ? 0 : 11 - remainder;
+  }
+
+  const baseCPF = cleanedCPF.substring(0, 9);
+  const firstDigit = calculateDigit(baseCPF, 10);
+
+  const baseCPFWithFirstDigit = baseCPF + firstDigit;
+  const secondDigit = calculateDigit(baseCPFWithFirstDigit, 11);
+
+  return cleanedCPF === baseCPF + firstDigit.toString() + secondDigit.toString();
 }
 
 export function checkEqualObjs(obj1: Object, obj2: Object) {
