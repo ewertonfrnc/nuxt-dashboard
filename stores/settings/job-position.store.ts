@@ -12,7 +12,6 @@ type JobPositionState = {
 };
 
 export const useJobPositionStore = defineStore("job-position", {
-  persist: true,
   state(): JobPositionState {
     return {
       total: 0,

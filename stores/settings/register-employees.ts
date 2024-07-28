@@ -8,7 +8,6 @@ type RegisterEmployeesState = {
 };
 
 export const useRegisterEmployeesStore = defineStore("register-employees", {
-  persist: true,
   state(): RegisterEmployeesState {
     return {
       csvData: [],

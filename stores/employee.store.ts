@@ -24,7 +24,6 @@ type EmployeeStore = {
 };
 
 export const useEmployeeStore = defineStore("employee", {
-  persist: true,
   state(): EmployeeStore {
     return {
       employee: {} as Employee,

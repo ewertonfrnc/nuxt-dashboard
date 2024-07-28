@@ -60,6 +60,7 @@ import {
   WeeklySchedule,
 } from "~/interfaces/settings/shifts.interface";
 import { timeFormatters } from "~/utils/formatters";
+import { shiftsMock } from "~/services/mocks/shifts.mock";
 
 export default {
   setup() {
@@ -89,13 +90,18 @@ export default {
     ...mapState(useShiftStore, ["shifts"]),
   },
   created() {
-    this.getShifts();
-    this.workSchedule = this.shifts;
+    this.loadShifts();
+    this.workSchedule = shiftsMock.getShifts.shifts;
   },
   methods: {
     ...mapActions(useShiftStore, ["getShifts", "saveShifts"]),
     cancelEditing() {
       this.isEditing = false;
+    },
+    loadShifts() {
+      this.getShifts()
+        .then(() => {})
+        .catch(() => this.getToast("error"));
     },
     handleChange(dayObj: SimpleShift) {
       const { day, intervals } = dayObj;

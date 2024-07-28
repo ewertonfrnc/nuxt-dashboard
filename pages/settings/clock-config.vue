@@ -106,11 +106,17 @@ export default {
     ...mapState(useClockConfigStore, ["hours"]),
   },
   created() {
-    this.getExtraHours();
-    this.handleInitialValues();
+    this.loadExtraHours();
   },
   methods: {
     ...mapActions(useClockConfigStore, ["getExtraHours", "saveExtraHours"]),
+    loadExtraHours() {
+      this.getExtraHours()
+        .then(() => {
+          this.handleInitialValues();
+        })
+        .catch(() => this.getToast("error"));
+    },
     cancelEditing() {
       this.isEditing = false;
       this.handleInitialValues();

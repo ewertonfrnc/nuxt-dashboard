@@ -7,7 +7,6 @@ type ShiftsState = {
 };
 
 export const useShiftStore = defineStore("shift", {
-  persist: true,
   state(): ShiftsState {
     return {
       shifts: {} as WeeklySchedule,

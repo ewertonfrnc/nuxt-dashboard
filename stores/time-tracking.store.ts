@@ -15,7 +15,6 @@ type TimeTrackingState = {
 };
 
 export const useTimeTrackingStore = defineStore("time-tracking", {
-  persist: true,
   state(): TimeTrackingState {
     return {
       total: 0,

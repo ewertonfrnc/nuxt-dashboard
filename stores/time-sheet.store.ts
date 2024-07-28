@@ -12,7 +12,6 @@ type TimeSheetstate = {
 };
 
 export const useTimeSheetStore = defineStore("time-sheet", {
-  persist: true,
   state(): TimeSheetstate {
     return {
       userPendingRequests: null,

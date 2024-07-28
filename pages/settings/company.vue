@@ -235,12 +235,18 @@ export default {
     ...mapState(useCompanyStore, ["company"]),
   },
   created() {
-    this.getCompanyInfo();
-    this.inititalValues = { ...this.company };
+    this.loadCompanyInfo();
   },
   methods: {
     ...mapActions(useEmployeeStore, ["searchEmployeeAddres"]),
     ...mapActions(useCompanyStore, ["getCompanyInfo", "saveCompanyInfo"]),
+    loadCompanyInfo() {
+      this.getCompanyInfo()
+        .then(() => {
+          this.inititalValues = { ...this.company };
+        })
+        .catch(() => {});
+    },
     handleUpload() {},
     toggleSearch() {
       this.isSearchable = !this.isSearchable;

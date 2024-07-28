@@ -36,11 +36,6 @@
     scrollable
     select-all
     select-all-change
-    @row-select="onRowSelect"
-    @row-unselect="onRowUnselect"
-    @select-all-change="selectAllHandler"
-    @row-expand="onRowExpand"
-    @row-collapse="onRowCollapse"
     @update:filters="updateFilterHandler"
   >
     <template v-if="!loading && headerShown" #header>
@@ -99,47 +94,17 @@
     </div>
 
     <Column
-      v-if="!loading && isSelectable"
-      :pt="{
-        checkboxwrapper: 'checkbox__wrapper',
-        headercheckboxwrapper: 'checkbox__wrapper',
-        headercell: 'table__header--cell',
-        bodycell: 'table__body--cell table__body--cell-icon',
-      }"
-      selection-mode="multiple"
-    />
-
-    <Column
-      v-if="!loading && isExpandable"
-      :pt="{
-        headercell: 'table__header--cell',
-        headercontent: 'table__header--content',
-        bodycell: 'table__body--cell table__body--cell-icon',
-      }"
-      expander
-    >
-      <template #header>
-        <span class="heading__quinary">Ações</span>
-      </template>
-    </Column>
-
-    <Column
       v-for="col of columns"
       v-if="!loading && nodes.length"
       :key="col.field"
       :field="col.field"
       :filter-field="col.field"
-      :frozen="col.frozen"
       :header="col.header"
       :pt="{
-        headercell: `table__header--cell ${
-          col.frozen && 'table__header--frozen-cell'
-        }`,
+        headercell: `table__header--cell`,
         headertitle: 'heading__quinary mr-auto	',
         headercontent: 'table__header--content',
-        bodycell: `table__body--cell ${
-          col.frozen && 'table__body--frozen-cell'
-        }`,
+        bodycell: `table__body--cell`,
         filteraddrule: 'filter__add-rule',
         filterConstraints: 'table__filter',
         filtermenubutton: 'table__filter--icon',
@@ -269,10 +234,6 @@
 <script lang="ts">
 import { PropType } from "nuxt/dist/app/compat/capi";
 import { FilterMatchMode } from "primevue/api";
-import {
-  DataTableRowExpandEvent,
-  DataTableRowSelectEvent,
-} from "primevue/datatable";
 import { PageState } from "primevue/paginator";
 import {
   FilterOption,
@@ -311,9 +272,6 @@ export default {
         { label: "Contém", code: FilterMatchMode.CONTAINS },
         { label: "Não contém", code: FilterMatchMode.NOT_CONTAINS },
         { label: "Igual", code: FilterMatchMode.EQUALS },
-        { label: "Começa com", code: FilterMatchMode.STARTS_WITH },
-        { label: "Termina com", code: FilterMatchMode.ENDS_WITH },
-        { label: "Exceto", code: FilterMatchMode.NOT_EQUALS },
       ],
 
       // Row selection
@@ -327,24 +285,6 @@ export default {
   },
   created() {
     this.initFilters();
-  },
-  mounted() {
-    if (this.isSelectable) {
-      this.selectAllCheckbox = document.querySelector(
-        '[data-pc-section="headercheckboxwrapper"] .p-hidden-accessible',
-      )?.children[0];
-
-      if (this.selectAllCheckbox)
-        this.selectAllCheckbox.ariaLabel = "All items unselected";
-    }
-  },
-  updated() {
-    if (this.isSelectable && this.selectAllCheckbox) {
-      this.selectAllCheckbox.ariaLabel =
-        this.selectedEmployees?.length !== this.nodes.length
-          ? "All items unselected"
-          : "All items selected";
-    }
   },
   methods: {
     clearFilters() {
@@ -360,28 +300,8 @@ export default {
       };
       this.filters = { ...this.filters, ...this.customFilters };
     },
-    selectAllHandler() {
-      this.selectedEmployees =
-        this.selectedEmployees?.length !== this.nodes.length ? this.nodes : [];
-    },
-    onRowSelect(event: DataTableRowSelectEvent) {
-      this.selectedEmployees = [...this.selectedEmployees, event.data];
-    },
-    onRowUnselect(event: DataTableRowSelectEvent) {
-      this.selectedEmployees = this.selectedEmployees?.filter(
-        (employee) => employee.id !== event.data.id,
-      );
-    },
     toggleValueItems() {
       this.seeOnlySelectedFields = !this.seeOnlySelectedFields;
-    },
-    onRowExpand(event: DataTableRowExpandEvent) {
-      this.expandedRows = [...this.expandedRows, event.data];
-    },
-    onRowCollapse(event: DataTableRowExpandEvent) {
-      this.expandedRows = this.expandedRows?.filter(
-        (row) => row.id !== event.data.id,
-      );
     },
     changeFilter(field: string) {
       this.selectedFilterField = field;

@@ -3,7 +3,6 @@ import { clockValues } from "~/interfaces/settings/settings.interface";
 import { clockConfigService } from "~/services";
 
 export const useClockConfigStore = defineStore("clock-config", {
-  persist: true,
   state() {
     return {
       hours: {},

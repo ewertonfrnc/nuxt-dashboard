@@ -6,10 +6,10 @@ import { employeeMock } from "./employee.mock";
 import { timeTrackingMock } from "./time-tracking.mock";
 import { clockConfigMock } from "./clock-config.mock";
 import { companyMock } from "./company.mock";
+import { RegisterMock } from "./register.mock";
 import { jobPositionMock } from "~/services/mocks/job-position.mock";
 import { departmentsMock } from "~/services/mocks/departments.mock";
 import { shiftsMock } from "~/services/mocks/shifts.mock";
-import { RegisterMock } from "./register.mock";
 
 const mockTypes = {
   auth: authMock,

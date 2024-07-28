@@ -11,7 +11,6 @@ type EmployeesState = {
 };
 
 export const useEmployeesStore = defineStore("employees", {
-  persist: true,
   state(): EmployeesState {
     return {
       total: 0,

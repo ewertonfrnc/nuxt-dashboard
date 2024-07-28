@@ -7,7 +7,6 @@ type CompanyStoreState = {
 };
 
 export const useCompanyStore = defineStore("company", {
-  persist: true,
   state(): CompanyStoreState {
     return {
       company: {},

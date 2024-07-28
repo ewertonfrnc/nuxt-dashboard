@@ -178,27 +178,27 @@
 
       <div class="form__address">
         <div class="form__control">
-          <label class="form__label caption__primary">
-            Bairro
-
-            <BaseInputText name="neighborhood" :readonly="!isEditing" />
-          </label>
+          <BaseFormInputText
+            label="Bairro"
+            name="neighborhood"
+            :readonly="!isEditing"
+          />
         </div>
 
         <div class="form__control">
-          <label class="form__label caption__primary">
-            Logradouro
-
-            <BaseInputText name="street" :readonly="!isEditing" />
-          </label>
+          <BaseFormInputText
+            label="Logradouro"
+            name="street"
+            :readonly="!isEditing"
+          />
         </div>
 
         <div v-if="isEditing" class="form__control">
-          <label class="form__label caption__primary">
-            Número
-
-            <BaseInputText name="houseNumber" :readonly="!isEditing" />
-          </label>
+          <BaseFormInputText
+            label="Número"
+            name="houseNumber"
+            :readonly="!isEditing"
+          />
         </div>
       </div>
 

@@ -12,7 +12,6 @@ type DepartmentsState = {
 };
 
 export const useDepartmentsStore = defineStore("departments", {
-  persist: true,
   state(): DepartmentsState {
     return {
       total: 0,
