@@ -2,6 +2,13 @@
 
 Base project to be used by [Usemobile]'s frontend developers using Nuxt 3.
 
+👉 [Live Preview]
+
+```bash
+usuario: Qualquer CPF válido
+senha: teste123
+```
+
 ## Tech
 
 This project requires the following technologies to work properly:
@@ -62,3 +69,4 @@ Using vue [test-utils] for unit testing. Please, follow these [test-guidelines] 
 [PrimeVue]: https://primevue.org/
 [test-utils]: https://test-utils.vuejs.org
 [test-guidelines]: https://test-utils.vuejs.org/guide/essentials/easy-to-test.html
+[Live Preview]: https://itera-dashboard.netlify.app/
